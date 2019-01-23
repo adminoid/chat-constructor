@@ -13,7 +13,7 @@
 
 <div class="container">
     <div id="app">
-        <private-root-component></private-root-component>
+        <private-root></private-root>
     </div>
 </div>
 
