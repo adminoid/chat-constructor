@@ -7,7 +7,9 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue';
+
+import { store } from './store/private.js';
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,7 +22,9 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('private-root', require('./components/PrivateRoot.vue').default);
+// Vue.component('private-root', require('./components/PrivateRoot.vue').default);
+
+import PrivateRoot from './components/PrivateRoot';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,5 +33,9 @@ Vue.component('private-root', require('./components/PrivateRoot.vue').default);
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    store,
+
+    components: { PrivateRoot }
 });
