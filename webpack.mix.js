@@ -11,7 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/private.js', 'public/js')
+mix.js('resources/js/private.js', 'public/js').sourceMaps()
    .sass('resources/sass/private.scss', 'public/css');
 
 mix.webpackConfig({
