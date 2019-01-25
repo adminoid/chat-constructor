@@ -6,15 +6,16 @@
                 button(type="button" class="top-panel__add-block-btn btn btn-success" v-on:click="addBlock") Добавить блок
             .work-area__main-area(class="h-100")
                 keep-alive
-                    template(v-for="(mainBlock, index) in mainBlocks")
-                        component(:is="mainBlock" :key="mainBlock.name")
+                    div.work-area__block.block(v-for="(block, index) in blocks" :key="index")
+                        private-root-work-area-main-block(:name="block.name")
+
 
 </template>
 
 <script>
 
-    import Vue from 'vue'
     import PrivateRootWorkAreaMainBlock from './PrivateRootWorkAreaMainBlock';
+    import { mapState } from 'vuex';
 
     export default {
 
@@ -22,23 +23,17 @@
 
         components: { PrivateRootWorkAreaMainBlock },
 
-        data () {
-            return {
-                mainBlocks: []
-            }
+        computed: {
+            ...mapState(['blocks'])
         },
 
         methods: {
 
             addBlock () {
 
-                let BlockClass = Vue.extend(PrivateRootWorkAreaMainBlock);
-                let BlockInstance = new BlockClass();
-                BlockInstance.$mount();
+                this.$store.commit('pushBlock', {name: 'Test block'});
 
-                this.mainBlocks.push(new BlockInstance);
-
-                console.log(this.mainBlocks);
+                console.log(this.blocks);
 
             }
         }

@@ -9,7 +9,7 @@ require('./bootstrap');
 
 import Vue from 'vue';
 
-import { store } from './store/private.js';
+import store from './store/private.js';
 
 /**
  * The following block of code may be used to automatically register your
@@ -22,7 +22,7 @@ import { store } from './store/private.js';
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('private-root-work-area-main-block', require('./components/PrivateRootWorkAreaMainBlock.vue').default);
+// Vue.component('private-root-work-area-main-block', require('./components/PrivateRootWorkAreaMainBlock.vue').default);
 
 import PrivateRoot from './components/PrivateRoot';
 
