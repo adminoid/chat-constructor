@@ -22,7 +22,7 @@ import { store } from './store/private.js';
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-// Vue.component('private-root', require('./components/PrivateRoot.vue').default);
+Vue.component('private-root-work-area-main-block', require('./components/PrivateRootWorkAreaMainBlock.vue').default);
 
 import PrivateRoot from './components/PrivateRoot';
 

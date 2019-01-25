@@ -4,7 +4,9 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        testStoreProp: 'test store prop'
+        testStoreProp: 'test store prop',
+
+        blocks: []
     },
     getters: {
     }

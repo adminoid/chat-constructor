@@ -5,34 +5,43 @@
             .top-panel
                 button(type="button" class="top-panel__add-block-btn btn btn-success" v-on:click="addBlock") Добавить блок
             .work-area__main-area(class="h-100")
-                p {{ testStoreProp }}
+                keep-alive
+                    template(v-for="(mainBlock, index) in mainBlocks")
+                        component(:is="mainBlock" :key="mainBlock.name")
 
 </template>
 
 <script>
 
+    import Vue from 'vue'
+    import PrivateRootWorkAreaMainBlock from './PrivateRootWorkAreaMainBlock';
+
     export default {
 
         name: 'PrivateRootWorkArea',
 
+        components: { PrivateRootWorkAreaMainBlock },
+
         data () {
             return {
-
+                mainBlocks: []
             }
         },
 
         methods: {
 
             addBlock () {
-                console.log('addBlock');
-            }
-        },
 
-        computed: {
-            testStoreProp () {
-                return this.$store.state.testStoreProp
+                let BlockClass = Vue.extend(PrivateRootWorkAreaMainBlock);
+                let BlockInstance = new BlockClass();
+                BlockInstance.$mount();
+
+                this.mainBlocks.push(new BlockInstance);
+
+                console.log(this.mainBlocks);
+
             }
-        },
+        }
 
     }
 
