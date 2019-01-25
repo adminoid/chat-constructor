@@ -1,6 +1,7 @@
 <template lang="pug">
 
     .main-block
+        p {{ idx }}
 
 </template>
 
@@ -10,14 +11,9 @@
 
         name: 'PrivateRootWorkAreaMainBlock',
 
-        data () {
-            return {
-                name: 'block-1' //+ this.$store.state.blocks.length + 1
-            }
-        },
-
-        mounted() {
-            console.log(this.name);
+        props: {
+            idx: Number,
+            startBlockData: Object
         }
 
     }

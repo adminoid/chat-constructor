@@ -5,9 +5,9 @@
             .top-panel
                 button(type="button" class="top-panel__add-block-btn btn btn-success" v-on:click="addBlock") Добавить блок
             .work-area__main-area(class="h-100")
-                keep-alive
+
                     div.work-area__block.block(v-for="(block, index) in blocks" :key="index")
-                        private-root-work-area-main-block(:name="block.name")
+                        private-root-work-area-main-block(:idx="index" :startBlockData="block")
 
 
 </template>
@@ -31,7 +31,9 @@
 
             addBlock () {
 
-                this.$store.commit('pushBlock', {name: 'Test block'});
+                this.$store.commit('pushBlock', {
+                    blockName: 'Test block'
+                });
 
                 console.log(this.blocks);
 
