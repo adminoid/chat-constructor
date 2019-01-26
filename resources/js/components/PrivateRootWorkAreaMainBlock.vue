@@ -1,6 +1,6 @@
 <template lang="pug">
 
-    .main-block
+    .main-block(:style="position")
         p {{ idx }}
 
 </template>
@@ -14,7 +14,13 @@
         props: {
             idx: Number,
             startBlockData: Object
-        }
+        },
+
+        data: function () {
+            return {
+                position: _.mapValues(this.startBlockData['startPosition'], val => val + 'px')
+            }
+        },
 
     }
 
@@ -23,6 +29,7 @@
 <style lang="sass">
 
     .main-block
+        position: absolute
         height: 100px
         width: 150px
         background: #6a8aff

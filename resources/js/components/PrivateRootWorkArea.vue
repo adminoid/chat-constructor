@@ -30,7 +30,11 @@
             addBlock () {
 
                 this.$store.commit('pushBlock', {
-                    blockName: 'Test block'
+                    blockName: 'Test block',
+                    startPosition: {
+                        left: 20,
+                        top: 40
+                    }
                 });
 
                 console.log(this.blocks);
