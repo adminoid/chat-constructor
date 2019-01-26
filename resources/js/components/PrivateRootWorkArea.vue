@@ -1,13 +1,11 @@
 <template lang="pug">
 
-    .work-area
+    .work-area.col-md-9
         .work-area__wrapper
             .top-panel
                 button(type="button" class="top-panel__add-block-btn btn btn-success" v-on:click="addBlock") Добавить блок
-            .work-area__main-area(class="h-100")
-
-                    div.work-area__block.block(v-for="(block, index) in blocks" :key="index")
-                        private-root-work-area-main-block(:idx="index" :startBlockData="block")
+            .work-area__main-area
+                private-root-work-area-main-block(v-for="(block, index) in blocks" :key="index" :idx="index" :startBlockData="block")
 
 
 </template>
@@ -46,17 +44,22 @@
 
 <style lang="sass">
 
+    // Custom scss global mixins
+    @import '../../sass/_mixins.scss'
+
     .work-area
         .work-area__wrapper
+            background: #8d8d8d
             padding: 10px
-            background-color: #8d8d8d
         .work-area__main-area
-            height: 100%
+            height: calc(100vh - 140px)
+            position: relative
+            background: #d7d7d7
+            @include border-radius(5px)
     .top-panel
         display: flex
         height: 50px
-        background: #f0f
-        padding: 3px
+        margin-bottom: 10px
         .top-panel__add-block-btn
             align-items: center
 

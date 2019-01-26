@@ -8,7 +8,29 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+html {
+    position: relative;
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    margin-bottom: 60px;
+    #app {
+        height: 100%;
+    }
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: #111111;
+    padding: 10px;
+    .copy {
+        color: #f7ffd0;
+        float: right;
+    }
 }

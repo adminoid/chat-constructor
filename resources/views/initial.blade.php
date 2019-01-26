@@ -7,15 +7,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>This is private panel for customers</title>
-    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/private.css') }}">
 </head>
 <body>
 
-<div class="container">
-    <div id="app">
-        <private-root></private-root>
-    </div>
+
+<div class="row no-gutters" id="app">
+
+    <private-root-sidebar></private-root-sidebar>
+    <private-root-work-area></private-root-work-area>
+
 </div>
+
+
+<footer>
+    <div class="copy">
+        &copy; 2019
+    </div>
+</footer>
 
 <script src="{{ asset('/js/private.js') }}"></script>
 

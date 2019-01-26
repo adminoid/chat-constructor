@@ -24,7 +24,8 @@ import store from './store/private.js';
 
 // Vue.component('private-root-work-area-main-block', require('./components/PrivateRootWorkAreaMainBlock.vue').default);
 
-import PrivateRoot from './components/PrivateRoot';
+import PrivateRootSidebar from './components/PrivateRootSidebar'
+import PrivateRootWorkArea from './components/PrivateRootWorkArea';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,5 +38,8 @@ const app = new Vue({
 
     store,
 
-    components: { PrivateRoot }
+    components: {
+        PrivateRootSidebar,
+        PrivateRootWorkArea
+    }
 });
