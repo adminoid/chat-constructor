@@ -1,7 +1,8 @@
 <template lang="pug">
 
-    .main-block(:style="position")
-        p {{ idx }}
+    .main-block(:style="getStyles()")
+        p №{{ idx }}
+        p {{ blockData.name }}
 
 </template>
 
@@ -13,14 +14,42 @@
 
         props: {
             idx: Number,
-            startBlockData: Object
+            blockData: Object
         },
 
         data: function () {
             return {
-                position: _.mapValues(this.startBlockData['startPosition'], val => val + 'px')
+                position: {
+                    left: 0,
+                    top: 0
+                }
             }
         },
+
+        methods: {
+
+            getStyles () {
+
+                return {
+                    ...this.getPosition(),
+                    ...this.style
+                }
+
+            },
+
+            getPosition () {
+                return _.mapValues(this.position, val => val + 'px')
+            }
+
+        },
+
+        mounted () {
+
+            this.position = this.blockData['startPosition'];
+
+            this.style = this.blockData['style'];
+
+        }
 
     }
 

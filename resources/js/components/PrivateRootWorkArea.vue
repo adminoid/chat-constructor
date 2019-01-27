@@ -5,7 +5,7 @@
             .top-panel
                 button(type="button" class="top-panel__add-block-btn btn btn-success" v-on:click="addBlock") Добавить блок
             .work-area__main-area
-                private-root-work-area-main-block(v-for="(block, index) in blocks" :key="index" :idx="index" :startBlockData="block")
+                private-root-work-area-main-block(v-for="(block, index) in blocks" :key="index" :idx="index" :blockData="block")
 
 
 </template>
@@ -13,7 +13,7 @@
 <script>
 
     import PrivateRootWorkAreaMainBlock from './PrivateRootWorkAreaMainBlock';
-    import { mapState } from 'vuex';
+    import { mapState, mapActions } from 'vuex';
 
     export default {
 
@@ -27,17 +27,19 @@
 
         methods: {
 
+            ...mapActions(['pushBlock']),
+
             addBlock () {
 
-                this.$store.commit('pushBlock', {
-                    blockName: 'Test block',
-                    startPosition: {
-                        left: 20,
-                        top: 40
-                    }
-                });
+                this.pushBlock({
 
-                console.log(this.blocks);
+                    blockName: 'Test block',
+
+                }).then(() => {
+
+                    console.log(this.blocks);
+
+                });
 
             }
         }

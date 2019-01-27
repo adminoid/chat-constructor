@@ -10,10 +10,52 @@ export default new Vuex.Store({
     },
 
     mutations: {
-        pushBlock (state, block) {
+
+        addBlock (state, block) {
 
             state.blocks.push(block);
         }
 
-    }
+    },
+
+    getters: {
+
+        getNextBlockZIndex (state) {
+
+            return (state.blocks.length + 1) * 100;
+
+        },
+
+        getNextBlockOffset (state) {
+
+            let offset = (state.blocks.length + 1) * 10;
+
+            return {
+                left: offset,
+                top: offset
+            };
+
+        },
+
+    },
+
+    actions: {
+
+        pushBlock ({getters, commit}, block) {
+
+            block.style = {
+                'z-index': getters.getNextBlockZIndex
+            };
+
+            block.startPosition = getters.getNextBlockOffset;
+
+            // console.log(getters.getNextBlockZIndex);
+            // console.log(block);
+
+            commit('addBlock', block);
+
+        }
+
+    },
+
 });
