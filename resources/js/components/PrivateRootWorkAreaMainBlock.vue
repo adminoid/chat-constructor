@@ -1,12 +1,21 @@
 <template lang="pug">
 
-    .main-block(:style="getStyles()")
+    .main-block(
+        :style="getStyles()"
+        @dragstart="dragStart"
+        @dragend="dragEnd"
+        @drag="drag"
+        draggable="true"
+        v-if="!dragged"
+    )
         p №{{ idx }}
-        p {{ blockData.name }}
+        p {{ blockData.blockName }}
 
 </template>
 
 <script>
+
+    import { mapMutations, mapState } from 'vuex';
 
     export default {
 
@@ -14,7 +23,8 @@
 
         props: {
             idx: Number,
-            blockData: Object
+            blockData: Object,
+            parentOffset: Object
         },
 
         data: function () {
@@ -22,11 +32,51 @@
                 position: {
                     left: 0,
                     top: 0
+                },
+                dragged: false,
+                cursorOffset: {
+                    top: 0, left: 0
                 }
             }
         },
 
         methods: {
+
+            ...mapMutations(['setMovedBlockIndex']),
+
+            drag (e) {
+
+                // console.log(e.dataTransfer);
+
+            },
+
+            dragStart (e) {
+
+                // e.preventDefault();
+                this.dragged = true;
+                this.setMovedBlockIndex(this.idx);
+
+                this.cursorOffset.left = e.clientX - e.target.getBoundingClientRect().left;
+
+                this.cursorOffset.top = e.clientY - e.target.getBoundingClientRect().top;
+
+                e.dataTransfer.effectAllowed = 'link';
+                e.dataTransfer.setData("text", e.target.id);
+                console.log('drag start...');
+
+            },
+
+            dragEnd (e) {
+
+                this.dragged = false;
+                this.setMovedBlockIndex(-1);
+
+                this.position.left = e.clientX - this.parentOffset.left - this.cursorOffset.left;
+                this.position.top = e.clientY - this.parentOffset.top - this.cursorOffset.top;
+
+                this.cursorOffset = {};
+
+            },
 
             getStyles () {
 

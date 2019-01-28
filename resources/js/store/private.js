@@ -6,7 +6,9 @@ export default new Vuex.Store({
     state: {
         testStoreProp: 'test store prop',
 
-        blocks: []
+        blocks: [],
+
+        movedBlockIndex: -1
     },
 
     mutations: {
@@ -14,6 +16,10 @@ export default new Vuex.Store({
         addBlock (state, block) {
 
             state.blocks.push(block);
+        },
+
+        setMovedBlockIndex (state, idx) {
+            state.movedBlockIndex = idx;
         }
 
     },
@@ -48,9 +54,6 @@ export default new Vuex.Store({
             };
 
             block.startPosition = getters.getNextBlockOffset;
-
-            // console.log(getters.getNextBlockZIndex);
-            // console.log(block);
 
             commit('addBlock', block);
 
