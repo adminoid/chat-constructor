@@ -3,14 +3,13 @@
     .work-area.col-md-9
         .work-area__wrapper
             .top-panel
-                button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addBlock") Добавить блок
-            #area.work-area__main-area(@dragover="dragOver" @drop="drop")
+                button(type="button" class="top-panel__add-block-btn btn btn-success" @click="pushBlock({blockName: 'Test block'})") Добавить блок
+            #area.work-area__main-area(@dragover="dragOver")
                 private-root-work-area-main-block(
                     v-for="(block, index) in blocks"
                     :key="index"
                     :idx="index"
                     :blockData="block"
-                    :parentOffset="offset"
                 )
 
 
@@ -19,7 +18,7 @@
 <script>
 
     import PrivateRootWorkAreaMainBlock from './PrivateRootWorkAreaMainBlock';
-    import { mapState, mapActions } from 'vuex';
+    import { mapState, mapActions, mapMutations } from 'vuex';
     import _ from 'lodash';
 
     export default {
@@ -38,55 +37,36 @@
         },
 
         computed: {
-            ...mapState(['blocks', 'movedBlockIndex'])
+            ...mapState(['blocks', 'area'])
         },
 
         mounted () {
 
-            this.getWorkAreaOffset();
+            this.saveWorkAreaOffset();
 
         },
 
         methods: {
 
-            getWorkAreaOffset () {
+            ...mapMutations(['setAreaOffset']),
+
+            saveWorkAreaOffset () {
 
                 let el = document.getElementById('area');
                 let coordinates = el.getBoundingClientRect();
-                this.offset = _.pick(coordinates, ['top', 'left']);
-
-            },
-
-            drop (e) {
-
-                console.log(e.target);
-                console.log(this.blocks[this.movedBlockIndex]);
+                this.setAreaOffset(_.pick(coordinates, ['top', 'left']));
 
             },
 
             dragOver (e) {
 
                 e.preventDefault();
-                // console.log(event.clientX);
-                // console.log(event.clientY);
 
             },
 
+
             ...mapActions(['pushBlock']),
 
-            addBlock () {
-
-                this.pushBlock({
-
-                    blockName: 'Test block',
-
-                }).then(() => {
-
-                    console.log(this.blocks);
-
-                });
-
-            }
         }
 
     }

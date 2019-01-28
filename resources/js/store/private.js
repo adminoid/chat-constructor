@@ -8,10 +8,18 @@ export default new Vuex.Store({
 
         blocks: [],
 
+        area: {
+            offset: {}
+        },
+
         movedBlockIndex: -1
     },
 
     mutations: {
+
+        setAreaOffset (state, offset) {
+            state.area.offset = offset;
+        },
 
         addBlock (state, block) {
 

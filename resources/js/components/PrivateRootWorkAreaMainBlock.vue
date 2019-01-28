@@ -4,27 +4,31 @@
         :style="getStyles()"
         @dragstart="dragStart"
         @dragend="dragEnd"
-        @drag="drag"
         draggable="true"
         v-if="!dragged"
     )
-        p №{{ idx }}
-        p {{ blockData.blockName }}
+        p {{ blockData.blockName }} №{{ idx }}
 
 </template>
 
 <script>
 
+    // TODO: inspect why block sometimes is gone...
+
     import { mapMutations, mapState } from 'vuex';
+    import dragDropMixin from '../mixins/dragDrop';
 
     export default {
 
         name: 'PrivateRootWorkAreaMainBlock',
 
+        // TODO: here place connector components
+
+        mixins: [dragDropMixin],
+
         props: {
             idx: Number,
             blockData: Object,
-            parentOffset: Object
         },
 
         data: function () {
@@ -32,37 +36,26 @@
                 position: {
                     left: 0,
                     top: 0
-                },
-                dragged: false,
-                cursorOffset: {
-                    top: 0, left: 0
                 }
             }
+        },
+
+        computed: {
+            ...mapState(['area'])
         },
 
         methods: {
 
             ...mapMutations(['setMovedBlockIndex']),
 
-            drag (e) {
-
-                // console.log(e.dataTransfer);
-
-            },
-
             dragStart (e) {
 
-                // e.preventDefault();
                 this.dragged = true;
                 this.setMovedBlockIndex(this.idx);
 
-                this.cursorOffset.left = e.clientX - e.target.getBoundingClientRect().left;
-
-                this.cursorOffset.top = e.clientY - e.target.getBoundingClientRect().top;
+                this.setCursorOffset(e); // mixin method
 
                 e.dataTransfer.effectAllowed = 'link';
-                e.dataTransfer.setData("text", e.target.id);
-                console.log('drag start...');
 
             },
 
@@ -71,23 +64,20 @@
                 this.dragged = false;
                 this.setMovedBlockIndex(-1);
 
-                this.position.left = e.clientX - this.parentOffset.left - this.cursorOffset.left;
-                this.position.top = e.clientY - this.parentOffset.top - this.cursorOffset.top;
-
-                this.cursorOffset = {};
+                this.position = this.getPosition(e, this.area.offset); // getPosition - is mixin method
 
             },
 
             getStyles () {
 
                 return {
-                    ...this.getPosition(),
+                    ...this.normalizePosition(),
                     ...this.style
                 }
 
             },
 
-            getPosition () {
+            normalizePosition () {
                 return _.mapValues(this.position, val => val + 'px')
             }
 
@@ -107,11 +97,15 @@
 
 <style lang="sass">
 
+    @import '../../sass/_mixins.scss'
+
     .main-block
         position: absolute
         height: 100px
         width: 150px
         background: #6a8aff
         border: 1px solid #030041
+        padding: 10px
+        @include border-radius(5px)
 
 </style>
