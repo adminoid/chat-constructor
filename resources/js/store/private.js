@@ -4,6 +4,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+
+        paddingStep: 30,
+
         testStoreProp: 'test store prop',
 
         blocks: [],
@@ -42,7 +45,7 @@ export default new Vuex.Store({
 
         getNextBlockOffset (state) {
 
-            let offset = (state.blocks.length + 1) * 10;
+            let offset = (state.blocks.length + 1) * state.paddingStep;
 
             return {
                 left: offset,

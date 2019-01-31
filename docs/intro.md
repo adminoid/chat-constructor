@@ -19,3 +19,5 @@ keep-alive
 <https://css-tricks.com/creating-vue-js-component-instances-programmatically/>
 <https://codesandbox.io/embed/4l3w20zomw>
 
+### Distance from mouse to element
+<https://stackoverflow.com/questions/50906224/calculate-distance-between-mouse-and-the-edges-of-a-dom-element>

@@ -7,7 +7,13 @@
         draggable="true"
         v-if="!dragged"
     )
-        p {{ blockData.blockName }} №{{ idx }}
+        .main-block__header Header
+        .main-block__body
+            p {{ blockData.blockName }} №{{ idx }}
+        .main-block__footer
+            private-root-work-area-main-block-connectors-group(kind="out")
+
+
 
 </template>
 
@@ -17,11 +23,12 @@
 
     import { mapMutations, mapState } from 'vuex';
     import dragDropMixin from '../mixins/dragDrop';
+    import PrivateRootWorkAreaMainBlockConnectorsGroup from "./PrivateRootWorkAreaMainBlockConnectorsGroup";
 
     export default {
 
         name: 'PrivateRootWorkAreaMainBlock',
-
+        components: {PrivateRootWorkAreaMainBlockConnectorsGroup},
         // TODO: here place connector components
 
         mixins: [dragDropMixin],
@@ -100,12 +107,21 @@
     @import '../../sass/_mixins.scss'
 
     .main-block
+        display: flex
+        flex-flow: column nowrap
+        justify-content: space-between
+        align-items: center
         position: absolute
         height: 100px
         width: 150px
         background: #6a8aff
-        border: 1px solid #030041
-        padding: 10px
+        border: 1px solid #5d6dd5
         @include border-radius(5px)
+        .main-block__header
+            position: relative
+        .main-block__body
+            height: 100%
+        .main-block__footer
+            position: relative
 
 </style>
