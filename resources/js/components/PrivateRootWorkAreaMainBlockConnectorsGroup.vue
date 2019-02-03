@@ -1,7 +1,7 @@
 <template lang="pug">
 
-    ul.connectors-group(:class="classes")
-        private-root-work-area-main-block-connector(v-for="(connector, index) in connectors" :key="index" :data="connector")
+    ul.connectors-group(:class="classes" ref="out-connectors")
+        private-root-work-area-main-block-connector(v-for="(connector, index) in connectors" :key="index" :connector="connector")
 
 </template>
 
@@ -18,7 +18,6 @@
                 type: String,
                 default: 'out'
             },
-            data: {}
         },
 
         components: { PrivateRootWorkAreaMainBlockConnector },
@@ -37,7 +36,7 @@
         created () {
 
             this.connectors.push({
-                kind: 'create-new'
+                kind: 'new1'
             })
 
         }

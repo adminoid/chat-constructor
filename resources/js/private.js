@@ -24,7 +24,7 @@ import store from './store/private.js';
 
 // Vue.component('private-root-work-area-main-block', require('./components/PrivateRootWorkAreaMainBlock.vue').default);
 
-import PrivateRootSidebar from './components/PrivateRootSidebar'
+import PrivateRootSidebar from './components/PrivateRootSidebar';
 import PrivateRootWorkArea from './components/PrivateRootWorkArea';
 
 /**
@@ -32,6 +32,8 @@ import PrivateRootWorkArea from './components/PrivateRootWorkArea';
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+import { mapMutations } from 'vuex';
 
 const app = new Vue({
     el: '#app',
@@ -41,5 +43,24 @@ const app = new Vue({
     components: {
         PrivateRootSidebar,
         PrivateRootWorkArea
+    },
+
+    methods: {
+
+        ...mapMutations(['updateCursorCoordinates']),
+
+        setGlobalMouseMoveListener () {
+
+            window.addEventListener('mousemove', this.updateCursorCoordinates);
+
+        },
+
+    },
+
+    mounted () {
+
+        this.setGlobalMouseMoveListener();
+
     }
+
 });

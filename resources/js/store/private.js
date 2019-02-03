@@ -12,13 +12,60 @@ export default new Vuex.Store({
         blocks: [],
 
         area: {
-            offset: {}
+            offset: {top: 0, left: 0},
+            cursorInArea: {top: 0, left: 0},
+            el: {},
         },
 
-        movedBlockIndex: -1
+        movedBlockIndex: -1,
+
+        dd: {
+
+            trackCursor: false,
+
+            coordinates: {top: 0, left: 0},
+
+        }
+
     },
 
     mutations: {
+
+        saveWorkAreaEl (state, el) {
+
+            state.area.el = el;
+
+        },
+
+        setTrackCursor (state, enable = false) {
+
+            state.dd.trackCursor = enable;
+
+        },
+
+        updateCursorCoordinates (state, e) {
+
+            // console.log(e.pageX);
+            // console.log(e.pageY);
+
+            // if (!state.trackCursor) return false;
+
+            state.dd.coordinates.top = e.pageY;
+            state.dd.coordinates.left = e.pageX;
+
+            // console.log(state.dd.coordinates.top, state.dd.coordinates.left);
+            // console.log(state.area.offset.top, state.area.offset.left);
+
+            let top = state.dd.coordinates.top - state.area.offset.top;
+            let left = state.dd.coordinates.left - state.area.offset.left;
+
+            // TODO: add boundaries for right and bottom
+            state.area.cursorInArea.top = (top < 0) ? 0 : top;
+            state.area.cursorInArea.left = (left < 0) ? 0 : left;
+
+            // console.log(state.area.cursorInArea.top, state.area.cursorInArea.left);
+
+        },
 
         setAreaOffset (state, offset) {
             state.area.offset = offset;

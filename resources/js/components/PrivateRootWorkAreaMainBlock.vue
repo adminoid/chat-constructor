@@ -1,9 +1,10 @@
 <template lang="pug">
 
     .main-block(
-        :style="getStyles()"
+        :style="styles"
         @dragstart="dragStart"
         @dragend="dragEnd"
+        @drag="drag"
         draggable="true"
         v-if="!dragged"
     )
@@ -48,10 +49,28 @@
         },
 
         computed: {
-            ...mapState(['area'])
+            ...mapState(['area']),
+
+            styles () {
+
+                return {
+                    ...this.normalizePosition(),
+                    ...this.style
+                }
+
+            },
         },
 
         methods: {
+
+            drag (e) {
+
+                e.preventDefault();
+
+                // console.log(e.target);
+                // console.log(this.position);
+
+            },
 
             ...mapMutations(['setMovedBlockIndex']),
 
@@ -63,6 +82,7 @@
                 this.setCursorOffset(e); // mixin method
 
                 e.dataTransfer.effectAllowed = 'link';
+                return false;
 
             },
 
@@ -72,15 +92,6 @@
                 this.setMovedBlockIndex(-1);
 
                 this.position = this.getPosition(e, this.area.offset); // getPosition - is mixin method
-
-            },
-
-            getStyles () {
-
-                return {
-                    ...this.normalizePosition(),
-                    ...this.style
-                }
 
             },
 

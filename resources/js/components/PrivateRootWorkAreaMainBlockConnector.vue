@@ -1,10 +1,21 @@
 <template lang="pug">
 
-    li.connector(:class="classes" @mouseenter="onHover" @mouseout="onUnHover")
+    li.connector(
+        :class="[classMain]"
+        @mouseenter="onHover"
+        @mouseout="onUnHover"
+        @dragstart.stop.prevent="onDragStart"
+        @mousedown.stop.prevent="onMouseDown"
+    )
 
 </template>
 
 <script>
+
+    import { mapMutations, mapState } from 'vuex';
+    import Vue from 'vue';
+    import draggableCloneOfConnectorMixin from '../mixins/draggableCloneOfConnector';
+    import PrivateRootWorkAreaMainBlockConnector from './PrivateRootWorkAreaMainBlockConnector';
 
     export default {
 
@@ -13,34 +24,86 @@
         props: {
             kind: {
                 type: String,
-                default: 'create-new'
+                default: 'new'
             },
-            data: {}
+
+            connector: {}
         },
 
         data () {
             return {
-                classes: [
-                    'connector_' + this.kind
-                ]
+
+                classMain: '',
+
+                classesArray: [],
+
+                dd: {
+                    shiftX: 0,
+                    shiftY: 0,
+                    moving: false,
+                    connectorCopy: {},
+                }
+
             }
         },
 
-        methods: {
-            onHover (e) {
+        computed: {
 
-                console.log('onHover');
-                this.classes.push('connector_hover')
+            ...mapState(['area']),
+
+        },
+
+        methods: {
+
+            ...mapMutations(['setTrackCursor']),
+
+            onMouseDown () {
+
+                console.log('m-d');
+
+                this.setTrackCursor(true);
+
+                let connectorClass = Vue.extend(PrivateRootWorkAreaMainBlockConnector);
+
+                let connectorInstance = new connectorClass({
+
+                    mixins: [draggableCloneOfConnectorMixin],
+
+                    propsData: {kind: 'clone'},
+
+                });
+
+                connectorInstance.$mount();
+
+                this.$parent.$el.appendChild(connectorInstance.$el);
+                // TODO: Not add to virtual DOM...
+
+                // this.$parent.connectors.push(connectorInstance);
 
             },
 
-            onUnHover (e) {
+            onDragStart () {
+                return false;
+            },
 
-                console.log('onUnHover');
-                this.classes.pop();
+            onHover () {
+
+                this.classesArray.push('connector_hover')
+
+            },
+
+            onUnHover () {
+
+                this.classesArray.pop();
+
             }
-        }
+        },
 
+        created () {
+
+            this.classMain = 'connector_' + this.kind;
+
+        }
     }
 
 </script>
@@ -53,10 +116,15 @@
         height: 16px
         width: 16px
         border: 1px dashed #2a9055
+        background: #31b06f
         @include border-radius(3px)
     .connector_hover
         border: 1px solid #005f26
         background: #2a9055
         cursor: pointer
-
+    .connector_clone
+        background: #000
+        position: absolute
+        top: 30px
+        left: 20px
 </style>

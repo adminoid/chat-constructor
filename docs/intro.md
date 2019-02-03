@@ -21,3 +21,9 @@ keep-alive
 
 ### Distance from mouse to element
 <https://stackoverflow.com/questions/50906224/calculate-distance-between-mouse-and-the-edges-of-a-dom-element>
+
+### D&d
+<https://learn.javascript.ru/drag-and-drop>
+
+### Pass props to data
+<https://stackoverflow.com/questions/40408096/whats-the-correct-way-to-pass-props-as-initial-data-in-vue-js-2>

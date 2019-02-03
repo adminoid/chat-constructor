@@ -1,10 +1,10 @@
 <template lang="pug">
 
     .work-area.col-md-9
-        .work-area__wrapper
+        .work-area__wrapper(ref="work-area")
             .top-panel
                 button(type="button" class="top-panel__add-block-btn btn btn-success" @click="pushBlock({blockName: 'Test block'})") Добавить блок
-            #area.work-area__main-area(@dragover="dragOver")
+            #area.work-area__main-area(@dragover="dragOver" @mouseup.stop.prevent="onMouseUp" @drop="drop")
                 private-root-work-area-main-block(
                     v-for="(block, index) in blocks"
                     :key="index"
@@ -42,13 +42,26 @@
 
         mounted () {
 
+            this.saveWorkAreaEl(this.$el);
             this.saveWorkAreaOffset();
 
         },
 
         methods: {
 
-            ...mapMutations(['setAreaOffset']),
+            onMouseUp () {
+
+                console.log('m-u');
+
+                this.setTrackCursor(false);
+
+            },
+
+            drop (e) {
+                console.log(e.target);
+            },
+
+            ...mapMutations(['saveWorkAreaEl', 'setAreaOffset', 'setTrackCursor']),
 
             saveWorkAreaOffset () {
 
