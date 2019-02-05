@@ -14,8 +14,7 @@
 
 <div class="row no-gutters" id="app">
 
-    <private-root-sidebar></private-root-sidebar>
-    <private-root-work-area></private-root-work-area>
+    <main-sidebar></main-sidebar>
 
 </div>
 

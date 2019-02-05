@@ -9,17 +9,12 @@
     2. emit update coordinates custom event (ibid <https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component>)
 - split getCoordinates as method and computed coordinates based on it (for what? I'm forgotten...)
 - install typescript & vue-class-component & decorators
-  - **(IMO) best explanation <https://medium.com/@titasgailius/initial-laravel-setup-with-vuejs-vue-router-vuex-in-typescript-305f7fe9d62b>**
-  - cheat sheet <https://github.com/sebastiandedeyne/laravel-mix-typescript-example>
-  - <https://ru.vuejs.org/v2/guide/typescript.html>
-  - <https://stackoverflow.com/questions/42655160/how-can-i-get-vue-js-2-0-typings-for-typescript-working-with-visual-studio>
-  - <https://alexjover.com/blog/integrate-typescript-in-your-vue-project/>
-  - (outdated, but good) <https://sebastiandedeyne.com/typescript-with-laravel-mix>
+  - best explanation <https://medium.com/@titasgailius/initial-laravel-setup-with-vuejs-vue-router-vuex-in-typescript-305f7fe9d62b>
 
 **final edited todo:**
-- reorganize file and folder to different folders for different frontend projects (customer, admin, app)
++ reorganize file and folder to different folders for different frontend projects (customer, admin, app)
 - reorganize code with support typescript, vue-class-component and for vuex
-- make file types.ts with exporting many types
++ make file types.ts with exporting many types (resources/customer/ts/ts-custom.d.ts)
 - make list array for area component of different components with type as imported type from types.ts
 - make base component for connector
   - make components based on connector: connector-moved, connector-create

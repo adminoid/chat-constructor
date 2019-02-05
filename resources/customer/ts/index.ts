@@ -1,11 +1,11 @@
 import "./bootstrap"
+import Vue from "vue"
+import store from "./store"
+import MainSidebar from "./components/MainSidebar.vue"
 
-class App {
+Vue.component('main-sidebar', MainSidebar);
 
-  public var1: string = 'test'
-
-}
-
-let app = new App();
-
-console.log(app.var1);
+new Vue({
+  el: '#app',
+  store,
+});
