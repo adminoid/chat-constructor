@@ -11,5 +11,26 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/private.js', 'public/js').sourceMaps()
+   .sass('resources/sass/private.scss', 'public/css');
+
+mix.webpackConfig({
+    module: {
+        rules:
+        [{
+            test: /\.pug$/,
+            oneOf: [
+                // this applies to `<template lang="pug">` in Vue components
+                {
+                    resourceQuery: /^\?vue/,
+                    use: ['pug-plain-loader']
+                },
+                // this applies to pug imports inside JavaScript
+                {
+                    use: ['raw-loader', 'pug-plain-loader']
+                }
+            ]
+        }]
+    }
+});
+
