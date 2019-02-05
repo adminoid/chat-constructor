@@ -1,9 +1,18 @@
 // import { mapState } from 'vuex';
-// import store from '../store/private.js';
+import store from '../store/private.js';
 
 export default {
 
     computed: {
+
+        coordinates () {
+
+            return {
+                top: store.state.area.cursorInArea.top + 'px',
+                left: store.state.area.cursorInArea.left + 'px',
+            };
+
+        }
 
         // ...mapState(['area']),
 
@@ -11,7 +20,7 @@ export default {
 
     created () {
 
-        console.log(this);
+        console.log(store.state.area);
         // console.log(this.area);
         // console.log(this.area.cursorInArea);
 

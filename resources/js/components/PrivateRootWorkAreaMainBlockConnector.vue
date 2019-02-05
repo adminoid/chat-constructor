@@ -1,12 +1,13 @@
 <template lang="pug">
 
     li.connector(
-        :class="[classMain]"
+        :style="coordinates"
+        :class="classMain"
         @mouseenter="onHover"
         @mouseout="onUnHover"
         @dragstart.stop.prevent="onDragStart"
         @mousedown.stop.prevent="onMouseDown"
-    )
+    ) {{ coordinates }}
 
 </template>
 
