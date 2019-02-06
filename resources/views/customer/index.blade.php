@@ -15,6 +15,7 @@
 <div class="row no-gutters" id="app">
 
     <main-sidebar></main-sidebar>
+    <main-content></main-content>
 
 </div>
 

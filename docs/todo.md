@@ -38,4 +38,18 @@
 ### Notes
 + Using Vue mixins with typescript and vue-class-component <https://forum.vuejs.org/t/how-can-i-use-mixin-with-vue-class-component-and-typescript/21254/7>
 
+### Semantic component structure
+
+- index.blade:
+  main-sidebar / aside
+  main-content / section
+    top-panel / nav
+    drop-area
+      drag-item [block, connector-dd, line] *mixin=drag-item
+      block
+        connector-group
+          connector [connector-create, connector-dd, connector]
+
+
+
 
