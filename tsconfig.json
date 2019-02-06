@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es5",
+    "strict": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "strictNullChecks": false
+  },
+  "include": [
+    "resources/customer/ts/**/*.ts",
+    "resources/customer/ts/**/*.vue"
+  ],
+  "exclude": [ "node_modules" ],
+  "types": [ "jest" ]
+}

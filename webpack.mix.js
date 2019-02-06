@@ -11,26 +11,33 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/private.js', 'public/js').sourceMaps()
-   .sass('resources/sass/private.scss', 'public/css');
+mix.ts('resources/customer/ts/index.ts', 'public/js/customer.js').sourceMaps()
+  .sass('resources/customer/sass/index.sass', 'public/css/customer.css');
 
 mix.webpackConfig({
-    module: {
-        rules:
-        [{
-            test: /\.pug$/,
-            oneOf: [
-                // this applies to `<template lang="pug">` in Vue components
-                {
-                    resourceQuery: /^\?vue/,
-                    use: ['pug-plain-loader']
-                },
-                // this applies to pug imports inside JavaScript
-                {
-                    use: ['raw-loader', 'pug-plain-loader']
-                }
-            ]
-        }]
-    }
+  module: {
+    rules: [
+      {
+        test: /\.pug$/,
+        oneOf: [
+          // this applies to `<template lang="pug">` in Vue components
+          {
+            resourceQuery: /^\?vue/,
+            use: ['pug-plain-loader']
+          },
+          // this applies to pug imports inside JavaScript
+          {
+            use: ['raw-loader', 'pug-plain-loader']
+          }
+        ]
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: { appendTsSuffixTo: [/\.vue$/] },
+        exclude: /node_modules/,
+      },
+    ]
+  }
 });
 
