@@ -6,7 +6,8 @@
     "module": "es6",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "noImplicitAny": false
   },
   "include": [
     "resources/customer/ts/**/*.ts",

@@ -13,7 +13,7 @@
 
 **final edited todo:**
 + reorganize file and folder to different folders for different frontend projects (customer, admin, app)
-- reorganize code with support typescript, vue-class-component and for vuex
++ reorganize code with support typescript, vue-class-component and for vuex
 + make file types.ts with exporting many types (resources/customer/ts/ts-custom.d.ts)
 - make list array for area component of different components with type as imported type from types.ts
 - make base component for connector
@@ -37,6 +37,13 @@
 
 ### Notes
 + Using Vue mixins with typescript and vue-class-component <https://forum.vuejs.org/t/how-can-i-use-mixin-with-vue-class-component-and-typescript/21254/7>
++ vuex typing <https://github.com/vuejs/vuex/issues/564>
++ modules example <https://github.com/Anonyfox/vuex-store-module-example/blob/master/src/getters.ts>
++ vuex stuff
+  + <https://codeburst.io/vuex-and-typescript-3427ba78cfa8>
+  + <https://github.com/ktsn/vuex-class>
++ vue 'singleton' <https://stackoverflow.com/questions/52944052/creating-a-single-instance-of-a-class-within-a-vue-application>
+
 
 ### Semantic component structure
 
@@ -50,6 +57,10 @@
         connector-group
           connector [connector-create, connector-dd, connector]
 
+### Latest actual TODO list
 
-
+- make block component
+- make insert block by click button
+- make drag-item mixin
+- [mixin] on mouse clicked save cursor position into clicked element
 

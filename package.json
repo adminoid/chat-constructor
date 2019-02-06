@@ -26,7 +26,8 @@
         "typescript": "^3.3.1",
         "vue": "^2.5.22",
         "vue-class-component": "^6.3.2",
-        "vue-template-compiler": "^2.5.22"
+        "vue-template-compiler": "^2.5.22",
+        "vuex-class": "^0.3.1"
     },
     "dependencies": {
         "jsplumb": "^2.8.8",
