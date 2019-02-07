@@ -7,18 +7,18 @@
 
 <script lang="ts">
 
-  import Vue from "vue"
-  import Component from "vue-class-component"
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
 
-  @Component({
-    components: { },
-    props: { },
-  })
+  @Component
   export default class MainSidebar extends Vue {
 
     pushBlock () {
 
-      console.log('block pushed');
+      console.group('TopPanel.vue');
+      console.log(this.$store.state);
+      console.info('block pushed');
+      console.groupEnd();
 
     }
 

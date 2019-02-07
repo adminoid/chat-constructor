@@ -6,23 +6,12 @@
 
 <script lang="ts">
 
-  import Vue from "vue"
   import Component, { mixins } from 'vue-class-component'
   import {
-    State,
-    namespace
+    State, namespace, Mutation,
   } from 'vuex-class'
 
   import DragItemMixin from '../mixins/DragItem'
-
-  // Use `mixins` helper function instead of `Vue`.
-  // `mixins` can receive any number of arguments.
-  @Component
-  export class MyComp extends mixins(DragItemMixin) {
-    created () {
-
-    }
-  }
 
   const DropAreaModule = namespace('DropAreaModule');
 
@@ -34,11 +23,17 @@
 
     @State version;
     @DropAreaModule.State count;
+    @Mutation rootMoot;
+    @DropAreaModule.Mutation change;
 
     created () {
-      console.log(this.version);
+      console.group('DropArea.vue');
+      this.rootMoot('new val');
+      console.log(this.mixinValue);
       console.log(this.count);
-      console.log(this.mixinValue) // -> Hello
+      this.change(721);
+      console.log(this.count);
+      console.groupEnd();
     }
 
   }
