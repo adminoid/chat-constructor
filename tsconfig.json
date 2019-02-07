@@ -3,11 +3,12 @@
     "sourceMap": true,
     "target": "es5",
     "strict": true,
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "strictNullChecks": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "importHelpers": true
   },
   "include": [
     "resources/customer/ts/**/*.ts",
