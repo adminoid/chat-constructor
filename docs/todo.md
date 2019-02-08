@@ -70,7 +70,7 @@
 
 #### also TODO
 
-- bind z-index hardly to all components in items array
++ bind z-index hardly to all components in items array
 - make action addBlock to store module
   - add type of component and initial offset
 - think about how rightly bind left/top position to DragItem-like components

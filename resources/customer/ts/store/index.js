@@ -8,12 +8,12 @@ export default new Vuex.Store({
         version: '0.9.1'
     },
     mutations: {
-        rootMoot: function (state, newVersion) {
+        rootMoot(state, newVersion) {
             state.version = newVersion;
         }
     },
     modules: {
-        DropAreaModule: DropAreaModule
+        DropAreaModule
     }
 });
 //# sourceMappingURL=index.js.map

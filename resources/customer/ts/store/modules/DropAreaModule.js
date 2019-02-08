@@ -1,25 +1,33 @@
 import * as tslib_1 from "tslib";
-import { Module, VuexModule, Mutation, } from 'vuex-module-decorators';
-var DropAreaModule = /** @class */ (function (_super) {
-    tslib_1.__extends(DropAreaModule, _super);
-    function DropAreaModule() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.items = [];
-        return _this;
+import { Module, VuexModule, Mutation, Action, } from 'vuex-module-decorators';
+import _ from 'lodash';
+let DropAreaModule = class DropAreaModule extends VuexModule {
+    constructor() {
+        super(...arguments);
+        this.items = [];
     }
-    DropAreaModule.prototype.insert = function (item) {
+    insertItem(item) {
         this.items.push(item);
-    };
-    tslib_1.__decorate([
-        Mutation
-    ], DropAreaModule.prototype, "insert", null);
-    DropAreaModule = tslib_1.__decorate([
-        Module({
-            namespaced: true,
-            name: 'DropAreaModule',
-        })
-    ], DropAreaModule);
-    return DropAreaModule;
-}(VuexModule));
+    }
+    async insertBlock(itemData) {
+        if (!_.has(itemData, 'component') || itemData.component !== 'BlockBase') {
+            itemData.component = 'BlockBase';
+        }
+        this.context.commit('insertItem', itemData);
+    }
+};
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "insertItem", null);
+tslib_1.__decorate([
+    Action({ rawError: true })
+], DropAreaModule.prototype, "insertBlock", null);
+DropAreaModule = tslib_1.__decorate([
+    Module({
+        name: 'DropAreaModule',
+        namespaced: true,
+        store: {},
+    })
+], DropAreaModule);
 export default DropAreaModule;
 //# sourceMappingURL=DropAreaModule.js.map

@@ -1,7 +1,7 @@
 <template lang="pug">
 
   .top-panel
-    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="pushBlock({blockName: 'Test block'})") Добавить блок
+    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addBlock") Добавить блок
 
 </template>
 
@@ -10,7 +10,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import {
-    namespace, Mutation, State
+    namespace
   } from 'vuex-class'
 
   const DropAreaModule = namespace('DropAreaModule');
@@ -18,18 +18,14 @@
   @Component
   export default class MainSidebar extends Vue {
 
-    @DropAreaModule.Mutation('insert') insertItem;
+    @DropAreaModule.Action('insertBlock') insertBlock;
+    // @DropAreaModule.Mutation('insertItem') insertItem;
 
-    pushBlock () {
+    addBlock () {
 
-      console.group('TopPanel.vue');
-      // console.log(this.$store.DropAreaModule.state);
-      this.insertItem({
-        blockName: 'Test block',
-        component: 'BlockBase'
+      this.insertBlock({
+        blockName: 'Test block'
       });
-      console.info('block pushed');
-      console.groupEnd();
 
     }
 
