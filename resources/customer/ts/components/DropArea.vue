@@ -7,6 +7,7 @@
       :is="item.component"
       :idx="index"
       :style="{ zIndex: index * zIndexStep }"
+      :initialData="item.initialData"
     )
 
 </template>
@@ -23,8 +24,7 @@
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { BlockBase },
-    props: { },
+    components: { BlockBase }
   })
   export default class DropArea extends Vue {
 

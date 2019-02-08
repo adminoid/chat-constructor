@@ -15,6 +15,11 @@ export default class DropAreaModule extends VuexModule {
 
   items = [];
 
+  blockPositionSteps = {
+    left: 15,
+    top: 10,
+  };
+
   @Mutation
   insertItem(item: any) {
     this.items.push(item);
@@ -25,6 +30,18 @@ export default class DropAreaModule extends VuexModule {
     if( !_.has( itemData, 'component' ) || itemData.component !== 'BlockBase' ) {
       itemData.component = 'BlockBase';
     }
+
+    let steps = (this.context.state as any).blockPositionSteps;
+    let total = (this.context.state as any).items.length;
+
+    let actualSteps = {};
+    Object.keys(steps).map((key) => {
+      actualSteps[key] = steps[key] * ( total + 1 );
+    });
+
+    itemData.initialData = {
+      position: actualSteps
+    };
 
     this.context.commit('insertItem', itemData);
   }
