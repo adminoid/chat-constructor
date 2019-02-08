@@ -59,8 +59,18 @@
 
 ### Latest actual TODO list
 
-- make block component
-- make insert block by click button
++ make block component
+  - copy padding and z-index from alpha version
+  + insert to items
+  - _insert to items with interface_
++ make insert block by click button
 - make drag-item mixin
 - [mixin] on mouse clicked save cursor position into clicked element
+- bind drop-item position with store
 
+#### also TODO
+
+- bind z-index hardly to all components in items array
+- make action addBlock to store module
+  - add type of component and initial offset
+- think about how rightly bind left/top position to DragItem-like components

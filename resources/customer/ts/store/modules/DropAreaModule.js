@@ -4,15 +4,15 @@ var DropAreaModule = /** @class */ (function (_super) {
     tslib_1.__extends(DropAreaModule, _super);
     function DropAreaModule() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.count = 237;
+        _this.items = [];
         return _this;
     }
-    DropAreaModule.prototype.change = function (n) {
-        this.count = n;
+    DropAreaModule.prototype.insert = function (item) {
+        this.items.push(item);
     };
     tslib_1.__decorate([
         Mutation
-    ], DropAreaModule.prototype, "change", null);
+    ], DropAreaModule.prototype, "insert", null);
     DropAreaModule = tslib_1.__decorate([
         Module({
             namespaced: true,

@@ -9,14 +9,25 @@
 
   import Vue from 'vue'
   import Component from 'vue-class-component'
+  import {
+    namespace, Mutation, State
+  } from 'vuex-class'
+
+  const DropAreaModule = namespace('DropAreaModule');
 
   @Component
   export default class MainSidebar extends Vue {
 
+    @DropAreaModule.Mutation('insert') insertItem;
+
     pushBlock () {
 
       console.group('TopPanel.vue');
-      console.log(this.$store.state);
+      // console.log(this.$store.DropAreaModule.state);
+      this.insertItem({
+        blockName: 'Test block',
+        component: 'BlockBase'
+      });
       console.info('block pushed');
       console.groupEnd();
 

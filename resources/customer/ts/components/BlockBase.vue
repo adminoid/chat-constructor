@@ -1,6 +1,6 @@
 <template lang="pug">
   .base-block
-    .base-block__header Header
+    .base-block__header Block №{{ idx }}
       .base-block__body
         p Block
       .base-block__footer Footer
@@ -8,14 +8,29 @@
 
 <script lang="ts">
 
-  import Vue from "vue"
-  import Component from "vue-class-component"
+  import Component, { mixins } from 'vue-class-component'
+  import DragItemMixin from '../mixins/DragItem'
+  import { Prop } from 'vue-property-decorator'
+  // import {
+  //   namespace
+  // } from 'vuex-class'
 
   @Component({
     components: {  },
-    props: {  },
+    props: {
+      idx: Number
+    }
   })
-  export default class BaseBlock extends Vue {
+  export default class BlockBase extends mixins(DragItemMixin) {
+
+    @Prop({}) idx!: number;
+
+    mount () {
+      console.group('BlockBase.vue/$mount()');
+      console.log(this.idx);
+      console.log(this.mixinValue);
+      console.groupEnd();
+    }
 
   }
 

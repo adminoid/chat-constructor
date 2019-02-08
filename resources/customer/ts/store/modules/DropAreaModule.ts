@@ -10,11 +10,11 @@ import {
 })
 export default class DropAreaModule extends VuexModule {
 
-  count = 237;
+  items = [];
 
   @Mutation
-  change(n: number) {
-    this.count = n;
+  insert(item: any) {
+    this.items.push(item);
   }
 
 }

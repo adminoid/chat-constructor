@@ -1,40 +1,36 @@
 <template lang="pug">
 
   #drop-area
+    component(
+      v-for="(item, index) in items"
+      :key="index"
+      :is="item.component"
+      :idx="index"
+      :style="{ zIndex: index * zIndexStep }"
+    )
 
 </template>
 
 <script lang="ts">
 
-  import Component, { mixins } from 'vue-class-component'
+  import Component from 'vue-class-component'
   import {
-    State, namespace, Mutation,
+    namespace
   } from 'vuex-class'
-
-  import DragItemMixin from '../mixins/DragItem'
+  import Vue from 'vue'
+  import BlockBase from './BlockBase'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { },
+    components: { BlockBase },
     props: { },
   })
-  export default class DropArea extends mixins(DragItemMixin) {
+  export default class DropArea extends Vue {
 
-    @State version;
-    @DropAreaModule.State count;
-    @Mutation rootMoot;
-    @DropAreaModule.Mutation change;
+    @DropAreaModule.State items;
 
-    created () {
-      console.group('DropArea.vue');
-      this.rootMoot('new val');
-      console.log(this.mixinValue);
-      console.log(this.count);
-      this.change(721);
-      console.log(this.count);
-      console.groupEnd();
-    }
+    zIndexStep: number = 20;
 
   }
 
