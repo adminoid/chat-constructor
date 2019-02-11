@@ -4,6 +4,7 @@
     drag-item-wrapper(
     v-for="(item, index) in items"
     :key="index"
+    :idx="index"
     :position="item.position")
       component(
       :is="item.component"

@@ -9,9 +9,30 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             left: 15,
             top: 10,
         };
+        this.dd = {
+            dragging: false,
+            startIdx: -1,
+            elementOffset: -1,
+        };
     }
     insertItem(item) {
         this.items.push(item);
+    }
+    setDragDropData(payload) {
+        let { idx, elementOffset } = payload;
+        let draggingItem = this.items.splice(idx, 1);
+        this.dd.dragging = true;
+        this.dd.startIdx = idx;
+        this.dd.elementOffset = elementOffset;
+        this.items.push(draggingItem[0]);
+        // console.group('startDragging');
+        // console.log(draggingItem[0]);
+        // console.log(this.dd);
+        // console.log(this.items);
+        // console.log(idx, offset);
+        // console.log(payload); // idx, offset<left, top>
+        // console.log(this.dd);
+        // console.groupEnd();
     }
     async insertBlock(itemData) {
         if (!_.has(itemData, 'component') || itemData.component !== 'BlockBase') {
@@ -30,6 +51,9 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "insertItem", null);
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "setDragDropData", null);
 tslib_1.__decorate([
     Action({ rawError: true })
 ], DropAreaModule.prototype, "insertBlock", null);

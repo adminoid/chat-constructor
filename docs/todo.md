@@ -3,10 +3,10 @@
 ## About frontend organization
 
 - make decision about that how and where place cloned connector for visual moving and delete it after
-  - figure out, how insert different components to array of components
+  + figure out, how insert different components to array of components
   - how dynamically change coordinates of moved DOM-element
-    1. run method who updates coordinate from area component as there <https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component>
-    2. emit update coordinates custom event (ibid <https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component>)
+    - run method who updates coordinate from area component as there <https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component>
+    - emit update coordinates custom event (ibid <https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component>)
 - split getCoordinates as method and computed coordinates based on it (for what? I'm forgotten...)
 - install typescript & vue-class-component & decorators
   - **best explanation** (with vue-router) <https://medium.com/@titasgailius/initial-laravel-setup-with-vuejs-vue-router-vuex-in-typescript-305f7fe9d62b>
@@ -52,9 +52,9 @@
     top-panel / nav
     drop-area
       drag-item [block, connector-dd, line] inner blocks wrapped to wrapper component **DragItem**
-      block
-        connector-group
-          connector [connector-create, connector-dd, connector]
+        block
+          connector-group
+            connector [connector-create, connector-dd, connector]
 
 ### Latest actual TODO list
 
@@ -113,8 +113,28 @@ new Vue({
 + conclusion about encapsulating components <https://stackoverflow.com/questions/48807290/how-to-encapsulate-wrap-a-vuejs-component>
 - may to read about reusable components: <https://codeburst.io/creating-reusable-components-with-vue-js-button-component-503167facfde>
 + more <https://adamwathan.me/renderless-components-in-vuejs/>
++ get key value in child component <https://stackoverflow.com/questions/47783396/access-key-from-child-component-in-vue>
+    `Otherwise you can access the key on the vnode within the component via this.$vnode.key`
++ get ref by index <https://www.reddit.com/r/vuejs/comments/89hywj/using_refs_with_arrays_of_things/>:
+    ```
+    <button @click="playPause(index)">Play/Pause</button>
+    <audio ref="audioEl" src="audio/sample1.mp3" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
+
+    methods: {
+      playPause (index) {
+        const audioEl = this.$refs.audioEl[index]
+        audioEl[audioEl.paused ? 'play' : 'pause']()
+      }
+    }
+    ```
+    + also <https://jsfiddle.net/Fmajor/cuay7v1j/2/>
++ splice: `this.settingsData.campaigns.splice(index, 1);`
++ useful notes about refs array: <https://github.com/vuejs/vue/issues/4952#issuecomment-425875157>
 
 ## For future
 ### Backend
 - nullable one-to-one relationship <https://laracasts.com/discuss/channels/eloquent/allow-null-for-belongsto-relationship?page=0>
+
 
