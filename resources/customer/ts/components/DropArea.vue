@@ -1,14 +1,13 @@
 <template lang="pug">
 
   #drop-area
-    component(
-      v-for="(item, index) in items"
-      :key="index"
+    drag-item-wrapper(
+    v-for="(item, index) in items"
+    :key="index"
+    :position="item.position")
+      component(
       :is="item.component"
-      :idx="index"
-      :style="{ zIndex: index * zIndexStep }"
-      :initialData="item.initialData"
-    )
+      :idx="index")
 
 </template>
 
@@ -19,11 +18,12 @@
     namespace
   } from 'vuex-class'
   import BlockBase from './BlockBase'
+  import DragItemWrapper from './DragItemWrapper'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { BlockBase }
+    components: { BlockBase, DragItemWrapper }
   })
   export default class DropArea extends Vue {
 

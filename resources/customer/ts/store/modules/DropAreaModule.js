@@ -21,11 +21,9 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         let total = this.context.state.items.length;
         let actualSteps = {};
         Object.keys(steps).map((key) => {
-            actualSteps[key] = steps[key] * (total + 1);
+            actualSteps[key] = steps[key] * (total + 1) + 'px';
         });
-        itemData.initialData = {
-            position: actualSteps
-        };
+        itemData.position = actualSteps;
         this.context.commit('insertItem', itemData);
     }
 };

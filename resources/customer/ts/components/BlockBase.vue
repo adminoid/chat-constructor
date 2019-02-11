@@ -1,5 +1,5 @@
 <template lang="pug">
-  .base-block(:style="style")
+  .base-block
     .base-block__header Block №{{ idx }}
       .base-block__body
         p Block
@@ -8,8 +8,7 @@
 
 <script lang="ts">
 
-  import Vue from 'vue'
-  import { Component, Prop } from 'vue-property-decorator'
+  import { Vue, Component, Prop } from 'vue-property-decorator'
 
   @Component({
     components: {  },
@@ -19,21 +18,7 @@
   })
   export default class BlockBase extends Vue {
 
-    style: any = {};
-
     @Prop({}) idx!: number;
-    @Prop({}) initialData!: any;
-
-    created () {
-      let position = this.initialData.position;
-
-      Object.keys(position).forEach(function (item) {
-        position[item] = position[item] + 'px';
-      });
-
-      this.style = position;
-
-    }
 
   }
 
@@ -45,7 +30,6 @@
     flex-flow: column nowrap
     justify-content: space-between
     align-items: center
-    position: absolute
     height: 100px
     width: 150px
     background: #6a8aff

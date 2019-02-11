@@ -51,7 +51,7 @@
   main-content / section
     top-panel / nav
     drop-area
-      drag-item [block, connector-dd, line] *mixin=drag-item
+      drag-item [block, connector-dd, line] inner blocks wrapped to wrapper component **DragItem**
       block
         connector-group
           connector [connector-create, connector-dd, connector]
