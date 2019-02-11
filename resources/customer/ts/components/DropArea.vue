@@ -14,11 +14,10 @@
 
 <script lang="ts">
 
-  import Component from 'vue-class-component'
+  import { Vue, Component } from 'vue-property-decorator'
   import {
     namespace
   } from 'vuex-class'
-  import Vue from 'vue'
   import BlockBase from './BlockBase'
 
   const DropAreaModule = namespace('DropAreaModule');

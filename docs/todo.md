@@ -9,7 +9,7 @@
     2. emit update coordinates custom event (ibid <https://stackoverflow.com/questions/33682651/call-a-vue-js-component-method-from-outside-the-component>)
 - split getCoordinates as method and computed coordinates based on it (for what? I'm forgotten...)
 - install typescript & vue-class-component & decorators
-  - best explanation <https://medium.com/@titasgailius/initial-laravel-setup-with-vuejs-vue-router-vuex-in-typescript-305f7fe9d62b>
+  - **best explanation** (with vue-router) <https://medium.com/@titasgailius/initial-laravel-setup-with-vuejs-vue-router-vuex-in-typescript-305f7fe9d62b>
 
 **final edited todo:**
 + reorganize file and folder to different folders for different frontend projects (customer, admin, app)
@@ -43,10 +43,9 @@
   + <https://codeburst.io/vuex-and-typescript-3427ba78cfa8>
   + <https://github.com/ktsn/vuex-class>
 + vue 'singleton' <https://stackoverflow.com/questions/52944052/creating-a-single-instance-of-a-class-within-a-vue-application>
-
++ transparent components: <https://zendev.com/2018/05/31/transparent-wrapper-components-in-vue.html>
 
 ### Semantic component structure
-
 - index.blade:
   main-sidebar / aside
   main-content / section
@@ -71,6 +70,51 @@
 #### also TODO
 
 + bind z-index hardly to all components in items array
-- make action addBlock to store module
-  - add type of component and initial offset
++ add action addBlock to store module
+  - add type of component
+  + initial offset
 - think about how rightly bind left/top position to DragItem-like components
+  - Is it need move adding initial data to DragItemMixin?
+
+#### Main work is...
+- **comment mixin and replace it to DragItem/slot/Component**
+for children dynamic components see <https://vuejs.org/v2/guide/components-dynamic-async.html>, example:
+```javascript
+Vue.component(
+  'async-webpack-example',
+  // The `import` function returns a Promise.
+  () => import('./my-async-component')
+)
+// and
+new Vue({
+  // ...
+  components: {
+    'my-component': () => import('./my-async-component')
+  }
+})
+```
+
+---
+
+> + about watchers here: <https://alligator.io/vuejs/typescript-class-components/>
+> + about extending styles: <https://alligator.io/vuejs/typescript-class-components/>
+> + extending templates: <https://github.com/mrodal/vue-inheritance-loader>
+> + mixin wrapper <https://github.com/ktsn/vue-typed-mixins> for class-like extending
+> + extending template with render function <https://github.com/vuejs/vue/issues/4665#issuecomment-321618056>
+> + more extending: <https://forum.vuejs.org/t/extend-styles-and-behaviour-of-a-single-file-component/19420>
+> + scalable content: <https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/>
+
+### Close TODO's
+- replace `import from 'vue-class-component'` to `import from 'vue-property-decorator'`
+- pass data through DragItem wrapper-component as here: <https://alligator.io/vuejs/add-v-model-support/>
+  - this is my case: <https://stackoverflow.com/questions/50891858/vue-how-to-pass-down-slots-inside-wrapper-component>
+
+**Notes**
++ conclusion about encapsulating components <https://stackoverflow.com/questions/48807290/how-to-encapsulate-wrap-a-vuejs-component>
+- may to read about reusable components: <https://codeburst.io/creating-reusable-components-with-vue-js-button-component-503167facfde>
++ more <https://adamwathan.me/renderless-components-in-vuejs/>
+
+## For future
+### Backend
+- nullable one-to-one relationship <https://laracasts.com/discuss/channels/eloquent/allow-null-for-belongsto-relationship?page=0>
+

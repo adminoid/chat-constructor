@@ -8,8 +8,7 @@
 
 <script lang="ts">
 
-  import Vue from "vue"
-  import Component from "vue-class-component"
+  import { Vue, Component } from "vue-property-decorator"
 
   import TopPanel from "./TopPanel.vue"
   import DropArea from "./DropArea.vue"
@@ -18,11 +17,7 @@
     components: { TopPanel, DropArea },
     props: { },
   })
-  export default class MainContent extends Vue {
-
-
-
-  }
+  export default class MainContent extends Vue {}
 
 </script>
 

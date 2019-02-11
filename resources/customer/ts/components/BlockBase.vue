@@ -8,9 +8,8 @@
 
 <script lang="ts">
 
-  import Component, { mixins } from 'vue-class-component'
-  import DragItemMixin from '../mixins/DragItem'
-  import { Prop } from 'vue-property-decorator'
+  import Vue from 'vue'
+  import { Component, Prop } from 'vue-property-decorator'
 
   @Component({
     components: {  },
@@ -18,7 +17,7 @@
       idx: Number
     }
   })
-  export default class BlockBase extends mixins(DragItemMixin) {
+  export default class BlockBase extends Vue {
 
     style: any = {};
 
