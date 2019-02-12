@@ -1,9 +1,9 @@
 <template lang="pug">
   .base-block
-    .base-block__header Block №{{ idx }}
-      .base-block__body
-        p Block
-      .base-block__footer Footer
+    .base-block__header {{ itemData.blockName }}
+    .base-block__body
+      p Block
+    .base-block__footer Footer
 </template>
 
 <script lang="ts">
@@ -12,13 +12,14 @@
 
   @Component({
     components: {  },
-    props: {
-      idx: Number
-    }
   })
   export default class BlockBase extends Vue {
 
     @Prop({}) idx!: number;
+
+    @Prop({}) blockName!: string;
+
+    @Prop({}) itemData!: object;
 
   }
 

@@ -18,14 +18,9 @@
   export default class MainSidebar extends Vue {
 
     @DropAreaModule.Action('insertBlock') insertBlock;
-    // @DropAreaModule.Mutation('insertItem') insertItem;
 
     addBlock () {
-
-      this.insertBlock({
-        blockName: 'Test block'
-      });
-
+      this.insertBlock();
     }
 
   }

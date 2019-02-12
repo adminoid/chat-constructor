@@ -13,30 +13,34 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             dragging: false,
             startIdx: -1,
             elementOffset: -1,
+            newIdx: -1,
         };
     }
     insertItem(item) {
         this.items.push(item);
     }
     setDragDropData(payload) {
-        let { idx, elementOffset } = payload;
-        let draggingItem = this.items.splice(idx, 1);
+        let { idx, elementOffset } = payload, draggingItem = this.items.splice(idx, 1);
         this.dd.dragging = true;
         this.dd.startIdx = idx;
         this.dd.elementOffset = elementOffset;
-        this.items.push(draggingItem[0]);
-        // console.group('startDragging');
-        // console.log(draggingItem[0]);
-        // console.log(this.dd);
-        // console.log(this.items);
-        // console.log(idx, offset);
-        // console.log(payload); // idx, offset<left, top>
-        // console.log(this.dd);
-        // console.groupEnd();
+        this.dd.newIdx = this.items.push(draggingItem[0]) - 1;
+        console.log(this.dd);
     }
-    async insertBlock(itemData) {
-        if (!_.has(itemData, 'component') || itemData.component !== 'BlockBase') {
+    /**
+     * Action because in the future planned make async ajax queries to the server
+     *
+     * @param itemData
+     */
+    async insertBlock(itemData = {}) {
+        if (!_.has(itemData, 'component')
+            || itemData.component !== 'BlockBase') {
             itemData.component = 'BlockBase';
+        }
+        if (!_.has(itemData, 'blockName')) {
+            itemData.initialData = {
+                blockName: `Block №${this.context.getters['itemsTotal']}`,
+            };
         }
         let steps = this.context.state.blockPositionSteps;
         let total = this.context.state.items.length;
@@ -45,7 +49,11 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             actualSteps[key] = steps[key] * (total + 1) + 'px';
         });
         itemData.position = actualSteps;
+        console.log(itemData);
         this.context.commit('insertItem', itemData);
+    }
+    get itemsTotal() {
+        return this.items.length;
     }
 };
 tslib_1.__decorate([

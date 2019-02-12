@@ -8,7 +8,8 @@
     :position="item.position")
       component(
       :is="item.component"
-      :idx="index")
+      :idx="index"
+      :itemData="item.initialData")
 
 </template>
 
