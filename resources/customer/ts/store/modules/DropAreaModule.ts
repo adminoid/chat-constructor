@@ -27,23 +27,76 @@ export default class DropAreaModule extends VuexModule {
     newIdx: -1,
   };
 
+  area = {
+    boundaries: {
+      left: -1,
+      top: -1,
+      right: -1,
+      bottom: -1,
+    }
+  };
+
   @Mutation
-  insertItem(item: any) {
-    this.items.push(item);
+  setAreaBoundaries( data ) {
+    this.area.boundaries = data;
   }
 
   @Mutation
-  setDragDropData(payload) {
+  updateCoords( coords ) {
+    if( this.dd.dragging ) {
 
-    let { idx, elementOffset } = payload,
-    draggingItem = this.items.splice(idx, 1);
+      let actualCoords = {};
 
-    this.dd.dragging = true;
+      Object.keys( coords ).map(( key ) => {
+         actualCoords[key] = coords[key] - this.dd.elementOffset[key];
+      });
+
+      if( actualCoords['left'] ) {
+
+      }
+
+      this.items[this.items.length-1].position = actualCoords;
+
+    }
+  }
+
+  @Mutation
+  insertItem( item: any ) {
+    this.items.push(item);
+  }
+
+
+  @Mutation
+  dragDropDataReset() {
+    this.dd = {
+      dragging: false,
+      startIdx: -1,
+      elementOffset: -1,
+      newIdx: -1,
+    };
+  }
+
+  @Mutation
+  dragDropDataSet(payload) {
+
+    let { idx, offset: elementOffset } = payload;
+
     this.dd.startIdx = idx;
+    this.dd.dragging = true;
     this.dd.elementOffset = elementOffset;
-    this.dd.newIdx = this.items.push(draggingItem[0]) - 1;
 
-    console.log(this.dd);
+    if( this.items.length > 1 ) {
+
+      let draggingItem = this.items.splice(idx, 1);
+      this.dd.newIdx = this.items.push(draggingItem[0]) - 1;
+
+    } else if ( this.items.length == 1 ) {
+
+      this.dd.newIdx = 0;
+
+    } else {
+      throw 'Error: Here no one block... What do you want to move?'
+    }
 
   }
 
@@ -55,10 +108,7 @@ export default class DropAreaModule extends VuexModule {
   @Action({rawError: true})
   async insertBlock(itemData: any = {}) {
 
-    if(
-      !_.has( itemData, 'component' )
-      || itemData.component !== 'BlockBase'
-    ) {
+    if( !_.has( itemData, 'component' ) || itemData.component !== 'BlockBase' ) {
       itemData.component = 'BlockBase';
     }
 
@@ -73,12 +123,12 @@ export default class DropAreaModule extends VuexModule {
 
     let actualSteps = {};
     Object.keys(steps).map((key) => {
-      actualSteps[key] = steps[key] * ( total + 1 ) + 'px';
+      actualSteps[key] = steps[key] * ( total + 1 );
     });
 
-    itemData.position = actualSteps;
+    // console.log(itemData);
 
-    console.log(itemData);
+    itemData.position = actualSteps;
 
     this.context.commit('insertItem', itemData);
 
