@@ -36,6 +36,7 @@
     background: #6a8aff
     border: 1px solid #5d6dd5
     border-radius: 5px
+    box-shadow: 4px 4px 14px 0 rgba(0,0,0,0.3)
     .base-block__header
       position: relative
     .base-block__body
