@@ -1,25 +1,26 @@
 <template lang="pug">
 
   .top-panel
-    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="pushBlock({blockName: 'Test block'})") Добавить блок
+    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addBlock") Добавить блок
 
 </template>
 
 <script lang="ts">
 
-  import Vue from "vue"
-  import Component from "vue-class-component"
+  import { Vue, Component } from 'vue-property-decorator'
+  import {
+    namespace
+  } from 'vuex-class'
 
-  @Component({
-    components: { },
-    props: { },
-  })
+  const DropAreaModule = namespace('DropAreaModule');
+
+  @Component
   export default class MainSidebar extends Vue {
 
-    pushBlock () {
+    @DropAreaModule.Action('insertBlock') insertBlock;
 
-      console.log('block pushed');
-
+    addBlock () {
+      this.insertBlock();
     }
 
   }

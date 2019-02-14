@@ -1,0 +1,34 @@
+//// This is work example for mixins, but mixins not used for now
+// import Vue from 'vue'
+// import Component from 'vue-class-component'
+// import store from '../store'
+
+//// You can declare a mixin as the same style as components.
+// @Component
+// export default class DragItem extends Vue {
+//
+//   mixinValue = 'Hello';
+//
+//   testMethod () {
+//     console.group('DragItem.ts');
+//     console.log(store.state.version);
+//     // store.commit('DropAreaModule/change', 111);
+//     // console.log(store.state.version);
+//     // console.log(store.state.DropAreaModule.count);
+//     console.groupEnd();
+//   }
+//
+// }
+
+//// Call from other files:
+// import Component, { mixins } from 'vue-class-component'
+//
+// import DragItemMixin from '../mixins/DragItem'
+// export default class BlockBase extends mixins(DragItemMixin) {
+//   style: any = {};
+//
+//   @Prop({}) idx!: number;
+//   @Prop({}) initialData!: any;
+//
+//   created () {
+// }
