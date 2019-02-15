@@ -9,7 +9,7 @@
       component(
       :is="item.component"
       :idx="index"
-      :itemData="item.initialData")
+      :itemData="item.itemData")
     .debug {{ coords }}
 
 </template>
@@ -17,16 +17,15 @@
 <script lang="ts">
 
   import { Vue, Component } from 'vue-property-decorator'
-  import {
-    namespace
-  } from 'vuex-class'
-  import BlockBase from './BlockBase'
+  import { namespace } from 'vuex-class'
   import DragItemWrapper from './DragItemWrapper'
+  import BlockBase from './BlockBase'
+  import ConnectorBase from './ConnectorBase'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { BlockBase, DragItemWrapper },
+    components: { DragItemWrapper, BlockBase, ConnectorBase },
   })
   export default class DropArea extends Vue {
 

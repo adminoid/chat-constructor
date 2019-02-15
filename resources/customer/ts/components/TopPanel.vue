@@ -23,6 +23,10 @@
       this.insertBlock();
     }
 
+    mounted () {
+      this.addBlock();
+    }
+
   }
 
 </script>

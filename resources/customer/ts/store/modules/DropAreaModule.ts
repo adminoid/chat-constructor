@@ -61,10 +61,34 @@ export default class DropAreaModule extends VuexModule {
   }
 
   @Mutation
+  insertConnectorClone( cloneData: any = {}) {
+
+    console.log(cloneData);
+    console.log(this.dd);
+
+    // calculate position in area
+    let inAreaPosition = {
+      left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
+      top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top,
+    };
+
+    let connectorData = {
+      component: 'ConnectorBase',
+      position: inAreaPosition,
+    };
+
+    this.dd.startIdx = this.dd.newIdx = this.items.length;
+    this.dd.dragging = true;
+    this.dd.elementOffset = cloneData.cursorOffset;
+
+    this.items.push(connectorData);
+
+  }
+
+  @Mutation
   insertItem( item: any ) {
     this.items.push(item);
   }
-
 
   @Mutation
   dragDropDataReset() {
@@ -103,20 +127,22 @@ export default class DropAreaModule extends VuexModule {
   /**
    * Action because in the future planned make async ajax queries to the server
    *
-   * @param itemData
+   * @param item
    */
   @Action({rawError: true})
-  async insertBlock(itemData: any = {}) {
+  async insertBlock(item: any = {}) {
 
-    if( !_.has( itemData, 'component' ) || itemData.component !== 'BlockBase' ) {
-      itemData.component = 'BlockBase';
+    if( !_.has( item, 'component' ) || item.component !== 'BlockBase' ) {
+      item.component = 'BlockBase';
     }
 
-    if( !_.has( itemData, 'blockName' ) ) {
-      itemData.initialData = {
+    if( !_.has( item, 'blockName' ) ) {
+      item.itemData = {
         blockName: `Block №${this.context.getters['itemsTotal']}`,
       }
     }
+
+    item.itemData.outputConnectors = {};
 
     let steps = (this.context.state as any).blockPositionSteps;
     let total = (this.context.state as any).items.length;
@@ -128,9 +154,9 @@ export default class DropAreaModule extends VuexModule {
 
     // console.log(itemData);
 
-    itemData.position = actualSteps;
+    item.position = actualSteps;
 
-    this.context.commit('insertItem', itemData);
+    this.context.commit('insertItem', item);
 
   }
 

@@ -138,3 +138,8 @@ new Vue({
 - nullable one-to-one relationship <https://laracasts.com/discuss/channels/eloquent/allow-null-for-belongsto-relationship?page=0>
 
 
+**Extending**:
+1. <https://jsfiddle.net/m7koc7uv/>
+2. <https://stackoverflow.com/questions/51791676/how-can-both-a-base-class-and-mixins-be-used-with-vue-class-component>
+3. <https://github.com/vuejs/vue-class-component/issues/80>
+

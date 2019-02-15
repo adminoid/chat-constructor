@@ -38,6 +38,23 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             this.items[this.items.length - 1].position = actualCoords;
         }
     }
+    insertConnectorClone(cloneData = {}) {
+        console.log(cloneData);
+        console.log(this.dd);
+        // calculate position in area
+        let inAreaPosition = {
+            left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
+            top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top,
+        };
+        let connectorData = {
+            component: 'ConnectorBase',
+            position: inAreaPosition,
+        };
+        this.dd.startIdx = this.dd.newIdx = this.items.length;
+        this.dd.dragging = true;
+        this.dd.elementOffset = cloneData.cursorOffset;
+        this.items.push(connectorData);
+    }
     insertItem(item) {
         this.items.push(item);
     }
@@ -68,17 +85,18 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
     /**
      * Action because in the future planned make async ajax queries to the server
      *
-     * @param itemData
+     * @param item
      */
-    async insertBlock(itemData = {}) {
-        if (!_.has(itemData, 'component') || itemData.component !== 'BlockBase') {
-            itemData.component = 'BlockBase';
+    async insertBlock(item = {}) {
+        if (!_.has(item, 'component') || item.component !== 'BlockBase') {
+            item.component = 'BlockBase';
         }
-        if (!_.has(itemData, 'blockName')) {
-            itemData.initialData = {
+        if (!_.has(item, 'blockName')) {
+            item.itemData = {
                 blockName: `Block №${this.context.getters['itemsTotal']}`,
             };
         }
+        item.itemData.outputConnectors = {};
         let steps = this.context.state.blockPositionSteps;
         let total = this.context.state.items.length;
         let actualSteps = {};
@@ -86,8 +104,8 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             actualSteps[key] = steps[key] * (total + 1);
         });
         // console.log(itemData);
-        itemData.position = actualSteps;
-        this.context.commit('insertItem', itemData);
+        item.position = actualSteps;
+        this.context.commit('insertItem', item);
     }
     get itemsTotal() {
         return this.items.length;
@@ -99,6 +117,9 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "updateCoords", null);
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "insertConnectorClone", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "insertItem", null);
