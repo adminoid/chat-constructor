@@ -10,7 +10,6 @@
       :is="item.component"
       :idx="index"
       :itemData="item.itemData")
-    .debug {{ coords }}
 
 </template>
 
@@ -20,21 +19,21 @@
   import { namespace } from 'vuex-class'
   import DragItemWrapper from './DragItemWrapper'
   import BlockBase from './BlockBase'
-  import ConnectorBase from './ConnectorBase'
+  import ConnectorClone from './ConnectorClone'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { DragItemWrapper, BlockBase, ConnectorBase },
+    components: { DragItemWrapper, BlockBase, ConnectorClone },
   })
   export default class DropArea extends Vue {
 
     @DropAreaModule.State items;
     @DropAreaModule.State dd;
+    @DropAreaModule.State area;
     @DropAreaModule.Mutation setAreaBoundaries;
     @DropAreaModule.Mutation dragDropDataReset;
     @DropAreaModule.Mutation updateCoords;
-    @DropAreaModule.State area;
 
     coords = {};
 
@@ -103,9 +102,5 @@
     position: relative
     background: #d7d7d7
     border-radius: 5px
-    .debug
-      position: absolute
-      bottom: 5px
-      right: 5px
 
 </style>

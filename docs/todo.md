@@ -100,7 +100,7 @@ new Vue({
 > + about extending styles: <https://alligator.io/vuejs/typescript-class-components/>
 > + extending templates: <https://github.com/mrodal/vue-inheritance-loader>
 > + mixin wrapper <https://github.com/ktsn/vue-typed-mixins> for class-like extending
-> + extending template with render function <https://github.com/vuejs/vue/issues/4665#issuecomment-321618056>
+  > + extending template with render function <https://github.com/vuejs/vue/issues/4665#issuecomment-321618056>
 > + more extending: <https://forum.vuejs.org/t/extend-styles-and-behaviour-of-a-single-file-component/19420>
 > + scalable content: <https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/>
 
@@ -143,3 +143,28 @@ new Vue({
 2. <https://stackoverflow.com/questions/51791676/how-can-both-a-base-class-and-mixins-be-used-with-vue-class-component>
 3. <https://github.com/vuejs/vue-class-component/issues/80>
 
+# income-connectors
+
+- on mouseup:
+  - modify connector-create to connector-outcome
+  - add new connector-create to outcome-connectors
+  
+## SVG lines  
+
+<https://stackoverflow.com/questions/52972648/drawing-path-in-svg-with-90-arc-between-perpendicular-lines>
+
+Insert line before block, and after connecting last block move to up (z-index).
+
+Testing: <http://blogs.sitepointstatic.com/examples/tech/svg-curves/cubic-curve.html>  
+Need square:  
+```<path d="M71,111 C63,408 280,113 272,410 Z" />```
+
+## Notes
+I have 3 types of connector (_each connector must contain type property_):
+1. ConnectorNormal
+1. ConnectorCreate
+  - toggleable to ConnectorNormal
+1. ConnectorClone
+  - bind position
+  
+ConnectorClone and ConnectorCreate must pass his coordinates to store for drawing line... 

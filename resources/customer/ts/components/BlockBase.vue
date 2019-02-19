@@ -6,12 +6,10 @@
       p Block
     .base-block__footer
       .output-connectors
-        output-connector(
-        v-for="(connector, index) in itemData.outputConnectors"
+        component(
+        v-for="(connector, index) in connectorsOutput"
         :key="index"
-        :connectorData="connector"
-        class="connector_output")
-        li.connector_new( @mousedown.prevent.stop="startDragConnector" )
+        :is="'connector-' + connector.type")
 
 </template>
 
@@ -19,33 +17,39 @@
 
   import { Vue, Component, Prop } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
-  import { getCursorOffset } from '../helpers'
+  import ConnectorOutput from './ConnectorOutput'
+  import ConnectorCreate from './ConnectorCreate'
+  import _ from 'lodash'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: {  },
+    components: { ConnectorOutput, ConnectorCreate },
   })
   export default class BlockBase extends Vue {
 
-    @DropAreaModule.Mutation insertConnectorClone;
+    @DropAreaModule.Mutation pushCreateConnector;
 
     @Prop({}) idx!: number;
 
     @Prop({}) itemData!: object;
 
-    startDragConnector (e) {
+    get connectorsOutput () {
 
-      let connectorData = {
-        blockIdx: this.idx,
-        clickedCoords: {left: e.clientX, top: e.clientY},
-        cursorOffset: getCursorOffset(e)
-      };
+      let connectorsOutput = _.get(this.itemData, 'connectors.output');
 
-      this.insertConnectorClone(connectorData);
-    }
+      console.log(connectorsOutput);
 
-    get outputConnectors () {
+      let createButtonCnt = _.filter(connectorsOutput, function(o) { if (o.type == 'create') return o }).length;
+
+      if (createButtonCnt < 1) {
+        // here push create connector to store
+        this.pushCreateConnector(this.idx);
+      } else if (createButtonCnt > 1) {
+        throw 'create button must be a single'
+      }
+
+      return connectorsOutput;
 
     }
 

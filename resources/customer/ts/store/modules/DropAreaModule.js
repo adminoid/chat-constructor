@@ -47,7 +47,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top,
         };
         let connectorData = {
-            component: 'ConnectorBase',
+            component: 'ConnectorClone',
             position: inAreaPosition,
         };
         this.dd.startIdx = this.dd.newIdx = this.items.length;
@@ -82,6 +82,12 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             throw 'Error: Here no one block... What do you want to move?';
         }
     }
+    pushCreateConnector(blockId, type = 'outcome') {
+        // console.log(this.items[blockId].itemData.connectors);
+        this.items[blockId].itemData.connectors.output.push({
+            type: 'create',
+        });
+    }
     /**
      * Action because in the future planned make async ajax queries to the server
      *
@@ -96,14 +102,19 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
                 blockName: `Block №${this.context.getters['itemsTotal']}`,
             };
         }
-        item.itemData.outputConnectors = {};
+        item.itemData.connectors = {
+            output: [{
+                    type: 'output',
+                }, {
+                    type: 'output',
+                }]
+        };
         let steps = this.context.state.blockPositionSteps;
         let total = this.context.state.items.length;
         let actualSteps = {};
         Object.keys(steps).map((key) => {
             actualSteps[key] = steps[key] * (total + 1);
         });
-        // console.log(itemData);
         item.position = actualSteps;
         this.context.commit('insertItem', item);
     }
@@ -129,6 +140,9 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "dragDropDataSet", null);
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "pushCreateConnector", null);
 tslib_1.__decorate([
     Action({ rawError: true })
 ], DropAreaModule.prototype, "insertBlock", null);

@@ -73,7 +73,7 @@ export default class DropAreaModule extends VuexModule {
     };
 
     let connectorData = {
-      component: 'ConnectorBase',
+      component: 'ConnectorClone',
       position: inAreaPosition,
     };
 
@@ -124,6 +124,16 @@ export default class DropAreaModule extends VuexModule {
 
   }
 
+  @Mutation
+  pushCreateConnector(blockId: number, type: string = 'outcome') {
+
+    // console.log(this.items[blockId].itemData.connectors);
+
+    this.items[blockId].itemData.connectors.output.push({
+      type: 'create',
+    });
+  }
+
   /**
    * Action because in the future planned make async ajax queries to the server
    *
@@ -142,7 +152,13 @@ export default class DropAreaModule extends VuexModule {
       }
     }
 
-    item.itemData.outputConnectors = {};
+    item.itemData.connectors = {
+      output: [{
+        type: 'output',
+      },{
+        type: 'output',
+      }]
+    };
 
     let steps = (this.context.state as any).blockPositionSteps;
     let total = (this.context.state as any).items.length;
@@ -151,8 +167,6 @@ export default class DropAreaModule extends VuexModule {
     Object.keys(steps).map((key) => {
       actualSteps[key] = steps[key] * ( total + 1 );
     });
-
-    // console.log(itemData);
 
     item.position = actualSteps;
 
