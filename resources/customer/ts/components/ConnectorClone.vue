@@ -8,22 +8,24 @@
 
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
-  // import { namespace } from 'vuex-class'
-  // const DropAreaModule = namespace('DropAreaModule');
+  import { namespace } from 'vuex-class'
+  const DropAreaModule = namespace('DropAreaModule');
 
   @Component({})
   export default class ConnectorClone extends Vue {
 
-    // @DropAreaModule.Mutation startDragConnector;
+    @DropAreaModule.Mutation saveClonedConnector;
 
     @Prop({}) itemData!: object;
 
-    mouseUp (e) {
+    mouseUp () {
+      // TODO: here remove clone and lines
       console.log('mouse up on connector clone');
     }
 
-    created () {
-      console.log('connector clone created');
+    mounted () {
+      // console.log('connector clone created');
+      this.saveClonedConnector(this.$el);
     }
 
   }
@@ -37,7 +39,7 @@
     height: 16px
     width: 16px
     border: 1px dashed #2a9055
-    background: #b05a1d
+    background: #419410
     border-radius: 3px
 
 </style>

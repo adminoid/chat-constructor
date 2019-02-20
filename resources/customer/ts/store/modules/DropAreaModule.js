@@ -23,6 +23,10 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
                 bottom: -1,
             }
         };
+        this.line = {
+            source: {},
+            target: {},
+        };
     }
     setAreaBoundaries(data) {
         this.area.boundaries = data;
@@ -33,14 +37,18 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             Object.keys(coords).map((key) => {
                 actualCoords[key] = coords[key] - this.dd.elementOffset[key];
             });
-            if (actualCoords['left']) {
-            }
+            // if( actualCoords['left'] ) {}
             this.items[this.items.length - 1].position = actualCoords;
         }
     }
+    saveClonedConnector(cloneConnectorData) {
+        // console.log(cloneConnectorData);
+        this.line.target = cloneConnectorData;
+        console.info(this.line);
+    }
     insertConnectorClone(cloneData = {}) {
-        console.log(cloneData);
-        console.log(this.dd);
+        // console.log(cloneData.source);
+        // console.log(this.dd);
         // calculate position in area
         let inAreaPosition = {
             left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
@@ -54,6 +62,8 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         this.dd.dragging = true;
         this.dd.elementOffset = cloneData.cursorOffset;
         this.items.push(connectorData);
+        this.line.source = cloneData.source;
+        // console.log(this.line);
     }
     insertItem(item) {
         this.items.push(item);
@@ -128,6 +138,9 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "updateCoords", null);
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "saveClonedConnector", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "insertConnectorClone", null);

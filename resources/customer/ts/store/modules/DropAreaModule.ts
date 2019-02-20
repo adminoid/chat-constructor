@@ -3,8 +3,9 @@ import {
   VuexModule,
   Mutation,
   Action,
-} from 'vuex-module-decorators';
-import _ from 'lodash';
+} from 'vuex-module-decorators'
+import _ from 'lodash'
+import $ from 'jquery'
 
 @Module({
   name: 'DropAreaModule',
@@ -36,6 +37,11 @@ export default class DropAreaModule extends VuexModule {
     }
   };
 
+  line = {
+    source: {},
+    target: {},
+  };
+
   @Mutation
   setAreaBoundaries( data ) {
     this.area.boundaries = data;
@@ -51,9 +57,7 @@ export default class DropAreaModule extends VuexModule {
          actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
 
-      if( actualCoords['left'] ) {
-
-      }
+      // if( actualCoords['left'] ) {}
 
       this.items[this.items.length-1].position = actualCoords;
 
@@ -61,10 +65,20 @@ export default class DropAreaModule extends VuexModule {
   }
 
   @Mutation
+  saveClonedConnector ( cloneConnectorData ) {
+    // console.log(cloneConnectorData);
+
+    this.line.target = cloneConnectorData;
+
+    console.info(this.line);
+
+  }
+
+  @Mutation
   insertConnectorClone( cloneData: any = {}) {
 
-    console.log(cloneData);
-    console.log(this.dd);
+    // console.log(cloneData.source);
+    // console.log(this.dd);
 
     // calculate position in area
     let inAreaPosition = {
@@ -82,6 +96,11 @@ export default class DropAreaModule extends VuexModule {
     this.dd.elementOffset = cloneData.cursorOffset;
 
     this.items.push(connectorData);
+
+    this.line.source = cloneData.source;
+
+    // console.log(this.line);
+
 
   }
 

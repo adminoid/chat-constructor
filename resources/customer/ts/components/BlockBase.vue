@@ -38,8 +38,6 @@
 
       let connectorsOutput = _.get(this.itemData, 'connectors.output');
 
-      console.log(connectorsOutput);
-
       let createButtonCnt = _.filter(connectorsOutput, function(o) { if (o.type == 'create') return o }).length;
 
       if (createButtonCnt < 1) {

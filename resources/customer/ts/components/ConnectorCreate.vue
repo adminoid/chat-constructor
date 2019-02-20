@@ -22,23 +22,24 @@
 
     startDragConnector (e) {
 
-      // pass info about create and clone connectors to store for drawing line between
+      // TODO: pass info about create and clone connectors to store for drawing line between
 
       let connectorData = {
         blockIdx: this.$parent['idx'],
         clickedCoords: {left: e.clientX, top: e.clientY},
-        cursorOffset: getCursorOffset(e)
+        cursorOffset: getCursorOffset(e),
+        source: e.target,
       };
 
-      console.log(connectorData);
+      // console.log(connectorData);
 
       this.insertConnectorClone(connectorData);
 
     }
 
-    created () {
-      console.log('connector "create"');
-    }
+    // created () {
+    //   console.log('connector "create"');
+    // }
 
   }
 

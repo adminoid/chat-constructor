@@ -18,9 +18,9 @@
 
     @Prop({}) itemData!: object;
 
-    created () {
-      console.log('connector output created');
-    }
+    // created () {
+    //   console.log('connector output created');
+    // }
 
   }
 
