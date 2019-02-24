@@ -39,11 +39,13 @@
 
     setupSizesOfArea() {
 
+      let bounding = this.$el.getBoundingClientRect();
+
       this.setAreaBoundaries({
-        left: this.$el.getBoundingClientRect().left,
-        top: this.$el.getBoundingClientRect().top,
-        right: this.$el.getBoundingClientRect().right,
-        bottom: this.$el.getBoundingClientRect().bottom
+        left: bounding.left,
+        top: bounding.top,
+        right: bounding.right,
+        bottom: bounding.bottom
       });
 
     }

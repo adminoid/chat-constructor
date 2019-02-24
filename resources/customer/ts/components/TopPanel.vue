@@ -1,7 +1,7 @@
 <template lang="pug">
 
   .top-panel
-    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addBlock") Добавить блок
+    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="insertBlock") Добавить блок
 
 </template>
 
@@ -19,12 +19,9 @@
 
     @DropAreaModule.Action('insertBlock') insertBlock;
 
-    addBlock () {
-      this.insertBlock();
-    }
-
     mounted () {
-      this.addBlock();
+      this.insertBlock();
+      this.insertBlock( {position: {left: 200, top: 150}} );
     }
 
   }

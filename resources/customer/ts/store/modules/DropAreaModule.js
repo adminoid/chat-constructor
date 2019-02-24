@@ -41,14 +41,22 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             this.items[this.items.length - 1].position = actualCoords;
         }
     }
+    /**
+     * Call when connector clone mounted
+     *
+     * @param cloneConnectorData
+     */
     saveClonedConnector(cloneConnectorData) {
-        // console.log(cloneConnectorData);
         this.line.target = cloneConnectorData;
-        console.info(this.line);
+        // const LeaderLine = require('leader-line');
+        // console.info(new LeaderLine);
     }
+    /**
+     * Call when clicked on create connector
+     *
+     * @param cloneData
+     */
     insertConnectorClone(cloneData = {}) {
-        // console.log(cloneData.source);
-        // console.log(this.dd);
         // calculate position in area
         let inAreaPosition = {
             left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
@@ -63,7 +71,6 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         this.dd.elementOffset = cloneData.cursorOffset;
         this.items.push(connectorData);
         this.line.source = cloneData.source;
-        // console.log(this.line);
     }
     insertItem(item) {
         this.items.push(item);
@@ -101,32 +108,37 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
     /**
      * Action because in the future planned make async ajax queries to the server
      *
-     * @param item
+     * @param params
      */
-    async insertBlock(item = {}) {
-        if (!_.has(item, 'component') || item.component !== 'BlockBase') {
-            item.component = 'BlockBase';
+    async insertBlock(params = {}) {
+        if (!_.has(params, 'component') || params.component !== 'BlockBase') {
+            params.component = 'BlockBase';
         }
-        if (!_.has(item, 'blockName')) {
-            item.itemData = {
+        let blockData;
+        // It's temporary decor
+        if (!_.has(params, 'blockName')) {
+            blockData = {
                 blockName: `Block №${this.context.getters['itemsTotal']}`,
             };
         }
-        item.itemData.connectors = {
+        params.itemData = _.assign(blockData, _.omit(params, ['component', 'position']));
+        // console.log(params);
+        params.itemData.connectors = {
             output: [{
                     type: 'output',
-                }, {
-                    type: 'output',
+                    target: 1,
                 }]
         };
-        let steps = this.context.state.blockPositionSteps;
-        let total = this.context.state.items.length;
-        let actualSteps = {};
-        Object.keys(steps).map((key) => {
-            actualSteps[key] = steps[key] * (total + 1);
-        });
-        item.position = actualSteps;
-        this.context.commit('insertItem', item);
+        if (!_.has(params, 'position')) {
+            let steps = this.context.state.blockPositionSteps;
+            let total = this.context.state.items.length;
+            let actualSteps = {};
+            Object.keys(steps).map((key) => {
+                actualSteps[key] = steps[key] * (total + 1);
+            });
+            params.position = actualSteps;
+        }
+        this.context.commit('insertItem', params);
     }
     get itemsTotal() {
         return this.items.length;

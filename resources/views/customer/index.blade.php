@@ -26,6 +26,7 @@
     </div>
 </footer>
 
+<script src="{{ asset('/js/leader-line.min.js') }}"></script>
 <script src="{{ asset('/js/customer.js') }}"></script>
 
 </body>

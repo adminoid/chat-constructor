@@ -168,3 +168,36 @@ I have 3 types of connector (_each connector must contain type property_):
   - bind position
   
 ConnectorClone and ConnectorCreate must pass his coordinates to store for drawing line... 
+
+# About bezier curves
+
+1. <https://codepen.io/anon/pen/LjPpGv?editors=1010> from <https://stackoverflow.com/questions/45240401/svg-path-create-a-curvy-line-to-link-two-points>
+2. also: <https://stackoverflow.com/questions/49274176/how-to-create-a-curved-svg-path-between-two-points>
+
+## Way for lodash select/where:  
+```javascript
+const people = [
+  { name: "Tom", age: 19 },
+  { name: "John", age: 3 },
+  { name: "Seven", age: 37 },
+  { name: "John", age: 42 }
+];
+
+let filtered_people = _.filter(people, function(p){
+  return _.includes(['Tom', 'John'], p.name);  
+});
+
+console.log(filtered_people); // Array[3]
+```
+
++ good cheat sheet for lodash <https://medium.com/voobans-tech-stories/10-lodash-functions-everyone-should-know-334b372aec5d>
+
+I need internal in area x1,y1 and x2,y2 for a line, where x - left and y - top.  
+
++ another way to draw lines: <https://codepen.io/berky93/pen/vKmkWG>
+
+# Latest TODO
+
+- add second block for testing "computed" lines array
+- add property target to each out connector
++ determine where draw svg lines (**in template of DropArea**) 

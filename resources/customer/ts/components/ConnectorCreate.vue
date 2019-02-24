@@ -15,7 +15,6 @@
   @Component({})
   export default class ConnectorCreate extends Vue {
 
-    // @DropAreaModule.Mutation startDragConnector;
     @DropAreaModule.Mutation insertConnectorClone;
 
     @Prop({}) itemData!: object;
@@ -31,15 +30,9 @@
         source: e.target,
       };
 
-      // console.log(connectorData);
-
       this.insertConnectorClone(connectorData);
 
     }
-
-    // created () {
-    //   console.log('connector "create"');
-    // }
 
   }
 

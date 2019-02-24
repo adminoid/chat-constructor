@@ -14,6 +14,7 @@
   @Component({})
   export default class ConnectorClone extends Vue {
 
+    @DropAreaModule.State line;
     @DropAreaModule.Mutation saveClonedConnector;
 
     @Prop({}) itemData!: object;
@@ -21,10 +22,10 @@
     mouseUp () {
       // TODO: here remove clone and lines
       console.log('mouse up on connector clone');
+
     }
 
     mounted () {
-      // console.log('connector clone created');
       this.saveClonedConnector(this.$el);
     }
 

@@ -5,7 +5,6 @@ import {
   Action,
 } from 'vuex-module-decorators'
 import _ from 'lodash'
-import $ from 'jquery'
 
 @Module({
   name: 'DropAreaModule',
@@ -64,21 +63,27 @@ export default class DropAreaModule extends VuexModule {
     }
   }
 
+  /**
+   * Call when connector clone mounted
+   *
+   * @param cloneConnectorData
+   */
   @Mutation
   saveClonedConnector ( cloneConnectorData ) {
-    // console.log(cloneConnectorData);
 
     this.line.target = cloneConnectorData;
 
-    console.info(this.line);
-
+    // const LeaderLine = require('leader-line');
+    // console.info(new LeaderLine);
   }
 
+  /**
+   * Call when clicked on create connector
+   *
+   * @param cloneData
+   */
   @Mutation
   insertConnectorClone( cloneData: any = {}) {
-
-    // console.log(cloneData.source);
-    // console.log(this.dd);
 
     // calculate position in area
     let inAreaPosition = {
@@ -98,9 +103,6 @@ export default class DropAreaModule extends VuexModule {
     this.items.push(connectorData);
 
     this.line.source = cloneData.source;
-
-    // console.log(this.line);
-
 
   }
 
@@ -156,40 +158,47 @@ export default class DropAreaModule extends VuexModule {
   /**
    * Action because in the future planned make async ajax queries to the server
    *
-   * @param item
+   * @param params
    */
   @Action({rawError: true})
-  async insertBlock(item: any = {}) {
+  async insertBlock(params: any = {}) {
 
-    if( !_.has( item, 'component' ) || item.component !== 'BlockBase' ) {
-      item.component = 'BlockBase';
+    if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
+      params.component = 'BlockBase';
     }
 
-    if( !_.has( item, 'blockName' ) ) {
-      item.itemData = {
+    let blockData: object;
+    // It's temporary decor
+    if( !_.has( params, 'blockName' ) ) {
+      blockData = {
         blockName: `Block №${this.context.getters['itemsTotal']}`,
       }
     }
 
-    item.itemData.connectors = {
+    params.itemData = _.assign(blockData, _.omit(params, ['component', 'position']));
+
+    // console.log(params);
+
+    params.itemData.connectors = {
       output: [{
         type: 'output',
-      },{
-        type: 'output',
+        target: 1,
       }]
     };
 
-    let steps = (this.context.state as any).blockPositionSteps;
-    let total = (this.context.state as any).items.length;
+    if( !_.has( params, 'position' ) ) {
+      let steps = (this.context.state as any).blockPositionSteps;
+      let total = (this.context.state as any).items.length;
 
-    let actualSteps = {};
-    Object.keys(steps).map((key) => {
-      actualSteps[key] = steps[key] * ( total + 1 );
-    });
+      let actualSteps = {};
+      Object.keys(steps).map((key) => {
+        actualSteps[key] = steps[key] * ( total + 1 );
+      });
 
-    item.position = actualSteps;
+      params.position = actualSteps;
+    }
 
-    this.context.commit('insertItem', item);
+    this.context.commit('insertItem', params);
 
   }
 
