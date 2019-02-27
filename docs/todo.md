@@ -201,3 +201,26 @@ I need internal in area x1,y1 and x2,y2 for a line, where x - left and y - top.
 - add second block for testing "computed" lines array
 - add property target to each out connector
 + determine where draw svg lines (**in template of DropArea**) 
+
+----------------
+
+### New connector drawing
+- mousedown
+  - add target to items[id].itemData.connectors.output{type = 'create'}
+
+Line contains from:
+- ~~out connector block id~~
+- ~~out connector id~~
++ source: block_id + connector_id (?)
++ target block id (in connector one for the block)
+
+Actual question: **how calculate coordinates for line**
+May be add method `getLineCoords` to: ConnectorClone and
+
+# Next point to point tasks
+1. set target (ConnectorClone) for ConnectorCreate by click on it
+2. make "computed" array lines, created by filtering block->connector->has(target)
+3. When mousemove, drawing square block for line (it would be svg frame)
+  - need get coordinate offset for source and target elements
+4. draw quadratic bezier in svg frame
+5. create preset target and draw line between connector and target

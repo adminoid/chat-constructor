@@ -7,9 +7,11 @@
     :idx="index"
     :position="item.position")
       component(
+      ref="items"
       :is="item.component"
       :idx="index"
       :itemData="item.itemData")
+    line(v-for="(line, index) in lines" :key="index" :lineData="line")
 
 </template>
 
@@ -20,6 +22,7 @@
   import DragItemWrapper from './DragItemWrapper'
   import BlockBase from './BlockBase'
   import ConnectorClone from './ConnectorClone'
+  // import LineSvg from './LineSvg'
 
   const DropAreaModule = namespace('DropAreaModule');
 
@@ -28,6 +31,7 @@
   })
   export default class DropArea extends Vue {
 
+    @DropAreaModule.State lines;
     @DropAreaModule.State items;
     @DropAreaModule.State dd;
     @DropAreaModule.State area;
@@ -91,6 +95,11 @@
     mounted () {
 
       this.setupSizesOfArea();
+
+      // console.log(this.$refs);
+      // console.log(this.$refs['items']);
+      // console.log(this.$refs.length);
+      // console.log(this.$refs.items[0].$refs);
 
     }
 

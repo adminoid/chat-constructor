@@ -1,7 +1,7 @@
 <template lang="pug">
 
   .top-panel
-    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="insertBlock") Добавить блок
+    button(type="button" class="top-panel__add-block-btn btn btn-success" @click="insertBlock()") Добавить блок
 
 </template>
 

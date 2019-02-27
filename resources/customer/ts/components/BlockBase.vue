@@ -1,15 +1,18 @@
 <template lang="pug">
 
   .base-block
-    .base-block__header {{ itemData.blockName }}
+    .base-block__header
+      .input-connector
     .base-block__body
-      p Block
+      p {{ itemData.blockName }}
     .base-block__footer
       .output-connectors
         component(
         v-for="(connector, index) in connectorsOutput"
         :key="index"
-        :is="'connector-' + connector.type")
+        :connectorId="index"
+        :is="'connector-' + connector.type"
+        ref="output-connectors")
 
 </template>
 
@@ -51,6 +54,10 @@
 
     }
 
+    // mounted () {
+    //   console.log(this.$refs);
+    // }
+
   }
 
 </script>
@@ -83,6 +90,20 @@
     bottom: -11px
     border: 1px dashed #7c7c7c
     border-radius: 3px
+
+  .input-connector
+    padding: 2px
+    margin: 0
+    list-style: none
+    display: flex
+    position: relative
+    top: -8px
+    height: 16px
+    width: 16px
+    border: 1px dashed #4046b8
+    background: #575dff
+    border-radius: 3px
+    opacity: .7
 
   .connector_new
     height: 16px

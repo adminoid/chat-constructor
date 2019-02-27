@@ -15,7 +15,6 @@
   export default class ConnectorClone extends Vue {
 
     @DropAreaModule.State line;
-    @DropAreaModule.Mutation saveClonedConnector;
 
     @Prop({}) itemData!: object;
 
@@ -25,9 +24,15 @@
 
     }
 
-    mounted () {
-      this.saveClonedConnector(this.$el);
-    }
+    // mounted () {
+      // add target (not standard block...) to block_id->connector_create
+      // TODO: how rightly add target for connector clone and standard block with income connector? What is universal target?
+      // I need target coords for line end
+
+      // Target for line may be: ConnectorClone or Block (with one input connector)
+
+      // this.saveClonedConnector(this.$el);
+    // }
 
   }
 

@@ -15,6 +15,8 @@ export default class DropAreaModule extends VuexModule {
 
   items = [];
 
+  lines = [];
+
   blockPositionSteps = {
     left: 15,
     top: 10,
@@ -36,10 +38,28 @@ export default class DropAreaModule extends VuexModule {
     }
   };
 
-  line = {
+  //
+  newLine = {
     source: {},
     target: {},
   };
+
+  @Mutation
+  setTargetForConnectorCreate( clickedConnectorInfo ) {
+
+    // getBlock
+
+    let [blockId, connectorId] = clickedConnectorInfo;
+
+    this.items[blockId].itemData.connectors.output[connectorId].target = this.dd.newIdx;
+
+    // console.group('setTargetForConnector');
+    // console.log(blockId);
+    // console.log(connectorId);
+    // console.log(this.items[blockId].itemData.connectors.output[connectorId]);
+    // console.groupEnd();
+
+  }
 
   @Mutation
   setAreaBoundaries( data ) {
@@ -56,25 +76,9 @@ export default class DropAreaModule extends VuexModule {
          actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
 
-      // if( actualCoords['left'] ) {}
-
       this.items[this.items.length-1].position = actualCoords;
 
     }
-  }
-
-  /**
-   * Call when connector clone mounted
-   *
-   * @param cloneConnectorData
-   */
-  @Mutation
-  saveClonedConnector ( cloneConnectorData ) {
-
-    this.line.target = cloneConnectorData;
-
-    // const LeaderLine = require('leader-line');
-    // console.info(new LeaderLine);
   }
 
   /**
@@ -101,8 +105,6 @@ export default class DropAreaModule extends VuexModule {
     this.dd.elementOffset = cloneData.cursorOffset;
 
     this.items.push(connectorData);
-
-    this.line.source = cloneData.source;
 
   }
 
@@ -153,6 +155,7 @@ export default class DropAreaModule extends VuexModule {
     this.items[blockId].itemData.connectors.output.push({
       type: 'create',
     });
+
   }
 
   /**
@@ -181,8 +184,7 @@ export default class DropAreaModule extends VuexModule {
 
     params.itemData.connectors = {
       output: [{
-        type: 'output',
-        target: 1,
+        type: 'create',
       }]
     };
 

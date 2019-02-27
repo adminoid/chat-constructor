@@ -5,6 +5,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
     constructor() {
         super(...arguments);
         this.items = [];
+        this.lines = [];
         this.blockPositionSteps = {
             left: 15,
             top: 10,
@@ -23,10 +24,21 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
                 bottom: -1,
             }
         };
-        this.line = {
+        //
+        this.newLine = {
             source: {},
             target: {},
         };
+    }
+    setTargetForConnectorCreate(clickedConnectorInfo) {
+        // getBlock
+        let [blockId, connectorId] = clickedConnectorInfo;
+        this.items[blockId].itemData.connectors.output[connectorId].target = this.dd.newIdx;
+        // console.group('setTargetForConnector');
+        // console.log(blockId);
+        // console.log(connectorId);
+        // console.log(this.items[blockId].itemData.connectors.output[connectorId]);
+        // console.groupEnd();
     }
     setAreaBoundaries(data) {
         this.area.boundaries = data;
@@ -37,19 +49,8 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             Object.keys(coords).map((key) => {
                 actualCoords[key] = coords[key] - this.dd.elementOffset[key];
             });
-            // if( actualCoords['left'] ) {}
             this.items[this.items.length - 1].position = actualCoords;
         }
-    }
-    /**
-     * Call when connector clone mounted
-     *
-     * @param cloneConnectorData
-     */
-    saveClonedConnector(cloneConnectorData) {
-        this.line.target = cloneConnectorData;
-        // const LeaderLine = require('leader-line');
-        // console.info(new LeaderLine);
     }
     /**
      * Call when clicked on create connector
@@ -70,7 +71,6 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         this.dd.dragging = true;
         this.dd.elementOffset = cloneData.cursorOffset;
         this.items.push(connectorData);
-        this.line.source = cloneData.source;
     }
     insertItem(item) {
         this.items.push(item);
@@ -125,8 +125,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         // console.log(params);
         params.itemData.connectors = {
             output: [{
-                    type: 'output',
-                    target: 1,
+                    type: 'create',
                 }]
         };
         if (!_.has(params, 'position')) {
@@ -146,13 +145,13 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
 };
 tslib_1.__decorate([
     Mutation
+], DropAreaModule.prototype, "setTargetForConnectorCreate", null);
+tslib_1.__decorate([
+    Mutation
 ], DropAreaModule.prototype, "setAreaBoundaries", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "updateCoords", null);
-tslib_1.__decorate([
-    Mutation
-], DropAreaModule.prototype, "saveClonedConnector", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "insertConnectorClone", null);
