@@ -39,16 +39,27 @@
 
     get connectorsOutput () {
 
-      let connectorsOutput = _.get(this.itemData, 'connectors.output');
+      let connectorsOutput = _.get(this.itemData, 'connectors.output') || [];
 
       let createButtonCnt = _.filter(connectorsOutput, function(o) { if (o.type == 'create') return o }).length;
 
-      if (createButtonCnt < 1) {
+      // console.log(connectorsOutput);
+      // console.log((connectorsOutput));
+      // console.log(createButtonCnt);
+
+      if (!createButtonCnt || createButtonCnt < 1) {
         // here push create connector to store
         this.pushCreateConnector(this.idx);
+
+        // this.$nextTick(() => {
+        //   this.pushCreateConnector(this.idx);
+        // });
+
       } else if (createButtonCnt > 1) {
         throw 'create button must be a single'
       }
+
+      // console.log(connectorsOutput);
 
       return connectorsOutput;
 

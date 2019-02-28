@@ -5,7 +5,6 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
     constructor() {
         super(...arguments);
         this.items = [];
-        this.lines = [];
         this.blockPositionSteps = {
             left: 15,
             top: 10,
@@ -24,21 +23,11 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
                 bottom: -1,
             }
         };
-        //
-        this.newLine = {
-            source: {},
-            target: {},
-        };
     }
     setTargetForConnectorCreate(clickedConnectorInfo) {
         // getBlock
         let [blockId, connectorId] = clickedConnectorInfo;
         this.items[blockId].itemData.connectors.output[connectorId].target = this.dd.newIdx;
-        // console.group('setTargetForConnector');
-        // console.log(blockId);
-        // console.log(connectorId);
-        // console.log(this.items[blockId].itemData.connectors.output[connectorId]);
-        // console.groupEnd();
     }
     setAreaBoundaries(data) {
         this.area.boundaries = data;
@@ -100,7 +89,14 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         }
     }
     pushCreateConnector(blockId, type = 'outcome') {
-        // console.log(this.items[blockId].itemData.connectors);
+        // console.log(_.has(this.items[blockId], 'itemData'));
+        // console.log(this.items[blockId]);
+        if (!_.has(this.items[blockId].itemData, 'connectors')) {
+            // console.info(blockId);
+            this.items[blockId].itemData.connectors = {
+                output: []
+            };
+        }
         this.items[blockId].itemData.connectors.output.push({
             type: 'create',
         });
@@ -122,12 +118,18 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             };
         }
         params.itemData = _.assign(blockData, _.omit(params, ['component', 'position']));
+        if (_.has(params, 'connectors')) {
+            delete params.connectors;
+        }
         // console.log(params);
-        params.itemData.connectors = {
-            output: [{
-                    type: 'create',
-                }]
-        };
+        // params.itemData.connectors = {
+        //   output: [{
+        //     type: 'output',
+        //     target: 1,
+        //   }, {
+        //     type: 'create',
+        //   }]
+        // };
         if (!_.has(params, 'position')) {
             let steps = this.context.state.blockPositionSteps;
             let total = this.context.state.items.length;
@@ -137,6 +139,8 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             });
             params.position = actualSteps;
         }
+        // console.log(params);
+        // return;
         this.context.commit('insertItem', params);
     }
     get itemsTotal() {

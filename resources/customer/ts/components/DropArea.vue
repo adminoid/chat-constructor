@@ -11,7 +11,8 @@
       :is="item.component"
       :idx="index"
       :itemData="item.itemData")
-    line(v-for="(line, index) in lines" :key="index" :lineData="line")
+    line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
+    pre(style="position: absolute; right: 30px; bottom: 20px;") {{ lines }}
 
 </template>
 
@@ -22,16 +23,16 @@
   import DragItemWrapper from './DragItemWrapper'
   import BlockBase from './BlockBase'
   import ConnectorClone from './ConnectorClone'
-  // import LineSvg from './LineSvg'
+  import LineSvg from './LineSvg'
+  import * as _ from 'lodash'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { DragItemWrapper, BlockBase, ConnectorClone },
+    components: { DragItemWrapper, BlockBase, ConnectorClone, LineSvg },
   })
   export default class DropArea extends Vue {
 
-    @DropAreaModule.State lines;
     @DropAreaModule.State items;
     @DropAreaModule.State dd;
     @DropAreaModule.State area;
@@ -40,6 +41,42 @@
     @DropAreaModule.Mutation updateCoords;
 
     coords = {};
+
+    get lines () {
+
+      // lines is object contains source and target
+      // lines is each connector with block id and connector id with target id
+
+      let lines = [];
+
+      this.items.forEach((el) => {
+        if( _.has(el, 'itemData') && _.has(el.itemData.connectors, 'output')) {
+          el.itemData.connectors.output.forEach((outputConnector) => {
+            console.log(outputConnector);
+          })
+        }
+      });
+
+      // for (let [key, value] of this.items) {
+      //   console.log(key + " <> " + value);
+      // }
+
+      // console.log(this.items);
+
+      // let ret = _.filter(this.items, (item) => {
+      //   if( _.has(item, 'itemData') ) {
+      //     return true;
+          // _.filter(item.itemData.connectors.output, (connector) => {
+            // console.log(connector.hasOwnProperty('target'));
+            // return(connector.hasOwnProperty('target'));
+          // });
+        // }
+      // });
+
+      // console.log(lines);
+
+      // return [{line: 1}, {line: 2}];
+    }
 
     setupSizesOfArea() {
 

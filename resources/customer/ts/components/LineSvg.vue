@@ -19,4 +19,10 @@
 
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+  .line-area
+    background: #f00
+    width: 10px
+    height: 10px
+    border: 1px solid #0f0
+</style>

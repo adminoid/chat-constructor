@@ -202,7 +202,7 @@ I need internal in area x1,y1 and x2,y2 for a line, where x - left and y - top.
 - add property target to each out connector
 + determine where draw svg lines (**in template of DropArea**) 
 
-----------------
+---
 
 ### New connector drawing
 - mousedown

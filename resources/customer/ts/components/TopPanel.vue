@@ -20,7 +20,13 @@
     @DropAreaModule.Action('insertBlock') insertBlock;
 
     mounted () {
-      this.insertBlock();
+
+      this.insertBlock( { connectors: {
+            output: [{
+              type: 'output',
+              target: 1,
+            }]
+          }} );
       this.insertBlock( {position: {left: 200, top: 150}} );
     }
 
