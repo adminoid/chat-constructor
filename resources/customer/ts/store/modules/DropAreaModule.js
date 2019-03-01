@@ -88,13 +88,16 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             throw 'Error: Here no one block... What do you want to move?';
         }
     }
-    pushCreateConnector(blockId, type = 'outcome') {
-        // console.log(_.has(this.items[blockId], 'itemData'));
-        // console.log(this.items[blockId]);
-        if (!_.has(this.items[blockId].itemData, 'connectors')) {
-            // console.info(blockId);
-            this.items[blockId].itemData.connectors = {
-                output: []
+    pushCreateConnector(blockId) {
+        console.info('here');
+        console.log(this.items[blockId].itemData);
+        // console.log(this.items[blockId].itemData.hasOwnProperty('connectors'));
+        console.log(this.items[blockId].itemData.connectors);
+        if (!_.has(this.items[blockId], 'itemData.connectors')) {
+            this.items[blockId].itemData = {
+                connectors: {
+                    output: []
+                }
             };
         }
         this.items[blockId].itemData.connectors.output.push({

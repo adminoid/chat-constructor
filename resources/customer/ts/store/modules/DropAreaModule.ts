@@ -134,14 +134,18 @@ export default class DropAreaModule extends VuexModule {
   }
 
   @Mutation
-  pushCreateConnector(blockId: number, type: string = 'outcome') {
+  pushCreateConnector(blockId: number) {
 
-    // console.log(_.has(this.items[blockId], 'itemData'));
-    // console.log(this.items[blockId]);
-    if ( !_.has(this.items[blockId].itemData, 'connectors') ) {
-      // console.info(blockId);
-      this.items[blockId].itemData.connectors = {
-        output: []
+    console.info('here');
+    console.log(this.items[blockId].itemData);
+    // console.log(this.items[blockId].itemData.hasOwnProperty('connectors'));
+    console.log(this.items[blockId].itemData.connectors);
+
+    if ( !_.has(this.items[blockId], 'itemData.connectors') ) {
+      this.items[blockId].itemData = {
+        connectors: {
+          output: []
+        }
       };
     }
 

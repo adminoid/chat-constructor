@@ -6,14 +6,16 @@
 
 <script lang="ts">
 
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Vue, Component, Prop } from 'vue-property-decorator'
 
   @Component({})
   export default class LineSvg extends Vue {
 
-    created () {
-      console.info('line svg created');
-    }
+    @Prop({}) lineData!: object;
+
+    // created () {
+    //   console.log(this.lineData);
+    // }
 
   }
 

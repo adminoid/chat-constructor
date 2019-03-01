@@ -47,7 +47,11 @@
       // lines is object contains source and target
       // lines is each connector with block id and connector id with target id
 
-      let lines = []; //, n = 0;
+      // TODO: solve questions:
+      // - where place dom elements for begin and end lines?
+      // - Where and how calculate offsets?
+
+      let lines = [];
 
       this.items.forEach((el, itemIdx) => {
         if( _.has(el, 'itemData') && _.has(el.itemData.connectors, 'output')) {
@@ -55,32 +59,11 @@
 
             if( outputConnector.hasOwnProperty('target') ) {
               lines.push( {itemId: itemIdx, connectorId: connectorIdx, target: outputConnector.target} );
-              // n++;
             }
 
           })
         }
       });
-
-      // for (let [key, value] of this.items) {
-      //   console.log(key + " <> " + value);
-      // }
-
-      // console.log(this.items);
-
-      // let ret = _.filter(this.items, (item) => {
-      //   if( _.has(item, 'itemData') ) {
-      //     return true;
-          // _.filter(item.itemData.connectors.output, (connector) => {
-            // console.log(connector.hasOwnProperty('target'));
-            // return(connector.hasOwnProperty('target'));
-          // });
-        // }
-      // });
-
-      console.log(lines);
-
-      // return [{line: 1}, {line: 2}];
 
       return lines;
 
