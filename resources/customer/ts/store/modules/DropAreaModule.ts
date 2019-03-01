@@ -4,7 +4,7 @@ import {
   Mutation,
   Action,
 } from 'vuex-module-decorators'
-import _ from 'lodash'
+import * as _ from 'lodash'
 
 @Module({
   name: 'DropAreaModule',

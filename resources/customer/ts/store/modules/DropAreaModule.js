@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 import { Module, VuexModule, Mutation, Action, } from 'vuex-module-decorators';
-import _ from 'lodash';
+import * as _ from 'lodash';
 let DropAreaModule = class DropAreaModule extends VuexModule {
     constructor() {
         super(...arguments);

@@ -47,12 +47,17 @@
       // lines is object contains source and target
       // lines is each connector with block id and connector id with target id
 
-      let lines = [];
+      let lines = []; //, n = 0;
 
-      this.items.forEach((el) => {
+      this.items.forEach((el, itemIdx) => {
         if( _.has(el, 'itemData') && _.has(el.itemData.connectors, 'output')) {
-          el.itemData.connectors.output.forEach((outputConnector) => {
-            console.log(outputConnector);
+          el.itemData.connectors.output.forEach((outputConnector, connectorIdx) => {
+
+            if( outputConnector.hasOwnProperty('target') ) {
+              lines.push( {itemId: itemIdx, connectorId: connectorIdx, target: outputConnector.target} );
+              // n++;
+            }
+
           })
         }
       });
@@ -73,9 +78,12 @@
         // }
       // });
 
-      // console.log(lines);
+      console.log(lines);
 
       // return [{line: 1}, {line: 2}];
+
+      return lines;
+
     }
 
     setupSizesOfArea() {

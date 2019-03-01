@@ -22,7 +22,7 @@
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput'
   import ConnectorCreate from './ConnectorCreate'
-  import _ from 'lodash'
+  import * as _ from 'lodash'
 
   const DropAreaModule = namespace('DropAreaModule');
 

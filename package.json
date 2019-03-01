@@ -27,10 +27,11 @@
     "vue-property-decorator": "^7.3.0",
     "vue-template-compiler": "^2.5.22",
     "vuex-class": "^0.3.1",
-    "vuex-module-decorators": "^0.9.7"
+    "vuex-module-decorators": "^0.9.7",
+    "lodash": "^4.17.11",
+    "@types/lodash": "^4.14.121"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
     "vue": "^2.6.4",
     "vuex": "^3.1.0"
   },
