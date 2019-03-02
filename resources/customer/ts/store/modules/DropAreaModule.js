@@ -89,10 +89,6 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         }
     }
     pushCreateConnector(blockId) {
-        console.info('here');
-        console.log(this.items[blockId].itemData);
-        // console.log(this.items[blockId].itemData.hasOwnProperty('connectors'));
-        console.log(this.items[blockId].itemData.connectors);
         if (!_.has(this.items[blockId], 'itemData.connectors')) {
             this.items[blockId].itemData = {
                 connectors: {

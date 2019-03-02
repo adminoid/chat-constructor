@@ -6,21 +6,14 @@
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
-
-  // import { namespace } from 'vuex-class'
-  // const DropAreaModule = namespace('DropAreaModule');
+  import { Component, Prop } from 'vue-property-decorator'
+  import { mixins } from 'vue-class-component'
+  import ConnectorCommonMixin from '../mixins/ConnectorCommon'
 
   @Component({})
-  export default class ConnectorOutput extends Vue {
-
-    // @DropAreaModule.Mutation startDragConnector;
+  export default class ConnectorOutput extends mixins(ConnectorCommonMixin) {
 
     @Prop({}) itemData!: object;
-
-    // created () {
-    //   console.log('connector output created');
-    // }
 
   }
 

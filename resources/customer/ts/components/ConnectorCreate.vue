@@ -15,6 +15,7 @@
   @Component({})
   export default class ConnectorCreate extends Vue {
 
+    @DropAreaModule.State area;
     @DropAreaModule.Mutation setTargetForConnectorCreate;
     @DropAreaModule.Mutation insertConnectorClone;
     @DropAreaModule.Mutation setConnectorTarget;

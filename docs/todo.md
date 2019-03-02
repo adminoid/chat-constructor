@@ -224,3 +224,7 @@ May be add method `getLineCoords` to: ConnectorClone and
   - need get coordinate offset for source and target elements
 4. draw quadratic bezier in svg frame
 5. create preset target and draw line between connector and target
+
+# Extends and mixin use both
+Full example: <https://stackoverflow.com/questions/51791676/how-can-both-a-base-class-and-mixins-be-used-with-vue-class-component>
+Many examples/patterns: <https://learn-vuejs.github.io/vue-patterns/patterns/>

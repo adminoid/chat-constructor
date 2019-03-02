@@ -58,7 +58,24 @@
           el.itemData.connectors.output.forEach((outputConnector, connectorIdx) => {
 
             if( outputConnector.hasOwnProperty('target') ) {
-              lines.push( {itemId: itemIdx, connectorId: connectorIdx, target: outputConnector.target} );
+
+              if( this.$refs.items ) {
+                let outConnector = this.$refs.items[itemIdx].$refs['output-connectors'][connectorIdx];
+
+                if( outConnector ) {
+                  let startCoords = outConnector.getLineCoords(),
+                    lineData = {
+                      itemId: itemIdx,
+                      connectorId: connectorIdx,
+                      target: outputConnector.target,
+                      start: startCoords
+                    };
+
+                  lines.push( lineData );
+                }
+
+              }
+
             }
 
           })
