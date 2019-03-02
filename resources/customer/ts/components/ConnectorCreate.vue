@@ -6,28 +6,30 @@
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Component, Prop } from 'vue-property-decorator'
+  import { mixins } from 'vue-class-component'
+  import ConnectorCommonMixin from '../mixins/ConnectorCommon'
   import { namespace } from 'vuex-class'
   import { getCursorOffset } from '../helpers'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({})
-  export default class ConnectorCreate extends Vue {
+  export default class ConnectorCreate extends mixins(ConnectorCommonMixin) {
 
     @DropAreaModule.State area;
     @DropAreaModule.Mutation setTargetForConnectorCreate;
     @DropAreaModule.Mutation insertConnectorClone;
     @DropAreaModule.Mutation setConnectorTarget;
 
-    @Prop({}) itemData!: object;
+    @Prop({}) itemData: object;
     @Prop({}) connectorId!: number;
 
     startDragConnector (e) {
 
       // TODO: pass info about create and clone connectors to store for drawing line between
 
-      let blockId = this.$parent['idx'];
+      let blockId = this.$parent['id'];
 
       let connectorData = {
         blockIdx: blockId,

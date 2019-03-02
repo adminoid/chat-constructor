@@ -5,11 +5,12 @@
     v-for="(item, index) in items"
     :key="index"
     :idx="index"
+    :id="item.id"
     :position="item.position")
       component(
       ref="items"
       :is="item.component"
-      :idx="index"
+      :id="item.id"
       :itemData="item.itemData")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre(style="position: absolute; right: 30px; bottom: 20px;") {{ lines }}
@@ -53,19 +54,23 @@
 
       let lines = [];
 
-      this.items.forEach((el, itemIdx) => {
-        if( _.has(el, 'itemData') && _.has(el.itemData.connectors, 'output')) {
-          el.itemData.connectors.output.forEach((outputConnector, connectorIdx) => {
+      this.items.forEach((item) => {
+        if( _.has(item, 'itemData') && _.has(item.itemData.connectors, 'output')) {
+          item.itemData.connectors.output.forEach((outputConnector, connectorIdx) => {
 
             if( outputConnector.hasOwnProperty('target') ) {
 
               if( this.$refs.items ) {
-                let outConnector = this.$refs.items[itemIdx].$refs['output-connectors'][connectorIdx];
+                let outConnector = this.$refs.items[item.id].$refs['output-connectors'][connectorIdx];
 
                 if( outConnector ) {
+
+                  // console.log(outConnector);
+                  // return false;
+
                   let startCoords = outConnector.getLineCoords(),
                     lineData = {
-                      itemId: itemIdx,
+                      itemId: item.id,
                       connectorId: connectorIdx,
                       target: outputConnector.target,
                       start: startCoords

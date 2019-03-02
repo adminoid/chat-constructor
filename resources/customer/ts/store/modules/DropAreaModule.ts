@@ -39,8 +39,6 @@ export default class DropAreaModule extends VuexModule {
   @Mutation
   setTargetForConnectorCreate( clickedConnectorInfo ) {
 
-    // getBlock
-
     let [blockId, connectorId] = clickedConnectorInfo;
 
     this.items[blockId].itemData.connectors.output[connectorId].target = this.dd.newIdx;
@@ -84,6 +82,7 @@ export default class DropAreaModule extends VuexModule {
     let connectorData = {
       component: 'ConnectorClone',
       position: inAreaPosition,
+      id: this.items.length,
     };
 
     this.dd.startIdx = this.dd.newIdx = this.items.length;
@@ -162,33 +161,23 @@ export default class DropAreaModule extends VuexModule {
       params.component = 'BlockBase';
     }
 
-
     let blockData: object;
     // It's temporary decor
-    if( !_.has( params, 'blockName' ) ) {
-      blockData = {
-        blockName: `Block №${this.context.getters['itemsTotal']}`,
-      }
-    }
+    // if( !_.has( params, 'blockName' ) ) {
+    //   blockData = {
+    //     blockName: `Block №${this.context.getters['itemsTotal']}`,
+    //   }
+    // }
+
+    blockData = {
+      blockName: `Block №${this.context.getters['itemsTotal']}`
+    };
 
     params.itemData = _.assign(blockData, _.omit(params, ['component', 'position']));
 
     if ( _.has(params, 'connectors') ) {
       delete params.connectors;
     }
-
-
-
-    // console.log(params);
-
-    // params.itemData.connectors = {
-    //   output: [{
-    //     type: 'output',
-    //     target: 1,
-    //   }, {
-    //     type: 'create',
-    //   }]
-    // };
 
     if( !_.has( params, 'position' ) ) {
       let steps = (this.context.state as any).blockPositionSteps;
@@ -202,8 +191,7 @@ export default class DropAreaModule extends VuexModule {
       params.position = actualSteps;
     }
 
-    // console.log(params);
-    // return;
+    params.id = this.context.getters['itemsTotal'];
 
     this.context.commit('insertItem', params);
 

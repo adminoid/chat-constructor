@@ -6,13 +6,15 @@
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Component, Prop } from 'vue-property-decorator'
+  import { mixins } from 'vue-class-component'
+  import ConnectorCommonMixin from '../mixins/ConnectorCommon'
 
   import { namespace } from 'vuex-class'
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({})
-  export default class ConnectorClone extends Vue {
+  export default class ConnectorClone extends mixins(ConnectorCommonMixin) {
 
     @DropAreaModule.State line;
 

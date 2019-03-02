@@ -33,7 +33,7 @@
 
     @DropAreaModule.Mutation pushCreateConnector;
 
-    @Prop({}) idx!: number;
+    @Prop({}) id!: number;
 
     @Prop({}) itemData!: object;
 
@@ -45,7 +45,7 @@
 
       if (!createButtonCnt || createButtonCnt < 1) {
         // here push create connector to store
-        this.pushCreateConnector(this.idx);
+        this.pushCreateConnector(this.id);
       } else if (createButtonCnt > 1) {
         throw 'create button must be a single'
       }
