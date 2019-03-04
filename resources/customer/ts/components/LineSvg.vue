@@ -1,21 +1,43 @@
 <template lang="pug">
 
-  .line-area
+  .line-area(:style="[position, size]")
 
 </template>
 
 <script lang="ts">
 
   import { Vue, Component, Prop } from 'vue-property-decorator'
+  import * as _ from 'lodash'
 
   @Component({})
   export default class LineSvg extends Vue {
 
     @Prop({}) lineData!: object;
 
-    mounted () {
-      console.log(this.lineData);
-      // console.log(this.$root);
+    get position () {
+      let dataArray = _.values(this.lineData);
+
+      let leftMin = _.minBy(dataArray, function(o) { return o.left; }).left;
+      let topMin = _.minBy(dataArray, function(o) { return o.top; }).top;
+
+      return {
+        left: leftMin + 'px',
+        top: topMin + 'px',
+      }
+    }
+
+    get size () {
+      let dataArray = _.values(this.lineData);
+
+      let leftMin = _.minBy(dataArray, function(o) { return o.left; }).left;
+      let topMin = _.minBy(dataArray, function(o) { return o.top; }).top;
+      let leftMax = _.maxBy(dataArray, function(o) { return o.left; }).left;
+      let topMax = _.maxBy(dataArray, function(o) { return o.top; }).top;
+
+      return {
+        height: topMax - topMin + 'px',
+        width: leftMax - leftMin + 'px',
+      };
     }
 
   }
@@ -23,9 +45,9 @@
 </script>
 
 <style lang="sass">
+
   .line-area
-    background: #f00
-    width: 10px
-    height: 10px
-    border: 1px solid #0f0
+    position: absolute
+    background: #e0ffcf
+
 </style>
