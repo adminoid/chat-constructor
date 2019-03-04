@@ -15,7 +15,7 @@
 
     mounted () {
       console.log(this.lineData);
-      console.log(this.$root);
+      // console.log(this.$root);
     }
 
   }

@@ -37,6 +37,43 @@ export default class DropAreaModule extends VuexModule {
   };
 
   @Mutation
+  setBeginLineCoords( payload ) {
+    let { itemId, connectorId, coords } = payload;
+
+    _.map( this.items, item => {
+      if ( item.id === itemId ) {
+        item.itemData.connectors.output[connectorId].coords = coords;
+      }
+    });
+
+    // setEndLineCoords(payload) {
+    //   let { itemId, coords } = payload;
+    //   _.map(this.items, (value) => {
+    //     _.map(_.get(value, 'itemData.connectors.output'), (connector) => {
+    //       if (connector.target === itemId) {
+    //         connector.targetCoords = coords;
+    //       }
+    //     });
+    //   });
+    // }
+
+  }
+
+  @Mutation
+  setEndLineCoords( payload ) {
+    let { itemId, coords } = payload;
+    _.map( this.items, (value) => {
+
+      _.map( _.get(value, 'itemData.connectors.output'), (connector) => {
+        if( connector.target === itemId ) {
+          connector.targetCoords = coords;
+        }
+      });
+
+    } );
+  }
+
+  @Mutation
   setTargetForConnectorCreate( clickedConnectorInfo ) {
 
     let [blockId, connectorId] = clickedConnectorInfo;

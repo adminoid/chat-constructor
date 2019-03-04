@@ -45,70 +45,21 @@
 
     get lines () {
 
-      // lines is object contains source and target
-      // lines is each connector with block id and connector id with target id
-
-      // TODO: solve questions:
-      // - where place dom elements for begin and end lines?
-      // - Where and how calculate offsets?
-
       let lines = [];
 
-      this.items.forEach((item) => {
-        if( _.has(item, 'itemData') && _.has(item.itemData.connectors, 'output')) {
-          item.itemData.connectors.output.forEach((outputConnector, connectorIdx) => {
+      _.map( this.items, item => {
 
-            if( outputConnector.hasOwnProperty('target') ) {
+        _.map( _.get(item, 'itemData.connectors.output'), connector => {
 
-              if( this.$refs.items ) {
+          if( connector.target && connector.coords && connector.targetCoords ) {
+            lines.push({
+              begin: connector.coords,
+              end: connector.targetCoords,
+            });
+          }
 
-                let outConnector = this.$refs.items[item.id].$refs['output-connectors'][connectorIdx];
+        });
 
-                if( outConnector ) {
-
-                  let targetItem = this.$refs.items[outputConnector.target];
-                  // TODO: refactor duplicate code...
-                  if ( targetItem ) {
-                    let beginCoords = outConnector.getLineBeginCoords(),
-                      endCoords = targetItem.getLineEndCoords(),
-                      lineData = {
-                        itemId: item.id,
-                        connectorId: connectorIdx,
-                        target: outputConnector.target,
-                        begin: beginCoords,
-                        end: endCoords,
-                      };
-
-                    lines.push( lineData );
-                  } else {
-
-                    this.$nextTick(() => {
-
-                      let targetItem = this.$refs.items[outputConnector.target],
-                        beginCoords = outConnector.getLineBeginCoords(),
-                        endCoords = targetItem.getLineEndCoords(),
-                        lineData = {
-                          itemId: item.id,
-                          connectorId: connectorIdx,
-                          target: outputConnector.target,
-                          begin: beginCoords,
-                          end: endCoords,
-                        };
-
-                      lines.push( lineData );
-
-                    });
-
-                  }
-
-                }
-
-              }
-
-            }
-
-          })
-        }
       });
 
       return lines;

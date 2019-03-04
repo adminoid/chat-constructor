@@ -18,6 +18,7 @@
 
     @DropAreaModule.State line;
 
+    @Prop({}) id!: number;
     @Prop({}) itemData!: object;
 
     mouseUp () {

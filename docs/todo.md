@@ -252,3 +252,5 @@ When connector mounted push his coordinates to store (item.connector && ..target
 Lodash update where examples
 <https://stackoverflow.com/questions/41341075/lodash-collection-bulk-update>
 
+todo:
+Install it: <https://github.com/justrhysism/vue-mixin-decorator>

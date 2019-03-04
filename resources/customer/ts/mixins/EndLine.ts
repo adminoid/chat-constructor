@@ -1,3 +1,7 @@
+/**
+ * This mixin for BlockBase and ConnectorClone
+ */
+
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import store from '../store'
@@ -19,6 +23,20 @@ export default class EndLine extends Vue {
       left: left,
       top: top
     };
+
+  }
+
+  mounted () {
+
+    // TODO: Install <https://github.com/justrhysism/vue-mixin-decorator> for properties linking
+
+    // push end coordinates to out connector.target
+    // console.log(this.id);
+
+    store.commit('DropAreaModule/setEndLineCoords', {
+      itemId: this.id,
+      coords: this.getLineEndCoords(),
+    });
 
   }
 

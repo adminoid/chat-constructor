@@ -12,6 +12,7 @@
         :key="index"
         :connectorId="index"
         :blockId="id"
+        :connectorData="connector"
         :is="'connector-' + connector.type"
         ref="output-connectors")
 

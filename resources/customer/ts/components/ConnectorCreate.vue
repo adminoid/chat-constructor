@@ -22,7 +22,7 @@
     @DropAreaModule.Mutation insertConnectorClone;
     @DropAreaModule.Mutation setConnectorTarget;
 
-    @Prop({}) itemData: object;
+    @Prop({}) connectorData!: object;
     @Prop({}) connectorId!: number;
     @Prop({}) blockId!: number;
 

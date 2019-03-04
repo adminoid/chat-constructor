@@ -24,6 +24,34 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             }
         };
     }
+    setBeginLineCoords(payload) {
+        let { itemId, connectorId, coords } = payload;
+        _.map(this.items, item => {
+            if (item.id === itemId) {
+                item.itemData.connectors.output[connectorId].coords = coords;
+            }
+        });
+        // setEndLineCoords(payload) {
+        //   let { itemId, coords } = payload;
+        //   _.map(this.items, (value) => {
+        //     _.map(_.get(value, 'itemData.connectors.output'), (connector) => {
+        //       if (connector.target === itemId) {
+        //         connector.targetCoords = coords;
+        //       }
+        //     });
+        //   });
+        // }
+    }
+    setEndLineCoords(payload) {
+        let { itemId, coords } = payload;
+        _.map(this.items, (value) => {
+            _.map(_.get(value, 'itemData.connectors.output'), (connector) => {
+                if (connector.target === itemId) {
+                    connector.targetCoords = coords;
+                }
+            });
+        });
+    }
     setTargetForConnectorCreate(clickedConnectorInfo) {
         let [blockId, connectorId] = clickedConnectorInfo;
         this.items[blockId].itemData.connectors.output[connectorId].target = this.dd.newIdx;
@@ -139,6 +167,12 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         return this.items.length;
     }
 };
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "setBeginLineCoords", null);
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "setEndLineCoords", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "setTargetForConnectorCreate", null);

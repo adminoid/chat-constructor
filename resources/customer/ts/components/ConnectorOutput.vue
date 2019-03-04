@@ -13,7 +13,9 @@
   @Component({})
   export default class ConnectorOutput extends mixins(BeginLineMixin) {
 
-    @Prop({}) itemData!: object;
+    @Prop({}) connectorData!: object;
+    @Prop({}) connectorId!: number;
+    @Prop({}) blockId!: number;
 
   }
 
