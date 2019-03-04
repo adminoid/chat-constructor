@@ -157,7 +157,9 @@ Insert line before block, and after connecting last block move to up (z-index).
 
 Testing: <http://blogs.sitepointstatic.com/examples/tech/svg-curves/cubic-curve.html>  
 Need square:  
-```<path d="M71,111 C63,408 280,113 272,410 Z" />```
+```
+<path d="M71,111 C63,408 280,113 272,410 Z" />
+```
 
 ## Notes
 I have 3 types of connector (_each connector must contain type property_):
@@ -228,3 +230,25 @@ May be add method `getLineCoords` to: ConnectorClone and
 # Extends and mixin use both
 Full example: <https://stackoverflow.com/questions/51791676/how-can-both-a-base-class-and-mixins-be-used-with-vue-class-component>
 Many examples/patterns: <https://learn-vuejs.github.io/vue-patterns/patterns/>
+
+Force recompute computed: <https://github.com/vuejs/vue/issues/214>
+
+## Latest questions
+
+### V 1
+
+When out or create connector are mounted, save his coordinates to store
+
+When mousemove over DropArea, recalculate coordinates in store
+
+**How and where recalculate coordinates of begin or end lines**
+
+_How recalculate connector coordinates only for related to moved DragItemWrapper?_
+
+### V 2
+
+When connector mounted push his coordinates to store (item.connector && ..target)
+
+Lodash update where examples
+<https://stackoverflow.com/questions/41341075/lodash-collection-bulk-update>
+

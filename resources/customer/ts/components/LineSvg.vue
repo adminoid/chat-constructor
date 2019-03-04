@@ -13,9 +13,10 @@
 
     @Prop({}) lineData!: object;
 
-    // created () {
-    //   console.log(this.lineData);
-    // }
+    mounted () {
+      console.log(this.lineData);
+      console.log(this.$root);
+    }
 
   }
 

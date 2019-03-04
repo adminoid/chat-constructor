@@ -11,6 +11,7 @@
         v-for="(connector, index) in connectorsOutput"
         :key="index"
         :connectorId="index"
+        :blockId="id"
         :is="'connector-' + connector.type"
         ref="output-connectors")
 
@@ -18,7 +19,9 @@
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Component, Prop } from 'vue-property-decorator'
+  import { mixins } from 'vue-class-component'
+  import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput'
   import ConnectorCreate from './ConnectorCreate'
@@ -29,7 +32,7 @@
   @Component({
     components: { ConnectorOutput, ConnectorCreate },
   })
-  export default class BlockBase extends Vue {
+  export default class BlockBase extends mixins(EndLineMixin) {
 
     @DropAreaModule.Mutation pushCreateConnector;
 

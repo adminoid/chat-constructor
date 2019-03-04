@@ -4,21 +4,16 @@ import store from '../store'
 
 // You can declare a mixin as the same style as components.
 @Component
-export default class ConnectorCommon extends Vue {
+export default class EndLine extends Vue {
 
-  // get test () {
-  //   return store.state.DropAreaModule.dd.dragging;
-  // }
-
-  // TODO: extendable...
-  getLineCoords () {
+  getLineEndCoords () {
 
     let areaBoundaries = store.state.DropAreaModule.area.boundaries;
     let clientRect = this.$el.getBoundingClientRect();
 
     let paddingLeft = clientRect.width / 2,
       left = clientRect.left - areaBoundaries.left + paddingLeft,
-      top = clientRect.bottom - areaBoundaries.top;
+      top = clientRect.top - areaBoundaries.top;
 
     return {
       left: left,

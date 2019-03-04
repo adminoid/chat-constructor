@@ -8,10 +8,10 @@
 
   import { Component, Prop } from 'vue-property-decorator'
   import { mixins } from 'vue-class-component'
-  import ConnectorCommonMixin from '../mixins/ConnectorCommon'
+  import BeginLineMixin from '../mixins/BeginLine'
 
   @Component({})
-  export default class ConnectorOutput extends mixins(ConnectorCommonMixin) {
+  export default class ConnectorOutput extends mixins(BeginLineMixin) {
 
     @Prop({}) itemData!: object;
 

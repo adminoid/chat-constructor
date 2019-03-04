@@ -61,22 +61,46 @@
             if( outputConnector.hasOwnProperty('target') ) {
 
               if( this.$refs.items ) {
+
                 let outConnector = this.$refs.items[item.id].$refs['output-connectors'][connectorIdx];
 
                 if( outConnector ) {
 
-                  // console.log(outConnector);
-                  // return false;
+                  let targetItem = this.$refs.items[outputConnector.target];
+                  // TODO: refactor duplicate code...
+                  if ( targetItem ) {
+                    let beginCoords = outConnector.getLineBeginCoords(),
+                      endCoords = targetItem.getLineEndCoords(),
+                      lineData = {
+                        itemId: item.id,
+                        connectorId: connectorIdx,
+                        target: outputConnector.target,
+                        begin: beginCoords,
+                        end: endCoords,
+                      };
 
-                  let startCoords = outConnector.getLineCoords(),
-                    lineData = {
-                      itemId: item.id,
-                      connectorId: connectorIdx,
-                      target: outputConnector.target,
-                      start: startCoords
-                    };
+                    lines.push( lineData );
+                  } else {
 
-                  lines.push( lineData );
+                    this.$nextTick(() => {
+
+                      let targetItem = this.$refs.items[outputConnector.target],
+                        beginCoords = outConnector.getLineBeginCoords(),
+                        endCoords = targetItem.getLineEndCoords(),
+                        lineData = {
+                          itemId: item.id,
+                          connectorId: connectorIdx,
+                          target: outputConnector.target,
+                          begin: beginCoords,
+                          end: endCoords,
+                        };
+
+                      lines.push( lineData );
+
+                    });
+
+                  }
+
                 }
 
               }
@@ -107,6 +131,9 @@
     mousemoveHandler(e) {
 
       if (this.dd.dragging) {
+
+        // TODO: Think about updating begin and end coordinates...
+        // this.$forceUpdate();
 
         let left = +Number(e.clientX - this.area.boundaries.left).toFixed(),
           top = +Number(e.clientY - this.area.boundaries.top).toFixed();

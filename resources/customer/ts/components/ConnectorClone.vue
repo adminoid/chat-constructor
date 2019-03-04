@@ -8,13 +8,13 @@
 
   import { Component, Prop } from 'vue-property-decorator'
   import { mixins } from 'vue-class-component'
-  import ConnectorCommonMixin from '../mixins/ConnectorCommon'
+  import EndLineMixin from '../mixins/EndLine'
 
   import { namespace } from 'vuex-class'
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({})
-  export default class ConnectorClone extends mixins(ConnectorCommonMixin) {
+  export default class ConnectorClone extends mixins(EndLineMixin) {
 
     @DropAreaModule.State line;
 
