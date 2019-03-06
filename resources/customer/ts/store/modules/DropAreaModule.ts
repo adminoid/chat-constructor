@@ -22,7 +22,7 @@ export default class DropAreaModule extends VuexModule {
 
   dd = {
     dragging: false,
-    startIdx: -1,
+    id: -1,
     elementOffset: -1,
     newIdx: -1,
   };
@@ -122,7 +122,7 @@ export default class DropAreaModule extends VuexModule {
       id: this.items.length,
     };
 
-    this.dd.startIdx = this.dd.newIdx = this.items.length;
+    this.dd.id = this.dd.newIdx = this.items.length;
     this.dd.dragging = true;
     this.dd.elementOffset = cloneData.cursorOffset;
 
@@ -139,7 +139,7 @@ export default class DropAreaModule extends VuexModule {
   dragDropDataReset() {
     this.dd = {
       dragging: false,
-      startIdx: -1,
+      id: -1,
       elementOffset: -1,
       newIdx: -1,
     };
@@ -148,9 +148,9 @@ export default class DropAreaModule extends VuexModule {
   @Mutation
   dragDropDataSet(payload) {
 
-    let { idx, offset: elementOffset } = payload;
+    let { id, idx, offset: elementOffset } = payload;
 
-    this.dd.startIdx = idx;
+    this.dd.id = id;
     this.dd.dragging = true;
     this.dd.elementOffset = elementOffset;
 

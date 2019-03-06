@@ -11,7 +11,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         };
         this.dd = {
             dragging: false,
-            startIdx: -1,
+            id: -1,
             elementOffset: -1,
             newIdx: -1,
         };
@@ -84,7 +84,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             position: inAreaPosition,
             id: this.items.length,
         };
-        this.dd.startIdx = this.dd.newIdx = this.items.length;
+        this.dd.id = this.dd.newIdx = this.items.length;
         this.dd.dragging = true;
         this.dd.elementOffset = cloneData.cursorOffset;
         this.items.push(connectorData);
@@ -95,14 +95,14 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
     dragDropDataReset() {
         this.dd = {
             dragging: false,
-            startIdx: -1,
+            id: -1,
             elementOffset: -1,
             newIdx: -1,
         };
     }
     dragDropDataSet(payload) {
-        let { idx, offset: elementOffset } = payload;
-        this.dd.startIdx = idx;
+        let { id, idx, offset: elementOffset } = payload;
+        this.dd.id = id;
         this.dd.dragging = true;
         this.dd.elementOffset = elementOffset;
         if (this.items.length > 1) {

@@ -3,12 +3,14 @@
  */
 
 import Vue from 'vue'
-import Component from 'vue-class-component'
 import store from '../store'
+import { Mixin } from 'vue-mixin-decorator'
 
 // You can declare a mixin as the same style as components.
-@Component
+@Mixin
 export default class EndLine extends Vue {
+
+  id: number;
 
   getLineEndCoords () {
 

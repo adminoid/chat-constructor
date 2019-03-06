@@ -3,8 +3,8 @@
  */
 import * as tslib_1 from "tslib";
 import Vue from 'vue';
-import Component from 'vue-class-component';
 import store from '../store';
+import { Mixin } from 'vue-mixin-decorator';
 // You can declare a mixin as the same style as components.
 let EndLine = class EndLine extends Vue {
     getLineEndCoords() {
@@ -27,7 +27,7 @@ let EndLine = class EndLine extends Vue {
     }
 };
 EndLine = tslib_1.__decorate([
-    Component
+    Mixin
 ], EndLine);
 export default EndLine;
 //# sourceMappingURL=EndLine.js.map

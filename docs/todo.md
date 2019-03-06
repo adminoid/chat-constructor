@@ -254,3 +254,7 @@ Lodash update where examples
 
 todo:
 Install it: <https://github.com/justrhysism/vue-mixin-decorator>
+
+## Next todo
+- make data `lines` and fill it when mounted/created? (get in diff)
+- watch items deeply, if changed coords of targetCoords - rearrange lines

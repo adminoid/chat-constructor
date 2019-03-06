@@ -17,8 +17,8 @@
     get position () {
       let dataArray = _.values(this.lineData);
 
-      let leftMin = _.minBy(dataArray, function(o) { return o.left; }).left;
-      let topMin = _.minBy(dataArray, function(o) { return o.top; }).top;
+      let leftMin = _.minBy(dataArray, function(o: any) { return o.left; }).left;
+      let topMin = _.minBy(dataArray, function(o: any) { return o.top; }).top;
 
       return {
         left: leftMin + 'px',
@@ -29,10 +29,10 @@
     get size () {
       let dataArray = _.values(this.lineData);
 
-      let leftMin = _.minBy(dataArray, function(o) { return o.left; }).left;
-      let topMin = _.minBy(dataArray, function(o) { return o.top; }).top;
-      let leftMax = _.maxBy(dataArray, function(o) { return o.left; }).left;
-      let topMax = _.maxBy(dataArray, function(o) { return o.top; }).top;
+      let leftMin = _.minBy(dataArray, function(o: any) { return o.left; }).left;
+      let topMin = _.minBy(dataArray, function(o: any) { return o.top; }).top;
+      let leftMax = _.maxBy(dataArray, function(o: any) { return o.left; }).left;
+      let topMax = _.maxBy(dataArray, function(o: any) { return o.top; }).top;
 
       return {
         height: topMax - topMin + 'px',

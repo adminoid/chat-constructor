@@ -3,12 +3,15 @@
  */
 
 import Vue from 'vue'
-import Component from 'vue-class-component'
 import store from '../store'
+import { Mixin } from 'vue-mixin-decorator'
 
 // You can declare a mixin as the same style as components.
-@Component
+@Mixin
 export default class BeginLine extends Vue {
+
+  connectorId: number;
+  blockId: number;
 
   getLineBeginCoords () {
 
@@ -28,12 +31,12 @@ export default class BeginLine extends Vue {
 
   mounted () {
 
-      // push begin coordinates to out connector
-      store.commit('DropAreaModule/setBeginLineCoords', {
-        itemId: this.blockId,
-        connectorId: this.connectorId,
-        coords: this.getLineBeginCoords(),
-      });
+    // push begin coordinates to out connector
+    store.commit('DropAreaModule/setBeginLineCoords', {
+      itemId: this.blockId,
+      connectorId: this.connectorId,
+      coords: this.getLineBeginCoords(),
+    });
 
   }
 

@@ -42,13 +42,15 @@
 
     @Prop({}) idx!: number;
 
+    @Prop({}) id: number;
+
     @DropAreaModule.Mutation dragDropDataSet;
 
     dragStart (e) {
 
       let cursorOffset = getCursorOffset(e);
 
-      this.dragDropDataSet({idx: this.idx, offset: cursorOffset});
+      this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
 
     }
 

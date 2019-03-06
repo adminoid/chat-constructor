@@ -19,7 +19,7 @@
 
 <script lang="ts">
 
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Vue, Component, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
   import DragItemWrapper from './DragItemWrapper'
   import BlockBase from './BlockBase'
@@ -41,29 +41,28 @@
     @DropAreaModule.Mutation dragDropDataReset;
     @DropAreaModule.Mutation updateCoords;
 
-    coords = {};
+    lines = [];
 
-    get lines () {
+    @Watch('items', { deep: true })
+    onItemsChanged(val, oldVal) {
+      // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
+      this.lines = this.makeLinesFromItems();
+    }
 
+    makeLinesFromItems() {
       let lines = [];
-
       _.map( this.items, item => {
-
         _.map( _.get(item, 'itemData.connectors.output'), connector => {
-
           if( connector.target && connector.coords && connector.targetCoords ) {
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,
             });
           }
-
         });
-
       });
 
       return lines;
-
     }
 
     setupSizesOfArea() {
@@ -82,9 +81,6 @@
     mousemoveHandler(e) {
 
       if (this.dd.dragging) {
-
-        // TODO: Think about updating begin and end coordinates...
-        // this.$forceUpdate();
 
         let left = +Number(e.clientX - this.area.boundaries.left).toFixed(),
           top = +Number(e.clientY - this.area.boundaries.top).toFixed();
@@ -110,6 +106,33 @@
           top: top,
         });
 
+        // TODO: Update all begin and end coordinates who concern to this item
+        // find all begin lines relates to this id
+        if( this.dd.id >= 0 ) {
+
+          let idx = _.findIndex(this.items, {id: this.dd.id}),
+            $endItem = this.$refs.items[idx],
+            endCoords = $endItem.getLineEndCoords();
+
+          _.map(this.items, (item, index) => {
+            _.map(_.get(item, 'itemData.connectors.output'), (connector, cidx) => {
+
+              if( item.id === this.dd.id ) {
+                let $connector = this.$refs.items[index].$refs['output-connectors'][cidx];
+                if( $connector ) {
+                  connector.coords = $connector.getLineBeginCoords();
+                }
+              }
+
+              if( connector.target == this.dd.id ) {
+                connector.targetCoords = endCoords;
+              }
+
+            });
+          });
+
+        }
+
       }
 
 
@@ -117,18 +140,11 @@
 
     mouseupHandler() {
       this.dragDropDataReset();
-      // console.info('mouseupHandler');
     }
 
     mounted () {
-
       this.setupSizesOfArea();
-
-      // console.log(this.$refs);
-      // console.log(this.$refs['items']);
-      // console.log(this.$refs.length);
-      // console.log(this.$refs.items[0].$refs);
-
+      this.lines = this.makeLinesFromItems();
     }
 
   }
