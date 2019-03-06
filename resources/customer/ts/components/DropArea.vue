@@ -110,22 +110,21 @@
         // find all begin lines relates to this id
         if( this.dd.id >= 0 ) {
 
-          let idx = _.findIndex(this.items, {id: this.dd.id}),
-            $endItem = this.$refs.items[idx],
-            endCoords = $endItem.getLineEndCoords();
+          let $beginItem = _.find(this.$refs.items, {id: this.dd.id});
 
-          _.map(this.items, (item, index) => {
-            _.map(_.get(item, 'itemData.connectors.output'), (connector, cidx) => {
+          _.map(this.items, (item) => {
+            _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
               if( item.id === this.dd.id ) {
-                let $connector = this.$refs.items[index].$refs['output-connectors'][cidx];
-                if( $connector ) {
-                  connector.coords = $connector.getLineBeginCoords();
+
+                let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                if( $beginConnector ) {
+                  connector.coords = $beginConnector.getLineBeginCoords();
                 }
               }
 
               if( connector.target == this.dd.id ) {
-                connector.targetCoords = endCoords;
+                connector.targetCoords = $beginItem.getLineEndCoords();
               }
 
             });

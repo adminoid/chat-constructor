@@ -49,5 +49,6 @@
   .line-area
     position: absolute
     background: #e0ffcf
+    opacity: .3
 
 </style>

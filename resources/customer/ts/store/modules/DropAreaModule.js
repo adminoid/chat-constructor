@@ -54,7 +54,10 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
     }
     setTargetForConnectorCreate(clickedConnectorInfo) {
         let [blockId, connectorId] = clickedConnectorInfo;
-        this.items[blockId].itemData.connectors.output[connectorId].target = this.dd.newIdx;
+        let item = _.find(this.items, ['id', blockId]);
+        if (_.has(item, 'itemData.connectors.output')) {
+            item.itemData.connectors.output[connectorId].target = this.dd.id;
+        }
     }
     setAreaBoundaries(data) {
         this.area.boundaries = data;
