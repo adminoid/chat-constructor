@@ -13,7 +13,6 @@
       :id="item.id"
       :itemData="item.itemData")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
-    pre(style="position: absolute; right: 30px; bottom: 20px;") {{ lines }}
 
 </template>
 
@@ -110,7 +109,8 @@
         // find all begin lines relates to this id
         if( this.dd.id >= 0 ) {
 
-          let $beginItem = _.find(this.$refs.items, {id: this.dd.id});
+          let $items: any = this.$refs.items,
+            $beginItem = _.find($items, (item: any) => item.id === this.dd.id);
 
           _.map(this.items, (item) => {
             _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {

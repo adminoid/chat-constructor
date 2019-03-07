@@ -256,5 +256,16 @@ todo:
 Install it: <https://github.com/justrhysism/vue-mixin-decorator>
 
 ## Next todo
-- make data `lines` and fill it when mounted/created? (get in diff)
-- watch items deeply, if changed coords of targetCoords - rearrange lines
++ make data `lines` and fill it when mounted/created? (get in diff)
++ watch items deeply, if changed coords of targetCoords - rearrange lines
+
+- calculate begin and end points for svg line
+- draw straight line
+- calculate additional two points for bezier curve
+- draw bezier curve
+
+- think about toggling ConnectorClone to InputConnector if cursor closer
+- compose tech task questions for backend...
+
+### Calculate distance between mouse and element
+<https://css-tricks.com/snippets/jquery/calculate-distance-between-mouse-and-element/>
