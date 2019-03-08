@@ -117,8 +117,15 @@
             $items: any = this.$refs.items,
             $beginItem = _.find($items, (item: any) => item.id === this.dd.id);
 
+          // update sourceCoords (DropAreaModule\updateEndLineCoords)
+          this.updateEndLineCoords({
+            itemId: this.dd.id,
+            coords: $beginItem.getLineEndCoords(),
+          });
+
           _.map(this.items, (item) => {
-            item.active = (
+
+            const isActive = (
               isNewLine && item.component === 'BlockBase' &&
               item.sourceCoords.left < left + this.closest &&
               item.sourceCoords.left > left - this.closest &&
@@ -126,23 +133,9 @@
               item.sourceCoords.top > top - this.closest
             );
 
-            // update sourceCoords (DropAreaModule\updateEndLineCoords)
-            this.updateEndLineCoords({
-              itemId: this.dd.id,
-              coords: $beginItem.getLineEndCoords(),
-            });
-
-            if( item.active ) {
-              console.group('---');
-              console.log(item.sourceCoords.left, left);
-              console.log(item.sourceCoords.top, top);
-              console.groupEnd();
-            }
-
             _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
               if( item.id === this.dd.id ) {
-
                 let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
                 if( $beginConnector ) {
                   connector.coords = $beginConnector.getLineBeginCoords();
@@ -151,6 +144,10 @@
 
               if( connector.target == this.dd.id ) {
                 connector.targetCoords = $beginItem.getLineEndCoords();
+              }
+              // check if target item not itself
+              else {
+                item.active = isActive;
               }
 
             });

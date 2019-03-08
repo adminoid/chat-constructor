@@ -30,11 +30,6 @@ export default class EndLine extends Vue {
 
   mounted () {
 
-    // TODO: Install <https://github.com/justrhysism/vue-mixin-decorator> for properties linking
-
-    // push end coordinates to out connector.target
-    // console.log(this.id);
-
     store.commit('DropAreaModule/updateEndLineCoords', {
       itemId: this.id,
       coords: this.getLineEndCoords(),
