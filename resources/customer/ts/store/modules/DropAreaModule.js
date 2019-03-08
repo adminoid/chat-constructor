@@ -31,21 +31,14 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
                 item.itemData.connectors.output[connectorId].coords = coords;
             }
         });
-        // setEndLineCoords(payload) {
-        //   let { itemId, coords } = payload;
-        //   _.map(this.items, (value) => {
-        //     _.map(_.get(value, 'itemData.connectors.output'), (connector) => {
-        //       if (connector.target === itemId) {
-        //         connector.targetCoords = coords;
-        //       }
-        //     });
-        //   });
-        // }
     }
-    setEndLineCoords(payload) {
+    updateEndLineCoords(payload) {
         let { itemId, coords } = payload;
-        _.map(this.items, (value) => {
-            _.map(_.get(value, 'itemData.connectors.output'), (connector) => {
+        _.map(this.items, (item) => {
+            if (item.id === itemId) {
+                item.sourceCoords = coords;
+            }
+            _.map(_.get(item, 'itemData.connectors.output'), (connector) => {
                 if (connector.target === itemId) {
                     connector.targetCoords = coords;
                 }
@@ -175,7 +168,7 @@ tslib_1.__decorate([
 ], DropAreaModule.prototype, "setBeginLineCoords", null);
 tslib_1.__decorate([
     Mutation
-], DropAreaModule.prototype, "setEndLineCoords", null);
+], DropAreaModule.prototype, "updateEndLineCoords", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "setTargetForConnectorCreate", null);

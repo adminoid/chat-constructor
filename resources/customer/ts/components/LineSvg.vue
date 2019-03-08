@@ -37,7 +37,17 @@
 
     get mirrored () {
       // console.log(this.lineData); // begin/end . left/top
-      let lineData = this.lineData;
+
+      type lineDataType = {
+        begin: {
+          left, top
+        },
+        end: {
+          left, top
+        }
+      };
+
+      let lineData: lineDataType | any = this.lineData;
       let test = _.reduce(lineData.begin, function(result, value, key) {
         return value < lineData.end[key] ?
           result : result.concat(key);

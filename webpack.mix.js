@@ -12,7 +12,6 @@ const mix = require('laravel-mix');
  */
 
 mix.ts('resources/customer/ts/index.ts', 'public/js/customer.js').sourceMaps()
-  .copy('node_modules/leader-line/leader-line.min.js', 'public/js/leader-line.min.js')
   .sass('resources/customer/sass/index.sass', 'public/css/customer.css');
 
 mix.webpackConfig({

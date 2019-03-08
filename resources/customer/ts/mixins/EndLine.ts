@@ -35,7 +35,7 @@ export default class EndLine extends Vue {
     // push end coordinates to out connector.target
     // console.log(this.id);
 
-    store.commit('DropAreaModule/setEndLineCoords', {
+    store.commit('DropAreaModule/updateEndLineCoords', {
       itemId: this.id,
       coords: this.getLineEndCoords(),
     });

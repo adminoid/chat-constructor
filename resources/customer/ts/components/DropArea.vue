@@ -10,6 +10,7 @@
       component(
       ref="items"
       :is="item.component"
+      :active="item.active"
       :id="item.id"
       :itemData="item.itemData")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
@@ -39,8 +40,11 @@
     @DropAreaModule.Mutation setAreaBoundaries;
     @DropAreaModule.Mutation dragDropDataReset;
     @DropAreaModule.Mutation updateCoords;
+    @DropAreaModule.Mutation updateEndLineCoords;
 
     lines = [];
+
+    closest = 50;
 
     @Watch('items', { deep: true })
     onItemsChanged(val, oldVal) {
@@ -109,10 +113,32 @@
         // find all begin lines relates to this id
         if( this.dd.id >= 0 ) {
 
-          let $items: any = this.$refs.items,
+          let isNewLine = _.find(this.items, (item: any) => item.id === this.dd.id).component === 'ConnectorClone',
+            $items: any = this.$refs.items,
             $beginItem = _.find($items, (item: any) => item.id === this.dd.id);
 
           _.map(this.items, (item) => {
+            item.active = (
+              isNewLine && item.component === 'BlockBase' &&
+              item.sourceCoords.left < left + this.closest &&
+              item.sourceCoords.left > left - this.closest &&
+              item.sourceCoords.top < top + this.closest &&
+              item.sourceCoords.top > top - this.closest
+            );
+
+            // update sourceCoords (DropAreaModule\updateEndLineCoords)
+            this.updateEndLineCoords({
+              itemId: this.dd.id,
+              coords: $beginItem.getLineEndCoords(),
+            });
+
+            if( item.active ) {
+              console.group('---');
+              console.log(item.sourceCoords.left, left);
+              console.log(item.sourceCoords.top, top);
+              console.groupEnd();
+            }
+
             _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
               if( item.id === this.dd.id ) {

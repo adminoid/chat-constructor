@@ -2,7 +2,7 @@
 
   .base-block
     .base-block__header
-      .input-connector
+      .input-connector(:class="{ active: active }")
     .base-block__body
       p {{ itemData.blockName }}
     .base-block__footer
@@ -40,6 +40,8 @@
     @Prop({}) id!: number;
 
     @Prop({}) itemData!: object;
+
+    @Prop({}) active: boolean;
 
     get connectorsOutput () {
 
@@ -104,6 +106,8 @@
     background: #575dff
     border-radius: 3px
     opacity: .7
+    &.active
+      background: #f09593
 
   .connector_new
     height: 16px
