@@ -44,7 +44,9 @@
 
     lines = [];
 
-    closest = 50;
+    closest = 20;
+
+    connectorWidth = 16;
 
     @Watch('items', { deep: true })
     onItemsChanged(val, oldVal) {
@@ -64,6 +66,8 @@
           }
         });
       });
+
+      console.log(lines);
 
       return lines;
     }
@@ -104,13 +108,7 @@
           top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
         }
 
-        this.updateCoords({
-          left: left,
-          top: top,
-        });
-
-        // TODO: Update all begin and end coordinates who concern to this item
-        // find all begin lines relates to this id
+        // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
           let isNewLine = _.find(this.items, (item: any) => item.id === this.dd.id).component === 'ConnectorClone',
@@ -148,9 +146,18 @@
               // check if target item not itself
               else {
                 item.active = isActive;
+                if( isActive ) {
+                  left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth/2;
+                  top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth/2;
+                }
               }
 
             });
+          });
+
+          this.updateCoords({
+            left: left,
+            top: top,
           });
 
         }

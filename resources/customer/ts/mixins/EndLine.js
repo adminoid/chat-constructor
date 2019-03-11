@@ -10,10 +10,10 @@ let EndLine = class EndLine extends Vue {
     getLineEndCoords() {
         let areaBoundaries = store.state.DropAreaModule.area.boundaries;
         let clientRect = this.$el.getBoundingClientRect();
-        let paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left + paddingLeft, top = clientRect.top - areaBoundaries.top;
+        let paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left, top = clientRect.top - areaBoundaries.top;
         return {
-            left: left,
-            top: top
+            left: left + paddingLeft,
+            top: top,
         };
     }
     mounted() {

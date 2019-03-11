@@ -38,7 +38,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             if (item.id === itemId) {
                 item.sourceCoords = coords;
             }
-            _.map(_.get(item, 'itemData.connectors.output'), (connector) => {
+            _.map(_.get(item, 'itemData.connectors.output'), connector => {
                 if (connector.target === itemId) {
                     connector.targetCoords = coords;
                 }

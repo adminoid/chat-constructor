@@ -18,12 +18,12 @@ export default class EndLine extends Vue {
     let clientRect = this.$el.getBoundingClientRect();
 
     let paddingLeft = clientRect.width / 2,
-      left = clientRect.left - areaBoundaries.left + paddingLeft,
+      left = clientRect.left - areaBoundaries.left,
       top = clientRect.top - areaBoundaries.top;
 
     return {
-      left: left,
-      top: top
+      left: left + paddingLeft,
+      top: top,
     };
 
   }
