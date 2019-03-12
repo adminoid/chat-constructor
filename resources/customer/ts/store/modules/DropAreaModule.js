@@ -14,6 +14,8 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             id: -1,
             elementOffset: -1,
             newIdx: -1,
+            targetId: -1,
+            sourcePath: [],
         };
         this.area = {
             boundaries: {
@@ -23,6 +25,11 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
                 bottom: -1,
             }
         };
+    }
+    setActiveTargetId(id) {
+        if (id > 0) {
+            this.dd.targetId = id;
+        }
     }
     setBeginLineCoords(payload) {
         let { itemId, connectorId, coords } = payload;
@@ -46,8 +53,7 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         });
     }
     setTargetForConnectorCreate(clickedConnectorInfo) {
-        let [blockId, connectorId] = clickedConnectorInfo;
-        let item = _.find(this.items, ['id', blockId]);
+        let [blockId, connectorId] = this.dd.sourcePath = clickedConnectorInfo, item = _.find(this.items, ['id', blockId]);
         if (_.has(item, 'itemData.connectors.output')) {
             item.itemData.connectors.output[connectorId].target = this.dd.id;
         }
@@ -94,6 +100,8 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             id: -1,
             elementOffset: -1,
             newIdx: -1,
+            targetId: -1,
+            sourcePath: [],
         };
     }
     dragDropDataSet(payload) {
@@ -112,17 +120,17 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
             throw 'Error: Here no one block... What do you want to move?';
         }
     }
-    pushCreateConnector(blockId) {
-        if (!_.has(this.items[blockId], 'itemData.connectors')) {
-            this.items[blockId].itemData = {
-                connectors: {
-                    output: []
-                }
-            };
+    checkCreateConnector(blockId) {
+        // console.log(this.items);
+        // console.log(blockId);
+        let item = _.find(this.items, ['id', blockId]), connectorsOutput = _.get(item.itemData, 'connectors.output') || [], createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
+        if (!createButtonCnt || createButtonCnt < 1) {
+            !_.has(item, 'itemData') && _.set(item, 'itemData', { connectors: { output: [] } });
+            !_.has(item, 'itemData.connectors') && _.set(item, 'itemData.connectors', { output: [] });
+            item.itemData.connectors.output.push({
+                type: 'create',
+            });
         }
-        this.items[blockId].itemData.connectors.output.push({
-            type: 'create',
-        });
     }
     /**
      * Action because in the future planned make async ajax queries to the server
@@ -133,17 +141,10 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         if (!_.has(params, 'component') || params.component !== 'BlockBase') {
             params.component = 'BlockBase';
         }
-        let blockData;
-        // It's temporary decor
-        // if( !_.has( params, 'blockName' ) ) {
-        //   blockData = {
-        //     blockName: `Block №${this.context.getters['itemsTotal']}`,
-        //   }
-        // }
-        blockData = {
+        let blockData = {
             blockName: `Block №${this.context.getters['itemsTotal']}`
         };
-        params.itemData = _.assign(blockData, _.omit(params, ['component', 'position']));
+        _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
         if (_.has(params, 'connectors')) {
             delete params.connectors;
         }
@@ -163,6 +164,9 @@ let DropAreaModule = class DropAreaModule extends VuexModule {
         return this.items.length;
     }
 };
+tslib_1.__decorate([
+    Mutation
+], DropAreaModule.prototype, "setActiveTargetId", null);
 tslib_1.__decorate([
     Mutation
 ], DropAreaModule.prototype, "setBeginLineCoords", null);
@@ -192,7 +196,7 @@ tslib_1.__decorate([
 ], DropAreaModule.prototype, "dragDropDataSet", null);
 tslib_1.__decorate([
     Mutation
-], DropAreaModule.prototype, "pushCreateConnector", null);
+], DropAreaModule.prototype, "checkCreateConnector", null);
 tslib_1.__decorate([
     Action({ rawError: true })
 ], DropAreaModule.prototype, "insertBlock", null);

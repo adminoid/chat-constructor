@@ -25,6 +25,8 @@ export default class DropAreaModule extends VuexModule {
     id: -1,
     elementOffset: -1,
     newIdx: -1,
+    targetId: -1,
+    sourcePath: [],
   };
 
   area = {
@@ -35,6 +37,13 @@ export default class DropAreaModule extends VuexModule {
       bottom: -1,
     }
   };
+
+  @Mutation
+  setActiveTargetId( id: number ) {
+    if( id > 0 ) {
+      this.dd.targetId = id;
+    }
+  }
 
   @Mutation
   setBeginLineCoords( payload ) {
@@ -67,8 +76,9 @@ export default class DropAreaModule extends VuexModule {
   @Mutation
   setTargetForConnectorCreate( clickedConnectorInfo ) {
 
-    let [blockId, connectorId] = clickedConnectorInfo;
-    let item = _.find(this.items, ['id', blockId]);
+    let [blockId, connectorId] = this.dd.sourcePath = clickedConnectorInfo,
+      item = _.find(this.items, ['id', blockId]);
+
     if( _.has(item, 'itemData.connectors.output') ) {
       item.itemData.connectors.output[connectorId].target = this.dd.id;
     }
@@ -135,6 +145,8 @@ export default class DropAreaModule extends VuexModule {
       id: -1,
       elementOffset: -1,
       newIdx: -1,
+      targetId: -1,
+      sourcePath: [],
     };
   }
 
@@ -163,19 +175,24 @@ export default class DropAreaModule extends VuexModule {
   }
 
   @Mutation
-  pushCreateConnector(blockId: number) {
+  checkCreateConnector(blockId: number) {
 
-    if ( !_.has(this.items[blockId], 'itemData.connectors') ) {
-      this.items[blockId].itemData = {
-        connectors: {
-          output: []
-        }
-      };
+    // console.log(this.items);
+    // console.log(blockId);
+
+    let item = _.find(this.items, ['id', blockId]),
+      connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
+      createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
+
+    if (!createButtonCnt || createButtonCnt < 1) {
+      !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
+
+      !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
+
+      item.itemData.connectors.output.push({
+        type: 'create',
+      });
     }
-
-    this.items[blockId].itemData.connectors.output.push({
-      type: 'create',
-    });
 
   }
 
@@ -191,19 +208,11 @@ export default class DropAreaModule extends VuexModule {
       params.component = 'BlockBase';
     }
 
-    let blockData: object;
-    // It's temporary decor
-    // if( !_.has( params, 'blockName' ) ) {
-    //   blockData = {
-    //     blockName: `Block №${this.context.getters['itemsTotal']}`,
-    //   }
-    // }
-
-    blockData = {
+    let blockData: object = {
       blockName: `Block №${this.context.getters['itemsTotal']}`
     };
 
-    params.itemData = _.assign(blockData, _.omit(params, ['component', 'position']));
+    _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
 
     if ( _.has(params, 'connectors') ) {
       delete params.connectors;

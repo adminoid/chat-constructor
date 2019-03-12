@@ -1,7 +1,7 @@
 <template lang="pug">
 
   svg.svg(:style="[position, size]" :viewBox="viewBox" xmlns="http://www.w3.org/2000/svg")
-    line.svg__line(x1="0" :y1="y1" :x2="width" :y2="y2" stroke="#6b240c")
+    line.svg__line(x1="0" :y1="y1" :x2="width" :y2="y2" stroke="rgba(14, 81, 0, 0.8)")
 
 </template>
 
@@ -14,6 +14,8 @@
   export default class LineSvg extends Vue {
 
     @Prop({}) lineData!: object;
+
+    lineMinSize: number = 3;
 
     get position () {
       let dataArray = _.values(this.lineData);
@@ -57,21 +59,21 @@
     }
 
     get width () {
-      let dataArray = _.values(this.lineData);
+      let dataArray = _.values(this.lineData),
+        leftMin = _.minBy(dataArray, (o: any) => o.left).left,
+        leftMax = _.maxBy(dataArray, (o: any) => o.left).left,
+        width = leftMax - leftMin;
 
-      let leftMin = _.minBy(dataArray, function(o: any) { return o.left; }).left;
-      let leftMax = _.maxBy(dataArray, function(o: any) { return o.left; }).left;
-
-      return leftMax - leftMin;
+      return (width < this.lineMinSize) ? this.lineMinSize : width;
     }
 
     get height () {
-      let dataArray = _.values(this.lineData);
+      let dataArray = _.values(this.lineData),
+        topMin = _.minBy(dataArray, (o: any) => o.top).top,
+        topMax = _.maxBy(dataArray, (o: any) => o.top).top,
+        height = topMax - topMin;
 
-      let topMin = _.minBy(dataArray, function(o: any) { return o.top; }).top;
-      let topMax = _.maxBy(dataArray, function(o: any) { return o.top; }).top;
-
-      return topMax - topMin;
+      return (height < this.lineMinSize) ? this.lineMinSize : height;
     }
 
     get viewBox () {
@@ -92,8 +94,8 @@
 <style lang="sass">
 
   .svg
+    z-index: -1
     position: absolute
-    background: rgba(222, 255, 203, 0.33)
     .svg__line
       stroke-width: 2
 

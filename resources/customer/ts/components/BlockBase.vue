@@ -8,7 +8,7 @@
     .base-block__footer
       .output-connectors
         component(
-        v-for="(connector, index) in connectorsOutput"
+        v-for="(connector, index) in itemData.connectors.output"
         :key="index"
         :connectorId="index"
         :blockId="id"
@@ -20,13 +20,13 @@
 
 <script lang="ts">
 
-  import { Component, Prop } from 'vue-property-decorator'
+  import { Component, Prop, Watch } from 'vue-property-decorator'
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput'
   import ConnectorCreate from './ConnectorCreate'
-  import * as _ from 'lodash'
+  // import * as _ from 'lodash'
 
   const DropAreaModule = namespace('DropAreaModule');
 
@@ -35,28 +35,27 @@
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 
-    @DropAreaModule.Mutation pushCreateConnector;
+    @DropAreaModule.Mutation checkCreateConnector;
+    @DropAreaModule.State dd;
 
     @Prop({}) id!: number;
-
     @Prop({}) itemData!: object;
-
     @Prop({}) active: boolean;
 
-    get connectorsOutput () {
+    @Watch('dd', { deep: true })
+    onItemsChanged() {
+      // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
 
-      let connectorsOutput = _.get(this.itemData, 'connectors.output') || [];
+      // console.log('watching ' + this.id);
 
-      let createButtonCnt = _.filter(connectorsOutput, function(o) { if (o.type == 'create') return o }).length;
+      this.checkCreateConnector(this.id);
+      this.$forceUpdate();
 
-      if (!createButtonCnt || createButtonCnt < 1) {
-        // here push create connector to store
-        this.pushCreateConnector(this.id);
-      } else if (createButtonCnt > 1) {
-        throw 'create button must be a single'
-      }
+    }
 
-      return connectorsOutput;
+    created() {
+
+      this.checkCreateConnector(this.id);
 
     }
 
@@ -72,8 +71,8 @@
     align-items: center
     height: 100px
     width: 150px
-    background: #6a8aff
-    border: 1px solid #5d6dd5
+    background: rgba(82, 176, 93, 0.57)
+    border: 1px solid rgba(14, 81, 0, 0.8)
     border-radius: 5px
     box-shadow: 4px 4px 14px 0 rgba(0,0,0,0.3)
     .base-block__header

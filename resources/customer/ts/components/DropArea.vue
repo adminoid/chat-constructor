@@ -41,6 +41,7 @@
     @DropAreaModule.Mutation dragDropDataReset;
     @DropAreaModule.Mutation updateCoords;
     @DropAreaModule.Mutation updateEndLineCoords;
+    @DropAreaModule.Mutation setActiveTargetId;
 
     lines = [];
 
@@ -66,8 +67,6 @@
           }
         });
       });
-
-      console.log(lines);
 
       return lines;
     }
@@ -111,9 +110,9 @@
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
-          let isNewLine = _.find(this.items, (item: any) => item.id === this.dd.id).component === 'ConnectorClone',
+          let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
             $items: any = this.$refs.items,
-            $beginItem = _.find($items, (item: any) => item.id === this.dd.id);
+            $beginItem = _.find($items, ['id', this.dd.id]);
 
           // update sourceCoords (DropAreaModule\updateEndLineCoords)
           this.updateEndLineCoords({
@@ -134,6 +133,11 @@
             _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
               if( item.id === this.dd.id ) {
+
+                // console.log(cIdx);
+                // console.log($beginItem.$refs);
+                // console.log($beginItem.$refs['output-connectors']);
+
                 let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
                 if( $beginConnector ) {
                   connector.coords = $beginConnector.getLineBeginCoords();
@@ -147,6 +151,8 @@
               else {
                 item.active = isActive;
                 if( isActive ) {
+                  // TODO: if active, set target id to dd
+                  this.setActiveTargetId(item.id);
                   left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth/2;
                   top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth/2;
                 }
@@ -168,6 +174,18 @@
     }
 
     mouseupHandler() {
+
+      if(this.dd.sourcePath.length === 2 && this.dd.targetId >= 0) {
+
+        let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
+          sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
+
+        sourceConnector.type = 'output';
+        sourceConnector.target = this.dd.targetId;
+
+        this.items.splice(this.items.length - 1, 1);
+
+      }
       this.dragDropDataReset();
     }
 
@@ -182,6 +200,7 @@
 <style lang="sass">
 
   #drop-area
+    z-index: 0
     height: calc(100vh - 140px)
     position: relative
     background: #d7d7d7
