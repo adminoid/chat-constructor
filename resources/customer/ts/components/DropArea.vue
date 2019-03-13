@@ -12,6 +12,7 @@
       :is="item.component"
       :active="item.active"
       :id="item.id"
+      :key="item.id"
       :itemData="item.itemData")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
 
@@ -50,9 +51,16 @@
     connectorWidth = 16;
 
     @Watch('items', { deep: true })
-    onItemsChanged(val, oldVal) {
+    onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
+
       this.lines = this.makeLinesFromItems();
+
+      // this.lines = _.debounce( <any>function (this) {
+      //   console.log(this.lines);
+      //   return this.makeLinesFromItems();
+      // }.bind(this), 1000);
+
     }
 
     makeLinesFromItems() {
@@ -134,10 +142,6 @@
 
               if( item.id === this.dd.id ) {
 
-                // console.log(cIdx);
-                // console.log($beginItem.$refs);
-                // console.log($beginItem.$refs['output-connectors']);
-
                 let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
                 if( $beginConnector ) {
                   connector.coords = $beginConnector.getLineBeginCoords();
@@ -175,17 +179,35 @@
 
     mouseupHandler() {
 
-      if(this.dd.sourcePath.length === 2 && this.dd.targetId >= 0) {
+      if( this.dd.sourcePath.length === 2 ) {
 
         let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
           sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
 
-        sourceConnector.type = 'output';
-        sourceConnector.target = this.dd.targetId;
+        if( sourceConnector.type === 'create' ) {
 
-        this.items.splice(this.items.length - 1, 1);
+          if( this.dd.targetId >= 0 ) {
+            sourceConnector.target = this.dd.targetId;
+            sourceConnector.type = 'output';
+          }
+          else {
+            // remove target from output connector
+            let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
+              source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
+
+            _.unset(source, 'target');
+            _.unset(source, 'targetCoords');
+
+            this.lines = this.makeLinesFromItems();
+
+          }
+
+          _.remove( this.items, (item: any) => item.id === this.dd.id );
+
+        }
 
       }
+
       this.dragDropDataReset();
     }
 
@@ -195,6 +217,7 @@
     }
 
   }
+
 </script>
 
 <style lang="sass">
