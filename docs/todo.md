@@ -271,21 +271,12 @@ Install it: <https://github.com/justrhysism/vue-mixin-decorator>
 <https://css-tricks.com/snippets/jquery/calculate-distance-between-mouse-and-element/>
 
 ## Next tasks and questions
-- vue.js + lodash debounce
-  + <https://stackoverflow.com/questions/41238872/are-vue-js-and-debounce-lodash-underscore-compatible>
-  + <https://stackoverflow.com/questions/52987115/using-vue-js-how-to-you-flush-a-method-that-is-debounced-with-lodash>
-  + <https://stackoverflow.com/questions/47037812/what-is-wrong-with-vue-and-lodash-debounce>
-  + <https://stackoverflow.com/questions/45178621/how-to-correctly-use-vue-js-watch-with-lodash-debounce>
-  + <https://stackoverflow.com/questions/42199956/how-to-implement-debounce-in-vue2>
-  + <https://medium.com/vuejs-tips/tip-15-delay-execution-with-debounce-6a93b759bb06>
-- initiate update later for actualize elements view
-  - debounce forceUpdate?
-- forceUpdate on nextTick?
-  + <http://michaelnthiessen.com/force-re-render/>
-- laravel eloquent: many types of model - ways for realization
-- remove bottom margin in DropArea
-- think about 
+
 * bezier curves
+* remove bottom margin in DropArea
+- laravel eloquent: many types of model - ways for realization
+  + <https://stackoverflow.com/questions/45958875/different-relationships-on-different-model-types-laravel>
+  + <https://stackoverflow.com/questions/47310673/have-a-laravel-model-have-a-relationship-with-2-different-models>
 * make authorization
 * make models and migrations
 ----------------
