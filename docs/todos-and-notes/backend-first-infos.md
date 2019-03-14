@@ -25,3 +25,4 @@ connectors
 ### Links
 + polymorphic custom names: <https://stackoverflow.com/questions/43612399/laravel-polymorphic-relationships-with-custom-keys>
 + also some ways: <https://stackoverflow.com/questions/22012877/laravel-eloquent-polymorphic-one-to-one>
++ installed lang package: <https://github.com/caouecs/Laravel-lang>

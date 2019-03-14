@@ -12,7 +12,8 @@ const mix = require('laravel-mix');
  */
 
 mix.ts('resources/customer/ts/index.ts', 'public/js/customer.js').sourceMaps()
-  .sass('resources/customer/sass/index.sass', 'public/css/customer.css');
+  .sass('resources/customer/sass/index.sass', 'public/css/customer.css')
+  .sass('resources/app/sass/index.sass', 'public/css/app.css');
 
 mix.webpackConfig({
   module: {

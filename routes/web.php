@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('customer.index');
-});
+Auth::routes();
+
+//Route::get('/', function () {
+//    return view('customer.index');
+//});
+
+Route::get('/', 'CabinetController@index')->name('home');
