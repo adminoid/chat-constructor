@@ -100,7 +100,7 @@ new Vue({
 > + about extending styles: <https://alligator.io/vuejs/typescript-class-components/>
 > + extending templates: <https://github.com/mrodal/vue-inheritance-loader>
 > + mixin wrapper <https://github.com/ktsn/vue-typed-mixins> for class-like extending
-> + extending template with render function <https://github.com/vuejs/vue/issues/4665#issuecomment-321618056>
+  > + extending template with render function <https://github.com/vuejs/vue/issues/4665#issuecomment-321618056>
 > + more extending: <https://forum.vuejs.org/t/extend-styles-and-behaviour-of-a-single-file-component/19420>
 > + scalable content: <https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/>
 
@@ -137,4 +137,148 @@ new Vue({
 ### Backend
 - nullable one-to-one relationship <https://laracasts.com/discuss/channels/eloquent/allow-null-for-belongsto-relationship?page=0>
 
+
+**Extending**:
+1. <https://jsfiddle.net/m7koc7uv/>
+2. <https://stackoverflow.com/questions/51791676/how-can-both-a-base-class-and-mixins-be-used-with-vue-class-component>
+3. <https://github.com/vuejs/vue-class-component/issues/80>
+
+# income-connectors
+
+- on mouseup:
+  - modify connector-create to connector-outcome
+  - add new connector-create to outcome-connectors
+  
+## SVG lines  
+
+<https://stackoverflow.com/questions/52972648/drawing-path-in-svg-with-90-arc-between-perpendicular-lines>
+
+Insert line before block, and after connecting last block move to up (z-index).
+
+Testing: <http://blogs.sitepointstatic.com/examples/tech/svg-curves/cubic-curve.html>  
+Need square:  
+```
+<path d="M71,111 C63,408 280,113 272,410 Z" />
+```
+
+## Notes
+I have 3 types of connector (_each connector must contain type property_):
+1. ConnectorNormal
+1. ConnectorCreate
+  - toggleable to ConnectorNormal
+1. ConnectorClone
+  - bind position
+  
+ConnectorClone and ConnectorCreate must pass his coordinates to store for drawing line... 
+
+# About bezier curves
+
+1. <https://codepen.io/anon/pen/LjPpGv?editors=1010> from <https://stackoverflow.com/questions/45240401/svg-path-create-a-curvy-line-to-link-two-points>
+2. also: <https://stackoverflow.com/questions/49274176/how-to-create-a-curved-svg-path-between-two-points>
+
+## Way for lodash select/where:  
+```javascript
+const people = [
+  { name: "Tom", age: 19 },
+  { name: "John", age: 3 },
+  { name: "Seven", age: 37 },
+  { name: "John", age: 42 }
+];
+
+let filtered_people = _.filter(people, function(p){
+  return _.includes(['Tom', 'John'], p.name);  
+});
+
+console.log(filtered_people); // Array[3]
+```
+
++ good cheat sheet for lodash <https://medium.com/voobans-tech-stories/10-lodash-functions-everyone-should-know-334b372aec5d>
+
+I need internal in area x1,y1 and x2,y2 for a line, where x - left and y - top.  
+
++ another way to draw lines: <https://codepen.io/berky93/pen/vKmkWG>
+
+# Latest TODO
+
+- add second block for testing "computed" lines array
+- add property target to each out connector
++ determine where draw svg lines (**in template of DropArea**) 
+
+---
+
+### New connector drawing
+- mousedown
+  - add target to items[id].itemData.connectors.output{type = 'create'}
+
+Line contains from:
+- ~~out connector block id~~
+- ~~out connector id~~
++ source: block_id + connector_id (?)
++ target block id (in connector one for the block)
+
+Actual question: **how calculate coordinates for line**
+May be add method `getLineCoords` to: ConnectorClone and
+
+# Next point to point tasks
+1. set target (ConnectorClone) for ConnectorCreate by click on it
+2. make "computed" array lines, created by filtering block->connector->has(target)
+3. When mousemove, drawing square block for line (it would be svg frame)
+  - need get coordinate offset for source and target elements
+4. draw quadratic bezier in svg frame
+5. create preset target and draw line between connector and target
+
+# Extends and mixin use both
+Full example: <https://stackoverflow.com/questions/51791676/how-can-both-a-base-class-and-mixins-be-used-with-vue-class-component>
+Many examples/patterns: <https://learn-vuejs.github.io/vue-patterns/patterns/>
+
+Force recompute computed: <https://github.com/vuejs/vue/issues/214>
+
+## Latest questions
+
+### V 1
+
+When out or create connector are mounted, save his coordinates to store
+
+When mousemove over DropArea, recalculate coordinates in store
+
+**How and where recalculate coordinates of begin or end lines**
+
+_How recalculate connector coordinates only for related to moved DragItemWrapper?_
+
+### V 2
+
+When connector mounted push his coordinates to store (item.connector && ..target)
+
+Lodash update where examples
+<https://stackoverflow.com/questions/41341075/lodash-collection-bulk-update>
+
+todo:
+Install it: <https://github.com/justrhysism/vue-mixin-decorator>
+
+## Next todo
++ make data `lines` and fill it when mounted/created? (get in diff)
++ watch items deeply, if changed coords of targetCoords - rearrange lines
+
+- calculate begin and end points for svg line
+- draw straight line
+- calculate additional two points for bezier curve
+- draw bezier curve
+
+- think about toggling ConnectorClone to InputConnector if cursor closer
+- compose tech task questions for backend...
+
+### Calculate distance between mouse and element
+<https://css-tricks.com/snippets/jquery/calculate-distance-between-mouse-and-element/>
+
+## Next tasks and questions
+
+* bezier curves
+* remove bottom margin in DropArea
+- laravel eloquent: many types of model - ways for realization
+  + <https://stackoverflow.com/questions/45958875/different-relationships-on-different-model-types-laravel>
+  + <https://stackoverflow.com/questions/47310673/have-a-laravel-model-have-a-relationship-with-2-different-models>
+* make authorization
+* make models and migrations
+----------------
+user login and add blocks, then add connectors and other plans writes...
 

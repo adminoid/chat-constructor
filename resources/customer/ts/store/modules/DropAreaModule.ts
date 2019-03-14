@@ -3,8 +3,8 @@ import {
   VuexModule,
   Mutation,
   Action,
-} from 'vuex-module-decorators';
-import _ from 'lodash';
+} from 'vuex-module-decorators'
+import * as _ from 'lodash'
 
 @Module({
   name: 'DropAreaModule',
@@ -22,9 +22,11 @@ export default class DropAreaModule extends VuexModule {
 
   dd = {
     dragging: false,
-    startIdx: -1,
+    id: -1,
     elementOffset: -1,
     newIdx: -1,
+    targetId: -1,
+    sourcePath: [],
   };
 
   area = {
@@ -35,6 +37,53 @@ export default class DropAreaModule extends VuexModule {
       bottom: -1,
     }
   };
+
+  @Mutation
+  setActiveTargetId( id: number ) {
+    if( id > 0 ) {
+      this.dd.targetId = id;
+    }
+  }
+
+  @Mutation
+  setBeginLineCoords( payload ) {
+    let { itemId, connectorId, coords } = payload;
+
+    _.map( this.items, item => {
+      if ( item.id === itemId ) {
+        item.itemData.connectors.output[connectorId].coords = coords;
+      }
+    });
+
+  }
+
+  @Mutation
+  updateEndLineCoords( payload ) {
+    let { itemId, coords } = payload;
+    _.map( this.items, (item) => {
+      if( item.id === itemId ) {
+        item.sourceCoords = coords;
+      }
+      _.map( _.get(item, 'itemData.connectors.output'), connector => {
+        if( connector.target === itemId ) {
+          connector.targetCoords = coords;
+        }
+      });
+
+    } );
+  }
+
+  @Mutation
+  setTargetForConnectorCreate( clickedConnectorInfo ) {
+
+    let [blockId, connectorId] = this.dd.sourcePath = clickedConnectorInfo,
+      item = _.find(this.items, ['id', blockId]);
+
+    if( _.has(item, 'itemData.connectors.output') ) {
+      item.itemData.connectors.output[connectorId].target = this.dd.id;
+    }
+
+  }
 
   @Mutation
   setAreaBoundaries( data ) {
@@ -48,16 +97,40 @@ export default class DropAreaModule extends VuexModule {
       let actualCoords = {};
 
       Object.keys( coords ).map(( key ) => {
-         actualCoords[key] = coords[key] - this.dd.elementOffset[key];
+        actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
-
-      if( actualCoords['left'] ) {
-
-      }
 
       this.items[this.items.length-1].position = actualCoords;
 
     }
+  }
+
+  /**
+   * Call when clicked on create connector
+   *
+   * @param cloneData
+   */
+  @Mutation
+  insertConnectorClone( cloneData: any = {}) {
+
+    // calculate position in area
+    let inAreaPosition = {
+      left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
+      top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top,
+    };
+
+    let connectorData = {
+      component: 'ConnectorClone',
+      position: inAreaPosition,
+      id: this.items.length,
+    };
+
+    this.dd.id = this.dd.newIdx = this.items.length;
+    this.dd.dragging = true;
+    this.dd.elementOffset = cloneData.cursorOffset;
+
+    this.items.push(connectorData);
+
   }
 
   @Mutation
@@ -65,23 +138,24 @@ export default class DropAreaModule extends VuexModule {
     this.items.push(item);
   }
 
-
   @Mutation
   dragDropDataReset() {
     this.dd = {
       dragging: false,
-      startIdx: -1,
+      id: -1,
       elementOffset: -1,
       newIdx: -1,
+      targetId: -1,
+      sourcePath: [],
     };
   }
 
   @Mutation
   dragDropDataSet(payload) {
 
-    let { idx, offset: elementOffset } = payload;
+    let { id, idx, offset: elementOffset } = payload;
 
-    this.dd.startIdx = idx;
+    this.dd.id = id;
     this.dd.dragging = true;
     this.dd.elementOffset = elementOffset;
 
@@ -100,37 +174,65 @@ export default class DropAreaModule extends VuexModule {
 
   }
 
+  @Mutation
+  checkCreateConnector(blockId: number) {
+
+    // console.log(this.items);
+    // console.log(blockId);
+
+    let item = _.find(this.items, ['id', blockId]),
+      connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
+      createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
+
+    if (!createButtonCnt || createButtonCnt < 1) {
+      !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
+
+      !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
+
+      item.itemData.connectors.output.push({
+        type: 'create',
+      });
+    }
+
+  }
+
   /**
    * Action because in the future planned make async ajax queries to the server
    *
-   * @param itemData
+   * @param params
    */
   @Action({rawError: true})
-  async insertBlock(itemData: any = {}) {
+  async insertBlock(params: any = {}) {
 
-    if( !_.has( itemData, 'component' ) || itemData.component !== 'BlockBase' ) {
-      itemData.component = 'BlockBase';
+    if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
+      params.component = 'BlockBase';
     }
 
-    if( !_.has( itemData, 'blockName' ) ) {
-      itemData.initialData = {
-        blockName: `Block №${this.context.getters['itemsTotal']}`,
-      }
+    let blockData: object = {
+      blockName: `Block №${this.context.getters['itemsTotal']}`
+    };
+
+    _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
+
+    if ( _.has(params, 'connectors') ) {
+      delete params.connectors;
     }
 
-    let steps = (this.context.state as any).blockPositionSteps;
-    let total = (this.context.state as any).items.length;
+    if( !_.has( params, 'position' ) ) {
+      let steps = (this.context.state as any).blockPositionSteps;
+      let total = (this.context.state as any).items.length;
 
-    let actualSteps = {};
-    Object.keys(steps).map((key) => {
-      actualSteps[key] = steps[key] * ( total + 1 );
-    });
+      let actualSteps = {};
+      Object.keys(steps).map((key) => {
+        actualSteps[key] = steps[key] * ( total + 1 );
+      });
 
-    // console.log(itemData);
+      params.position = actualSteps;
+    }
 
-    itemData.position = actualSteps;
+    params.id = this.context.getters['itemsTotal'];
 
-    this.context.commit('insertItem', itemData);
+    this.context.commit('insertItem', params);
 
   }
 

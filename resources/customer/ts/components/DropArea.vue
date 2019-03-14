@@ -5,47 +5,89 @@
     v-for="(item, index) in items"
     :key="index"
     :idx="index"
+    :id="item.id"
     :position="item.position")
       component(
+      ref="items"
       :is="item.component"
-      :idx="index"
-      :itemData="item.initialData")
-    .debug {{ coords }}
+      :active="item.active"
+      :id="item.id"
+      :key="item.id"
+      :itemData="item.itemData")
+    line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
 
 </template>
 
 <script lang="ts">
 
-  import { Vue, Component } from 'vue-property-decorator'
-  import {
-    namespace
-  } from 'vuex-class'
-  import BlockBase from './BlockBase'
+  import { Vue, Component, Watch } from 'vue-property-decorator'
+  import { namespace } from 'vuex-class'
   import DragItemWrapper from './DragItemWrapper'
+  import BlockBase from './BlockBase'
+  import ConnectorClone from './ConnectorClone'
+  import LineSvg from './LineSvg'
+  import * as _ from 'lodash'
 
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component({
-    components: { BlockBase, DragItemWrapper },
+    components: { DragItemWrapper, BlockBase, ConnectorClone, LineSvg },
   })
   export default class DropArea extends Vue {
 
     @DropAreaModule.State items;
     @DropAreaModule.State dd;
+    @DropAreaModule.State area;
     @DropAreaModule.Mutation setAreaBoundaries;
     @DropAreaModule.Mutation dragDropDataReset;
     @DropAreaModule.Mutation updateCoords;
-    @DropAreaModule.State area;
+    @DropAreaModule.Mutation updateEndLineCoords;
+    @DropAreaModule.Mutation setActiveTargetId;
 
-    coords = {};
+    lines = [];
+
+    closest = 20;
+
+    connectorWidth = 16;
+
+    @Watch('items', { deep: true })
+    onItemsChanged() {
+      // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
+
+      this.lines = this.makeLinesFromItems();
+
+      // this.lines = _.debounce( <any>function (this) {
+      //   console.log(this.lines);
+      //   return this.makeLinesFromItems();
+      // }.bind(this), 1000);
+
+    }
+
+    makeLinesFromItems() {
+      let lines = [];
+      _.map( this.items, item => {
+        _.map( _.get(item, 'itemData.connectors.output'), connector => {
+          if( connector.target && connector.coords && connector.targetCoords ) {
+            lines.push({
+              begin: connector.coords,
+              end: connector.targetCoords,
+            });
+          }
+        });
+      });
+
+      return lines;
+    }
 
     setupSizesOfArea() {
 
+      let bounding = this.$el.getBoundingClientRect();
+
       this.setAreaBoundaries({
-        left: this.$el.getBoundingClientRect().left,
-        top: this.$el.getBoundingClientRect().top,
-        right: this.$el.getBoundingClientRect().right,
-        bottom: this.$el.getBoundingClientRect().bottom
+        left: bounding.left,
+        top: bounding.top,
+        right: bounding.right,
+        bottom: bounding.bottom
       });
 
     }
@@ -73,10 +115,62 @@
           top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
         }
 
-        this.updateCoords({
-          left: left,
-          top: top,
-        });
+        // Update all begin and end coordinates who concern to this item
+        if( this.dd.id >= 0 ) {
+
+          let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
+            $items: any = this.$refs.items,
+            $beginItem = _.find($items, ['id', this.dd.id]);
+
+          // update sourceCoords (DropAreaModule\updateEndLineCoords)
+          this.updateEndLineCoords({
+            itemId: this.dd.id,
+            coords: $beginItem.getLineEndCoords(),
+          });
+
+          _.map(this.items, (item) => {
+
+            const isActive = (
+              isNewLine && item.component === 'BlockBase' &&
+              item.sourceCoords.left < left + this.closest &&
+              item.sourceCoords.left > left - this.closest &&
+              item.sourceCoords.top < top + this.closest &&
+              item.sourceCoords.top > top - this.closest
+            );
+
+            _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+
+              if( item.id === this.dd.id ) {
+
+                let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                if( $beginConnector ) {
+                  connector.coords = $beginConnector.getLineBeginCoords();
+                }
+              }
+
+              if( connector.target == this.dd.id ) {
+                connector.targetCoords = $beginItem.getLineEndCoords();
+              }
+              // check if target item not itself
+              else {
+                item.active = isActive;
+                if( isActive ) {
+                  // TODO: if active, set target id to dd
+                  this.setActiveTargetId(item.id);
+                  left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth/2;
+                  top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth/2;
+                }
+              }
+
+            });
+          });
+
+          this.updateCoords({
+            left: left,
+            top: top,
+          });
+
+        }
 
       }
 
@@ -84,29 +178,55 @@
     }
 
     mouseupHandler() {
+
+      if( this.dd.sourcePath.length === 2 ) {
+
+        let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
+          sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
+
+        if( sourceConnector.type === 'create' ) {
+
+          if( this.dd.targetId >= 0 ) {
+            sourceConnector.target = this.dd.targetId;
+            sourceConnector.type = 'output';
+          }
+          else {
+            // remove target from output connector
+            let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
+              source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
+
+            _.unset(source, 'target');
+            _.unset(source, 'targetCoords');
+
+            this.lines = this.makeLinesFromItems();
+
+          }
+
+          _.remove( this.items, (item: any) => item.id === this.dd.id );
+
+        }
+
+      }
+
       this.dragDropDataReset();
-      // console.info('mouseupHandler');
     }
 
     mounted () {
-
       this.setupSizesOfArea();
-
+      this.lines = this.makeLinesFromItems();
     }
 
   }
+
 </script>
 
 <style lang="sass">
 
   #drop-area
+    z-index: 0
     height: calc(100vh - 140px)
     position: relative
     background: #d7d7d7
     border-radius: 5px
-    .debug
-      position: absolute
-      bottom: 5px
-      right: 5px
 
 </style>
