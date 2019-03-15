@@ -11,10 +11,14 @@
 |
 */
 
-Auth::routes();
+Route::get('/', function () {
+    return view('home');
+});
+
+Auth::routes(['verify' => true]);
 
 //Route::get('/', function () {
 //    return view('customer.index');
 //});
 
-Route::get('/', 'CabinetController@index')->name('home');
+Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
