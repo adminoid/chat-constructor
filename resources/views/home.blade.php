@@ -6,7 +6,9 @@
         <div class="col-md-8">
             <h1>This is the main page</h1>
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header">
+                    Locale: {{ app()->getLocale() }}
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -18,7 +20,7 @@
                     @if (Auth::check())
                         You are logged in!
                     @else
-                        You are don't logged in...
+                        You are not logged in...
                     @endif
 
                 </div>
