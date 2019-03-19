@@ -18,7 +18,7 @@ class BlockBotRelationshipsTest extends TestCase
      *
      * @return void
      */
-    public function testBlockBotRelationship()
+    public function testBlockBotRelationship() : void
     {
 
         $block = factory(Block::class)->create();
@@ -29,7 +29,7 @@ class BlockBotRelationshipsTest extends TestCase
 
     }
 
-    public function testBotBlockRlationship()
+    public function testBotBlockRlationship() : void
     {
 
         $bot = factory(Bot::class)->create();
@@ -40,7 +40,7 @@ class BlockBotRelationshipsTest extends TestCase
 
     }
 
-    public function testCascadeDeletingBlocksWithBot()
+    public function testCascadeDeletingBlocksWithBot() : void
     {
 
         $bot = factory('App\Bot')->create();

@@ -9,6 +9,11 @@ class Block extends Model
 
     public function bot()
     {
-        return $this->belongsTo('App\Bot');
+        return $this->belongsTo(Bot::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }

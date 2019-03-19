@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BotsTableSeeder extends Seeder
+class MessagesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,8 +11,6 @@ class BotsTableSeeder extends Seeder
      */
     public function run()
     {
-
-        factory(App\Bot::class)->create();
-
+        factory(App\Message::class)->create();
     }
 }
