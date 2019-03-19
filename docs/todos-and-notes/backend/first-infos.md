@@ -57,3 +57,14 @@ $books->load(['author' => function ($query) {
 }]);
 ```
 
+---
+
+## sequence for step-by-step create database and models structure
+
+1. make **(0)model with migration or only migration** if model exist
+2. make **(1)seed** and **(2)factory** for the model
+3. **(3)migrate** with seeds
+4. **(4)write relationships** for models related to recently created
+5. **(5)write tests** for relations and pass it
+
+Good explanation for factory and faker: <https://scotch.io/tutorials/generate-dummy-laravel-data-with-model-factories>
