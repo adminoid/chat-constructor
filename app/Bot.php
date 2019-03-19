@@ -12,4 +12,9 @@ class Bot extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function blocks()
+    {
+        return $this->hasMany('App\Block');
+    }
+
 }

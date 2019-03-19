@@ -10,6 +10,9 @@ use App\Bot;
 
 class UserBotRelationshipsTest extends TestCase
 {
+
+    use RefreshDatabase;
+
     /**
      * testing user -> bot relation
      *
