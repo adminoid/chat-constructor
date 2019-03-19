@@ -282,3 +282,16 @@ Install it: <https://github.com/justrhysism/vue-mixin-decorator>
 ----------------
 user login and add blocks, then add connectors and other plans writes...
 
+## Unit testing
+
+Drag drop testing: <https://stackoverflow.com/questions/52831676/how-to-test-drag-and-drop-with-vue-and-jest>
+
+### todo
+
+- make migrations && models
+- make relationships and tests
+
+testing mocha-webpack (favorite): <https://vue-test-utils.vuejs.org/ru/guides/testing-single-file-components-with-mocha-webpack.html> and <https://medium.com/@sergiturbadenas/unit-testing-vue-componets-with-vue-test-utils-in-laravel-918188178207>
+
+Dynamic templates example: <https://github.com/vuejs/Discussion/issues/193>  
+
