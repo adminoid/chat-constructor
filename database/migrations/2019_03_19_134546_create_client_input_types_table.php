@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBlocksTable extends Migration
+class CreateClientInputTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,10 @@ class CreateBlocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('client_input_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            // todo remove nullable after create client_input_types table
-            $table->integer('client_input_type_id')->unsigned()->nullable();
-            $table->unsignedBigInteger('bot_id')->nullable();
             $table->timestamps();
-
-            $table->foreign('bot_id')
-                ->references('id')->on('bots')
-                ->onDelete('cascade');
         });
     }
 
@@ -34,6 +27,6 @@ class CreateBlocksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('client_input_types');
     }
 }

@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
          $this->call(BotsTableSeeder::class);
          $this->call(BlocksTableSeeder::class);
          $this->call(MessagesTableSeeder::class);
+         $this->call(ClientInputTypesTableSeeder::class);
     }
 }
