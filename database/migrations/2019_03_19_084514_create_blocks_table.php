@@ -16,8 +16,7 @@ class CreateBlocksTable extends Migration
         Schema::create('blocks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            // todo remove nullable after create client_input_types table
-            $table->integer('client_input_type_id')->unsigned()->nullable();
+            $table->unsignedInteger('client_input_type_id')->nullable();
             $table->unsignedBigInteger('bot_id')->nullable();
             $table->timestamps();
 

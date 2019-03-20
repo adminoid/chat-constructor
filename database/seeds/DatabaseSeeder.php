@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
          $this->call(BlocksTableSeeder::class);
          $this->call(MessagesTableSeeder::class);
          $this->call(ClientInputTypesTableSeeder::class);
+         $this->call(OutputsTableSeeder::class);
     }
 }

@@ -23,4 +23,15 @@ class Block extends Model
     {
         return $this->belongsTo(ClientInputType::class);
     }
+
+    public function outputs() : HasMany
+    {
+        return $this->hasMany(Output::class);
+    }
+
+    public function outputSources() : HasMany
+    {
+        return $this->hasMany(Output::class, 'target_block_id', 'id');
+    }
+
 }

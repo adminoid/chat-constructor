@@ -25,10 +25,10 @@ php artisan make:seeder BlocksTableSeeder
 # make tests
 php artisan make:test BlockBotRelationshipsTest
 ```
-
+ 
 1. edit created migration files
 2. edit factory
-3. write seed with factory and test it (`php artisan migrate:refresh --seed`)
+3. write seed with factory and test it (`php artisan migrate:fresh --seed`)
 4. write relationships for Models
 5. write test for test relations forward and backward
 6. write test for foreign keys / cascade deleting
