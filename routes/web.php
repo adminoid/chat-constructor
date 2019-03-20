@@ -12,5 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('customer.index');
+    return view('home');
 });
+
+Auth::routes(['verify' => true]);
+
+//Route::get('/', function () {
+//    return view('customer.index');
+//});
+
+Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
