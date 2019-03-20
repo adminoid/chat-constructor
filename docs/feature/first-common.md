@@ -5,8 +5,8 @@ Testing example (typescript, vue-class-component): <https://danpottsdoes.wordpre
 ## Todo list
 
 ### First todo
-- commit js testing
-- install vue-router
++ commit js testing
++ install vue-router
 - look at hellotars.com for index page of customer panel
 - come up with a first tests ideas
 - write test
