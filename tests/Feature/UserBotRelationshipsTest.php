@@ -18,7 +18,7 @@ class UserBotRelationshipsTest extends TestCase
      *
      * @return void
      */
-    public function testUserBotRelationship()
+    public function testUserBotRelationship() : void
     {
 
         $user = factory('App\User')->create();
@@ -28,7 +28,7 @@ class UserBotRelationshipsTest extends TestCase
 
     }
 
-    public function testBotUserRelationship()
+    public function testBotUserRelationship() : void
     {
         $user = factory('App\User')->create();
         $user->bots()->save(factory('App\Bot')->make());
@@ -37,7 +37,7 @@ class UserBotRelationshipsTest extends TestCase
 
     }
 
-    public function testCascadeDeletingBotsWithUser()
+    public function testCascadeDeletingBotsWithUser() : void
     {
 
         $user = factory('App\User')->create();

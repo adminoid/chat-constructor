@@ -11,6 +11,8 @@ use App\Block;
 class OutputBlockRelationshipsTest extends TestCase
 {
 
+    use RefreshDatabase;
+
     public function testOutputBlockRelationships() : void
     {
         $output = factory(Output::class)->create();

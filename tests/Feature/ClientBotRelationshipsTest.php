@@ -10,11 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ClientBotRelationshipsTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+
+    use RefreshDatabase;
+
     public function testClientBotRelationship() : void
     {
 

@@ -11,13 +11,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ClientInputTypeBlockRelationshipsTest extends TestCase
 {
 
-//    use RefreshDatabase;
+    use RefreshDatabase;
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function testBlockClientInputTypeRelationship() : void
     {
 
