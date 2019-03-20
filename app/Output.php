@@ -17,4 +17,16 @@ class Output extends Model
         return $this->belongsTo(Block::class,'target_block_id');
     }
 
+    public function outputable()
+    {
+        return $this->morphTo();
+    }
+
+    public static function boot() {
+        parent::boot();
+        static::deleting(function($output) {
+            $output->outputable()->delete();
+        });
+    }
+
 }

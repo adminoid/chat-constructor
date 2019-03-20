@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
          $this->call(MessagesTableSeeder::class);
          $this->call(ClientInputTypesTableSeeder::class);
          $this->call(OutputsTableSeeder::class);
+         $this->call(OutputButtonsTableSeeder::class);
     }
 }
