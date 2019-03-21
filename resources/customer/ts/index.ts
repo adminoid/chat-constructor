@@ -5,7 +5,7 @@ import MainSidebar from "./components/MainSidebar.vue"
 import MainContent from "./components/MainContent.vue"
 import VueRouter from 'vue-router'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 new Vue({
   el: '#app',
