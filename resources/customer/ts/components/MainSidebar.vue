@@ -15,8 +15,6 @@
   })
   export default class MainSidebar extends Vue {
 
-
-
   }
 
 </script>

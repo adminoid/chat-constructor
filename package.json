@@ -8,8 +8,7 @@
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "test": "mochapack --webpack-config node_modules/laravel-mix/setup/webpack.config.js --require tests/vue/setup.js tests/vue/**/*.spec.js",
-    "test-watch": "mochapack --webpack-config node_modules/laravel-mix/setup/webpack.config.js --require tests/vue/setup.js tests/vue/**/*.spec.js"
+    "test": "nyc mochapack --webpack-config node_modules/laravel-mix/setup/webpack.config.js --require tests/vue/setup.js tests/vue/*.spec.js"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.121",
@@ -25,7 +24,9 @@
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.11",
     "mocha": "^6.0.2",
+    "mocha-webpack": "^1.1.0",
     "mochapack": "^1.1.0",
+    "nyc": "^13.3.0",
     "popper.js": "^1.12",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
