@@ -18,7 +18,7 @@ mix
   .sass('resources/app/sass/index.sass', 'public/css/app.css');
 
 mix.webpackConfig({
-  devtool: 'inline-cheap-module-source-map',
+  devtool: '#inline-cheap-module-source-map',
   output: {
     devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
