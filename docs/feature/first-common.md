@@ -17,3 +17,8 @@ Also testing examples: <https://lmiller1990.github.io/vue-testing-handbook/vue-r
 - write test
 - write index of customer panel
 
+### Second todo
+- I should make routing in separate file
+  - bots area
+  - blocks area
+

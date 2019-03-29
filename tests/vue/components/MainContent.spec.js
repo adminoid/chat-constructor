@@ -1,15 +1,15 @@
-import { shallowMount } from '@vue/test-utils'
-import MainContent from '../../../resources/customer/ts/components/CustomerApp'
-import expect from 'expect'
+const tu = require('@vue/test-utils');
+// const CustomerApp = require('../../../resources/customer/ts/components/CustomerApp').default;
+const CustomerApp = require('@customer/ts/components/CustomerApp.vue').default;
 
-describe('MainContent', () => {
+describe('CustomerApp', () => {
 
-  const wrapper = shallowMount(MainContent);
-
-  it('renders the correct markup', () => {
-    // expect(true).toBe(true);
-    expect(wrapper.html()).toContain('kuku');
+  test('is a Vue instance', () => {
+    const wrapper = tu.mount(CustomerApp);
+    expect(wrapper.isVueInstance()).toBeTruthy()
   });
+
+
 
 });
 

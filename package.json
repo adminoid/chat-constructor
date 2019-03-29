@@ -8,26 +8,26 @@
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "test": "nyc mochapack --webpack-config node_modules/laravel-mix/setup/webpack.config.js --require tests/vue/setup.js tests/vue/**/*.spec.js",
-    "test:watch": "npm run test -- --watch"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.121",
     "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.18",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^24.5.0",
     "bootstrap": "^4.0.0",
     "cross-env": "^5.1",
     "describe": "^1.2.0",
     "expect": "^24.5.0",
+    "jest": "^24.5.0",
+    "jest-serializer-vue": "^2.0.2",
+    "jest-transform-stub": "^2.0.0",
     "jquery": "^3.2",
-    "jsdom": "^14.0.0",
-    "jsdom-global": "^3.0.2",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.11",
-    "mocha": "^6.0.2",
-    "mocha-webpack": "^1.1.0",
-    "mochapack": "^1.1.0",
-    "nyc": "^13.3.0",
     "popper.js": "^1.12",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
@@ -37,6 +37,7 @@
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.1",
     "vue-class-component": "^6.3.2",
+    "vue-jest": "^3.0.4",
     "vue-mixin-decorator": "^1.1.0",
     "vue-property-decorator": "^7.3.0",
     "vue-template-compiler": "^2.5.22",
@@ -52,5 +53,10 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "jest": {
+    "transform": {
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
+    }
+  }
 }
