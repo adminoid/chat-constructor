@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -46,6 +47,12 @@ mix.webpackConfig({
         exclude: /node_modules/,
       },
     ]
-  }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Promise: 'imports-loader?this=>global!exports-loader?global.Promise!es6-promise',
+      fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+    })
+  ]
 });
 
