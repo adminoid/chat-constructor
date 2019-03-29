@@ -9,7 +9,7 @@
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch "
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -49,7 +49,8 @@
     "vue-property-decorator": "^7.3.0",
     "vue-template-compiler": "^2.5.22",
     "vuex-class": "^0.3.1",
-    "vuex-module-decorators": "^0.9.7"
+    "vuex-module-decorators": "^0.9.7",
+    "watchman": "^1.0.0"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.0",

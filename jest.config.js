@@ -1,5 +1,7 @@
 module.exports = {
-  testRegex: 'tests/vue/components/.*.spec.js$',
+  testMatch: [
+    '<rootDir>/(tests/vue/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
+  ],
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue'],
   transform: {
     '^.+\\.vue$': 'vue-jest',
