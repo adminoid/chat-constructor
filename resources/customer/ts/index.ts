@@ -1,18 +1,18 @@
 import "./bootstrap"
 import Vue from "vue"
-import store from "./store"
+
 import CustomerApp from "./components/CustomerApp.vue"
 import VueRouter from 'vue-router'
+import store from './store'
 
 Vue.use(VueRouter);
 
 new Vue({
-  el: '#app',
+
+  el: '#customer-app',
 
   store,
 
-  components: {
-    CustomerApp
-  },
+  render: h => h(CustomerApp),
 
 });

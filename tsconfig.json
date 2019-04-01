@@ -9,7 +9,11 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "importHelpers": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "baseUrl": "resources",
+    "paths": {
+      "@customer/*": ["customer/ts/*"]
+    }
   },
   "include": [
     "resources/customer/ts/**/*.ts",

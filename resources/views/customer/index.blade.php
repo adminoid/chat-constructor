@@ -11,13 +11,7 @@
 </head>
 <body>
 
-
-<div class="row no-gutters" id="app">
-
-    <customer-app></customer-app>
-
-</div>
-
+<div id="customer-app"></div>
 
 <footer>
     <div class="copy">

@@ -3,10 +3,18 @@ const CustomerApp = require('@customer/ts/components/CustomerApp.vue').default;
 
 describe('CustomerApp', () => {
 
-  test('is a Vue instance', () => {
-    const wrapper = tu.mount(CustomerApp);
-    expect(wrapper.isVueInstance()).toBe(false)
+  const wrapper = tu.shallowMount(CustomerApp);
+
+  it('should contain Sidebar', () => {
+    expect(wrapper.text().includes('Sidebar')).toBe(true);
   });
 
-});
+  it('is a Vue instance', () => {
+    expect(wrapper.isVueInstance()).toBe(true)
+  });
 
+  it('renders correctly', () => {
+    expect(wrapper.element).toMatchSnapshot()
+  })
+
+});
