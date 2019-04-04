@@ -19,45 +19,47 @@ mix
   .sass('resources/customer/sass/index.sass', 'public/css/customer.css')
   .sass('resources/app/sass/index.sass', 'public/css/app.css')
   .webpackConfig({
-  resolve: {
-    alias: {
-      '@customer': path.join(__dirname, '/resources/customer/ts/')
-    }
-  },
-  devtool: '#inline-cheap-module-source-map',
-  output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
-    devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.pug$/,
-        oneOf: [
-          // this applies to `<template lang="pug">` in Vue components
-          {
-            resourceQuery: /^\?vue/,
-            use: ['pug-plain-loader']
-          },
-          // this applies to pug imports inside JavaScript
-          {
-            use: ['raw-loader', 'pug-plain-loader']
-          }
-        ]
+    resolve: {
+      extensions: ['.js', '.ts', '.vue', '.json'],
+      alias: {
+        'vue$': 'vue/dist/vue.esm.js',
+        '@customer': path.join(__dirname, '/resources/customer')
       },
-      {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        options: { appendTsSuffixTo: [/\.vue$/] },
-        exclude: /node_modules/,
-      },
+    },
+    devtool: '#inline-cheap-module-source-map',
+    output: {
+      devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+      devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.pug$/,
+          oneOf: [
+            // this applies to `<template lang="pug">` in Vue components
+            {
+              resourceQuery: /^\?vue/,
+              use: ['pug-plain-loader']
+            },
+            // this applies to pug imports inside JavaScript
+            {
+              use: ['raw-loader', 'pug-plain-loader']
+            }
+          ]
+        },
+        {
+          test: /\.tsx?$/,
+          loader: 'ts-loader',
+          options: { appendTsSuffixTo: [/\.vue$/] },
+          exclude: /node_modules/,
+        },
+      ]
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        Promise: 'imports-loader?this=>global!exports-loader?global.Promise!es6-promise',
+        fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+      })
     ]
-  },
-  plugins: [
-    new webpack.ProvidePlugin({
-      Promise: 'imports-loader?this=>global!exports-loader?global.Promise!es6-promise',
-      fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-    })
-  ]
-});
+  });
 

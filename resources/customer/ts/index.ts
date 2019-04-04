@@ -2,10 +2,15 @@ import "./bootstrap"
 import Vue from "vue"
 
 import CustomerApp from "./components/CustomerApp.vue"
-import VueRouter from 'vue-router'
 import store from './store'
 
-Vue.use(VueRouter);
+import router from "./router"
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    $myProperty: string
+  }
+}
 
 new Vue({
 
@@ -13,6 +18,8 @@ new Vue({
 
   store,
 
-  render: h => h(CustomerApp),
+  router,
+
+  components: { CustomerApp }
 
 });

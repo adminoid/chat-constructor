@@ -4,23 +4,23 @@
       .sidebar__area Sidebar
     section.col-md-9.right-area
       .top-panel
-        button(type="button" class="top-panel__add-block-btn btn btn-success" @click="insertBlock()") Добавить блок
-      section.main-container
+        top-button
+      router-view
 </template>
 
 <script lang="ts">
 
   import { Vue, Component } from 'vue-property-decorator'
-  import {
-    namespace
-  } from 'vuex-class'
-
-  const DropAreaModule = namespace('DropAreaModule');
+  // import TopButton from '../components/TopButton'
+  // import TopButton from './TopButton'
+  // import TopButton from './TopButton'
 
   @Component
   export default class CustomerApp extends Vue {
 
-    @DropAreaModule.Action('insertBlock') insertBlock;
+    name: "CustomerApp";
+
+    components: { TopButton };
 
   }
 
