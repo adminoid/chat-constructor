@@ -3,11 +3,14 @@ module.exports = {
   testMatch: [
     '<rootDir>/(tests/vue/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
   ],
+
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue', "ts", "tsx"],
 
   moduleNameMapper: {
-    '^@customer/(.*)$': '<rootDir>/resources/customer/$1'
+    "@r/(.*)$": "<rootDir>/resources/$1",
+    "^vue$": "vue/dist/vue.common.js"
   },
+
   snapshotSerializers: ['jest-serializer-vue'],
 
   transform: {

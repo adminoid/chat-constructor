@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
     "sourceMap": true,
     "target": "esnext",
     "strict": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "experimentalDecorators": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "importHelpers": true,
     "noImplicitThis": true,
-    "baseUrl": "resources",
+    "baseUrl": "./",
+    "moduleResolution": "node",
     "paths": {
-      "@customer/*": ["customer/ts/*"]
+      "@r/*": ["resources/*"]
     }
   },
   "include": [
-    "resources/customer/ts/**/*.ts",
-    "resources/customer/ts/**/*.vue"
+    "resources/**/*.ts",
+    "resources/**/*.vue"
   ],
   "exclude": [ "node_modules" ]
 }

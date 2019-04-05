@@ -25,6 +25,8 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.4.2",
     "bootstrap": "^4.0.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "core-js": "2",
     "cross-env": "^5.1",
     "describe": "^1.2.0",
@@ -45,6 +47,7 @@
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.15.2",
     "sass-loader": "^7.1.0",
+    "sinon-chai": "^3.3.0",
     "ts-jest": "^24.0.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.1",
@@ -70,6 +73,6 @@
     "not ie <= 8"
   ],
   "_moduleAliases": {
-    "@customer": "resources/customer/ts"
+    "@customer": "resources/customer/ts/"
   }
 }

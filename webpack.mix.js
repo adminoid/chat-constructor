@@ -14,8 +14,8 @@ const path = require('path');
  */
 
 mix
-  .ts('resources/customer/ts/index.ts', 'public/js/customer.js').sourceMaps()
-  .ts('resources/app/ts/index.ts', 'public/js/app.js').sourceMaps()
+  .ts('resources/customer/ts/index.ts', 'public/js/customer.js')
+  .ts('resources/app/ts/index.ts', 'public/js/app.js')
   .sass('resources/customer/sass/index.sass', 'public/css/customer.css')
   .sass('resources/app/sass/index.sass', 'public/css/app.css')
   .webpackConfig({
@@ -23,7 +23,7 @@ mix
       extensions: ['.js', '.ts', '.vue', '.json'],
       alias: {
         'vue$': 'vue/dist/vue.esm.js',
-        '@customer': path.join(__dirname, '/resources/customer')
+        '@r': path.join(__dirname, 'resource'),
       },
     },
     devtool: '#inline-cheap-module-source-map',
@@ -61,5 +61,6 @@ mix
         fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
       })
     ]
-  });
+  })
+  .sourceMaps();
 
