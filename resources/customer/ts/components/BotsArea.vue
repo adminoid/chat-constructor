@@ -1,4 +1,6 @@
-<template lang="pug"></template>
+<template lang="pug">
+  #bots-area
+</template>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'

@@ -1,23 +1,32 @@
 {
+  "types": [
+    "jest"
+  ],
   "compilerOptions": {
-    "esModuleInterop": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "sourceMap": true,
-    "target": "esnext",
     "strict": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "target": "es5",
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "importHelpers": true,
     "noImplicitThis": true,
-    "baseUrl": "./",
-    "moduleResolution": "node",
+    "baseUrl": "./resources",
     "paths": {
-      "@r/*": ["resources/*"]
+      "@r/*": ["/*"]
     }
   },
   "include": [
+    "resources/**/*.vue",
     "resources/**/*.ts",
-    "resources/**/*.vue"
+    "tests/vue/**/*.spec.js"
   ],
-  "exclude": [ "node_modules" ]
+  "exclude": [ "node_modules" ],
+  "files": ["resources/customer/ts/types/ts-shim.d.ts"]
 }

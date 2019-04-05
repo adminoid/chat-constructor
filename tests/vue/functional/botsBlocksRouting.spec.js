@@ -1,11 +1,11 @@
-import VueRouter from 'vue-router'
+// import VueRouter from 'vue-router'
 import { createLocalVue, mount} from '@vue/test-utils'
 import CustomerApp from '@r/customer/ts/components/CustomerApp.vue'
 
 import router from '@r/customer/ts/router/'
 
 const localVue = createLocalVue();
-localVue.use(VueRouter);
+// localVue.use(VueRouter);
 
 describe('CustomerApp', () => {
 

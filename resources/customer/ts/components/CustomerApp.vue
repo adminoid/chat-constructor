@@ -4,24 +4,21 @@
       .sidebar__area Sidebar
     section.col-md-9.right-area
       .top-panel
+        top-button
       router-view
 </template>
-
+s
 <script lang="ts">
 
   import { Vue, Component } from 'vue-property-decorator'
-  // import TopButton from '../components/TopButton'
-  // import TopButton from './TopButton'
-  // import TopButton from './TopButton'
+  import TopButton from "./TopButton.vue"
 
-  // import TopButton from "./TopButton"
-
-  @Component
+  @Component({
+    components: { TopButton }
+  })
   export default class CustomerApp extends Vue {
 
     name: "CustomerApp";
-
-    // components: { TopButton };
 
   }
 

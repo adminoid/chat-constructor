@@ -16,6 +16,10 @@ new Vue({
 
   el: '#customer-app',
 
+  render (createElement) {
+    return createElement(CustomerApp);
+  },
+
   store,
 
   router,

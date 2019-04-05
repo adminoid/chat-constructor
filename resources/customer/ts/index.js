@@ -5,8 +5,11 @@ import store from './store';
 import router from "./router";
 new Vue({
     el: '#customer-app',
-    store,
-    router,
-    components: { CustomerApp }
+    render: function (createElement) {
+        return createElement(CustomerApp);
+    },
+    store: store,
+    router: router,
+    components: { CustomerApp: CustomerApp }
 });
 //# sourceMappingURL=index.js.map

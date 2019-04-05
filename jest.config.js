@@ -14,10 +14,12 @@ module.exports = {
   snapshotSerializers: ['jest-serializer-vue'],
 
   transform: {
-    '^.+\\.vue$': 'vue-jest',
     '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
     '^.+\\.(js|jsx)?$': 'babel-jest',
-    '^.+\\.(ts|tsx)$': 'ts-jest'
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '.*\\.(vue)$': 'vue-jest'
   },
+
+  transformIgnorePatterns: ['<rootDir>/node_modules/']
 
 };
