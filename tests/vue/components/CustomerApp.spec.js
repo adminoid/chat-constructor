@@ -1,41 +1,32 @@
+import Vue from 'vue'
 import { shallowMount, mount, RouterLinkStub } from '@vue/test-utils'
 import CustomerApp from '@r/customer/ts/components/CustomerApp'
 
 const chai = require('chai');
 const expect = chai.expect;
 
-// const chaiAsPromised = require('chai-as-promised');
-// chai.use(chaiAsPromised);
-
+// mock component
+Vue.component('router-view', {
+  name: 'router-view',
+  render: h => h('div')
+});
 
 describe('CustomerApp', () => {
 
+  const wrapper = shallowMount(CustomerApp);
+
   it('should contain Sidebar', () => {
-
-    // const wrapper = shallowMount(CustomerApp);
-
-    const wrapper = mount(CustomerApp, {
-      stubs: {
-        RouterLink: RouterLinkStub
-      }
-    });
 
     let text = wrapper.text(),
       includes = text.includes('Sidebar');
 
-    // expect(true).is(true);
-
-    // expect().toBe(true);
-    // expect(includes).toBe(true);
     expect(includes).to.be.true;
-
-
 
   });
 
-  // it('is a Vue instance', () => {
-  //   expect(wrapper.isVueInstance()).toBe(true)
-  // });
+  it('is a Vue instance', () => {
+    expect(wrapper.isVueInstance()).to.be.true
+  });
 
   // it('renders correctly', () => {
   //   expect(wrapper.element).toMatchSnapshot()

@@ -17,7 +17,8 @@ describe('CustomerApp', () => {
 
     router.push("/");
 
-    expect(wrapper.find(CustomerApp).exists()).toBe(true)
+    expect(wrapper.find(CustomerApp).exists()).toBe(true);
+
   });
 
 });
