@@ -15,7 +15,7 @@ describe('CustomerApp', () => {
 
   const wrapper = shallowMount(CustomerApp);
 
-  it('should contain Sidebar', () => {
+  test('should contain Sidebar', () => {
 
     let text = wrapper.text(),
       includes = text.includes('Sidebar');
@@ -24,12 +24,8 @@ describe('CustomerApp', () => {
 
   });
 
-  it('is a Vue instance', () => {
-    expect(wrapper.isVueInstance()).to.be.true
-  });
-
-  // it('renders correctly', () => {
-  //   expect(wrapper.element).toMatchSnapshot()
-  // })
+  // test.only('just simple test test', () => {
+  //   expect(true).to.be.true;
+  // });
 
 });

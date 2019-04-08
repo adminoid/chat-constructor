@@ -12,7 +12,7 @@ class BotsTableSeeder extends Seeder
     public function run()
     {
 
-        factory(App\Bot::class)->create();
+        factory(App\Bot::class, 3)->create();
 
     }
 }
