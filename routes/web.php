@@ -21,4 +21,16 @@ Auth::routes(['verify' => true]);
 //    return view('customer.index');
 //});
 
-Route::get('/cabinet', 'BotsController@index')->name('cabinet');
+Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
+
+//Route::prefix('admin')->group(function () {
+//    Route::get('users', function () {
+//         Matches The "/admin/users" URL
+//    });
+//});
+
+Route::prefix('private')->middleware(['auth:web'])->group(function () {
+
+    Route::resource('bots', 'BotsController');
+
+});

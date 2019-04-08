@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Bot;
 
 class BotsController extends Controller
 {
@@ -19,7 +20,11 @@ class BotsController extends Controller
      */
     public function index()
     {
-        return view('customer.bots.index');
+        $data['bots'] = Bot::orderBy('id','desc')->paginate(10);
+
+//        dd('kuku');
+
+        return response()->json($data);
     }
 
     /**
