@@ -20,9 +20,7 @@ class BotsController extends Controller
      */
     public function index()
     {
-        $data['bots'] = Bot::orderBy('id','desc')->paginate(10);
-
-//        dd('kuku');
+        $data['bots'] = auth()->user()->bots()->get();
 
         return response()->json($data);
     }

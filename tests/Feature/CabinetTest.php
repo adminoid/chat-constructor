@@ -17,12 +17,6 @@ class CabinetTest extends TestCase
 
     }
 
-    public function testBotsUnAuth()
-    {
-        $response = $this->get('/private/bots');
-        $response->assertStatus(302);
-    }
-
     public function testIndexAuth()
     {
 
@@ -34,13 +28,7 @@ class CabinetTest extends TestCase
 
     }
 
-    public function testBotsAuth()
-    {
+    // TODO: Add test for redirect to /cabinet if user authenticated
 
-        $user = factory(User::class)->create();
-        $response = $this->actingAs($user)
-            ->get('/private/bots');
-        $response->assertStatus(200);
 
-    }
 }
