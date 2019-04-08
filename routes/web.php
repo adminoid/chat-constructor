@@ -21,4 +21,4 @@ Auth::routes(['verify' => true]);
 //    return view('customer.index');
 //});
 
-Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
+Route::get('/cabinet', 'BotsController@index')->name('cabinet');
