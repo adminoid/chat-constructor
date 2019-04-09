@@ -69,10 +69,9 @@ class BotsController extends Controller
         }
 
         $botData = $request->only('name');
-        $user = \auth()->user();
 
         $bot = Bot::findOrFail($id);
-
+        $user = \auth()->user();
         if ( $user && $user->id !== $bot->user_id ) {
             abort(401, "You are not owner of this bot");
         }
@@ -91,6 +90,16 @@ class BotsController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $bot = Bot::findOrFail($id);
+        $user = \auth()->user();
+        if ( $user && $user->id !== $bot->user_id ) {
+            abort(401, "You are not owner of this bot");
+        }
+
+        $bot->delete();
+
+        return response()->json($bot);
+
     }
 }

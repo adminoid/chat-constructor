@@ -110,7 +110,7 @@ class BotsControllerTest extends TestCase
 
     }
 
-    public function testBotUpdate()
+    public function testBotUpdatePut()
     {
 
         $user = factory(User::class)->create();
@@ -123,6 +123,30 @@ class BotsControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->json('PUT', '/private/bots/' . $botId, ['name' => 'Sally']);
+
+        $bot1 = Bot::find($botId);
+
+        $this->assertEquals('Sally', $bot1->name);
+
+        $response->assertJsonFragment([
+            'name' => 'Sally'
+        ]);
+
+    }
+
+    public function testBotUpdatePatch()
+    {
+
+        $user = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Bottie']);
+        $user->bots()->save($bot);
+
+        $this->assertEquals('Bottie', $bot->name);
+
+        $botId = $bot->id;
+
+        $response = $this->actingAs($user)
+            ->json('PATCH', '/private/bots/' . $botId, ['name' => 'Sally']);
 
         $bot1 = Bot::find($botId);
 
@@ -150,6 +174,61 @@ class BotsControllerTest extends TestCase
             ->json('PUT', '/private/bots/' . $botId, ['name' => 'Sally']);
 
         $response->assertStatus(401);
+
+    }
+
+    public function testBotDeleteUnAuth()
+    {
+
+        $user = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Deleton']);
+        $user->bots()->save($bot);
+
+        $this->assertEquals('Deleton', $bot->name);
+
+        $response = $this->json('DELETE', '/private/bots/' . $bot->id);
+
+        $response->assertStatus(401);
+
+    }
+
+    public function testBotDeleteNotOwner()
+    {
+
+        $user = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Deleton']);
+        $user->bots()->save($bot);
+
+        $this->assertEquals('Deleton', $bot->name);
+
+        $user2 = factory(User::class)->create();
+        $response = $this->actingAs($user2)
+            ->json('DELETE', '/private/bots/' . $bot->id);
+
+        $response->assertStatus(401);
+
+    }
+
+    public function testBotDeleteOwner()
+    {
+
+        $user = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Deleton']);
+        $user->bots()->save($bot);
+        $botId = $bot->id;
+
+        $this->assertEquals('Deleton', $bot->name);
+
+        $response = $this->actingAs($user)
+            ->json('DELETE', '/private/bots/' . $botId );
+
+        $response->assertJsonFragment([
+            'name' => 'Deleton'
+        ]);
+
+        $foundBot = Bot::find($botId);
+
+        $this->assertEquals(null, $foundBot);
 
     }
 
