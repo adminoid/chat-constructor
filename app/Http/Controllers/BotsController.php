@@ -54,28 +54,6 @@ class BotsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -84,7 +62,25 @@ class BotsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $validator = Validator::make(request()->all(), $this->rules);
+        if ($validator->fails()) {
+            return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
+        }
+
+        $botData = $request->only('name');
+        $user = \auth()->user();
+
+        $bot = Bot::findOrFail($id);
+
+        if ( $user && $user->id !== $bot->user_id ) {
+            abort(401, "You are not owner of this bot");
+        }
+
+        $bot->update($botData);
+
+        return response()->json($botData);
+
     }
 
     /**

@@ -86,4 +86,71 @@ class BotsControllerTest extends TestCase
 
     }
 
+    public function testBotUpdateUnAuthAndUnValid()
+    {
+
+        $user = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Bottie']);
+        $user->bots()->save($bot);
+
+        $this->assertEquals('Bottie', $bot->name);
+
+        $botId = $bot->id;
+
+        $response = $this->json('PUT', '/private/bots/' . $botId, ['name' => 'Sally']);
+
+        $response->assertStatus(401);
+
+        $response = $this->actingAs($user)
+            ->json('PUT', '/private/bots/' . $botId, ['name' => 'S']);
+
+        $response->assertJson([
+            'errors' => true
+        ]);
+
+    }
+
+    public function testBotUpdate()
+    {
+
+        $user = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Bottie']);
+        $user->bots()->save($bot);
+
+        $this->assertEquals('Bottie', $bot->name);
+
+        $botId = $bot->id;
+
+        $response = $this->actingAs($user)
+            ->json('PUT', '/private/bots/' . $botId, ['name' => 'Sally']);
+
+        $bot1 = Bot::find($botId);
+
+        $this->assertEquals('Sally', $bot1->name);
+
+        $response->assertJsonFragment([
+            'name' => 'Sally'
+        ]);
+
+    }
+
+    public function testBotUpdateNotOwner()
+    {
+
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+        $bot = new Bot(['name' => 'Bottie']);
+        $user->bots()->save($bot);
+
+        $this->assertEquals('Bottie', $bot->name);
+
+        $botId = $bot->id;
+
+        $response = $this->actingAs($user2)
+            ->json('PUT', '/private/bots/' . $botId, ['name' => 'Sally']);
+
+        $response->assertStatus(401);
+
+    }
+
 }
