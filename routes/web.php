@@ -17,20 +17,13 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-//Route::get('/', function () {
-//    return view('customer.index');
-//});
-
 Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
-
-//Route::prefix('admin')->group(function () {
-//    Route::get('users', function () {
-//         Matches The "/admin/users" URL
-//    });
-//});
 
 Route::prefix('private')->middleware(['auth:web'])->group(function () {
 
-    Route::resource('bots', 'BotsController');
+    // except || only
+    Route::resource('bots', 'BotsController', ['only' => [
+        'index', 'store', 'update', 'destroy'
+    ]]);
 
 });

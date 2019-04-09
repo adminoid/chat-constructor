@@ -14,7 +14,7 @@ class BotsTableSeeder extends Seeder
     public function run()
     {
 
-        $user = User::where('email', 'mr@adminoid.com')->first();
+        $user = User::first();
 
         $user->each(static function ($u) {
             $u->bots()->saveMany(factory(Bot::class, 3)->create());

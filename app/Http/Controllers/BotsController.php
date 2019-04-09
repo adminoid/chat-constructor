@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Bot;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BotsController extends Controller
 {
@@ -12,6 +14,10 @@ class BotsController extends Controller
     {
         $this->middleware('auth');
     }
+
+    protected $rules = [
+        'name' => 'required|min:2|max:32',
+    ];
 
     /**
      * Display a listing of the resource.
@@ -26,24 +32,25 @@ class BotsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make(request()->all(), $this->rules);
+        if ($validator->fails()) {
+            return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
+        }
+
+        $botData = $request->only('name');
+        $user = \auth()->user();
+        $bot = new Bot($botData);
+        $user->bots()->save($bot);
+
+        return response()->json($botData);
+
     }
 
     /**

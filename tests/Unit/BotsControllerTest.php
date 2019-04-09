@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,7 +12,7 @@ use App\User;
 class BotsControllerTest extends TestCase
 {
 
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     public function testBotsUnAuth()
     {
@@ -29,7 +30,10 @@ class BotsControllerTest extends TestCase
 
     }
 
-    public function testListsOfBots()
+    /**
+     * Test for BotsController::index method
+     */
+    public function testBotsList()
     {
 
         define('TOTAL', 3);
@@ -47,6 +51,38 @@ class BotsControllerTest extends TestCase
         $response->assertJsonFragment([
             'user_id' => $user->id
         ]);
+
+    }
+
+    public function testBotStoreNewBotUnAuth()
+    {
+        $response = $this->ajaxPost('/private/bots');
+        $response->assertStatus(302);
+    }
+
+    /**
+     * Test for BotsController::store method
+     */
+    public function testBotStoreNewBot()
+    {
+
+        define('BOT_NAME', 'John Walker');
+
+        $botData = [
+            'name' => BOT_NAME
+        ];
+
+        $user = factory(User::class)->create();
+        $response = $this->actingAs($user)
+            ->ajaxPost('/private/bots', $botData);
+
+        $response->assertJsonFragment([
+            'name' => BOT_NAME
+        ]);
+
+        $lastBot = Bot::orderBy('created_at', 'desc')->first();
+
+        $this->assertEquals(BOT_NAME, $lastBot->name);
 
     }
 
