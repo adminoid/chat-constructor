@@ -27,7 +27,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], function()
         'index', 'store', 'update', 'destroy'
     ]]);
 
-    Route::resource('bots/{id}', 'BlocksController', ['only' => [
+    Route::resource('bots.blocks', 'BlocksController', ['only' => [
         'index', 'store', 'update', 'destroy'
     ]]);
 

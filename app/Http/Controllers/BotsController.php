@@ -54,9 +54,10 @@ class BotsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, $id)
     {
@@ -69,10 +70,8 @@ class BotsController extends Controller
         $botData = $request->only('name');
 
         $bot = Bot::findOrFail($id);
-        $user = \auth()->user();
-        if ( $user && $user->id !== $bot->user_id ) {
-            abort(401, "You are not owner of this bot");
-        }
+
+        $this->authorize('update', $bot);
 
         $bot->update($botData);
 

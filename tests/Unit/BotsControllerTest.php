@@ -148,10 +148,10 @@ class BotsControllerTest extends TestCase
         $response = $this->actingAs($user)
             ->json('PATCH', '/private/bots/' . $botId, ['name' => 'Sally']);
 
+        $response->assertStatus(200);
+
         $bot1 = Bot::find($botId);
-
         $this->assertEquals('Sally', $bot1->name);
-
         $response->assertJsonFragment([
             'name' => 'Sally'
         ]);
@@ -173,7 +173,7 @@ class BotsControllerTest extends TestCase
         $response = $this->actingAs($user2)
             ->json('PUT', '/private/bots/' . $botId, ['name' => 'Sally']);
 
-        $response->assertStatus(401);
+        $response->assertStatus(403);
 
     }
 

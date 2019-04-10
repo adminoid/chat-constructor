@@ -68,23 +68,50 @@ class BlocksController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $botId
+     * @param $blockId
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $botId, $blockId)
     {
-        //
+
+        $validator = Validator::make(request()->all(), $this->rules);
+        if ($validator->fails()) {
+            return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
+        }
+
+        $blockData = $request->only('name');
+
+//        $bot = Bot::findOrFail($botId);
+        $block = Block::findOrFail($blockId);
+
+        $this->authorize('update', $block);
+
+        $block->update($blockData);
+
+        return response()->json($blockData);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($id)
     {
-        //
+
+        $block = Block::find($id);
+
+        $this->authorize('delete', $block);
+
+        $block->delete();
+
+        return response()->json($block);
+
     }
 }

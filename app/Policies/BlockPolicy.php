@@ -54,7 +54,8 @@ class BlockPolicy
      */
     public function delete(User $user, Block $block)
     {
-        //
+        $bot = $block->bot()->first();
+        return $user->id === $bot->user_id;
     }
 
     /**
