@@ -1,6 +1,8 @@
 <?php
 
+use App\Block;
 use Illuminate\Database\Seeder;
+use App\Bot;
 
 class BlocksTableSeeder extends Seeder
 {
@@ -12,7 +14,13 @@ class BlocksTableSeeder extends Seeder
     public function run()
     {
 
-        factory(App\Block::class)->create();
+        $bot = Bot::first();
+
+        $bot->each(static function ($locBot) {
+            $locBot->blocks()->saveMany(
+                factory(Block::class, 5)->create()
+            );
+        });
 
     }
 }

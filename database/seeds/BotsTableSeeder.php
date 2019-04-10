@@ -17,7 +17,9 @@ class BotsTableSeeder extends Seeder
         $user = User::first();
 
         $user->each(static function ($u) {
-            $u->bots()->saveMany(factory(Bot::class, 3)->create());
+            $u->bots()->saveMany(
+                factory(Bot::class, 3)->create()
+            );
         });
 
     }

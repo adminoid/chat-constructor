@@ -26,9 +26,7 @@ class BotsController extends Controller
      */
     public function index()
     {
-        $data['bots'] = auth()->user()->bots()->get();
-
-        return response()->json($data);
+        return response()->json(auth()->user()->bots()->get());
     }
 
     /**

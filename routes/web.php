@@ -19,11 +19,27 @@ Auth::routes(['verify' => true]);
 
 Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
 
-Route::prefix('private')->middleware(['auth:web'])->group(function () {
+Route::group(['prefix' => 'private', 'middleware' => 'auth'], function()
+{
 
     // except || only
     Route::resource('bots', 'BotsController', ['only' => [
         'index', 'store', 'update', 'destroy'
     ]]);
 
+    Route::resource('bots/{id}', 'BlocksController', ['only' => [
+        'index', 'store', 'update', 'destroy'
+    ]]);
+
 });
+
+//Route::prefix('private')->middleware(['auth:web'])->group(function () {
+//    // except || only
+//    Route::resource('bots', 'BotsController', ['only' => [
+//        'index', 'store', 'update', 'destroy'
+//    ]]);
+//    Route::resource('blocks', 'BlocksController')->except([
+//        'index', 'create', 'show', 'edit' // only: 'store', 'update', 'destroy' and 'index'
+//    ]);
+//    Route::get('bot/{botId?}/blocks', 'BlocksController@index');
+//});

@@ -12,7 +12,7 @@ use App\User;
 class BotsControllerTest extends TestCase
 {
 
-//    use RefreshDatabase;
+    use RefreshDatabase;
 
     public function testBotsUnAuth()
     {
@@ -47,7 +47,7 @@ class BotsControllerTest extends TestCase
         $response = $this->actingAs($user)
             ->ajaxGet('/private/bots');
 
-        $response->assertJsonCount(TOTAL, 'bots');
+        $response->assertJsonCount(TOTAL);
         $response->assertJsonFragment([
             'user_id' => $user->id
         ]);
