@@ -1,7 +1,7 @@
 import * as tslib_1 from "tslib";
 import { Vue, Component } from 'vue-property-decorator';
 import { namespace } from 'vuex-class';
-var BotModel = namespace('Bot');
+var Bot = namespace('Bot');
 var BotsArea = /** @class */ (function (_super) {
     tslib_1.__extends(BotsArea, _super);
     function BotsArea() {
@@ -12,10 +12,10 @@ var BotsArea = /** @class */ (function (_super) {
         this.fetchBots();
     };
     tslib_1.__decorate([
-        BotModel.State
+        Bot.State
     ], BotsArea.prototype, "bots", void 0);
     tslib_1.__decorate([
-        BotModel.Action
+        Bot.Action
     ], BotsArea.prototype, "fetchBots", void 0);
     BotsArea = tslib_1.__decorate([
         Component

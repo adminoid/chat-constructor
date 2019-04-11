@@ -1,10 +1,10 @@
 {
-  "plugins": ["@babel/syntax-dynamic-import", "@babel/transform-runtime"],
+  "plugins": ["@babel/plugin-syntax-dynamic-import"],
   "presets": [
     [
       "@babel/preset-env",
       {
-        "modules": false
+        "modules": "cjs"
       }
     ]
   ],
@@ -14,3 +14,4 @@
     }
   }
 }
+

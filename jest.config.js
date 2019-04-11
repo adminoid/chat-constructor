@@ -1,10 +1,18 @@
 module.exports = {
 
+  verbose: true,
+
+  globals: {
+    "NODE_ENV": "test"
+  },
+
+  cache: false,
+
   testMatch: [
     '<rootDir>/(tests/vue/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
   ],
 
-  moduleFileExtensions: ['js', 'jsx', 'json', 'vue', "ts", "tsx"],
+  moduleFileExtensions: ["ts", "vue", "js"],
 
   moduleNameMapper: {
     "@r/(.*)$": "<rootDir>/resources/$1",
@@ -20,6 +28,10 @@ module.exports = {
     '.*\\.(vue)$': 'vue-jest'
   },
 
-  transformIgnorePatterns: ['<rootDir>/node_modules/']
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],
+
+  testEnvironment: 'jest-environment-jsdom',
+
+  preset: 'ts-jest/presets/js-with-babel'
 
 };

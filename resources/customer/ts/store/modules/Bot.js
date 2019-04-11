@@ -14,11 +14,16 @@ var Bot = /** @class */ (function (_super) {
     Bot.prototype.fetchBots = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                axios.get('private/bots')
-                    .then(function (resp) {
-                    console.log(resp);
-                });
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, axios.get('private/bots')
+                            .then(function (resp) {
+                            // console.log(resp.data.length);
+                            console.log('hi there');
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -26,7 +31,7 @@ var Bot = /** @class */ (function (_super) {
         Mutation
     ], Bot.prototype, "updateBots", null);
     tslib_1.__decorate([
-        Action
+        Action({ rawError: true })
     ], Bot.prototype, "fetchBots", null);
     Bot = tslib_1.__decorate([
         Module({

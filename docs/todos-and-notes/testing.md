@@ -29,9 +29,9 @@ todo:
 
 ### Next todo
 
-- test BotsArea when created() run fetchBots() in vuex module
++ test BotsArea when created() run fetchBots() in vuex module
 - test vuex module for fetchBots() run axios and get bots data
-  - check for bots are rendered
+  - check for mock bots are rendered
 
 ### Read
 + <https://lmiller1990.github.io/electic/posts/mocks_and_stubs:_testing_api_requests_with_vue.html>

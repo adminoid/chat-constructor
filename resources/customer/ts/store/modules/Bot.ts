@@ -21,11 +21,12 @@ export default class Bot extends VuexModule {
     this.bots = bots;
   }
 
-  @Action
+  @Action({rawError: true})
   async fetchBots() {
-    axios.get('private/bots')
+    await axios.get('private/bots')
       .then((resp) => {
-        console.log(resp);
+        // console.log(resp.data.length);
+        console.log('hi there');
       });
   }
 
