@@ -1,35 +1,41 @@
-import { createLocalVue, mount} from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
+import Vuex from 'vuex'
 import BotsArea from '@r/customer/ts/components/BotsArea.vue'
 
-describe('BotsArea.vue', () => {
+const localVue = createLocalVue();
+localVue.use(Vuex);
 
-  it.only('loading user bots at created hook via ajax', () => {
+describe('BotsArea.vue fetchBots()', () => {
 
-    // jest.mock('axios', () => {
-    //   return {
-    //     get: () => ({ data: { userId: 1 }})
-    //   }
-    // })
+  let actions, state, store;
 
-    var axios = require('axios');
-    var MockAdapter = require('axios-mock-adapter');
+  beforeEach(() => {
+    state = {
+      bots: []
+    };
 
-    // This sets the mock adapter on the default instance
-    var mock = new MockAdapter(axios);
+    actions = {
+      fetchBots: jest.fn()
+    };
 
-    // Mock any GET request to /users
-    // arguments for reply are (status, data, headers)
-    mock.onGet('/users').reply(200, {
-      users: [
-        { id: 1, name: 'John Smith' }
-      ]
-    });
+    store = new Vuex.Store({
+      modules: {
+        Bot: {
+          namespaced: true,
+          state,
+          actions,
+        }
+      }
+    })
+  });
 
-    axios.get('/users')
-      .then(function(response) {
-        console.log(response.data);
-      });
+  it('loading user bots at created hook via ajax', () => {
+
+    shallowMount(BotsArea, { store, localVue });
+    expect(actions.fetchBots).toHaveBeenCalled();
 
   });
+
+
 
 });
