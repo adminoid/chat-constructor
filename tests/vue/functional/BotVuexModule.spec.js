@@ -1,32 +1,56 @@
-import store from '@r/customer/ts/store/index.ts'
+import Vuex from 'vuex'
+import Vue from 'vue'
+Vue.use(Vuex);
+import { getModule } from 'vuex-module-decorators'
+import Bot from "@r/customer/ts/store/modules/Bot.ts";
 
-// import { createLocalVue, mount, config} from '@vue/test-utils'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
-jest.mock('axios', () => {
-  return {
-    get: () => ({ data: { userId: 1 }})
+// This sets the mock adapter on the default instance
+let mock = new MockAdapter(axios);
+
+// Mock any GET request to /users
+// arguments for reply are (status, data, headers)
+mock.onGet('private/bots').reply(200, [
+  {
+    id: 1,
+    name: 'Colten Feest 1',
+    user_id: 1,
+    created_at: '2019-04-10 16:46:44',
+    updated_at: '2019-04-10 16:46:44',
+  }, {
+    id: 2,
+    name: 'Manuela Beahan 1',
+    user_id: 1,
+    created_at: '2019-04-10 16:46:44',
+    updated_at: '2019-04-10 16:46:44',
+  }, {
+    id: 3,
+    name: 'River Herzog 1',
+    user_id: 1,
+    created_at: '2019-04-10 16:46:44',
+    updated_at: '2019-04-10 16:46:44',
   }
-});
+]);
 
-describe('store/modules/Bot.ts', () => {
+describe('accessing statics works on dynamic module', () => {
+  it('should update count', async function() {
 
-  it('fetchBots', () => {
+    // axios.get('private/bots')
+    //   .then(function(response) {
+    //     console.log(response.data);
+    //   });
 
-      // const store = { commit: jest.fn() };
+    const bm = getModule(Bot);
+    // await bm.fetchBots();
+    await bm.fetchBots()
+      .then(() => {
 
-      // await store.actions.getPost(store);
+        expect(mock.history.get.length).toBe(1);
+        expect(bm.bots.length).toBe(3);
 
-    console.log(store);
+      });
 
-    expect(store.commit).toHaveBeenCalledWith('SET_POST', { userId: 1 })
-
-
-    // actions.getAsync({ commit: mockCommit })
-    //   .then(() => {
-    //     expect(count).toBe(1)
-    //     expect(data).toEqual({ title: 'Mock with Jest' })
-    //   })
-
-  })
-
+  });
 });

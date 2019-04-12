@@ -7,17 +7,23 @@ import {
 
 import axios from 'axios'
 
+import Vuex from 'vuex'
+import Vue from 'vue'
+Vue.use(Vuex);
+
+// import store from '../index'
+
+//dynamic: true, store, name: 'mm'
+//namespaced: true, store, name: 'Bot'
 @Module({
-  name: 'Bot',
-  namespaced: true,
-  store: {},
+  namespaced: true, dynamic: true, store: new Vuex.Store({}), name: 'Bot'
 })
 export default class Bot extends VuexModule {
 
   bots = [];
 
   @Mutation
-  updateBots( bots: [] ) {
+  updateBots( bots ) {
     this.bots = bots;
   }
 
@@ -25,8 +31,10 @@ export default class Bot extends VuexModule {
   async fetchBots() {
     await axios.get('private/bots')
       .then((resp) => {
-        // console.log(resp.data.length);
-        console.log('hi there');
+        this.updateBots(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

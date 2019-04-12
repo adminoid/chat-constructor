@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', static function () {
     return view('home');
 });
 
@@ -19,7 +19,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
 
-Route::group(['prefix' => 'private', 'middleware' => 'auth'], function()
+Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 {
 
     // except || only

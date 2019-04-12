@@ -83,11 +83,13 @@ Regarding **BotsArea** frontend tests:
   + routing for bots (root routing)
 - BotsArea
   + run action fetchBots() when created
+  - check render bots in area by vuex module store mock
   - check view of component (visually)
   - click delete button 
 - TopButton
   - click add button - call insertBot()
 - Vuex Store (modules/Bot)
-  - mock store data or axios response with the data and check are rendered 
   - fetchBots, deleteBot, createBot actions to axios mock
 
++ testing vuex module decorator: <https://github.com/championswimmer/vuex-module-decorators/blob/master/test/action_access_module_dynamic.ts>
++ also: <https://github.com/championswimmer/vuex-module-decorators/issues/71>

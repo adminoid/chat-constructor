@@ -8,7 +8,6 @@ var BotsArea = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     BotsArea.prototype.created = function () {
-        console.log('bots area created');
         this.fetchBots();
     };
     tslib_1.__decorate([
