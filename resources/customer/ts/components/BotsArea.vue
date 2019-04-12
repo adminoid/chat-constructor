@@ -18,7 +18,6 @@
     @Bot.Action fetchBots;
 
     created () {
-      console.log('bots area created');
       this.fetchBots();
     }
 

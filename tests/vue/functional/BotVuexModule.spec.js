@@ -1,5 +1,7 @@
 import store from '@r/customer/ts/store/index.ts'
 
+// import { createLocalVue, mount, config} from '@vue/test-utils'
+
 jest.mock('axios', () => {
   return {
     get: () => ({ data: { userId: 1 }})
@@ -16,7 +18,7 @@ describe('store/modules/Bot.ts', () => {
 
     console.log(store);
 
-      expect(store.commit).toHaveBeenCalledWith('SET_POST', { userId: 1 })
+    expect(store.commit).toHaveBeenCalledWith('SET_POST', { userId: 1 })
 
 
     // actions.getAsync({ commit: mockCommit })

@@ -73,3 +73,21 @@ describe('Mock `getBoundingClientRect`', () => {
 todo:
 - test button text toggle by route
 - move text to vue-i18n (later)
+
++ <https://stackoverflow.com/questions/45259086/stubbing-a-function-using-jest>
++ <https://jestjs.io/docs/en/mock-functions>
+
+
+Regarding **BotsArea** frontend tests:
++ routing tests (mock or stub vuex)
+  + routing for bots (root routing)
+- BotsArea
+  + run action fetchBots() when created
+  - check view of component (visually)
+  - click delete button 
+- TopButton
+  - click add button - call insertBot()
+- Vuex Store (modules/Bot)
+  - mock store data or axios response with the data and check are rendered 
+  - fetchBots, deleteBot, createBot actions to axios mock
+
