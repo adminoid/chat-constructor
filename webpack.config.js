@@ -6,7 +6,7 @@ module.exports = {
     extensions: ['.js', '.ts', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@r': path.join(__dirname, 'resources'),
+      '@r': path.resolve(__dirname, 'resources')
     },
   },
   devtool: '#inline-cheap-module-source-map',

@@ -3,7 +3,6 @@ import Vue from 'vue'
 Vue.use(Vuex);
 import { getModule } from 'vuex-module-decorators'
 import Bot from '@r/customer/ts/store/modules/Bot.ts';
-// import Bot from '../../../resources/customer/ts/store/modules/Bot.ts';
 
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'

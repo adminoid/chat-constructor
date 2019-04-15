@@ -17,9 +17,9 @@
     "noImplicitAny": false,
     "importHelpers": true,
     "noImplicitThis": true,
-    "baseUrl": "./resources",
+    "baseUrl": ".",
     "paths": {
-      "@r/*": ["/*"]
+      "@r/*": ["/resources/*"]
     }
   },
   "include": [

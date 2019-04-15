@@ -1,4 +1,4 @@
-import { shallowMount, mount, config } from '@vue/test-utils'
+import { shallowMount, config } from '@vue/test-utils'
 import CustomerApp from '@r/customer/ts/components/CustomerApp'
 
 config.stubs['router-view'] = '<div />'
