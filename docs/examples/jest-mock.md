@@ -1,3 +1,6 @@
+## Examples for jest mock
+
+```js
 describe('test', () => {
 
   test("returns undefined by default", () => {
@@ -62,3 +65,4 @@ describe('test', () => {
   });
 
 });
+```

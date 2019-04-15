@@ -1,5 +1,7 @@
 <template lang="pug">
-  #bots-area
+  .bots-area
+    .bots-area__bot(v-for="bot in bots")
+      span Bot: {{ bot.name }}
 </template>
 
 <script lang="ts">
