@@ -16,8 +16,4 @@ describe('CustomerApp', () => {
 
   });
 
-  // test.only('just simple test test', () => {
-  //   expect(true).to.be.true;
-  // });
-
 });

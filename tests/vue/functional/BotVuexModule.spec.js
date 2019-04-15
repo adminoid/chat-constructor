@@ -2,7 +2,8 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex);
 import { getModule } from 'vuex-module-decorators'
-import Bot from "@r/customer/ts/store/modules/Bot.ts";
+import Bot from '@r/customer/ts/store/modules/Bot.ts';
+// import Bot from '../../../resources/customer/ts/store/modules/Bot.ts';
 
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
@@ -10,8 +11,6 @@ import MockAdapter from 'axios-mock-adapter'
 // This sets the mock adapter on the default instance
 let mock = new MockAdapter(axios);
 
-// Mock any GET request to /users
-// arguments for reply are (status, data, headers)
 mock.onGet('private/bots').reply(200, [
   {
     id: 1,
@@ -36,11 +35,6 @@ mock.onGet('private/bots').reply(200, [
 
 describe('accessing statics works on dynamic module', () => {
   it('should update count', async function() {
-
-    // axios.get('private/bots')
-    //   .then(function(response) {
-    //     console.log(response.data);
-    //   });
 
     const bm = getModule(Bot);
     // await bm.fetchBots();

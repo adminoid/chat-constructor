@@ -27,12 +27,6 @@ todo:
 1. test mock with vuex action `await fetchBots()` when BotsArea created()
 2. test imported vuex module BotsModel (name for example) with axios mock has been called
 
-### Next todo
-
-+ test BotsArea when created() run fetchBots() in vuex module
-- test vuex module for fetchBots() run axios and get bots data
-  - check for mock bots are rendered
-
 ### Read
 + <https://lmiller1990.github.io/electic/posts/mocks_and_stubs:_testing_api_requests_with_vue.html>
 + <https://codeburst.io/a-pattern-for-mocking-and-unit-testing-vuex-actions-8f6672bdb255>
@@ -86,6 +80,7 @@ Regarding **BotsArea** frontend tests:
 - BotsArea
   + run action fetchBots() when created
   + check render bots in area by vuex module store mock
+  - install icon package with robot icon
   - check view of component (visually)
   - click delete button 
 - TopButton
@@ -94,3 +89,39 @@ Regarding **BotsArea** frontend tests:
 
 + testing vuex module decorator: <https://github.com/championswimmer/vuex-module-decorators/blob/master/test/action_access_module_dynamic.ts>
 + also: <https://github.com/championswimmer/vuex-module-decorators/issues/71>
+
+Example for testing run vuex action without _vuex-mock-store_ npm package:
+```js
+
+describe('BotsArea.vue fetchBots()', () => {
+
+  let actions, state, store;
+
+  beforeEach(() => {
+    state = {
+      bots: []
+    };
+
+    actions = {
+      fetchBots: jest.fn()
+    };
+
+    store = new Vuex.Store({
+      modules: {
+        Bot: {
+          namespaced: true,
+          state,
+          actions,
+        }
+      }
+    })
+  });
+
+  it('loading user bots at created hook via ajax', () => {
+
+    shallowMount(BotsArea, { store, localVue });
+    expect(actions.fetchBots).toHaveBeenCalled();
+
+  });
+});
+```

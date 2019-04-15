@@ -46,7 +46,6 @@
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.11",
-    "module-alias": "^2.2.0",
     "popper.js": "^1.12",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
@@ -78,8 +77,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ],
-  "_moduleAliases": {
-    "@customer": "resources/customer/ts/"
-  }
+  ]
 }
