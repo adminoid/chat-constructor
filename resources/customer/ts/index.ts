@@ -10,16 +10,17 @@ import { faRobot as fontAwesomeIcons } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import WindowsPlugin from './plugins/windows'
-declare module 'vue/types/vue' {
-  interface Vue {
-    $confirm: any;
-  }
-}
 Vue.use(WindowsPlugin);
 
 FontAwesomeLibrary.add(fontAwesomeIcons);
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    $confirm: any;
+  }
+}
 
 new Vue({
 
@@ -34,5 +35,12 @@ new Vue({
   router,
 
   components: { CustomerApp },
+
+  mounted () {
+
+    console.log('mounted here');
+    this.$confirm('kuku yopta');
+
+  }
 
 });

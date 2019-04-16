@@ -5,12 +5,19 @@
       br
       span Hi! My name is {{ bot.name }}
       br
-      a(@click.prevent="deleteBot") Удалить бота
+      a(href="" @click.prevent="deleteBot") Удалить бота
 </template>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
+
+  // import { confirm } from '../helpers/index'
+  // console.info(typeof confirm);
+  // console.info(confirm('ttt', 'bbb'));
+
+  const wait = (ms) => new Promise(res => setTimeout(res, ms));
+
   const Bot = namespace('Bot');
 
   @Component
@@ -27,7 +34,14 @@
     }
 
     deleteBot () {
-      //
+
+
+
+      // console.log(confirm('Title', 'Message'));
+
+      // confirm('Title', 'Message')
+      //   .then( resp => { console.info('all right'); console.log(resp) } )
+      //   .catch( e => { console.error(e.message) } );
     }
 
   }

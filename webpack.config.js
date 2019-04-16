@@ -1,9 +1,11 @@
+'use strict';
+
 const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
   resolve: {
-    extensions: ['.js', '.ts', '.vue', '.json'],
+    extensions: ['.vue', '.ts', '.js', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@r': path.resolve(__dirname, 'resources')

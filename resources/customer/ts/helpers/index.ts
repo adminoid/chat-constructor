@@ -1,3 +1,6 @@
+// import ModalWindow from "../components/ModalWindow.vue"
+// import Vue from 'vue'
+
 export const getCursorOffset = (e) => {
 
   let leftOffset = +Number(e.clientX - e.currentTarget.getBoundingClientRect().left).toFixed(),
@@ -13,3 +16,49 @@ export const getCursorOffset = (e) => {
   };
 
 };
+
+
+
+
+// declare module 'vue/types/vue' {
+//   interface Vue {
+//     closeHandler: any;
+//   }
+// }
+//
+// export const confirm = (title, message) => {
+//
+//   return new Promise((resolve, reject) => {
+//
+//     const dialog = new Vue({
+//
+//       methods: {
+//         closeHandler(fn, arg) {
+//           return function() {
+//             fn(arg);
+//             dialog.$destroy();
+//             dialog.$el.remove();
+//           };
+//         }
+//       },
+//
+//       render(h) {
+//         return h(ModalWindow, {
+//           props: {
+//             title,
+//             message,
+//           },
+//           on: {
+//             confirm: this.closeHandler(resolve),
+//             cancel: this.closeHandler(reject, new Error('canceled'))
+//           }
+//         });
+//       }
+//
+//     }).$mount();
+//
+//     document.body.appendChild(dialog.$el);
+//
+//   });
+//
+// };

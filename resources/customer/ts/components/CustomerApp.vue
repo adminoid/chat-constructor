@@ -20,14 +20,15 @@
 
     name: "CustomerApp";
 
-    $confirm;
-
     mounted () {
-      // this is plugin: `resources/customer/ts/plugins/windows.ts`
+
       // this.$confirm('Test confirm');
-      this.$confirm('Test confirm')
-        .then(_=> console.log('confirmed'))
-        .catch(e=> console.error(e.message))
+
+      // console.log(result);
+      // this is plugin: `resources/customer/ts/plugins/windows.ts`
+      // this.$confirm('Test confirm')
+      //   .then(_=> console.log('confirmed'))
+      //   .catch(e=> console.error(e.message))
     }
 
   }
