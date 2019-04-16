@@ -1,7 +1,9 @@
 import { Store } from 'vuex-mock-store'
-import { mount } from '@vue/test-utils'
+import {config, mount} from '@vue/test-utils'
 import BotsArea from '@r/customer/ts/components/BotsArea.vue'
 import expect from 'expect'
+
+config.stubs['fa-icon'] = '<div />';
 
 // create the Store mock
 const store = new Store({

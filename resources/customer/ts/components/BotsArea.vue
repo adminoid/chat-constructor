@@ -1,15 +1,16 @@
 <template lang="pug">
   .bots-area
     .bots-area__bot(v-for="bot in bots")
-      span Bot: {{ bot.name }}
+      fa-icon(icon="robot" size="5x")
       br
-      fa-icon(icon="robot")
+      span Hi! My name is {{ bot.name }}
+      br
+      a(@click.prevent="deleteBot") Удалить бота
 </template>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
-
   const Bot = namespace('Bot');
 
   @Component
@@ -23,6 +24,10 @@
 
     created () {
       this.fetchBots();
+    }
+
+    deleteBot () {
+      //
     }
 
   }

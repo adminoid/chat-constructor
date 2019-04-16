@@ -80,8 +80,11 @@ Regarding **BotsArea** frontend tests:
 - BotsArea
   + run action fetchBots() when created
   + check render bots in area by vuex module store mock
-  - install icon package with robot icon
+  + install icon package with robot icon
+    + font size
   - check view of component (visually)
+    - make markup
+    - make delete button
   - click delete button 
 - TopButton
   - click add button - call insertBot()
