@@ -19,6 +19,8 @@
     </div>
 </footer>
 
+<div id="modal-window"></div>
+
 <script src="{{ asset('/js/customer.js') }}"></script>
 
 </body>

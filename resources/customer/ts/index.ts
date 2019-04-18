@@ -16,12 +16,6 @@ FontAwesomeLibrary.add(fontAwesomeIcons);
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    $confirm: any;
-  }
-}
-
 new Vue({
 
   el: '#customer-app',
@@ -35,12 +29,5 @@ new Vue({
   router,
 
   components: { CustomerApp },
-
-  mounted () {
-
-    console.log('mounted here');
-    this.$confirm('kuku yopta');
-
-  }
 
 });

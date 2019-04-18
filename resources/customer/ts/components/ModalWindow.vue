@@ -1,7 +1,7 @@
 <template lang="pug">
   .modal-window
-    .modal-window__header {{ title }}
-    .modal-window__body {{ message }}
+    .modal-window__header {{ state.title }}
+    .modal-window__body {{ state.message }}
 </template>
 
 <script lang="ts">
@@ -13,17 +13,26 @@
 
     name: 'ModalWindow';
 
-    @Prop({}) title!: string;
-    @Prop({}) message!: string;
+    @Prop({}) state!: object;
 
-    // closeHandler (closure: Function, error?: Error) {
-    //   console.log('close handle');
-    // }
+    confirm () {
+      this.$emit('confirmed')
+    }
+
+    cancel () {
+      this.$emit('canceled')
+    }
+
+    mounted () {
+      console.log('Modal Window mounted')
+    }
+
   }
 
 </script>
 
 <style lang="sass" scoped>
+
   .modal-window
     position: fixed
     left: 100px

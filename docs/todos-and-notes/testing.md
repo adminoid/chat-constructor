@@ -128,3 +128,20 @@ describe('BotsArea.vue fetchBots()', () => {
   });
 });
 ```
+
+# Modal windows information
+files for modal windows as promise:
+- resources/assets/js/components/admin/ModalWindow.vue
+- resources/assets/js/components/admin/SortableTreeAjax.vue
+- resources/assets/js/admin.modals.js
+
+Info about testing: <https://github.com/vuejs/vue/tree/dev/test/unit/features>
+
+All vue test examples: <https://github.com/vuejs/vue/tree/dev/test/unit/features>
+
+modal component with confirming: <https://stackoverflow.com/questions/45038317/vue-how-to-destroy-already-created-and-mounted-tooltip-component-to-the-app> or just native window confirm: <https://stackoverflow.com/questions/52609015/manually-instantiating-components-in-vue>
+
+Very interesting:
++ <https://stackoverflow.com/questions/48837002/vue-js-mount-component-after-dom-tree-mutation-to-add-a-vue-component>
+- may be useful: <https://forum.vuejs.org/t/how-to-destroy-mounted-element-with-its-parent/3232>
+
