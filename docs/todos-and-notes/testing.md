@@ -83,8 +83,8 @@ Regarding **BotsArea** frontend tests:
   + install icon package with robot icon
     + font size
   - check view of component (visually)
-    - make markup
-    - make delete button
+    + make markup
+    + make delete button
   - click delete button 
 - TopButton
   - click add button - call insertBot()
@@ -129,7 +129,7 @@ describe('BotsArea.vue fetchBots()', () => {
 });
 ```
 
-# Modal windows information
+# Modal windows information (from `adminoid cms` source code)
 files for modal windows as promise:
 - resources/assets/js/components/admin/ModalWindow.vue
 - resources/assets/js/components/admin/SortableTreeAjax.vue

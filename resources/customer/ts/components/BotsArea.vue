@@ -1,11 +1,15 @@
 <template lang="pug">
   .bots-area
     .bots-area__bot(v-for="bot in bots")
-      fa-icon(icon="robot" size="5x")
-      br
-      span Hi! My name is {{ bot.name }}
-      br
-      a(href="" @click.prevent="deleteBot") Удалить бота
+      div
+        fa-icon(icon="robot" size="3x")
+      div
+        span {{ bot.name }}
+      div.bots-area__panel
+        router-link.bots-area__link.btn.btn-primary(alt="Редактировать" to="'/bot/${bot.id}'")
+          fa-icon(icon="edit")
+        a.bots-area__link.btn.btn-outline-danger(alt="Удалить" href @click.prevent="deleteBot")
+          fa-icon(icon="trash")
 </template>
 
 <script lang="ts">
@@ -60,9 +64,22 @@
     position: relative
     background: #d7d7d7
     border-radius: 5px
+    padding: 10px
+    display: flex
+    text-align: center
     .bots-area__bot
-      float: left
-      width: 100px
-      height: 100px
+      background-color: #fff
+      align-self: flex-start
+      min-width: 100px
+      margin: 10px
+      padding: 10px
+      border: 2px solid #000
+      border-radius: 5px
+    .bots-area__panel
+      padding: 10px
+      display: flex
+      justify-content: space-between
+    .bots-area__link
+      margin: 10px
 
 </style>

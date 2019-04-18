@@ -6,13 +6,13 @@ import router from "./router"
 
 // font awesome
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faRobot as fontAwesomeIcons } from '@fortawesome/free-solid-svg-icons'
+import { faRobot, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import WindowsPlugin from './plugins/windows'
 Vue.use(WindowsPlugin);
 
-FontAwesomeLibrary.add(fontAwesomeIcons);
+FontAwesomeLibrary.add({faRobot, faTrash, faEdit});
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
