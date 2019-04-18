@@ -1,10 +1,4 @@
-declare module 'vue/types/vue' {
-  interface Vue {
-    $confirm: any;
-  }
-}
-
-import ModalWindow from '../components/ModalWindow.vue'
+import ModalWindowConfirm from '../components/ModalWindowConfirm.vue'
 import $ from 'jquery'
 
 export default {
@@ -16,13 +10,14 @@ export default {
 
         class ModalData {
 
-          constructor() {
-            this.clear();
-          }
-
           title = '';
           message = '';
           active = false;
+
+          constructor() {
+            this.clear();
+            this.active = true;
+          }
 
           clear() {
             this.title = '';
@@ -34,12 +29,13 @@ export default {
             if (!!newData.title && !!newData.message) {
               this.title = newData.title;
               this.message = newData.message;
+              this.active = true;
             }
           }
 
           close() {
             this.active = false;
-            $('#modal-place').empty().append('<div id="modal-window"></div>')
+            // $('#modal-window___').html('');
           }
 
         }
@@ -48,10 +44,10 @@ export default {
         Modal.open(windowData);
 
         new Vue({
-          el: '#modal-window',
+          // el: '#modal-window',
           template: '<modal-window :state="modal" @confirmed="confirmedAction" @canceled="canceledAction"></modal-window>',
           components: {
-            ModalWindow
+            'modal-window': ModalWindowConfirm
           },
           data () {
             return {
@@ -60,16 +56,17 @@ export default {
           },
           methods: {
             confirmedAction () {
-              console.log(this);
-              // this.modal.close()
-              // this.initAction(this.modal.action)
+              // @ts-ignore
+              this.modal.close();
+              resolve('Resolve message');
             },
             canceledAction () {
-              // this.modal.close()
-              reject(`Action is cancelled`)
+              // @ts-ignore
+              this.modal.close();
+              reject(new Error(`Action is cancelled`))
             },
           }
-        })
+        }).$mount('#modal-window');
 
       });
     }

@@ -9,6 +9,13 @@
 </template>
 
 <script lang="ts">
+
+  declare module 'vue/types/vue' {
+    interface Vue {
+      $confirm: any;
+    }
+  }
+
   import { Vue, Component } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
 
@@ -21,6 +28,8 @@
 
     name: "BotsArea";
 
+    $confirm;
+
     @Bot.State bots;
 
     @Bot.Action fetchBots;
@@ -30,12 +39,14 @@
     }
 
     deleteBot () {
+
       this.$confirm({
         title: '~Title~',
         message: '**MESSAGE**',
       })
         .then( resp => { console.info('all right'); console.log(resp) } )
         .catch( e => { console.error(e.message) } );
+
     }
 
   }
