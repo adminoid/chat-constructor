@@ -11,8 +11,6 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex);
 
-// import store from '../index'
-
 //dynamic: true, store, name: 'mm'
 //namespaced: true, store, name: 'Bot'
 @Module({
@@ -27,15 +25,8 @@ export default class Bot extends VuexModule {
     this.bots = bots;
   }
 
-  @Action({rawError: true})
+  @Action({ commit: 'updateBots', rawError: true })
   async fetchBots() {
-    await axios.get('private/bots')
-      .then((resp) => {
-        this.updateBots(resp.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    return await axios.get('private/bots')
   }
-
 }

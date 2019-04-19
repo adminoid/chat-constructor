@@ -10,6 +10,8 @@ export default {
 
         class ModalData {
 
+          private titleDefault = 'Подтвердите действие';
+
           title = '';
           message = '';
           active = false;
@@ -20,22 +22,28 @@ export default {
           }
 
           clear() {
-            this.title = '';
+            this.title = this.titleDefault;
             this.message = '';
             this.active = false;
           }
 
           open(newData) {
-            if (!!newData.title && !!newData.message) {
-              this.title = newData.title;
-              this.message = newData.message;
+            if (!!newData.title || !!newData.message) {
+
               this.active = true;
+
+              if (!!newData.title) {
+                this.title = newData.title;
+              }
+
+              if (!!newData.message) {
+                this.message = newData.message;
+              }
             }
           }
 
           close() {
             this.active = false;
-            // $('#modal-window___').html('');
           }
 
         }
@@ -63,7 +71,7 @@ export default {
             canceledAction () {
               // @ts-ignore
               this.modal.close();
-              reject(new Error(`Action is cancelled`))
+              reject(new Error('Операция отменена'))
             },
           }
         }).$mount('#modal-window');

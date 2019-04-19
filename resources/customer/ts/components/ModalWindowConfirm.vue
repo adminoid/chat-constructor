@@ -36,10 +36,6 @@
       this.$emit('canceled')
     }
 
-    mounted () {
-      console.log('!!!Modal Window mounted')
-    }
-
   }
 
 </script>

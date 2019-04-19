@@ -71,25 +71,6 @@ todo:
 + <https://stackoverflow.com/questions/45259086/stubbing-a-function-using-jest>
 + <https://jestjs.io/docs/en/mock-functions>
 
-
-Regarding **BotsArea** frontend tests:
-+ routing tests (mock or stub vuex)
-  + routing for bots (root routing)
-- Vuex Store (modules/Bot)
-  - fetchBots, deleteBot, createBot actions to axios mock
-- BotsArea
-  + run action fetchBots() when created
-  + check render bots in area by vuex module store mock
-  + install icon package with robot icon
-    + font size
-  - check view of component (visually)
-    + make markup
-    + make delete button
-  - click delete button 
-- TopButton
-  - click add button - call insertBot()
-
-
 + testing vuex module decorator: <https://github.com/championswimmer/vuex-module-decorators/blob/master/test/action_access_module_dynamic.ts>
 + also: <https://github.com/championswimmer/vuex-module-decorators/issues/71>
 

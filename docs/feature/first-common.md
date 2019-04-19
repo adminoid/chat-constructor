@@ -43,3 +43,40 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
 + Vue test utils: <https://vue-test-utils.vuejs.org/>
 + Vue testing handbook: <https://lmiller1990.github.io/vue-testing-handbook/>
 
+## Latest todo list
+
+### BotsArea tests
+
++ routing tests (mock or stub vuex)
+  + routing for bots (root routing)
+- BotsArea
+  + run action fetchBots() when created
+  + check render bots in area by vuex module store mock
+  + install icon package with robot icon
+    + font size
+  + check view of component (visually)
+    + make markup
+    + make delete button
+  - [1] **click delete button - call removeBot()** 
+- TopButton
+  - [2] **click add button - call insertBot() - is vuex action**
+  - [4] **check button action is `addBot`**
+- Vuex Store (modules/Bot)
+  - [3] **fetchBots, deleteBot, createBot actions to axios mock**
+
+### BlocksArea tests
+
+- routing tests (add test to `tests/vue/functional/CustomerAppRouting.spec.js`)
+  - routing for bots
+  - check for TopButton action
+- Blocks
+  - fetchBots() action
+  - render blocks
+  - **think about new type connectors**
+  - add block
+  - delete block
+  - make connection
+  - move block
+
+# Important
+read as synchronize vuex with server CRUD 

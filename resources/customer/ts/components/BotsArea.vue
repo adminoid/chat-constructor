@@ -6,9 +6,9 @@
       div
         span {{ bot.name }}
       div.bots-area__panel
-        router-link.bots-area__link.btn.btn-primary(alt="Редактировать" to="'/bot/${bot.id}'")
+        router-link.bots-area__link.btn.btn-primary(title="Редактировать" to="'/bot/${bot.id}'")
           fa-icon(icon="edit")
-        a.bots-area__link.btn.btn-outline-danger(alt="Удалить" href @click.prevent="deleteBot")
+        a.bots-area__link.btn.btn-outline-danger(title="Удалить" href @click.prevent="deleteBot")
           fa-icon(icon="trash")
 </template>
 
@@ -45,8 +45,7 @@
     deleteBot () {
 
       this.$confirm({
-        title: '~Title~',
-        message: '**MESSAGE**',
+        message: 'Вы действительно хотите удалить бота?',
       })
         .then( resp => { console.info('all right'); console.log(resp) } )
         .catch( e => { console.error(e.message) } );
