@@ -49,7 +49,7 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
 
 + routing tests (mock or stub vuex)
   + routing for bots (root routing)
-- BotsArea
++ BotsArea
   + run action fetchBots() when created
   + check render bots in area by vuex module store mock
   + install icon package with robot icon
@@ -57,7 +57,7 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
   + check view of component (visually)
     + make markup
     + make delete button
-  - [1] **click delete button - call deleteBot()** 
+  + [1] click delete button - call deleteBot() 
 - TopButton
   - [2] **click add button - call insertBot() - is vuex action**
   - [4] **check button action is `addBot`**

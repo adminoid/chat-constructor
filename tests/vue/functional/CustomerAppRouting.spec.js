@@ -1,4 +1,4 @@
-import { createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import BotsArea from '@r/customer/ts/components/BotsArea.vue'
 
 // For routing test

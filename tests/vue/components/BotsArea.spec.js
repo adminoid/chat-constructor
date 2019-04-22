@@ -4,6 +4,7 @@ import BotsArea from '@r/customer/ts/components/BotsArea.vue'
 import expect from 'expect'
 
 config.stubs['fa-icon'] = '<div />';
+config.stubs['router-link'] = '<div />';
 
 // create the Store mock
 const store = new Store({
@@ -38,16 +39,34 @@ afterEach(() => store.reset());
 
 describe('BotsArea.vue', () => {
 
-  let wrapper;
-  beforeEach(() => {
-    wrapper = mount(BotsArea, { mocks })
-  });
+  test('fetchBots', () => {
 
-  it('fetchBots', () => {
+    let wrapper = mount(BotsArea, { mocks });
+
     expect(store.dispatch).toHaveBeenCalledWith('Bot/fetchBots');
     expect(wrapper.vm.bots.length).toBe(2);
     let bots = wrapper.findAll('.bots-area__bot');
     expect(bots.length).toBe(2);
+  });
+
+  test('deleteBot', () => {
+
+    const wrapper = mount(BotsArea, {
+      mocks
+    });
+
+    const removeBotMock = jest.fn();
+    wrapper.vm.removeBot = removeBotMock;
+
+    let bots = wrapper.findAll('.bots-area__bot'),
+      bot = bots.at(1);
+    expect(bots.length).toBe(2);
+    bot.find('.btn-outline-danger').trigger('click');
+    expect(removeBotMock.mock.calls.length).toBe(1);
+
+    wrapper.find('.btn-outline-danger').trigger('click');
+    expect(removeBotMock.mock.calls.length).toBe(2);
+
   });
 
 });
