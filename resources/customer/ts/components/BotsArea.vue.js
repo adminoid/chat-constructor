@@ -12,12 +12,12 @@ var BotsArea = /** @class */ (function (_super) {
         this.fetchBots();
     };
     BotsArea.prototype.removeBot = function (id) {
+        var _this = this;
         this.$confirm({
             message: 'Вы действительно хотите удалить бота?',
         })
             .then(function () {
-            console.info('then');
-            // this.deleteBot(id)
+            _this.deleteBot(id);
         })
             .catch(function (e) { console.error(e.message); });
     };

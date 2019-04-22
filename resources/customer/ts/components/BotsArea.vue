@@ -48,7 +48,7 @@
         message: 'Вы действительно хотите удалить бота?',
       })
         .then(() => {
-          this.deleteBot(id)
+          this.deleteBot(id);
         })
         .catch( e => { console.error(e.message) } );
 

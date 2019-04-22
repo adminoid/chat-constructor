@@ -17,6 +17,9 @@ var Bot = /** @class */ (function (_super) {
     Bot.prototype.updateBots = function (bots) {
         this.bots = bots.data;
     };
+    Bot.prototype.hideDeletedBot = function (bot) {
+        this.bots.splice(this.bots.findIndex(function (item) { return item.id === bot.data.id; }), 1);
+    };
     Bot.prototype.deleteBot = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
@@ -41,7 +44,10 @@ var Bot = /** @class */ (function (_super) {
         Mutation
     ], Bot.prototype, "updateBots", null);
     tslib_1.__decorate([
-        Action({ rawError: true })
+        Mutation
+    ], Bot.prototype, "hideDeletedBot", null);
+    tslib_1.__decorate([
+        Action({ commit: 'hideDeletedBot', rawError: true })
     ], Bot.prototype, "deleteBot", null);
     tslib_1.__decorate([
         Action({ commit: 'updateBots', rawError: true })
