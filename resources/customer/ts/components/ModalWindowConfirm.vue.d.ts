@@ -4,5 +4,4 @@ export default class ModalWindowConfirm extends Vue {
     state: object;
     confirm(): void;
     cancel(): void;
-    mounted(): void;
 }

@@ -6,9 +6,9 @@
       div
         span {{ bot.name }}
       div.bots-area__panel
-        router-link.bots-area__link.btn.btn-primary(title="Редактировать" to="'/bot/${bot.id}'")
+        router-link.bots-area__link.btn.btn-primary(title="Редактировать" :to="'/bot/' + bot.id")
           fa-icon(icon="edit")
-        a.bots-area__link.btn.btn-outline-danger(title="Удалить" href @click.prevent="deleteBot")
+        button.bots-area__link.btn.btn-outline-danger(title="Удалить" @click="removeBot(bot.id)")
           fa-icon(icon="trash")
 </template>
 
@@ -23,7 +23,7 @@
   import { Vue, Component } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
 
-  const wait = (ms) => new Promise(res => setTimeout(res, ms));
+  // const wait = (ms) => new Promise(res => setTimeout(res, ms));
 
   const Bot = namespace('Bot');
 
@@ -35,19 +35,21 @@
     $confirm;
 
     @Bot.State bots;
-
     @Bot.Action fetchBots;
+    @Bot.Action deleteBot;
 
     created () {
       this.fetchBots();
     }
 
-    deleteBot () {
+    removeBot (id) {
 
       this.$confirm({
         message: 'Вы действительно хотите удалить бота?',
       })
-        .then( resp => { console.info('all right'); console.log(resp) } )
+        .then(() => {
+          this.deleteBot(id)
+        })
         .catch( e => { console.error(e.message) } );
 
     }

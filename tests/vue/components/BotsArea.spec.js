@@ -43,7 +43,7 @@ describe('BotsArea.vue', () => {
     wrapper = mount(BotsArea, { mocks })
   });
 
-  it('calls increment', () => {
+  it('fetchBots', () => {
     expect(store.dispatch).toHaveBeenCalledWith('Bot/fetchBots');
     expect(wrapper.vm.bots.length).toBe(2);
     let bots = wrapper.findAll('.bots-area__bot');

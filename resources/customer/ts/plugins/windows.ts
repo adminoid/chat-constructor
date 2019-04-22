@@ -66,7 +66,7 @@ export default {
             confirmedAction () {
               // @ts-ignore
               this.modal.close();
-              resolve('Resolve message');
+              resolve();
             },
             canceledAction () {
               // @ts-ignore

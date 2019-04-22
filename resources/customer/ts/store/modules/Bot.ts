@@ -18,11 +18,19 @@ Vue.use(Vuex);
 })
 export default class Bot extends VuexModule {
 
+  baseUrl = 'private/bots';
+
   bots = [];
 
   @Mutation
   updateBots( bots ) {
-    this.bots = bots;
+    this.bots = bots.data;
+  }
+
+  @Action({ rawError: true })
+  async deleteBot(id: number) {
+    return await axios.delete(this.baseUrl + '/' + id);
+    // return await setTimeout(() => { console.log('test here ' + id) },5000)
   }
 
   @Action({ commit: 'updateBots', rawError: true })

@@ -91,7 +91,7 @@ class BotsController extends Controller
         $bot = Bot::findOrFail($id);
         $user = \auth()->user();
         if ( $user && $user->id !== $bot->user_id ) {
-            abort(401, "You are not owner of this bot");
+            abort(401, 'You are not owner of this bot');
         }
 
         $bot->delete();
