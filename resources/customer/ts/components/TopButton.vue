@@ -1,5 +1,5 @@
 <template lang="pug">
-  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="insertBlock()") Добавить блок
+  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addAction") {{ text }}
 </template>
 
 <script lang="ts">
@@ -11,11 +11,21 @@
   const DropAreaModule = namespace('DropAreaModule');
 
   @Component
-  export default class CustomerApp extends Vue {
+  export default class TopButton extends Vue {
 
     name: "TopButton";
 
-    @DropAreaModule.Action('insertBlock') insertBlock;
+    text = 'Добавить бота';
+
+    type = 'bots';
+
+    @DropAreaModule.Action insertBlock;
+
+    addAction () {
+
+
+
+    }
 
   }
 

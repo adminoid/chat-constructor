@@ -49,6 +49,7 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
 
 + routing tests (mock or stub vuex)
   + routing for bots (root routing)
+  - [ ] **add checks for top panel button has right type and action**
 + BotsArea
   + run action fetchBots() when created
   + check render bots in area by vuex module store mock
@@ -57,12 +58,12 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
   + check view of component (visually)
     + make markup
     + make delete button
-  + [1] click delete button - call deleteBot() 
+  + [x] click delete button - call deleteBot() 
 - TopButton
-  - [2] **click add button - call insertBot() - is vuex action**
-  - [4] **check button action is `addBot`**
+  - [ ] **click add button - call insertBot() - is vuex action**
+  - [ ] **check button action is `addBot`**
 - Vuex Store (modules/Bot)
-  - [3] **fetchBots, deleteBot, createBot actions to axios mock**
+  - [ ] **fetchBots, deleteBot, createBot actions to axios mock**
 
 ### BlocksArea tests
 
