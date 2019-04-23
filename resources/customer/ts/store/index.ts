@@ -8,6 +8,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 
+  actions: {
+    addAction () {
+      console.log('a-a');
+    }
+  },
+
   modules: {
     Bot
   }

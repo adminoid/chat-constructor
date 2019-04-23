@@ -4,28 +4,15 @@
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
-  import {
-    namespace
-  } from 'vuex-class'
-
-  const DropAreaModule = namespace('DropAreaModule');
+  import { Action } from 'vuex-class'
 
   @Component
   export default class TopButton extends Vue {
 
-    name: "TopButton";
-
     text = 'Добавить бота';
-
     type = 'bots';
 
-    @DropAreaModule.Action insertBlock;
-
-    addAction () {
-
-
-
-    }
+    @Action addAction;
 
   }
 
