@@ -80,4 +80,4 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
   - move block
 
 # Important
-read as synchronize vuex with server CRUD 
+read about synchronize vuex with server CRUD 

@@ -1,31 +1,18 @@
 <template lang="pug">
-  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addAction") {{ text }}
+  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addAction(type)") {{ text }}
 </template>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
-  import {
-    namespace
-  } from 'vuex-class'
-
-  const DropAreaModule = namespace('DropAreaModule');
+  import { Action } from 'vuex-class'
 
   @Component
   export default class TopButton extends Vue {
 
-    name: "TopButton";
-
     text = 'Добавить бота';
-
     type = 'bots';
 
-    @DropAreaModule.Action insertBlock;
-
-    addAction () {
-
-
-
-    }
+    @Action addAction;
 
   }
 
