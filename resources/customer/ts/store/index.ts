@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 
   actions: {
+<<<<<<< HEAD
 
     async HideDeletedBot() {
       console.log('here');
@@ -21,6 +22,11 @@ export default new Vuex.Store({
 
     },
 
+=======
+    addAction () {
+      console.log('a-a');
+    }
+>>>>>>> 981ec03e2f644af6ddb5163ffc80f27dcf845fe3
   },
 
   modules: {
