@@ -34,7 +34,7 @@ var Bot = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get('private/bots')];
+                    case 0: return [4 /*yield*/, axios.get(this.baseUrl)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -47,7 +47,7 @@ var Bot = /** @class */ (function (_super) {
         Mutation
     ], Bot.prototype, "hideDeletedBot", null);
     tslib_1.__decorate([
-        Action({ commit: 'hideDeletedBot', rawError: true })
+        Action({ commit: 'hideBot', rawError: true })
     ], Bot.prototype, "deleteBot", null);
     tslib_1.__decorate([
         Action({ commit: 'updateBots', rawError: true })

@@ -1,17 +1,26 @@
-// TODO: For upgrade look here <https://codeburst.io/vuex-and-typescript-3427ba78cfa8>
-
-import Bot from "./modules/Bot";
 import Vue from 'vue';
 import Vuex from 'vuex';
+import Bot from "./modules/Bot";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
 
   actions: {
-    addAction () {
-      console.log('a-a');
-    }
+
+    async HideDeletedBot() {
+      console.log('here');
+    },
+
+    async addAction(context, payload) {
+
+      this.dispatch('HideDeletedBot', 1, {root:true});
+
+      console.log(context);
+      console.log(payload);
+
+    },
+
   },
 
   modules: {

@@ -4,7 +4,7 @@ import router from '@r/customer/ts/router/index.ts'
 import { Store } from 'vuex-mock-store'
 import CustomerApp from '@r/customer/ts/components/CustomerApp.vue'
 import BotsArea from '@r/customer/ts/components/BotsArea.vue'
-import TopButton from "@r/customer/ts/components/TopButton";
+import TopButton from "@r/customer/ts/components/TopButton.vue";
 
 const store = new Store({
   state: {
