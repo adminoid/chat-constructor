@@ -59,8 +59,7 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
     + make markup
     + make delete button
   + [x] click delete button - call deleteBot() 
-- TopButton
-  + [ ] **click add button - call insertBot() - is vuex action**
+  - [ ] click addBot for BotsArea
 - Vuex Store (modules/Bot)
   - [ ] **fetchBots, deleteBot, createBot actions to axios mock**
 

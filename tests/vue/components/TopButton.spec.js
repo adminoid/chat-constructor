@@ -25,15 +25,9 @@ describe('TopButton.vue', () => {
 
     wrapper.find('.top-panel__add-block-btn').trigger('click');
 
-<<<<<<< HEAD
     let calls = store.dispatch.mock.calls;
     expect(calls[0][0]).toBe('addAction');
     expect(calls[0][1]).toBe('bots');
-=======
-    let vuexActionCalled = store.dispatch.mock.calls[0][0];
-    expect(vuexActionCalled).toBe('addAction');
->>>>>>> 981ec03e2f644af6ddb5163ffc80f27dcf845fe3
-
   });
 
 });
