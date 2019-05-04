@@ -31,7 +31,8 @@ export default class Bot extends VuexModule {
   }
 
   @Action({ commit: 'appendBot'})
-  async createBot() {
+  async createBot(type: string) {
+    // console.log(type); // todo: add TypeBot/TypeBlock
     return await axios.post(this.baseUrl, {
       'name': 'Billy' + Math.floor(Math.random() * 6) + 1
     });
@@ -46,11 +47,9 @@ export default class Bot extends VuexModule {
 
     let returnedId = await axios.delete(this.baseUrl + '/' + id);
 
-    console.log(returnedId)
+    console.log(returnedId);
 
-    _.remove( this.bots, (bot: any) => bot.id === returnedId.data.id );
-
-    console.log(test);
+    // _.remove( this.bots, (bot: any) => bot.id === returnedId.data.id );
 
   }
 
