@@ -1,5 +1,6 @@
 import * as tslib_1 from "tslib";
 import { Module, VuexModule, Mutation, Action, } from 'vuex-module-decorators';
+import _ from "lodash";
 import axios from 'axios';
 import Vuex from 'vuex';
 import Vue from 'vue';
@@ -13,24 +14,23 @@ var Bot = /** @class */ (function (_super) {
         _this.bots = [];
         return _this;
     }
-    // @Mutation
-    // addBot ( botData: any ) {
-    // }
     Bot.prototype.updateBots = function (bots) {
         this.bots = bots.data;
     };
-    Bot.prototype.hideDeletedBot = function (bot) {
-        this.bots.splice(this.bots.findIndex(function (item) { return item.id === bot.data.id; }), 1);
+    Bot.prototype.appendBot = function (bot) {
+        this.bots.push(bot.data);
     };
-    Bot.prototype.insertBot = function (bot) {
-        console.log(bot);
+    Bot.prototype.removeBot = function (bot) {
+        _.remove(this.bots, {
+            id: bot.id
+        });
     };
     Bot.prototype.createBot = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
-                            'name': 'Billy'
+                            'name': 'Wally'
                         })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -62,10 +62,10 @@ var Bot = /** @class */ (function (_super) {
     ], Bot.prototype, "updateBots", null);
     tslib_1.__decorate([
         Mutation
-    ], Bot.prototype, "hideDeletedBot", null);
+    ], Bot.prototype, "appendBot", null);
     tslib_1.__decorate([
         Mutation
-    ], Bot.prototype, "insertBot", null);
+    ], Bot.prototype, "removeBot", null);
     tslib_1.__decorate([
         Action({ commit: 'appendBot' })
     ], Bot.prototype, "createBot", null);

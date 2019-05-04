@@ -10,7 +10,7 @@ export default new Vuex.Store({
 
     async addAction(context, payload) {
 
-      context.dispatch('Bot/createBot', 237);
+      await context.dispatch('Bot/createBot', payload);
 
     },
 

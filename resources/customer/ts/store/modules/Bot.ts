@@ -5,10 +5,12 @@ import {
   Action,
 } from 'vuex-module-decorators'
 
+import _ from "lodash"
 import axios from 'axios'
 import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex);
+
 
 //dynamic: true, namespaced: true
 @Module({
@@ -20,29 +22,27 @@ export default class Bot extends VuexModule {
 
   bots = [];
 
-  // @Mutation
-  // addBot ( botData: any ) {
-  // }
-
   @Mutation
   updateBots( bots ) {
     this.bots = bots.data;
   }
 
   @Mutation
-  hideDeletedBot( bot ) {
-    this.bots.splice(this.bots.findIndex(item => item.id === bot.data.id), 1);
+  appendBot ( bot ) {
+    this.bots.push(bot.data);
   }
 
   @Mutation
-  insertBot ( bot ) {
-    console.log(bot);
+  removeBot ( bot ) {
+    _.remove(this.bots, {
+      id: bot.id
+    });
   }
 
   @Action({ commit: 'appendBot'})
   async createBot() {
     return await axios.post(this.baseUrl, {
-      'name': 'Billy'
+      'name': 'Wally'
     });
   }
 

@@ -43,7 +43,7 @@ describe('Routing custom tests', () => {
 
     it("check right type of TopButton.vue", () => {
       let topButton = wrapper.find(TopButton);
-      expect(topButton.vm.type).toBe('bots');
+      expect(topButton.vm.type).toBe('TypeBot');
     });
 
   });

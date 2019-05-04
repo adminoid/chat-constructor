@@ -27,7 +27,7 @@ describe('TopButton.vue', () => {
 
     let calls = store.dispatch.mock.calls;
     expect(calls[0][0]).toBe('addAction');
-    expect(calls[0][1]).toBe('bots');
+    expect(calls[0][1]).toBe('TypeBot');
   });
 
 });

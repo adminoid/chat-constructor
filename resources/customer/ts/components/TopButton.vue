@@ -10,7 +10,7 @@
   export default class TopButton extends Vue {
 
     text = 'Добавить бота';
-    type = 'bots';
+    type = 'TypeBot_007';
 
     @Action addAction;
 

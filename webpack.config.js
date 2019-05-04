@@ -9,7 +9,7 @@ module.exports = {
       '@r': path.resolve(__dirname, 'resources')
     },
   },
-  devtool: '#inline-cheap-module-source-map',
+  devtool: 'source-map',
   output: {
     devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'

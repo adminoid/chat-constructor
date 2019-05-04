@@ -45,6 +45,9 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
 
 ## Latest todo list
 
+### CustomerApp tests
+- [ ] click addBot for BotsArea
+
 ### BotsArea tests
 
 + routing tests (mock or stub vuex)
@@ -59,7 +62,6 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
     + make markup
     + make delete button
   + [x] click delete button - call deleteBot() 
-  - [ ] click addBot for BotsArea
 - Vuex Store (modules/Bot)
   - [ ] **fetchBots, deleteBot, createBot actions to axios mock**
 
