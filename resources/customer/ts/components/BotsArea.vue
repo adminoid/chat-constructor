@@ -4,7 +4,7 @@
       div
         fa-icon(icon="robot" size="3x")
       div
-        span {{ bot.name }}
+        span.bots-area_wrap {{ bot.name }}
       div.bots-area__panel
         router-link.bots-area__link.btn.btn-primary(title="Редактировать" :to="'/bot/' + bot.id")
           fa-icon(icon="edit")
@@ -23,8 +23,6 @@
   import { Vue, Component } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
 
-  // const wait = (ms) => new Promise(res => setTimeout(res, ms));
-
   const Bot = namespace('Bot');
 
   @Component
@@ -38,7 +36,7 @@
     @Bot.Action fetchBots;
     @Bot.Action deleteBot;
 
-    created () {
+    mounted () {
       this.fetchBots();
     }
 
@@ -69,6 +67,7 @@
     display: flex
     text-align: center
     .bots-area__bot
+      max-width: 170px
       background-color: #fff
       align-self: flex-start
       min-width: 100px
@@ -82,5 +81,7 @@
       justify-content: space-between
     .bots-area__link
       margin: 10px
+    .bots-area_wrap
+      white-space: normal !important
 
 </style>

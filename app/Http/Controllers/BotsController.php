@@ -32,8 +32,8 @@ class BotsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return bool|\Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -42,12 +42,15 @@ class BotsController extends Controller
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
         }
 
-        $botData = $request->only('name');
-        $user = \auth()->user();
-        $bot = new Bot($botData);
-        $user->bots()->save($bot);
+        $botData = $request->only('id', 'name');
+        if( $user = auth()->user() ) {
+            $bot = new Bot($botData);
+            $user->bots()->save($bot);
 
-        return response()->json($botData);
+            return response()->json($botData);
+        }
+
+        return false;
 
     }
 
@@ -67,7 +70,7 @@ class BotsController extends Controller
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
         }
 
-        $botData = $request->only('name');
+        $botData = $request->only('id', 'name', 'updated_at', 'user_id' );
 
         $bot = Bot::findOrFail($id);
 
@@ -96,10 +99,8 @@ class BotsController extends Controller
 
         $bot->delete();
 
-        return response()->json($bot);
+        return response()->json($id);
 
     }
-
-
 
 }

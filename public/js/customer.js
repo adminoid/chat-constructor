@@ -11239,7 +11239,7 @@ module.exports = {
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".bots-area[data-v-581bae2a] {\n  z-index: 0;\n  height: calc(100vh - 140px);\n  position: relative;\n  background: #d7d7d7;\n  border-radius: 5px;\n  padding: 10px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  text-align: center;\n}\n.bots-area .bots-area__bot[data-v-581bae2a] {\n  background-color: #fff;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n  min-width: 100px;\n  margin: 10px;\n  padding: 10px;\n  border: 2px solid #000;\n  border-radius: 5px;\n}\n.bots-area .bots-area__panel[data-v-581bae2a] {\n  padding: 10px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.bots-area .bots-area__link[data-v-581bae2a] {\n  margin: 10px;\n}", ""]);
+exports.push([module.i, ".bots-area[data-v-581bae2a] {\n  z-index: 0;\n  height: calc(100vh - 140px);\n  position: relative;\n  background: #d7d7d7;\n  border-radius: 5px;\n  padding: 10px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  text-align: center;\n}\n.bots-area .bots-area__bot[data-v-581bae2a] {\n  max-width: 170px;\n  background-color: #fff;\n  -ms-flex-item-align: start;\n      align-self: flex-start;\n  min-width: 100px;\n  margin: 10px;\n  padding: 10px;\n  border: 2px solid #000;\n  border-radius: 5px;\n}\n.bots-area .bots-area__panel[data-v-581bae2a] {\n  padding: 10px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.bots-area .bots-area__link[data-v-581bae2a] {\n  margin: 10px;\n}\n.bots-area .bots-area_wrap[data-v-581bae2a] {\n  white-space: normal !important;\n}", ""]);
 
 
 
@@ -30825,14 +30825,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// const wait = (ms) => new Promise(res => setTimeout(res, ms));
 var Bot = Object(vuex_class__WEBPACK_IMPORTED_MODULE_2__["namespace"])('Bot');
 var BotsArea = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](BotsArea, _super);
     function BotsArea() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BotsArea.prototype.created = function () {
+    BotsArea.prototype.mounted = function () {
         this.fetchBots();
     };
     BotsArea.prototype.removeBot = function (id) {
@@ -30961,7 +30960,7 @@ var TopButton = /** @class */ (function (_super) {
     function TopButton() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.text = 'Добавить бота';
-        _this.type = 'TypeBot_007';
+        _this.type = 'TypeBot';
         return _this;
     }
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -31522,7 +31521,11 @@ var render = function() {
     _vm._l(_vm.bots, function(bot) {
       return _c("div", { staticClass: "bots-area__bot" }, [
         _c("div", [_c("fa-icon", { attrs: { icon: "robot", size: "3x" } })], 1),
-        _c("div", [_c("span", [_vm._v(_vm._s(bot.name))])]),
+        _c("div", [
+          _c("span", { staticClass: "bots-area_wrap" }, [
+            _vm._v(_vm._s(bot.name))
+          ])
+        ]),
         _c(
           "div",
           { staticClass: "bots-area__panel" },
@@ -49053,9 +49056,9 @@ var tslib_1 = _interopRequireWildcard(__webpack_require__(/*! tslib */ "./node_m
 
 var _vuexModuleDecorators = __webpack_require__(/*! vuex-module-decorators */ "./node_modules/vuex-module-decorators/dist/esm/index.js");
 
-var _lodash = _interopRequireDefault(__webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"));
-
 var _axios = _interopRequireDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var _lodash = _interopRequireDefault(__webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"));
 
 var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js"));
 
@@ -49081,58 +49084,6 @@ function (_super) {
     return _this;
   }
 
-  Bot.prototype.updateBots = function (bots) {
-    this.bots = bots.data;
-  };
-
-  Bot.prototype.appendBot = function (bot) {
-    this.bots.push(bot.data);
-  };
-
-  Bot.prototype.removeBot = function (bot) {
-    _lodash.default.remove(this.bots, {
-      id: bot.id
-    });
-  };
-
-  Bot.prototype.createBot = function () {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-      return tslib_1.__generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            return [4
-            /*yield*/
-            , _axios.default.post(this.baseUrl, {
-              'name': 'Wally'
-            })];
-
-          case 1:
-            return [2
-            /*return*/
-            , _a.sent()];
-        }
-      });
-    });
-  };
-
-  Bot.prototype.deleteBot = function (id) {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-      return tslib_1.__generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            return [4
-            /*yield*/
-            , _axios.default.delete(this.baseUrl + '/' + id)];
-
-          case 1:
-            return [2
-            /*return*/
-            , _a.sent()];
-        }
-      });
-    });
-  };
-
   Bot.prototype.fetchBots = function () {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
       return tslib_1.__generator(this, function (_a) {
@@ -49151,25 +49102,75 @@ function (_super) {
     });
   };
 
-  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Bot.prototype, "updateBots", null);
+  Bot.prototype.updateBots = function (bots) {
+    this.bots = bots.data;
+  };
 
-  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Bot.prototype, "appendBot", null);
+  Bot.prototype.createBot = function () {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+      return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , _axios.default.post(this.baseUrl, {
+              'name': 'Billy' + Math.floor(Math.random() * 6) + 1
+            })];
 
-  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Bot.prototype, "removeBot", null);
+          case 1:
+            return [2
+            /*return*/
+            , _a.sent()];
+        }
+      });
+    });
+  };
 
-  tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
-    commit: 'appendBot'
-  })], Bot.prototype, "createBot", null);
+  Bot.prototype.appendBot = function (bot) {
+    this.bots.push(bot.data);
+  };
 
-  tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
-    commit: 'removeBot',
-    rawError: true
-  })], Bot.prototype, "deleteBot", null);
+  Bot.prototype.deleteBot = function (id) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+      var returnedId;
+      return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , _axios.default.delete(this.baseUrl + '/' + id)];
+
+          case 1:
+            returnedId = _a.sent();
+            console.log(returnedId);
+
+            _lodash.default.remove(this.bots, function (bot) {
+              return bot.id === returnedId.data.id;
+            });
+
+            console.log(test);
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
 
   tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
     commit: 'updateBots',
     rawError: true
   })], Bot.prototype, "fetchBots", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Bot.prototype, "updateBots", null);
+
+  tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
+    commit: 'appendBot'
+  })], Bot.prototype, "createBot", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Bot.prototype, "appendBot", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Action], Bot.prototype, "deleteBot", null);
 
   Bot = tslib_1.__decorate([(0, _vuexModuleDecorators.Module)({
     namespaced: true,

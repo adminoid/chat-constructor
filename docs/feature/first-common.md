@@ -62,9 +62,14 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
     + make markup
     + make delete button
   + [x] click delete button - call deleteBot() 
+  + [ ] remove deleted bot from botsArea
 - Vuex Store (modules/Bot)
   - [ ] **fetchBots, deleteBot, createBot actions to axios mock**
 
+fix list for **BotsArea tests**:  
+- think about updates bots after all operations
+
+====================
 ### BlocksArea tests
 
 - routing tests (add test to `tests/vue/functional/CustomerAppRouting.spec.js`)
@@ -79,5 +84,3 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
   - make connection
   - move block
 
-# Important
-read about synchronize vuex with server CRUD 
