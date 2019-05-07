@@ -31922,6 +31922,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
+// import _ from "lodash"
 _vue.default.use(_vuex.default); //dynamic: true, namespaced: true
 
 
@@ -31935,7 +31936,12 @@ function (_super) {
 
     _this.baseUrl = 'private/bots';
     _this.bots = [];
-    return _this;
+    return _this; // @Mutation
+    // removeBot(id) {
+    //   console.info(id + ' - update here! ');
+    //   this.bots = _.filter(this.bots, function(o) { return o.id === id; });
+    //   // this.bots = [];
+    // }
   }
 
   Bot.prototype.fetchBots = function () {
@@ -31987,7 +31993,7 @@ function (_super) {
 
   Bot.prototype.deleteBot = function (id) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-      var returnedId;
+      var deletedId;
       return tslib_1.__generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -31996,11 +32002,10 @@ function (_super) {
             , _axios.default.delete(this.baseUrl + '/' + id)];
 
           case 1:
-            returnedId = _a.sent();
-            console.log(returnedId);
+            deletedId = _a.sent();
             return [2
             /*return*/
-            ];
+            , deletedId];
         }
       });
     });
@@ -32019,7 +32024,9 @@ function (_super) {
 
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Bot.prototype, "appendBot", null);
 
-  tslib_1.__decorate([_vuexModuleDecorators.Action], Bot.prototype, "deleteBot", null);
+  tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
+    rawError: true
+  })], Bot.prototype, "deleteBot", null);
 
   Bot = tslib_1.__decorate([(0, _vuexModuleDecorators.Module)({
     namespaced: true,
