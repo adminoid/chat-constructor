@@ -1,7 +1,7 @@
 import * as tslib_1 from "tslib";
 import { Module, VuexModule, Mutation, Action, } from 'vuex-module-decorators';
 import axios from 'axios';
-// import _ from "lodash"
+import * as _ from "lodash";
 import Vuex from 'vuex';
 import Vue from 'vue';
 Vue.use(Vuex);
@@ -13,12 +13,6 @@ var Bot = /** @class */ (function (_super) {
         _this.baseUrl = 'private/bots';
         _this.bots = [];
         return _this;
-        // @Mutation
-        // removeBot(id) {
-        //   console.info(id + ' - update here! ');
-        //   this.bots = _.filter(this.bots, function(o) { return o.id === id; });
-        //   // this.bots = [];
-        // }
     }
     Bot.prototype.fetchBots = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -37,11 +31,12 @@ var Bot = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
-                            'name': 'Billy' + Math.floor(Math.random() * 6) + 1
-                        })];
-                    case 1: 
-                    // console.log(type); // todo: add TypeBot/TypeBlock
+                    case 0:
+                        console.log(type); // todo: add TypeBot/TypeBlock
+                        return [4 /*yield*/, axios.post(this.baseUrl, {
+                                'name': 'Billy' + Math.floor(Math.random() * 6) + 1
+                            })];
+                    case 1: // todo: add TypeBot/TypeBlock
                     return [2 /*return*/, _a.sent()];
                 }
             });
@@ -52,16 +47,21 @@ var Bot = /** @class */ (function (_super) {
     };
     Bot.prototype.deleteBot = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var deletedId;
+            var resp;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios.delete(this.baseUrl + '/' + id)];
                     case 1:
-                        deletedId = _a.sent();
-                        return [2 /*return*/, deletedId];
+                        resp = _a.sent();
+                        return [2 /*return*/, resp.data];
                 }
             });
         });
+    };
+    Bot.prototype.removeBot = function (id) {
+        console.log(this.bots);
+        _.remove(this.bots, function (b) { return b.id == id; });
+        console.log(this.bots);
     };
     tslib_1.__decorate([
         Action({ commit: 'updateBots', rawError: true })
@@ -76,8 +76,11 @@ var Bot = /** @class */ (function (_super) {
         Mutation
     ], Bot.prototype, "appendBot", null);
     tslib_1.__decorate([
-        Action({ rawError: true })
+        Action({ commit: 'removeBot', rawError: true })
     ], Bot.prototype, "deleteBot", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Bot.prototype, "removeBot", null);
     Bot = tslib_1.__decorate([
         Module({
             namespaced: true, dynamic: true, store: new Vuex.Store({}), name: 'Bot'

@@ -42,7 +42,7 @@ class BotsController extends Controller
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
         }
 
-        $botData = $request->only('id', 'name');
+        $botData = $request->all();
         if( $user = auth()->user() ) {
             $bot = new Bot($botData);
             $user->bots()->save($bot);
