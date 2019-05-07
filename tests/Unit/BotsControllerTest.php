@@ -222,9 +222,7 @@ class BotsControllerTest extends TestCase
         $response = $this->actingAs($user)
             ->json('DELETE', '/private/bots/' . $botId );
 
-        $response->assertJsonFragment([
-            'name' => 'Deleton'
-        ]);
+        $response->assertStatus(200);
 
         $foundBot = Bot::find($botId);
 

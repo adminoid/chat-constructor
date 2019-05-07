@@ -1,6 +1,7 @@
 import * as tslib_1 from "tslib";
 import { Module, VuexModule, Mutation, Action, } from 'vuex-module-decorators';
 import axios from 'axios';
+// import _ from "lodash"
 import Vuex from 'vuex';
 import Vue from 'vue';
 Vue.use(Vuex);
@@ -12,6 +13,12 @@ var Bot = /** @class */ (function (_super) {
         _this.baseUrl = 'private/bots';
         _this.bots = [];
         return _this;
+        // @Mutation
+        // removeBot(id) {
+        //   console.info(id + ' - update here! ');
+        //   this.bots = _.filter(this.bots, function(o) { return o.id === id; });
+        //   // this.bots = [];
+        // }
     }
     Bot.prototype.fetchBots = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -45,14 +52,13 @@ var Bot = /** @class */ (function (_super) {
     };
     Bot.prototype.deleteBot = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var returnedId;
+            var deletedId;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios.delete(this.baseUrl + '/' + id)];
                     case 1:
-                        returnedId = _a.sent();
-                        console.log(returnedId);
-                        return [2 /*return*/];
+                        deletedId = _a.sent();
+                        return [2 /*return*/, deletedId];
                 }
             });
         });
@@ -70,7 +76,7 @@ var Bot = /** @class */ (function (_super) {
         Mutation
     ], Bot.prototype, "appendBot", null);
     tslib_1.__decorate([
-        Action
+        Action({ rawError: true })
     ], Bot.prototype, "deleteBot", null);
     Bot = tslib_1.__decorate([
         Module({

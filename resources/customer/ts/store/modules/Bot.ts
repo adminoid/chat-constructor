@@ -6,7 +6,7 @@ import {
 } from 'vuex-module-decorators'
 
 import axios from 'axios'
-import _ from "lodash"
+// import _ from "lodash"
 import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex);
@@ -42,15 +42,16 @@ export default class Bot extends VuexModule {
     this.bots.push(bot.data);
   }
 
-  @Action
+  @Action({rawError: true})
   async deleteBot(id: number) {
-
-    let returnedId = await axios.delete(this.baseUrl + '/' + id);
-
-    console.log(returnedId);
-
-    // _.remove( this.bots, (bot: any) => bot.id === returnedId.data.id );
-
+    let deletedId = await axios.delete(this.baseUrl + '/' + id);
+    return deletedId;
   }
+  // @Mutation
+  // removeBot(id) {
+  //   console.info(id + ' - update here! ');
+  //   this.bots = _.filter(this.bots, function(o) { return o.id === id; });
+  //   // this.bots = [];
+  // }
 
 }
