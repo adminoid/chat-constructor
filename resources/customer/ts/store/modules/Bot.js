@@ -60,7 +60,8 @@ var Bot = /** @class */ (function (_super) {
     };
     Bot.prototype.removeBot = function (id) {
         console.log(this.bots);
-        _.remove(this.bots, function (b) { return b.id == id; });
+        this.bots = _.reject(this.bots, function (b) { return b.id == id; });
+        // this.bots = [];
         console.log(this.bots);
     };
     tslib_1.__decorate([

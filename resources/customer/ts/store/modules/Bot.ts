@@ -10,6 +10,7 @@ import * as _ from "lodash"
 import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex);
+import store from '../index.ts';
 
 //dynamic: true, namespaced: true
 @Module({
@@ -50,7 +51,8 @@ export default class Bot extends VuexModule {
   @Mutation
   removeBot(id) {
     console.log(this.bots);
-    _.remove(this.bots, b => b.id == id);
+    this.bots = _.reject(this.bots, b => b.id == id);
+    // this.bots = [];
     console.log(this.bots);
   }
 
