@@ -1,7 +1,10 @@
 <template lang="pug">
   .row.no-gutters
     aside.sidebar.col-md-3
-      .sidebar__area Sidebar
+        h2 Sidebar
+        ul.sidebar__area
+          li(v-for="link in links")
+            a(href="") {{ link }}
     section.col-md-9.right-area
       .top-panel
         top-button
@@ -19,6 +22,12 @@
   export default class CustomerApp extends Vue {
 
     name: "CustomerApp";
+
+    links = [
+      'Боты',
+      'Информация',
+      'Личный кабинет',
+    ];
 
     mounted () {
 
@@ -46,7 +55,8 @@
       margin: 10px 0 10px 10px
       border-radius: 5px
       padding: 10px
-
+      li
+        list-style: none !important
   .right-area
     background: #8d8d8d
     padding: 10px !important

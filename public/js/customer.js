@@ -11254,7 +11254,7 @@ exports.push([module.i, ".bots-area[data-v-581bae2a] {\n  z-index: 0;\n  height:
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".sidebar {\n  height: calc(100vh - 60px);\n  background: #8d8d8d;\n}\n.sidebar .sidebar__area {\n  background: #b4b4b4;\n  height: calc(100% - 20px);\n  margin: 10px 0 10px 10px;\n  border-radius: 5px;\n  padding: 10px;\n}\n.right-area {\n  background: #8d8d8d;\n  padding: 10px !important;\n}\n.top-panel {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  height: 50px;\n  margin-bottom: 10px;\n}\n.top-panel .top-panel__add-block-btn {\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.main-container {\n  z-index: 0;\n  height: calc(100vh - 140px);\n  position: relative;\n  background: #d7d7d7;\n  border-radius: 5px;\n}", ""]);
+exports.push([module.i, ".sidebar {\n  height: calc(100vh - 60px);\n  background: #8d8d8d;\n}\n.sidebar .sidebar__area {\n  background: #b4b4b4;\n  height: calc(100% - 20px);\n  margin: 10px 0 10px 10px;\n  border-radius: 5px;\n  padding: 10px;\n}\n.sidebar .sidebar__area li {\n  list-style: none !important;\n}\n.right-area {\n  background: #8d8d8d;\n  padding: 10px !important;\n}\n.top-panel {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  height: 50px;\n  margin-bottom: 10px;\n}\n.top-panel .top-panel__add-block-btn {\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.main-container {\n  z-index: 0;\n  height: calc(100vh - 140px);\n  position: relative;\n  background: #d7d7d7;\n  border-radius: 5px;\n}", ""]);
 
 
 
@@ -30881,7 +30881,13 @@ __webpack_require__.r(__webpack_exports__);
 var CustomerApp = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](CustomerApp, _super);
     function CustomerApp() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.links = [
+            'Боты',
+            'Информация',
+            'Личный кабинет',
+        ];
+        return _this;
     }
     CustomerApp.prototype.mounted = function () {
         // this.$confirm('Test confirm');
@@ -31599,7 +31605,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row no-gutters" }, [
-    _vm._m(0),
+    _c("aside", { staticClass: "sidebar col-md-3" }, [
+      _c("h2", [_vm._v("Sidebar")]),
+      _c(
+        "ul",
+        { staticClass: "sidebar__area" },
+        _vm._l(_vm.links, function(link) {
+          return _c("li", [
+            _c("a", { attrs: { href: "" } }, [_vm._v(_vm._s(link))])
+          ])
+        }),
+        0
+      )
+    ]),
     _c(
       "section",
       { staticClass: "col-md-9 right-area" },
@@ -31611,16 +31629,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("aside", { staticClass: "sidebar col-md-3" }, [
-      _c("div", { staticClass: "sidebar__area" }, [_vm._v("Sidebar")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
