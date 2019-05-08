@@ -22,29 +22,42 @@ const mocks = {
 // reset spies, initial state and getters
 afterEach(() => store.reset());
 
-describe('Routing custom tests', () => {
+describe('Mounting child components in CustomerApp via routing', () => {
 
-  describe('Mounting child components in CustomerApp via routing', () => {
+  const localVue = createLocalVue();
+  localVue.use(VueRouter);
 
-    const localVue = createLocalVue();
-    localVue.use(VueRouter);
-
-    let wrapper;
-    beforeEach(() => {
-      wrapper = mount(CustomerApp, { mocks, localVue, router })
-    });
-
-    // push root route
-    router.push("/");
-
-    it("renders a child BotsArea.vue", () => {
-      expect(wrapper.find(BotsArea).exists()).toBe(true);
-    });
-
-    it("check right type of TopButton.vue", () => {
-      let topButton = wrapper.find(TopButton);
-      expect(topButton.vm.type).toBe('TypeBot');
-    });
-
+  let wrapper;
+  beforeEach(() => {
+    wrapper = mount(CustomerApp, { mocks, localVue, router })
   });
+
+  // push root route
+  router.push("/");
+  it("check right type of TopButton.vue", () => {
+    expect(wrapper.find(BotsArea).exists()).toBe(true);
+    let topButton = wrapper.find(TopButton);
+    let typeLocal = topButton.vm.type;
+    expect(typeLocal).toBe('bot');
+  });
+
+  // push oot route
+  router.push("/bot/21");
+  it("check right type of TopButton.vue", () => {
+    expect(wrapper.find(BotsArea).exists()).toBe(true);
+    let topButton = wrapper.find(TopButton);
+    let typeLocal = topButton.vm.type;
+    expect(typeLocal).toBe('block');
+  });
+
+  it("renders a child BlocksArea.vue", () => {
+    expect(wrapper.find(BotsArea).exists()).toBe(true);
+  });
+
+  it("check right type of TopButton.vue", () => {
+    let topButton = wrapper.find(TopButton);
+    expect(topButton.vm.type).toBe('block');
+  });
+
 });
+

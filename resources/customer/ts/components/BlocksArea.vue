@@ -1,5 +1,5 @@
 <template lang="pug">
-  #blocks-area
+  #blocks-area {{ $route.params.id }}
 </template>
 
 <script lang="ts">

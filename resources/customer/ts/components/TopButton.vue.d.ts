@@ -3,4 +3,5 @@ export default class TopButton extends Vue {
     text: string;
     type: string;
     addAction: any;
+    onUrlChange(newRoute: any): void;
 }

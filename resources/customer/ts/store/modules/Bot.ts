@@ -11,7 +11,6 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex);
 
-//dynamic: true, namespaced: true
 @Module({
   namespaced: true, dynamic: true, store: new Vuex.Store({}), name: 'Bot'
 })

@@ -5,7 +5,6 @@ import * as _ from "lodash";
 import Vuex from 'vuex';
 import Vue from 'vue';
 Vue.use(Vuex);
-//dynamic: true, namespaced: true
 var Bot = /** @class */ (function (_super) {
     tslib_1.__extends(Bot, _super);
     function Bot() {

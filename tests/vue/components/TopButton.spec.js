@@ -12,6 +12,8 @@ const store = new Store({
 // add other mocks here so they are accessible in every component
 const mocks = {
   $store: store,
+  name,
+  $route: jest.fn(),
 };
 
 // reset spies, initial state and getters
@@ -27,7 +29,7 @@ describe('TopButton.vue', () => {
 
     let calls = store.dispatch.mock.calls;
     expect(calls[0][0]).toBe('addAction');
-    expect(calls[0][1]).toBe('TypeBot');
+    expect(calls[0][1]).toBe('bot');
   });
 
 });

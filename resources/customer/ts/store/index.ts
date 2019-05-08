@@ -8,9 +8,18 @@ export default new Vuex.Store({
 
   actions: {
 
-    async addAction(context, payload) {
+    async addAction(context, typeOfNew) {
 
-      await context.dispatch('Bot/createBot', payload);
+      console.log(typeOfNew);
+      if (typeOfNew === 'bot') {
+        console.log('BOT');
+
+      }else if (typeOfNew === 'block') {
+        console.log('BlOCK');
+
+      }
+
+      // await context.dispatch('Bot/createBot', payload);
 
     },
 

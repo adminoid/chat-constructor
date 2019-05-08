@@ -30960,12 +30960,25 @@ var TopButton = /** @class */ (function (_super) {
     function TopButton() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.text = 'Добавить бота';
-        _this.type = 'TypeBot';
+        _this.type = 'bot';
         return _this;
     }
+    TopButton.prototype.onUrlChange = function (newRoute) {
+        if (newRoute.name == 'block') {
+            this.text = 'Добавить блок';
+            this.type = 'block';
+        }
+        else {
+            this.text = 'Добавить бота';
+            this.type = 'bot';
+        }
+    };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         vuex_class__WEBPACK_IMPORTED_MODULE_2__["Action"]
     ], TopButton.prototype, "addAction", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Watch"])('$route', { immediate: true, deep: true })
+    ], TopButton.prototype, "onUrlChange", null);
     TopButton = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
     ], TopButton);
@@ -31491,7 +31504,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "blocks-area" } })
+  return _c("div", { attrs: { id: "blocks-area" } }, [
+    _vm._v(_vm._s(_vm.$route.params.id))
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -48968,10 +48983,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _default = [{
   path: "/",
-  component: _BotsArea.default
+  component: _BotsArea.default,
+  name: 'bot'
 }, {
   path: "/bot/:id",
-  component: _BlocksArea.default
+  component: _BlocksArea.default,
+  name: 'block'
 }];
 exports.default = _default;
 
@@ -49008,22 +49025,20 @@ _vue.default.use(_vuex.default);
 
 var _default = new _vuex.default.Store({
   actions: {
-    addAction: function addAction(context, payload) {
+    addAction: function addAction(context, typeOfNew) {
       return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
-          switch (_a.label) {
-            case 0:
-              return [4
-              /*yield*/
-              , context.dispatch('Bot/createBot', payload)];
+          console.log(typeOfNew);
 
-            case 1:
-              _a.sent();
-
-              return [2
-              /*return*/
-              ];
+          if (typeOfNew === 'bot') {
+            console.log('BOT');
+          } else if (typeOfNew === 'block') {
+            console.log('BlOCK');
           }
+
+          return [2
+          /*return*/
+          ];
         });
       });
     }
@@ -49068,8 +49083,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
-_vue.default.use(_vuex.default); //dynamic: true, namespaced: true
-
+_vue.default.use(_vuex.default);
 
 var Bot =
 /** @class */

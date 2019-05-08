@@ -3,16 +3,27 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Vue, Component, Watch } from 'vue-property-decorator'
   import { Action } from 'vuex-class'
 
   @Component
   export default class TopButton extends Vue {
 
     text = 'Добавить бота';
-    type = 'TypeBot';
+    type = 'bot';
 
     @Action addAction;
+
+    @Watch('$route', { immediate: true, deep: true })
+    onUrlChange(newRoute) {
+      if (newRoute.name == 'block') {
+        this.text = 'Добавить блок';
+        this.type = 'block';
+      } else {
+        this.text = 'Добавить бота';
+        this.type = 'bot';
+      }
+    }
 
   }
 
