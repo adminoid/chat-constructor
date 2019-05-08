@@ -49111,8 +49111,6 @@ function (_super) {
       return tslib_1.__generator(this, function (_a) {
         switch (_a.label) {
           case 0:
-            console.log(type); // todo: add TypeBot/TypeBlock
-
             return [4
             /*yield*/
             , _axios.default.post(this.baseUrl, {
@@ -49120,7 +49118,7 @@ function (_super) {
             })];
 
           case 1:
-            // todo: add TypeBot/TypeBlock
+            // console.log(type); // todo: add TypeBot/TypeBlock
             return [2
             /*return*/
             , _a.sent()];
@@ -49154,12 +49152,9 @@ function (_super) {
   };
 
   Bot.prototype.removeBot = function (id) {
-    console.log(this.bots);
     this.bots = _.reject(this.bots, function (b) {
       return b.id == id;
-    }); // this.bots = [];
-
-    console.log(this.bots);
+    });
   };
 
   tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({

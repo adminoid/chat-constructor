@@ -37,6 +37,7 @@ class BotsController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make(request()->all(), $this->rules);
         if ($validator->fails()) {
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
@@ -47,7 +48,7 @@ class BotsController extends Controller
             $bot = new Bot($botData);
             $user->bots()->save($bot);
 
-            return response()->json($botData);
+            return response()->json($bot);
         }
 
         return false;

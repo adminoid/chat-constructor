@@ -31,12 +31,11 @@ var Bot = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(type); // todo: add TypeBot/TypeBlock
-                        return [4 /*yield*/, axios.post(this.baseUrl, {
-                                'name': 'Billy' + Math.floor(Math.random() * 6) + 1
-                            })];
-                    case 1: // todo: add TypeBot/TypeBlock
+                    case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
+                            'name': 'Billy' + Math.floor(Math.random() * 6) + 1
+                        })];
+                    case 1: 
+                    // console.log(type); // todo: add TypeBot/TypeBlock
                     return [2 /*return*/, _a.sent()];
                 }
             });
@@ -59,10 +58,7 @@ var Bot = /** @class */ (function (_super) {
         });
     };
     Bot.prototype.removeBot = function (id) {
-        console.log(this.bots);
         this.bots = _.reject(this.bots, function (b) { return b.id == id; });
-        // this.bots = [];
-        console.log(this.bots);
     };
     tslib_1.__decorate([
         Action({ commit: 'updateBots', rawError: true })
