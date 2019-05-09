@@ -58,6 +58,7 @@
 <style lang="sass" scoped>
 
   .bots-area
+    flex-wrap: wrap
     z-index: 0
     height: calc(100vh - 140px)
     position: relative

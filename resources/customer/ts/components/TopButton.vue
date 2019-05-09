@@ -16,7 +16,8 @@
 
     @Watch('$route', { immediate: true, deep: true })
     onUrlChange(newRoute) {
-      if (newRoute.name == 'block') {
+      console.log(newRoute);
+      if (newRoute.name == 'blocks') {
         this.text = 'Добавить блок';
         this.type = 'block';
       } else {

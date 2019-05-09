@@ -1,9 +1,8 @@
 import ModalWindowConfirm from '../components/ModalWindowConfirm.vue'
-import $ from 'jquery'
 
 export default {
 
-  install (Vue, options) {
+  install (Vue) {
 
     Vue.prototype.$confirm = function(windowData) {
       return new Promise((resolve, reject) => {
