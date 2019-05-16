@@ -24,7 +24,7 @@
   import { Vue, Component } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
 
-  const Bot = namespace('Bot');
+  const BotModel = namespace('Bot');
 
   @Component
   export default class BotsArea extends Vue {
@@ -33,9 +33,9 @@
 
     $confirm;
 
-    @Bot.State bots;
-    @Bot.Action fetchBots;
-    @Bot.Action deleteBot;
+    @BotModel.State bots;
+    @BotModel.Action fetchBots;
+    @BotModel.Action deleteBot;
 
     removeBot (id) {
 
