@@ -24,8 +24,8 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  import ConnectorOutput from './ConnectorOutput'
-  import ConnectorCreate from './ConnectorCreate'
+  import ConnectorOutput from './ConnectorOutput.vue'
+  import ConnectorCreate from './ConnectorCreate.vue'
   // import * as _ from 'lodash'
 
   const DropAreaModule = namespace('DropAreaModule');
