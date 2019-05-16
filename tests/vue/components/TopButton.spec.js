@@ -5,7 +5,7 @@ import expect from 'expect'
 
 const store = new Store({
   actions: {
-    addAction: jest.fn()
+    createEntity: jest.fn()
   },
 });
 
@@ -21,14 +21,14 @@ afterEach(() => store.reset());
 
 describe('TopButton.vue', () => {
 
-  it('addAction', () => {
+  it('createEntity', () => {
 
     let wrapper = mount(TopButton, { mocks });
 
     wrapper.find('.top-panel__add-block-btn').trigger('click');
 
     let calls = store.dispatch.mock.calls;
-    expect(calls[0][0]).toBe('addAction');
+    expect(calls[0][0]).toBe('createEntity');
     expect(calls[0][1]).toBe('bot');
   });
 

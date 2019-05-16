@@ -2,6 +2,8 @@ import { Store } from 'vuex-mock-store'
 import {config, mount} from '@vue/test-utils'
 import BotsArea from '@r/customer/ts/components/BotsArea.vue'
 import expect from 'expect'
+import VueRouter from 'vue-router'
+import router from "@r/customer/ts/router";
 
 config.stubs['fa-icon'] = '<div />';
 config.stubs['router-link'] = '<div />';

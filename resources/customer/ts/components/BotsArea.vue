@@ -4,12 +4,13 @@
       div
         fa-icon(icon="robot" size="3x")
       div
-        span.bots-area_wrap {{ bot.name }}
+        span.bots-area_wrap {{ bot.name }} / {{ bot.id }}
       div.bots-area__panel
         router-link.bots-area__link.btn.btn-primary(title="Редактировать" :to="'/bot/' + bot.id")
           fa-icon(icon="edit")
         button.bots-area__link.btn.btn-outline-danger(title="Удалить" @click="removeBot(bot.id)")
           fa-icon(icon="trash")
+
 </template>
 
 <script lang="ts">
@@ -36,10 +37,6 @@
     @Bot.Action fetchBots;
     @Bot.Action deleteBot;
 
-    mounted () {
-      this.fetchBots();
-    }
-
     removeBot (id) {
 
       this.$confirm({
@@ -50,6 +47,10 @@
         })
         .catch( e => { console.error(e.message) } );
 
+    }
+
+    created () {
+      this.fetchBots();
     }
 
   }

@@ -12,7 +12,10 @@ import Vue from 'vue'
 Vue.use(Vuex);
 
 @Module({
-  namespaced: true, dynamic: true, store: new Vuex.Store({}), name: 'Bot'
+  name: 'Bot',
+  namespaced: true,
+  dynamic: true,
+  store: new Vuex.Store({}),
 })
 export default class Bot extends VuexModule {
 
@@ -31,14 +34,14 @@ export default class Bot extends VuexModule {
 
   @Action({ commit: 'appendBot'})
   async createBot(type: string) {
-    // console.log(type); // todo: add TypeBot/TypeBlock
+    // console.log(type); // todo: add TypeBot/TypeBot
     return await axios.post(this.baseUrl, {
       'name': 'Billy' + Math.floor(Math.random() * 6) + 1
     });
   }
   @Mutation
-  appendBot ( bot ) {
-    this.bots.push(bot.data);
+  appendBot ( block ) {
+    this.bots.push(block.data);
   }
 
   @Action({ commit: 'removeBot', rawError: true})

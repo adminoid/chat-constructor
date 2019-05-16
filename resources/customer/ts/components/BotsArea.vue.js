@@ -7,9 +7,6 @@ var BotsArea = /** @class */ (function (_super) {
     function BotsArea() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BotsArea.prototype.mounted = function () {
-        this.fetchBots();
-    };
     BotsArea.prototype.removeBot = function (id) {
         var _this = this;
         this.$confirm({
@@ -19,6 +16,9 @@ var BotsArea = /** @class */ (function (_super) {
             _this.deleteBot(id);
         })
             .catch(function (e) { console.error(e.message); });
+    };
+    BotsArea.prototype.created = function () {
+        this.fetchBots();
     };
     tslib_1.__decorate([
         Bot.State

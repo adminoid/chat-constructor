@@ -10,6 +10,6 @@ export default class BotsArea extends Vue {
     bots: any;
     fetchBots: any;
     deleteBot: any;
-    mounted(): void;
     removeBot(id: any): void;
+    created(): void;
 }

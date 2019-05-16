@@ -84,3 +84,14 @@ fix list for **BotsArea tests**:
   - make connection
   - move block
 
+### Next planning and todo
+
+- 
+- block layout
+- font smaller
+- confirm delete block
+- phpunit create block
+
+---
+
+

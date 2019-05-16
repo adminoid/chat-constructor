@@ -19,7 +19,7 @@ class BlockPolicy
      */
     public function view(User $user, Block $block)
     {
-//        return $user->id === $block->bot->user_id;
+        return $user->id === $block->bot->user_id;
     }
 
     /**
@@ -54,8 +54,7 @@ class BlockPolicy
      */
     public function delete(User $user, Block $block)
     {
-        $bot = $block->bot()->first();
-        return $user->id === $bot->user_id;
+        return $user->id === $block->bot->user_id;
     }
 
     /**

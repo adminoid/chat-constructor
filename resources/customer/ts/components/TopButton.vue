@@ -1,5 +1,5 @@
 <template lang="pug">
-  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="addAction(type)") {{ text }}
+  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="createEntity(type)") {{ text }}
 </template>
 
 <script lang="ts">
@@ -12,11 +12,10 @@
     text = 'Добавить бота';
     type = 'bot';
 
-    @Action addAction;
+    @Action createEntity;
 
     @Watch('$route', { immediate: true, deep: true })
     onUrlChange(newRoute) {
-      console.log(newRoute);
       if (newRoute.name == 'blocks') {
         this.text = 'Добавить блок';
         this.type = 'block';

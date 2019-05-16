@@ -34,14 +34,14 @@ var Bot = /** @class */ (function (_super) {
                             'name': 'Billy' + Math.floor(Math.random() * 6) + 1
                         })];
                     case 1: 
-                    // console.log(type); // todo: add TypeBot/TypeBlock
+                    // console.log(type); // todo: add TypeBot/TypeBot
                     return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    Bot.prototype.appendBot = function (bot) {
-        this.bots.push(bot.data);
+    Bot.prototype.appendBot = function (block) {
+        this.bots.push(block.data);
     };
     Bot.prototype.deleteBot = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -79,7 +79,10 @@ var Bot = /** @class */ (function (_super) {
     ], Bot.prototype, "removeBot", null);
     Bot = tslib_1.__decorate([
         Module({
-            namespaced: true, dynamic: true, store: new Vuex.Store({}), name: 'Bot'
+            name: 'Bot',
+            namespaced: true,
+            dynamic: true,
+            store: new Vuex.Store({}),
         })
     ], Bot);
     return Bot;

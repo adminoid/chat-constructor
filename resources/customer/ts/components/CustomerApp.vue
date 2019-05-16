@@ -1,10 +1,9 @@
 <template lang="pug">
   .row.no-gutters
     aside.sidebar.col-md-3
-      h2.sidebar__header Sidebar
       ul.sidebar__area
         li(v-for="link in links")
-          a(href="#") {{ link }}
+          router-link(:to="link.link") {{ link.name }}
     section.col-md-9.right-area
       .top-panel
         top-button
@@ -24,9 +23,18 @@
     name: "CustomerApp";
 
     links = [
-      'Боты',
-      'Информация',
-      'Личный кабинет',
+      {
+        name: 'В начало',
+        link: '/'
+      },
+      {
+        name: 'Информация',
+        link: 'info'
+      },
+      {
+        name: 'Личный кабинет',
+        link: 'profile'
+      }
     ];
 
     mounted () {
@@ -49,12 +57,9 @@
   .sidebar
     height: calc(100vh - 60px)
     background: #8d8d8d
-    .sidebar__header
-      height: 60px
-      margin: 10px 10px -10px
     .sidebar__area
       background: #b4b4b4
-      height: calc(100% - 80px)
+      height: calc(100% - 20px)
       margin: 10px 0 10px 10px
       border-radius: 5px
       padding: 10px
