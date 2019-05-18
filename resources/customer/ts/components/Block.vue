@@ -28,36 +28,13 @@
   import ConnectorCreate from './ConnectorCreate.vue'
   // import * as _ from 'lodash'
 
-  const DropAreaModule = namespace('DropAreaModule');
+  const BotModel = namespace('Bot');
 
   @Component({
+    //@ts-ignore
     components: { ConnectorOutput, ConnectorCreate },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
-
-    @DropAreaModule.Mutation checkCreateConnector;
-    @DropAreaModule.State dd;
-
-    @Prop({}) id!: number;
-    @Prop({}) itemData!: object;
-    @Prop({}) active: boolean;
-
-    @Watch('dd', { deep: true })
-    onItemsChanged() {
-      // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-
-      // console.log('watching ' + this.id);
-
-      this.checkCreateConnector(this.id);
-      this.$forceUpdate();
-
-    }
-
-    created() {
-
-      this.checkCreateConnector(this.id);
-
-    }
 
   }
 

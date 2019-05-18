@@ -25,13 +25,14 @@
   import * as _ from 'lodash'
   import Block from './Block.vue'
   import DragItemWrapper from './DragItemWrapper.vue'
-
+  import LineSvg from './LineSvg.vue'
+  import ConnectorClone from './ConnectorClone.vue'
   const BlockModel = namespace('Block');
 
   @Component({
-    // components: { DragItemWrapper, BlockBase, ConnectorClone, LineSvg },
+    components: { DragItemWrapper, Block, ConnectorClone, LineSvg },
   })
-  export default class DropArea extends Vue {
+  export default class BlocksArea extends Vue {
 
     @BlockModel.State items;
     @BlockModel.State dd;

@@ -2,7 +2,7 @@ import * as tslib_1 from "tslib";
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Bot from "./modules/Bot";
-// import Block from "./modules/Block";
+import Block from "./modules/Block";
 Vue.use(Vuex);
 export default new Vuex.Store({
     actions: {
@@ -15,15 +15,21 @@ export default new Vuex.Store({
                             return [4 /*yield*/, context.dispatch('Bot/createBot')];
                         case 1:
                             _a.sent();
-                            _a.label = 2;
-                        case 2: return [2 /*return*/];
+                            return [3 /*break*/, 4];
+                        case 2:
+                            if (!(typeOfNew === 'block')) return [3 /*break*/, 4];
+                            return [4 /*yield*/, context.dispatch('Block/createBlock')];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4: return [2 /*return*/];
                     }
                 });
             });
         },
     },
     modules: {
-        Bot: Bot //, Block
+        Bot: Bot, Block: Block
     }
 });
 //# sourceMappingURL=index.js.map
