@@ -48,13 +48,11 @@ export default class Block extends VuexModule {
 
   botId: -1;
 
-  baseUrl (botId) {
-    return 'bot/' + botId + '/blocks';
-  }
+  baseUrl: 'private/bots';
 
   @Action({ commit: 'updateBlocks', rawError: true })
-  async fetchBlocks( botId ) {
-    return await axios.get(this.baseUrl(botId));
+  async fetchBlocks( botId1 ) {
+    return await axios.get(`private/bots/${botId1}/blocks`);
   }
   @Mutation
   updateBots( blocks ) {

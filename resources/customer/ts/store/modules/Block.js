@@ -32,14 +32,11 @@ var Block = /** @class */ (function (_super) {
         };
         return _this;
     }
-    Block.prototype.baseUrl = function (botId) {
-        return 'bot/' + botId + '/blocks';
-    };
-    Block.prototype.fetchBlocks = function (botId) {
+    Block.prototype.fetchBlocks = function (botId1) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get(this.baseUrl(botId))];
+                    case 0: return [4 /*yield*/, axios.get("private/bots/" + botId1 + "/blocks")];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

@@ -8,11 +8,11 @@ export default new Vuex.Store({
             return tslib_1.__awaiter(this, void 0, void 0, function () {
                 return tslib_1.__generator(this, function (_a) {
                     if (typeOfNew === 'bot') {
-                        console.log('bOt');
+                        console.log('==bOt');
                         // await context.dispatch('Bot/createBot');
                     }
                     else if (typeOfNew === 'block') {
-                        console.log('blOck');
+                        console.log('--blOck');
                         // await context.dispatch('Block/createBlock');
                     }
                     return [2 /*return*/];

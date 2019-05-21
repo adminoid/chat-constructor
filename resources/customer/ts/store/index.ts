@@ -9,12 +9,12 @@ export default new Vuex.Store({
     async createEntity(context, typeOfNew) {
 
       if (typeOfNew === 'bot') {
-        console.log('bOt');
+        console.log('==bOt');
         // await context.dispatch('Bot/createBot');
       }
 
       else if (typeOfNew === 'block') {
-        console.log('blOck');
+        console.log('--blOck');
         // await context.dispatch('Block/createBlock');
       }
 
