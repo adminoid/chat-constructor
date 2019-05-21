@@ -4,14 +4,22 @@ import {
   Mutation,
   Action,
 } from 'vuex-module-decorators'
+
+import axios from 'axios'
 import * as _ from 'lodash'
+import Vuex from 'vuex';
+import Vue from 'vue'
+Vue.use(Vuex);
 
 @Module({
   name: 'Block',
   namespaced: true,
-  store: {},
+  dynamic: true,
+  store: new Vuex.Store({}),
 })
 export default class Block extends VuexModule {
+
+  $route;
 
   items = [];
 
@@ -37,6 +45,21 @@ export default class Block extends VuexModule {
       bottom: -1,
     }
   };
+
+  botId: -1;
+
+  baseUrl (botId) {
+    return 'bot/' + botId + '/blocks';
+  }
+
+  @Action({ commit: 'updateBlocks', rawError: true })
+  async fetchBlocks( botId ) {
+    return await axios.get(this.baseUrl(botId));
+  }
+  @Mutation
+  updateBots( blocks ) {
+    this.items = blocks.data;
+  }
 
   @Mutation
   setActiveTargetId( id: number ) {

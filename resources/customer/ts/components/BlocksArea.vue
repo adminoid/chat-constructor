@@ -22,32 +22,51 @@
 
   import { Vue, Component, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
-  import * as _ from 'lodash'
-  import Block from './Block.vue'
   import DragItemWrapper from './DragItemWrapper.vue'
+  import BlockBase from './BlockBase.vue'
+  // import ConnectorClone from './ConnectorClone.vue'
   import LineSvg from './LineSvg.vue'
-  import ConnectorClone from './ConnectorClone.vue'
-  const BlockModel = namespace('Block');
+  import * as _ from 'lodash'
+
+  const BlockModule = namespace('Block');
 
   @Component({
-    components: { DragItemWrapper, Block, ConnectorClone, LineSvg },
+    //@ts-ignore
+    components: { DragItemWrapper, BlockBase, LineSvg },
   })
   export default class BlocksArea extends Vue {
 
-    @BlockModel.State items;
-    @BlockModel.State dd;
-    @BlockModel.State area;
-    @BlockModel.Mutation setAreaBoundaries;
-    @BlockModel.Mutation dragDropDataReset;
-    @BlockModel.Mutation updateCoords;
-    @BlockModel.Mutation updateEndLineCoords;
-    @BlockModel.Mutation setActiveTargetId;
+    @BlockModule.Action fetchBlocks;
+
+    @BlockModule.State items;
+    @BlockModule.State dd;
+    @BlockModule.State area;
+    @BlockModule.Mutation setAreaBoundaries;
+    @BlockModule.Mutation dragDropDataReset;
+    @BlockModule.Mutation updateCoords;
+    @BlockModule.Mutation updateEndLineCoords;
+    @BlockModule.Mutation setActiveTargetId;
 
     lines = [];
 
     closest = 20;
 
     connectorWidth = 16;
+
+    botId: any;
+
+    created () {
+      this.botId = this.$route.params.botId;
+      this.fetchBlocks(this.botId );
+      // console.log(this.$route.params); // {botId: "17"}
+    }
+
+    mounted () {
+      this.setupSizesOfArea();
+      this.lines = this.makeLinesFromItems();
+    }
+
+    // botId = this.$route.params.;
 
     @Watch('items', { deep: true })
     onItemsChanged() {
@@ -121,7 +140,7 @@
             $items: any = this.$refs.items,
             $beginItem = _.find($items, ['id', this.dd.id]);
 
-          // update sourceCoords (BlockModel\updateEndLineCoords)
+          // update sourceCoords (BlockModule\updateEndLineCoords)
           this.updateEndLineCoords({
             itemId: this.dd.id,
             coords: $beginItem.getLineEndCoords(),
@@ -208,11 +227,7 @@
       }
 
       this.dragDropDataReset();
-    }
 
-    mounted () {
-      this.setupSizesOfArea();
-      this.lines = this.makeLinesFromItems();
     }
 
   }

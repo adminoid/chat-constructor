@@ -1,6 +1,10 @@
 import * as tslib_1 from "tslib";
 import { Module, VuexModule, Mutation, Action, } from 'vuex-module-decorators';
+import axios from 'axios';
 import * as _ from 'lodash';
+import Vuex from 'vuex';
+import Vue from 'vue';
+Vue.use(Vuex);
 var Block = /** @class */ (function (_super) {
     tslib_1.__extends(Block, _super);
     function Block() {
@@ -28,6 +32,22 @@ var Block = /** @class */ (function (_super) {
         };
         return _this;
     }
+    Block.prototype.baseUrl = function (botId) {
+        return 'bot/' + botId + '/blocks';
+    };
+    Block.prototype.fetchBlocks = function (botId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, axios.get(this.baseUrl(botId))];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Block.prototype.updateBots = function (blocks) {
+        this.items = blocks.data;
+    };
     Block.prototype.setActiveTargetId = function (id) {
         if (id > 0) {
             this.dd.targetId = id;
@@ -179,6 +199,12 @@ var Block = /** @class */ (function (_super) {
         configurable: true
     });
     tslib_1.__decorate([
+        Action({ commit: 'updateBlocks', rawError: true })
+    ], Block.prototype, "fetchBlocks", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "updateBots", null);
+    tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setActiveTargetId", null);
     tslib_1.__decorate([
@@ -218,7 +244,8 @@ var Block = /** @class */ (function (_super) {
         Module({
             name: 'Block',
             namespaced: true,
-            store: {},
+            dynamic: true,
+            store: new Vuex.Store({}),
         })
     ], Block);
     return Block;

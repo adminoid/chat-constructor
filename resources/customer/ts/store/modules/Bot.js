@@ -11,6 +11,7 @@ var Bot = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.baseUrl = 'private/bots';
         _this.bots = [];
+        _this.activeBotId = -1;
         return _this;
     }
     Bot.prototype.fetchBots = function () {

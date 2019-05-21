@@ -23,6 +23,8 @@ export default class Bot extends VuexModule {
 
   bots = [];
 
+  activeBotId = -1;
+
   @Action({ commit: 'updateBots', rawError: true })
   async fetchBots() {
     return await axios.get(this.baseUrl)

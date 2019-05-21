@@ -24,17 +24,39 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  import ConnectorOutput from './ConnectorOutput.vue'
-  import ConnectorCreate from './ConnectorCreate.vue'
+  // import ConnectorOutput from './ConnectorOutput'
+  // import ConnectorCreate from './ConnectorCreate'
   // import * as _ from 'lodash'
 
-  const BotModel = namespace('Bot');
+  const BlockModule = namespace('Block');
 
-  @Component({
-    //@ts-ignore
-    components: { ConnectorOutput, ConnectorCreate },
-  })
+  // @Component({
+  //   components: { ConnectorOutput, ConnectorCreate },
+  // })
+  @Component
   export default class BlockBase extends mixins(EndLineMixin) {
+
+    @BlockModule.Mutation checkCreateConnector;
+    @BlockModule.State dd;
+
+    @Prop({}) id!: number;
+    @Prop({}) itemData!: object;
+    @Prop({}) active: boolean;
+
+    @Watch('dd', { deep: true })
+    onItemsChanged() {
+      // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
+
+      this.checkCreateConnector(this.id);
+      this.$forceUpdate();
+
+    }
+
+    created() {
+
+      this.checkCreateConnector(this.id);
+
+    }
 
   }
 

@@ -1,9 +1,6 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
 import Bot from "./modules/Bot";
 import Block from "./modules/Block";
-
-Vue.use(Vuex);
 
 export default new Vuex.Store({
 
@@ -12,11 +9,13 @@ export default new Vuex.Store({
     async createEntity(context, typeOfNew) {
 
       if (typeOfNew === 'bot') {
-        await context.dispatch('Bot/createBot');
+        console.log('bOt');
+        // await context.dispatch('Bot/createBot');
       }
 
       else if (typeOfNew === 'block') {
-        await context.dispatch('Block/createBlock');
+        console.log('blOck');
+        // await context.dispatch('Block/createBlock');
       }
 
     },
