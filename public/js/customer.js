@@ -31197,7 +31197,6 @@ var BlocksArea = /** @class */ (function (_super) {
         var _this = this;
         if (this.dd.dragging) {
             var left_1 = +Number(e.clientX - this.area.boundaries.left).toFixed(), top_1 = +Number(e.clientY - this.area.boundaries.top).toFixed();
-            console.log(left_1, top_1);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
                 left_1 = this.dd.elementOffset.left;
             }

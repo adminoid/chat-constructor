@@ -110,8 +110,6 @@
         let left = +Number(e.clientX - this.area.boundaries.left).toFixed(),
           top = +Number(e.clientY - this.area.boundaries.top).toFixed();
 
-        console.log(left, top);
-
         if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
           left = this.dd.elementOffset.left;
         }

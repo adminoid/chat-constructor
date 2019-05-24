@@ -8,6 +8,7 @@
     .base-block__footer
       .output-connectors
 
+
 </template>
 
 <script lang="ts">
