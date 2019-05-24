@@ -19,7 +19,8 @@ class CreateBlocksTable extends Migration
             $table->unsignedInteger('client_input_type_id')->nullable();
             $table->unsignedBigInteger('bot_id')->nullable();
             $table->timestamps();
-
+            $table->boolean('active')->default(true);
+            $table->string('component')->default('BlockBase');
             $table->foreign('bot_id')
                 ->references('id')->on('bots')
                 ->onDelete('cascade');

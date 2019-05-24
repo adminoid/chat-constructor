@@ -6,6 +6,7 @@ use App\Bot;
 
 class BlocksTableSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -15,12 +16,14 @@ class BlocksTableSeeder extends Seeder
     {
 
         $bot = Bot::first();
-
-        $bot->each(static function ($locBot) {
+        $num = random_int(1, 5);
+        $bot->each(static function ($locBot) use ($num){
             $locBot->blocks()->saveMany(
-                factory(Block::class, 5)->create()
+                factory(Block::class, $num)->create()
             );
         });
 
     }
+
+
 }

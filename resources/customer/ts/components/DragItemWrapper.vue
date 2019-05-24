@@ -13,7 +13,7 @@
   import { namespace } from 'vuex-class'
   import { getCursorOffset } from '../helpers'
 
-  const DropAreaModule = namespace('DropAreaModule');
+  const BlockModule = namespace('Block');
 
   type positionInterface = {
     left: number,
@@ -44,7 +44,7 @@
 
     @Prop({}) id: number;
 
-    @DropAreaModule.Mutation dragDropDataSet;
+    @BlockModule.Mutation dragDropDataSet;
 
     dragStart (e) {
 

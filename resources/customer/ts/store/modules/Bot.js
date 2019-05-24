@@ -27,7 +27,7 @@ var Bot = /** @class */ (function (_super) {
     Bot.prototype.updateBots = function (bots) {
         this.bots = bots.data;
     };
-    Bot.prototype.createBot = function (type) {
+    Bot.prototype.createBot = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
@@ -35,7 +35,7 @@ var Bot = /** @class */ (function (_super) {
                             'name': 'Billy' + Math.floor(Math.random() * 6) + 1
                         })];
                     case 1: 
-                    // console.log(type); // todo: add TypeBot/TypeBot
+                    // console.log(type); // todo: add TypeBot/TypeBlock
                     return [2 /*return*/, _a.sent()];
                 }
             });

@@ -62,9 +62,9 @@ Vuex Router sync: <https://github.com/vuejs/vuex-router-sync>
     + make markup
     + make delete button
   + [x] click delete button - call deleteBot() 
-  + [ ] remove deleted bot from botsArea
+  + [x] remove deleted bot from botsArea
 - Vuex Store (modules/Bot)
-  - [ ] **fetchBots, deleteBot, createBot actions to axios mock**
+  - [-] **fetchBots, deleteBot, createBot actions to axios mock**
 
 fix list for **BotsArea tests**:  
 - think about updates bots after all operations

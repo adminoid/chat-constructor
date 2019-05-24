@@ -12,16 +12,24 @@ var EndLine = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EndLine.prototype.getLineEndCoords = function () {
-        var areaBoundaries = store.state.DropAreaModule.area.boundaries;
-        var clientRect = this.$el.getBoundingClientRect();
-        var paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left, top = clientRect.top - areaBoundaries.top;
+        // console.log(store.state);
+        // return;
+        // let areaBoundaries = store.state.Blocks.area.boundaries,
+        //   clientRect = this.$el.getBoundingClientRect(),
+        //   paddingLeft = clientRect.width / 2,
+        //   left = clientRect.left - areaBoundaries.left,
+        //   top = clientRect.top - areaBoundaries.top;
         return {
-            left: left + paddingLeft,
-            top: top,
+            left: 964,
+            top: 2
         };
+        // return {
+        //   left: left + paddingLeft,
+        //   top: top,
+        // };
     };
-    EndLine.prototype.mounted = function () {
-        store.commit('DropAreaModule/updateEndLineCoords', {
+    EndLine.prototype.created = function () {
+        store.commit('Block/updateEndLineCoords', {
             itemId: this.id,
             coords: this.getLineEndCoords(),
         });

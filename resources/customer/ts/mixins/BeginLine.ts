@@ -15,7 +15,7 @@ export default class BeginLine extends Vue {
 
   getLineBeginCoords () {
 
-    let areaBoundaries = store.state.DropAreaModule.area.boundaries;
+    let areaBoundaries = store.state.Block.area.boundaries;
     let clientRect = this.$el.getBoundingClientRect();
 
     let paddingLeft = clientRect.width / 2,

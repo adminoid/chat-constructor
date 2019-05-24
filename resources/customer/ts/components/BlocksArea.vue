@@ -3,11 +3,11 @@
   #drop-area(@mousemove="mousemoveHandler" @mouseup="mouseupHandler")
     drag-item-wrapper(
     v-for="(item, index) in items"
-    :key="index"
+    :key="item.id"
     :idx="index"
-    :id="item.id"
     :position="item.position")
       component(
+      class="itemComponent"
       ref="items"
       :is="item.component"
       :active="item.active"
@@ -22,11 +22,13 @@
 
   import { Vue, Component, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
+  import * as _ from 'lodash'
+
   import DragItemWrapper from './DragItemWrapper.vue'
   import BlockBase from './BlockBase.vue'
   // import ConnectorClone from './ConnectorClone.vue'
   import LineSvg from './LineSvg.vue'
-  import * as _ from 'lodash'
+
 
   const BlockModule = namespace('Block');
 
@@ -53,12 +55,11 @@
 
     connectorWidth = 16;
 
-    botId: any;
+    botId;
 
     created () {
-      this.botId = this.$route.params.botId;
-      this.fetchBlocks(this.botId );
-      // console.log(this.$route.params); // {botId: "17"}
+      this.botId = +this.$route.params.botId;
+      this.fetchBlocks(this.botId);
     }
 
     mounted () {
@@ -70,15 +71,7 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
-      // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-
       this.lines = this.makeLinesFromItems();
-
-      // this.lines = _.debounce( <any>function (this) {
-      //   console.log(this.lines);
-      //   return this.makeLinesFromItems();
-      // }.bind(this), 1000);
-
     }
 
     makeLinesFromItems() {
@@ -116,6 +109,8 @@
 
         let left = +Number(e.clientX - this.area.boundaries.left).toFixed(),
           top = +Number(e.clientY - this.area.boundaries.top).toFixed();
+
+        console.log(left, top);
 
         if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
           left = this.dd.elementOffset.left;

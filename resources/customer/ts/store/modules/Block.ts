@@ -48,14 +48,12 @@ export default class Block extends VuexModule {
 
   botId: -1;
 
-  baseUrl: 'private/bots';
-
   @Action({ commit: 'updateBlocks', rawError: true })
-  async fetchBlocks( botId1 ) {
-    return await axios.get(`private/bots/${botId1}/blocks`);
+  async fetchBlocks() {
+    return await axios.get(`private/bots/2/blocks`);
   }
   @Mutation
-  updateBots( blocks ) {
+  updateBlocks( blocks ) {
     this.items = blocks.data;
   }
 
@@ -230,7 +228,7 @@ export default class Block extends VuexModule {
     }
 
     let blockData: object = {
-      blockName: `Block №${this.context.getters['itemsTotal']}`
+      blockName: `__Block)_`
     };
 
     _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));

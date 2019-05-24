@@ -11,6 +11,10 @@ class Block extends Model
 
     protected $fillable = ['name'];
 
+//    protected $appends = array('itemData' => []);
+//    public function getAvailabilityAttribute()
+//    {return $this->calculateAvailability();}
+
     public function bot() : BelongsTo
     {
         return $this->belongsTo(Bot::class);

@@ -12,7 +12,7 @@ var BeginLine = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     BeginLine.prototype.getLineBeginCoords = function () {
-        var areaBoundaries = store.state.DropAreaModule.area.boundaries;
+        var areaBoundaries = store.state.Block.area.boundaries;
         var clientRect = this.$el.getBoundingClientRect();
         var paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left + paddingLeft, top = clientRect.bottom - areaBoundaries.top;
         return {

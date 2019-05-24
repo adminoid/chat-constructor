@@ -4,17 +4,9 @@
     .base-block__header
       .input-connector(:class="{ active: active }")
     .base-block__body
-      p {{ itemData.blockName }}
+      p Hello!
     .base-block__footer
       .output-connectors
-        component(
-        v-for="(connector, index) in itemData.connectors.output"
-        :key="index"
-        :connectorId="index"
-        :blockId="id"
-        :connectorData="connector"
-        :is="'connector-' + connector.type"
-        ref="output-connectors")
 
 </template>
 
@@ -24,16 +16,15 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  // import ConnectorOutput from './ConnectorOutput'
-  // import ConnectorCreate from './ConnectorCreate'
+  import ConnectorOutput from './ConnectorOutput.vue'
+  import ConnectorCreate from './ConnectorCreate.vue'
   // import * as _ from 'lodash'
 
   const BlockModule = namespace('Block');
 
-  // @Component({
-  //   components: { ConnectorOutput, ConnectorCreate },
-  // })
-  @Component
+  @Component({
+    components: { ConnectorOutput, ConnectorCreate },
+  })
   export default class BlockBase extends mixins(EndLineMixin) {
 
     @BlockModule.Mutation checkCreateConnector;
@@ -46,6 +37,8 @@
     @Watch('dd', { deep: true })
     onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
+
+      // console.log('watching ' + this.id);
 
       this.checkCreateConnector(this.id);
       this.$forceUpdate();
@@ -81,41 +74,41 @@
     .base-block__footer
       position: relative
 
-  .output-connectors
-    padding: 2px
-    margin: 0
-    list-style: none
-    display: flex
-    position: relative
-    bottom: -11px
-    border: 1px dashed #7c7c7c
-    border-radius: 3px
+    .output-connectors
+      padding: 2px
+      margin: 0
+      list-style: none
+      display: flex
+      position: relative
+      bottom: -11px
+      border: 1px dashed #7c7c7c
+      border-radius: 3px
 
-  .input-connector
-    padding: 2px
-    margin: 0
-    list-style: none
-    display: flex
-    position: relative
-    top: -8px
-    height: 16px
-    width: 16px
-    border: 1px dashed #4046b8
-    background: #575dff
-    border-radius: 3px
-    opacity: .7
-    &.active
-      background: #f09593
+    .input-connector
+      padding: 2px
+      margin: 0
+      list-style: none
+      display: flex
+      position: relative
+      top: -8px
+      height: 16px
+      width: 16px
+      border: 1px dashed #4046b8
+      background: #575dff
+      border-radius: 3px
+      opacity: .7
+      &.active
+        background: #f09593
 
-  .connector_new
-    height: 16px
-    width: 16px
-    border: 1px dashed #2a9055
-    background: #31b06f
-    border-radius: 3px
-    &:hover
-      border: 1px solid #005f26
-      background: #2a9055
-      cursor: pointer
+    .connector_new
+      height: 16px
+      width: 16px
+      border: 1px dashed #2a9055
+      background: #31b06f
+      border-radius: 3px
+      &:hover
+        border: 1px solid #005f26
+        background: #2a9055
+        cursor: pointer
 
 </style>

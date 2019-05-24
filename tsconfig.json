@@ -28,6 +28,5 @@
     "resources/**/*.ts",
     "tests/vue/**/*.spec.js"
   ],
-  "exclude": [ "node_modules" ],
-  "files": ["resources/customer/ts/types/ts-shim.d.ts"]
+  "exclude": [ "node_modules" ]
 }

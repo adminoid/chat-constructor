@@ -32,17 +32,17 @@ var Block = /** @class */ (function (_super) {
         };
         return _this;
     }
-    Block.prototype.fetchBlocks = function (botId1) {
+    Block.prototype.fetchBlocks = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get("private/bots/" + botId1 + "/blocks")];
+                    case 0: return [4 /*yield*/, axios.get("private/bots/2/blocks")];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    Block.prototype.updateBots = function (blocks) {
+    Block.prototype.updateBlocks = function (blocks) {
         this.items = blocks.data;
     };
     Block.prototype.setActiveTargetId = function (id) {
@@ -167,7 +167,7 @@ var Block = /** @class */ (function (_super) {
                     params.component = 'BlockBase';
                 }
                 blockData = {
-                    blockName: "Block \u2116" + this.context.getters['itemsTotal']
+                    blockName: "__Block)_"
                 };
                 _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
                 if (_.has(params, 'connectors')) {
@@ -200,7 +200,7 @@ var Block = /** @class */ (function (_super) {
     ], Block.prototype, "fetchBlocks", null);
     tslib_1.__decorate([
         Mutation
-    ], Block.prototype, "updateBots", null);
+    ], Block.prototype, "updateBlocks", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setActiveTargetId", null);
