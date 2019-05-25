@@ -30,7 +30,6 @@ export default class Block extends VuexModule {
     dragging: false,
     id: -1,
     elementOffset: -1,
-    newIdx: -1,
     targetId: -1,
     sourcePath: [],
   };
@@ -110,8 +109,6 @@ export default class Block extends VuexModule {
   @Mutation
   updateCoords( coords ) {
 
-    console.info('0--00-0-00-0');
-
     if( this.dd.dragging ) {
 
       let actualCoords = {};
@@ -119,8 +116,6 @@ export default class Block extends VuexModule {
       Object.keys( coords ).map(( key ) => {
         actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
-
-      // console.info(actualCoords);
 
       this.items[this.items.length-1].position = actualCoords;
 
@@ -198,9 +193,6 @@ export default class Block extends VuexModule {
 
   @Mutation
   checkCreateConnector(blockId: number) {
-
-    // console.log(this.items);
-    // console.log(blockId);
 
     let item = _.find(this.items, ['id', blockId]),
       connectorsOutput = _.get(item.itemData, 'connectors.output') || [],

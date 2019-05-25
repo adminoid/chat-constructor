@@ -18,7 +18,6 @@ var Block = /** @class */ (function (_super) {
             dragging: false,
             id: -1,
             elementOffset: -1,
-            newIdx: -1,
             targetId: -1,
             sourcePath: [],
         };
@@ -82,13 +81,11 @@ var Block = /** @class */ (function (_super) {
     };
     Block.prototype.updateCoords = function (coords) {
         var _this = this;
-        console.info('0--00-0-00-0');
         if (this.dd.dragging) {
             var actualCoords_1 = {};
             Object.keys(coords).map(function (key) {
                 actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
             });
-            // console.info(actualCoords);
             this.items[this.items.length - 1].position = actualCoords_1;
         }
     };
@@ -144,8 +141,6 @@ var Block = /** @class */ (function (_super) {
         }
     };
     Block.prototype.checkCreateConnector = function (blockId) {
-        // console.log(this.items);
-        // console.log(blockId);
         var item = _.find(this.items, ['id', blockId]), connectorsOutput = _.get(item.itemData, 'connectors.output') || [], createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
         if (!createButtonCnt || createButtonCnt < 1) {
             !_.has(item, 'itemData') && _.set(item, 'itemData', { connectors: { output: [] } });

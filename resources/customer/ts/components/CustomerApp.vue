@@ -26,27 +26,8 @@
       {
         name: 'В начало',
         link: '/'
-      },
-      {
-        name: 'Информация',
-        link: 'info'
-      },
-      {
-        name: 'Личный кабинет',
-        link: 'profile'
       }
     ];
-
-    mounted () {
-
-      // this.$confirm('Test confirm');
-
-      // console.log(result);
-      // this is plugin: `resources/customer/ts/plugins/windows.ts`
-      // this.$confirm('Test confirm')
-      //   .then(_=> console.log('confirmed'))
-      //   .catch(e=> console.error(e.message))
-    }
 
   }
 

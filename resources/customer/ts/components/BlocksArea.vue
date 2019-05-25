@@ -14,8 +14,9 @@
       :active="item.active"
       :id="item.id"
       :key="item.id"
-      :itemData="item.itemData") {{ item }}
+      :itemData="item.itemData") {{ item.id }}
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
+    pre.br {{ this.dd }}
 
 </template>
 
@@ -127,8 +128,6 @@
           top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
         }
 
-        console.log(this.dd);
-
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
@@ -152,12 +151,11 @@
               item.sourceCoords.top > top - this.closest
             );
 
-            _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+            _.map(
 
-              console.log(connector);
+              _.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
               if( item.id === this.dd.id ) {
-
                 let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
                 if( $beginConnector ) {
                   connector.coords = $beginConnector.getLineBeginCoords();
@@ -178,12 +176,14 @@
                 }
               }
 
-            });
-          });
+            }
+            );
 
-          this.updateCoords({
-            left: left,
-            top: top,
+            this.updateCoords({
+              left: left,
+              top: top,
+            });
+
           });
 
         }
@@ -240,5 +240,9 @@
     position: relative
     background: #d7d7d7
     border-radius: 5px
+    .br
+      position: absolute
+      bottom: 10px
+      right: 10px
 
 </style>

@@ -4,7 +4,7 @@
     .base-block__header
       .input-connector(:class="{ active: active }")
     .base-block__body
-      p Hello! {{ id }}
+      p Hello {{ id }}!
     .base-block__footer
       .output-connectors
 
@@ -17,14 +17,14 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  import ConnectorOutput from './ConnectorOutput.vue'
-  import ConnectorCreate from './ConnectorCreate.vue'
+  // import ConnectorOutput from './ConnectorOutput.vue'
+  // import ConnectorCreate from './ConnectorCreate.vue'
   // import * as _ from 'lodash'
 
   const BlockModule = namespace('Block');
 
   @Component({
-    components: { ConnectorOutput, ConnectorCreate },
+    // components: { ConnectorOutput, ConnectorCreate },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 
@@ -47,11 +47,8 @@
     }
 
     created() {
-
       this.checkCreateConnector(this.id);
-
     }
-
   }
 
 </script>
