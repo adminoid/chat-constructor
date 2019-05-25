@@ -4,6 +4,7 @@
     drag-item-wrapper(
     v-for="(item, index) in items"
     :key="item.id"
+    :id="item.id"
     :idx="index"
     :position="item.position")
       component(
@@ -13,7 +14,7 @@
       :active="item.active"
       :id="item.id"
       :key="item.id"
-      :itemData="item.itemData")
+      :itemData="item.itemData") {{ item }}
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
 
 </template>
@@ -126,6 +127,8 @@
           top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
         }
 
+        console.log(this.dd);
+
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
@@ -150,6 +153,8 @@
             );
 
             _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+
+              console.log(connector);
 
               if( item.id === this.dd.id ) {
 

@@ -19,8 +19,6 @@ Vue.use(Vuex);
 })
 export default class Block extends VuexModule {
 
-  $route;
-
   items = [];
 
   blockPositionSteps = {
@@ -49,8 +47,8 @@ export default class Block extends VuexModule {
   botId: -1;
 
   @Action({ commit: 'updateBlocks', rawError: true })
-  async fetchBlocks() {
-    return await axios.get(`private/bots/2/blocks`);
+  async fetchBlocks(id) {
+    return await axios.get(`private/bots/${id}/blocks`);
   }
   @Mutation
   updateBlocks( blocks ) {
@@ -111,6 +109,9 @@ export default class Block extends VuexModule {
 
   @Mutation
   updateCoords( coords ) {
+
+    console.info('0--00-0-00-0');
+
     if( this.dd.dragging ) {
 
       let actualCoords = {};
@@ -118,6 +119,8 @@ export default class Block extends VuexModule {
       Object.keys( coords ).map(( key ) => {
         actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
+
+      // console.info(actualCoords);
 
       this.items[this.items.length-1].position = actualCoords;
 

@@ -22,7 +22,6 @@ Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
 Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 {
 
-    // except || only
     Route::resource('bots', 'BotsController', ['only' => [
         'index', 'store', 'update', 'destroy'
     ]]);
@@ -33,13 +32,3 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
 });
 
-//Route::prefix('private')->middleware(['auth:web'])->group(function () {
-//    // except || only
-//    Route::resource('bots', 'BotsController', ['only' => [
-//        'index', 'store', 'update', 'destroy'
-//    ]]);
-//    Route::resource('blocks', 'BlocksController')->except([
-//        'index', 'create', 'show', 'edit' // only: 'store', 'update', 'destroy' and 'index'
-//    ]);
-//    Route::get('bot/{botId?}/blocks', 'BlocksController@index');
-//});

@@ -32,11 +32,11 @@ var Block = /** @class */ (function (_super) {
         };
         return _this;
     }
-    Block.prototype.fetchBlocks = function () {
+    Block.prototype.fetchBlocks = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get("private/bots/2/blocks")];
+                    case 0: return [4 /*yield*/, axios.get("private/bots/" + id + "/blocks")];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -82,11 +82,13 @@ var Block = /** @class */ (function (_super) {
     };
     Block.prototype.updateCoords = function (coords) {
         var _this = this;
+        console.info('0--00-0-00-0');
         if (this.dd.dragging) {
             var actualCoords_1 = {};
             Object.keys(coords).map(function (key) {
                 actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
             });
+            // console.info(actualCoords);
             this.items[this.items.length - 1].position = actualCoords_1;
         }
     };

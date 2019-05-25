@@ -50,6 +50,8 @@
 
       let cursorOffset = getCursorOffset(e);
 
+      // console.log(this);
+
       this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
 
     }

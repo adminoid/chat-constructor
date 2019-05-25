@@ -85,13 +85,27 @@ fix list for **BotsArea tests**:
   - move block
 
 ### Next planning and todo
+- check items from module BlockBase
+- check what is block showing in other bots
+- moving...
 
-- 
-- block layout
-- font smaller
-- confirm delete block
-- phpunit create block
+### Try make structure for make all chain from items to itemData connectors
 
----
+BlocksArea has:
+  items ~= block-base // :itemData="item.itemData")
+  itemData.connectors.output
+  
+items
+  item(BaseBlock or ConnectorClone)
+    .itemData <- universal any data archive for any drap&drop component
+
+1. Get all data once or partial loading logic chain?
+**Block\fetchBlocks()**
+item (BlockBase)
+  coords (coords for virtual top connector
+    connector x multiply (output)
+      coords
+
+Block->outputs()
 
 

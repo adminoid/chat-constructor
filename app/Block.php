@@ -37,7 +37,7 @@ class Block extends Model
 
     public function outputSources() : HasMany
     {
-        return $this->hasMany(Output::class, 'target_block_id', 'id');
+        return $this->hasMany(Output::class, 'block_id_target', 'id');
     }
 
 }

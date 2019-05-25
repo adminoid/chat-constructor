@@ -31209,6 +31209,7 @@ var BlocksArea = /** @class */ (function (_super) {
             if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
                 top_1 = (this.area.boundaries.bottom - this.area.boundaries.top) - this.dd.elementOffset.bottom;
             }
+            console.log(this.dd);
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
                 var isNewLine_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]).component === 'ConnectorClone', $items = this.$refs.items, $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"]($items, ['id', this.dd.id]);
@@ -31224,6 +31225,7 @@ var BlocksArea = /** @class */ (function (_super) {
                         item.sourceCoords.top < top_1 + _this.closest &&
                         item.sourceCoords.top > top_1 - _this.closest);
                     lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
+                        console.log(connector);
                         if (item.id === _this.dd.id) {
                             var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
                             if ($beginConnector) {
@@ -31566,6 +31568,7 @@ var DragItemWrapper = /** @class */ (function (_super) {
     }
     DragItemWrapper.prototype.dragStart = function (e) {
         var cursorOffset = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["getCursorOffset"])(e);
+        // console.log(this);
         this.dragDropDataSet({ id: this.id, idx: this.idx, offset: cursorOffset });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -32393,19 +32396,13 @@ var render = function() {
         class: { active: _vm.active }
       })
     ]),
-    _vm._m(0),
-    _vm._m(1)
+    _c("div", { staticClass: "base-block__body" }, [
+      _c("p", [_vm._v("Hello! " + _vm._s(_vm.id))])
+    ]),
+    _vm._m(0)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "base-block__body" }, [
-      _c("p", [_vm._v("Hello!")])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -32446,20 +32443,27 @@ var render = function() {
       _vm._l(_vm.items, function(item, index) {
         return _c(
           "drag-item-wrapper",
-          { key: item.id, attrs: { idx: index, position: item.position } },
+          {
+            key: item.id,
+            attrs: { id: item.id, idx: index, position: item.position }
+          },
           [
-            _c(item.component, {
-              key: item.id,
-              ref: "items",
-              refInFor: true,
-              tag: "component",
-              staticClass: "itemComponent",
-              attrs: {
-                active: item.active,
-                id: item.id,
-                itemData: item.itemData
-              }
-            })
+            _c(
+              item.component,
+              {
+                key: item.id,
+                ref: "items",
+                refInFor: true,
+                tag: "component",
+                staticClass: "itemComponent",
+                attrs: {
+                  active: item.active,
+                  id: item.id,
+                  itemData: item.itemData
+                }
+              },
+              [_vm._v(_vm._s(item))]
+            )
           ],
           1
         )
@@ -50947,14 +50951,14 @@ function (_super) {
     return _this;
   }
 
-  Block.prototype.fetchBlocks = function () {
+  Block.prototype.fetchBlocks = function (id) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
       return tslib_1.__generator(this, function (_a) {
         switch (_a.label) {
           case 0:
             return [4
             /*yield*/
-            , _axios.default.get("private/bots/2/blocks")];
+            , _axios.default.get("private/bots/" + id + "/blocks")];
 
           case 1:
             return [2
@@ -51022,11 +51026,14 @@ function (_super) {
   Block.prototype.updateCoords = function (coords) {
     var _this = this;
 
+    console.info('0--00-0-00-0');
+
     if (this.dd.dragging) {
       var actualCoords_1 = {};
       Object.keys(coords).map(function (key) {
         actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
-      });
+      }); // console.info(actualCoords);
+
       this.items[this.items.length - 1].position = actualCoords_1;
     }
   };
