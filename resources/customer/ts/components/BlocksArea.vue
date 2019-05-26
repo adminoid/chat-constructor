@@ -152,40 +152,37 @@
               item.sourceCoords.top > top - this.closest
             );
 
-            _.map(
+            if( _.get(item, 'itemData.connectors.output') ) {
+              _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
-              _.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+                  // TODO: $beginItem updates not properly {Frozen error}
+                  if (item.id === this.dd.id) {
 
-                // TODO: $beginItem updates not properly {Frozen error}
-                if( item.id === this.dd.id ) {
-                  if( $beginItem.$refs ) {
-
-                    if( !_.isEmpty($beginItem.$refs) ) {
+                    if (!_.isEmpty($beginItem.$refs)) {
                       let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
-                      if( $beginConnector ) {
+                      if ($beginConnector) {
                         connector.coords = $beginConnector.getLineBeginCoords();
                       }
                     }
 
                   }
-                }
 
-                if( connector.target == this.dd.id ) {
-                  connector.targetCoords = $beginItem.getLineEndCoords();
-                }
-                // check if target item not itself
-                else {
-                  item.active = isActive;
-                  if( isActive ) {
-                    // TODO: if active, set target id to dd
-                    this.setActiveTargetId(item.id);
-                    left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth/2;
-                    top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth/2;
+                  if (connector.target == this.dd.id) {
+                    connector.targetCoords = $beginItem.getLineEndCoords();
                   }
-                }
+                  // check if target item not itself
+                  else {
+                    item.active = isActive;
+                    if (isActive) {
+                      // TODO: if active, set target id to dd
+                      this.setActiveTargetId(item.id);
+                      left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
+                      top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
+                    }
+                  }
 
-              }
-            );
+                });
+            }
 
             this.updateCoords({
               left: left,

@@ -31224,10 +31224,10 @@ var BlocksArea = /** @class */ (function (_super) {
                         item.sourceCoords.left > left_1 - _this.closest &&
                         item.sourceCoords.top < top_1 + _this.closest &&
                         item.sourceCoords.top > top_1 - _this.closest);
-                    lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
-                        // TODO: $beginItem updates not properly {Frozen error}
-                        if (item.id === _this.dd.id) {
-                            if ($beginItem_1.$refs) {
+                    if (lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output')) {
+                        lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
+                            // TODO: $beginItem updates not properly {Frozen error}
+                            if (item.id === _this.dd.id) {
                                 if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
                                     var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
                                     if ($beginConnector) {
@@ -31235,21 +31235,21 @@ var BlocksArea = /** @class */ (function (_super) {
                                     }
                                 }
                             }
-                        }
-                        if (connector.target == _this.dd.id) {
-                            connector.targetCoords = $beginItem_1.getLineEndCoords();
-                        }
-                        // check if target item not itself
-                        else {
-                            item.active = isActive;
-                            if (isActive) {
-                                // TODO: if active, set target id to dd
-                                _this.setActiveTargetId(item.id);
-                                left_1 = item.sourceCoords.left + _this.dd.elementOffset.left - _this.connectorWidth / 2;
-                                top_1 = item.sourceCoords.top + _this.dd.elementOffset.top - _this.connectorWidth / 2;
+                            if (connector.target == _this.dd.id) {
+                                connector.targetCoords = $beginItem_1.getLineEndCoords();
                             }
-                        }
-                    });
+                            // check if target item not itself
+                            else {
+                                item.active = isActive;
+                                if (isActive) {
+                                    // TODO: if active, set target id to dd
+                                    _this.setActiveTargetId(item.id);
+                                    left_1 = item.sourceCoords.left + _this.dd.elementOffset.left - _this.connectorWidth / 2;
+                                    top_1 = item.sourceCoords.top + _this.dd.elementOffset.top - _this.connectorWidth / 2;
+                                }
+                            }
+                        });
+                    }
                     _this.updateCoords({
                         left: left_1,
                         top: top_1,
