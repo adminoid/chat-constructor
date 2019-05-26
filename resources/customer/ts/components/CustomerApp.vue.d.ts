@@ -5,5 +5,4 @@ export default class CustomerApp extends Vue {
         name: string;
         link: string;
     }[];
-    mounted(): void;
 }

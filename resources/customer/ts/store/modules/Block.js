@@ -87,7 +87,7 @@ var Block = /** @class */ (function (_super) {
             Object.keys(coords).map(function (key) {
                 actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
             });
-            console.info(actualCoords_1);
+            // console.info(actualCoords);
             this.items[this.items.length - 1].position = actualCoords_1;
         }
     };

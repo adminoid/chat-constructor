@@ -156,19 +156,17 @@
 
               _.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
-
-                // console.log(_.get(item, 'itemData.connectors.output'));
-                // console.log(item); // this is item from server (block) TODO one point: item.id = 6
-                // console.info(this.dd); // TODO: this.dd.id = 10, dragging
-
+                // TODO: $beginItem updates not properly {Frozen error}
                 if( item.id === this.dd.id ) {
+                  if( $beginItem.$refs ) {
 
-                  // TODO This undefined everywhere
-                  console.log($beginItem.$refs['output-connectors']);
+                    if( !_.isEmpty($beginItem.$refs) ) {
+                      let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                      if( $beginConnector ) {
+                        connector.coords = $beginConnector.getLineBeginCoords();
+                      }
+                    }
 
-                  let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
-                  if( $beginConnector ) {
-                    connector.coords = $beginConnector.getLineBeginCoords();
                   }
                 }
 

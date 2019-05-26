@@ -118,7 +118,7 @@ export default class Block extends VuexModule {
         actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
 
-      console.info(actualCoords);
+      // console.info(actualCoords);
 
       this.items[this.items.length-1].position = actualCoords;
 

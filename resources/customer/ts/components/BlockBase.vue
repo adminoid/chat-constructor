@@ -7,6 +7,14 @@
       p  {{ item.name }}
     .base-block__footer
       .output-connectors
+        component(
+          v-for="(connector, index) in itemData.connectors.output"
+          :key="index"
+          :connectorId="index"
+          :blockId="id"
+          :connectorData="connector"
+          :is="'connector-' + connector.type"
+          ref="output-connectors")
 
 
 </template>
@@ -17,14 +25,14 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  // import ConnectorOutput from './ConnectorOutput.vue'
-  // import ConnectorCreate from './ConnectorCreate.vue'
-  // import * as _ from 'lodash'
+  import ConnectorOutput from './ConnectorOutput.vue'
+  import ConnectorCreate from './ConnectorCreate.vue'
+  import * as _ from 'lodash'
 
   const BlockModule = namespace('Block');
 
   @Component({
-    // components: { ConnectorOutput, ConnectorCreate },
+    components: { ConnectorOutput, ConnectorCreate },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 
@@ -39,8 +47,6 @@
     @Watch('dd', { deep: true })
     onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-
-      // console.log('watching ' + this.id);
 
       this.checkCreateConnector(this.id);
       this.$forceUpdate();
