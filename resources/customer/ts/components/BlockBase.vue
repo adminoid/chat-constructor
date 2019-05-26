@@ -4,7 +4,7 @@
     .base-block__header
       .input-connector(:class="{ active: active }")
     .base-block__body
-      p Hello {{ id }}!
+      p  {{ item.name }}
     .base-block__footer
       .output-connectors
 
@@ -31,6 +31,7 @@
     @BlockModule.Mutation checkCreateConnector;
     @BlockModule.State dd;
 
+    @Prop({}) item!: object;
     @Prop({}) id!: number;
     @Prop({}) itemData!: object;
     @Prop({}) active: boolean;

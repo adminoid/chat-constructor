@@ -2,19 +2,20 @@
 
   #drop-area(@mousemove="mousemoveHandler" @mouseup="mouseupHandler")
     drag-item-wrapper(
-    v-for="(item, index) in items"
-    :key="item.id"
-    :id="item.id"
-    :idx="index"
-    :position="item.position")
-      component(
-      class="itemComponent"
-      ref="items"
-      :is="item.component"
-      :active="item.active"
-      :id="item.id"
+      v-for="(item, index) in items"
       :key="item.id"
-      :itemData="item.itemData") {{ item.id }}
+      :id="item.id"
+      :idx="index"
+      :position="item.position")
+      component(
+        class="itemComponent"
+        ref="items"
+        :is="item.component"
+        :active="item.active"
+        :id="item.id"
+        :key="item.id"
+        :item="item"
+        :itemData="item.itemData") {{ item.id }} ) {{ item.name }}
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre.br {{ this.dd }}
 
@@ -155,28 +156,37 @@
 
               _.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
-              if( item.id === this.dd.id ) {
-                let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
-                if( $beginConnector ) {
-                  connector.coords = $beginConnector.getLineBeginCoords();
-                }
-              }
 
-              if( connector.target == this.dd.id ) {
-                connector.targetCoords = $beginItem.getLineEndCoords();
-              }
-              // check if target item not itself
-              else {
-                item.active = isActive;
-                if( isActive ) {
-                  // TODO: if active, set target id to dd
-                  this.setActiveTargetId(item.id);
-                  left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth/2;
-                  top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth/2;
-                }
-              }
+                // console.log(_.get(item, 'itemData.connectors.output'));
+                // console.log(item); // this is item from server (block) TODO one point: item.id = 6
+                // console.info(this.dd); // TODO: this.dd.id = 10, dragging
 
-            }
+                if( item.id === this.dd.id ) {
+
+                  // TODO This undefined everywhere
+                  console.log($beginItem.$refs['output-connectors']);
+
+                  let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                  if( $beginConnector ) {
+                    connector.coords = $beginConnector.getLineBeginCoords();
+                  }
+                }
+
+                if( connector.target == this.dd.id ) {
+                  connector.targetCoords = $beginItem.getLineEndCoords();
+                }
+                // check if target item not itself
+                else {
+                  item.active = isActive;
+                  if( isActive ) {
+                    // TODO: if active, set target id to dd
+                    this.setActiveTargetId(item.id);
+                    left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth/2;
+                    top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth/2;
+                  }
+                }
+
+              }
             );
 
             this.updateCoords({

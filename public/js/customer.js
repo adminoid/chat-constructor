@@ -31009,6 +31009,9 @@ var BlockBase = /** @class */ (function (_super) {
     ], BlockBase.prototype, "dd", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
+    ], BlockBase.prototype, "item", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
     ], BlockBase.prototype, "id", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
@@ -31132,7 +31135,12 @@ var BlocksArea = /** @class */ (function (_super) {
                         item.sourceCoords.top < top_1 + _this.closest &&
                         item.sourceCoords.top > top_1 - _this.closest);
                     lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
+                        // console.log(_.get(item, 'itemData.connectors.output'));
+                        // console.log(item); // this is item from server (block) TODO one point: item.id = 6
+                        // console.info(this.dd); // TODO: this.dd.id = 10, dragging
                         if (item.id === _this.dd.id) {
+                            // TODO This undefined everywhere
+                            console.log($beginItem_1.$refs['output-connectors']);
                             var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
                             if ($beginConnector) {
                                 connector.coords = $beginConnector.getLineBeginCoords();
@@ -32170,7 +32178,7 @@ var render = function() {
       })
     ]),
     _c("div", { staticClass: "base-block__body" }, [
-      _c("p", [_vm._v("Hello " + _vm._s(_vm.id) + "!")])
+      _c("p", [_vm._v(" " + _vm._s(_vm.item.name))])
     ]),
     _vm._m(0)
   ])
@@ -32232,10 +32240,11 @@ var render = function() {
                 attrs: {
                   active: item.active,
                   id: item.id,
+                  item: item,
                   itemData: item.itemData
                 }
               },
-              [_vm._v(_vm._s(item.id))]
+              [_vm._v(_vm._s(item.id) + " ) " + _vm._s(item.name))]
             )
           ],
           1
@@ -50410,6 +50419,7 @@ function (_super) {
       dragging: false,
       id: -1,
       elementOffset: -1,
+      newIdx: -1,
       targetId: -1,
       sourcePath: []
     };
@@ -50504,6 +50514,7 @@ function (_super) {
       Object.keys(coords).map(function (key) {
         actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
       });
+      console.info(actualCoords_1);
       this.items[this.items.length - 1].position = actualCoords_1;
     }
   };

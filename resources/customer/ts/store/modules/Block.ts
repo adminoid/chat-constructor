@@ -30,6 +30,7 @@ export default class Block extends VuexModule {
     dragging: false,
     id: -1,
     elementOffset: -1,
+    newIdx: -1,
     targetId: -1,
     sourcePath: [],
   };
@@ -116,6 +117,8 @@ export default class Block extends VuexModule {
       Object.keys( coords ).map(( key ) => {
         actualCoords[key] = coords[key] - this.dd.elementOffset[key];
       });
+
+      console.info(actualCoords);
 
       this.items[this.items.length-1].position = actualCoords;
 

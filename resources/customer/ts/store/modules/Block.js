@@ -18,6 +18,7 @@ var Block = /** @class */ (function (_super) {
             dragging: false,
             id: -1,
             elementOffset: -1,
+            newIdx: -1,
             targetId: -1,
             sourcePath: [],
         };
@@ -86,6 +87,7 @@ var Block = /** @class */ (function (_super) {
             Object.keys(coords).map(function (key) {
                 actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
             });
+            console.info(actualCoords_1);
             this.items[this.items.length - 1].position = actualCoords_1;
         }
     };
