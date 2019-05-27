@@ -32384,7 +32384,7 @@ var render = function() {
       })
     ]),
     _c("div", { staticClass: "base-block__body" }, [
-      _c("p", [_vm._v(" " + _vm._s(_vm.item.name))])
+      _c("p", [_vm._v(" " + _vm._s(_vm.item))])
     ]),
     _c("div", { staticClass: "base-block__footer" }, [
       _c(
@@ -32453,12 +32453,7 @@ var render = function() {
                 refInFor: true,
                 tag: "component",
                 staticClass: "itemComponent",
-                attrs: {
-                  active: item.active,
-                  id: item.id,
-                  item: item,
-                  itemData: item.itemData
-                }
+                attrs: { active: item.active, id: item.id, itemData: item }
               },
               [_vm._v(_vm._s(item.id) + " ) " + _vm._s(item.name))]
             )

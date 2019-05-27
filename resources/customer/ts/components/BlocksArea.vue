@@ -14,8 +14,7 @@
         :active="item.active"
         :id="item.id"
         :key="item.id"
-        :item="item"
-        :itemData="item.itemData") {{ item.id }} ) {{ item.name }}
+        :itemData="item") {{ item.id }} ) {{ item.name }}
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre.br {{ this.dd }}
 

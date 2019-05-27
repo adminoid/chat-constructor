@@ -4,7 +4,7 @@
     .base-block__header
       .input-connector(:class="{ active: active }")
     .base-block__body
-      p  {{ item.name }}
+      p  {{ item }}
     .base-block__footer
       .output-connectors
         component(
