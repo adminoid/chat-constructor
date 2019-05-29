@@ -4,17 +4,15 @@
     drag-item-wrapper(
       v-for="(item, index) in items"
       :key="item.id"
-      :id="item.id"
       :idx="index"
       :position="item.position")
+
       component(
-        class="itemComponent"
         ref="items"
         :is="item.component"
-        :active="item.active"
         :id="item.id"
-        :key="item.id"
-        :itemData="item") {{ item.id }} ) {{ item.name }}
+        :itemData="item"
+        class="itemComponent")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre.br {{ this.dd }}
 
@@ -29,18 +27,19 @@
   import DragItemWrapper from './DragItemWrapper.vue'
   import BlockBase from './BlockBase.vue'
   // import ConnectorClone from './ConnectorClone.vue'
-  import LineSvg from './LineSvg.vue'
 
 
   const BlockModule = namespace('Block');
 
   @Component({
     //@ts-ignore
-    components: { DragItemWrapper, BlockBase, LineSvg },
+    components: { DragItemWrapper, BlockBase },
   })
   export default class BlocksArea extends Vue {
 
+    @BlockModule.State blocks;
     @BlockModule.Action fetchBlocks;
+    @BlockModule.Action deleteBlock;
 
     @BlockModule.State items;
     @BlockModule.State dd;
@@ -58,6 +57,8 @@
     connectorWidth = 16;
 
     botId;
+
+    id;
 
     created () {
       this.botId = +this.$route.params.botId;
@@ -133,7 +134,9 @@
 
           let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
             $items: any = this.$refs.items,
-            $beginItem = _.find($items, ['id', this.dd.id]);
+            $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+
+            // console.log($beginItem.getLineEndCoords());
 
           // update sourceCoords (BlockModule\updateEndLineCoords)
           this.updateEndLineCoords({

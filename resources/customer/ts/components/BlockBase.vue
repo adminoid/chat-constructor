@@ -2,19 +2,11 @@
 
   .base-block
     .base-block__header
-      .input-connector(:class="{ active: active }")
+      .input-connector
     .base-block__body
-      p  {{ item }}
+      p {{ itemData.id + ' ' + itemData.name }}
     .base-block__footer
       .output-connectors
-        component(
-          v-for="(connector, index) in itemData.connectors.output"
-          :key="index"
-          :connectorId="index"
-          :blockId="id"
-          :connectorData="connector"
-          :is="'connector-' + connector.type"
-          ref="output-connectors")
 
 
 </template>
@@ -25,37 +17,24 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  import ConnectorOutput from './ConnectorOutput.vue'
-  import ConnectorCreate from './ConnectorCreate.vue'
-  import * as _ from 'lodash'
 
   const BlockModule = namespace('Block');
 
   @Component({
-    components: { ConnectorOutput, ConnectorCreate },
+    // components: { ConnectorOutput, ConnectorCreate },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 
-    @BlockModule.Mutation checkCreateConnector;
     @BlockModule.State dd;
 
-    @Prop({}) item!: object;
-    @Prop({}) id!: number;
-    @Prop({}) itemData!: object;
-    @Prop({}) active: boolean;
+    @Prop({}) itemData!: any;
 
     @Watch('dd', { deep: true })
     onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-
-      this.checkCreateConnector(this.id);
       this.$forceUpdate();
-
     }
 
-    created() {
-      this.checkCreateConnector(this.id);
-    }
   }
 
 </script>

@@ -82,6 +82,8 @@ var Block = /** @class */ (function (_super) {
     };
     Block.prototype.updateCoords = function (coords) {
         var _this = this;
+        console.log('this.updateCoords');
+        // TODO - work here, find how change coordinates of moved `DragItemWrapper`
         if (this.dd.dragging) {
             var actualCoords_1 = {};
             Object.keys(coords).map(function (key) {
