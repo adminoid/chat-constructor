@@ -45,11 +45,12 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.updateBlocks = function (blocks) {
         this.items = blocks.data;
     };
-    Block.prototype.setActiveTargetId = function (id) {
-        if (id > 0) {
-            this.dd.targetId = id;
-        }
-    };
+    // @Mutation
+    // setActiveTargetId( id: number ) {
+    //   if( id > 0 ) {
+    //     this.dd.targetId = id;
+    //   }
+    // }
     Block.prototype.setBeginLineCoords = function (payload) {
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
         _.map(this.items, function (item) {
@@ -202,9 +203,6 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateBlocks", null);
-    tslib_1.__decorate([
-        Mutation
-    ], Block.prototype, "setActiveTargetId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setBeginLineCoords", null);

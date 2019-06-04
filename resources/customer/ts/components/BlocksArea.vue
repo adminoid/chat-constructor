@@ -1,17 +1,13 @@
 <template lang="pug">
 
-  #drop-area(@mousemove="mousemoveHandler" @mouseup="mouseupHandler")
+  #drop-area(@mousemove="mousemoveHandler")
     drag-item-wrapper(
-      v-for="(item, index) in items"
+      v-for="item in items"
       :key="item.id"
-      :idx="index"
-      :position="item.position")
-
+      :itemData="item")
       component(
         ref="items"
         :is="item.component"
-        :id="item.id"
-        :itemData="item"
         class="itemComponent")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre.br {{ this.dd }}
@@ -37,13 +33,13 @@
   })
   export default class BlocksArea extends Vue {
 
-    @BlockModule.State blocks;
     @BlockModule.Action fetchBlocks;
     @BlockModule.Action deleteBlock;
 
     @BlockModule.State items;
     @BlockModule.State dd;
     @BlockModule.State area;
+
     @BlockModule.Mutation setAreaBoundaries;
     @BlockModule.Mutation dragDropDataReset;
     @BlockModule.Mutation updateCoords;
@@ -60,6 +56,8 @@
 
     id;
 
+    $route;
+
     created () {
       this.botId = +this.$route.params.botId;
       this.fetchBlocks(this.botId);
@@ -69,8 +67,6 @@
       this.setupSizesOfArea();
       this.lines = this.makeLinesFromItems();
     }
-
-    // botId = this.$route.params.;
 
     @Watch('items', { deep: true })
     onItemsChanged() {

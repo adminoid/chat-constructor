@@ -31010,7 +31010,6 @@ var BlocksArea = /** @class */ (function (_super) {
         this.setupSizesOfArea();
         this.lines = this.makeLinesFromItems();
     };
-    // botId = this.$route.params.;
     BlocksArea.prototype.onItemsChanged = function () {
         this.lines = this.makeLinesFromItems();
     };
@@ -31123,9 +31122,6 @@ var BlocksArea = /** @class */ (function (_super) {
         }
         this.dragDropDataReset();
     };
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        BlockModule.State
-    ], BlocksArea.prototype, "blocks", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Action
     ], BlocksArea.prototype, "fetchBlocks", void 0);
@@ -31290,30 +31286,19 @@ var DragItemWrapper = /** @class */ (function (_super) {
     }
     DragItemWrapper.prototype.dragStart = function (e) {
         var cursorOffset = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["getCursorOffset"])(e);
-        this.dragDropDataSet({ id: this.id, idx: this.idx, offset: cursorOffset });
+        console.info(cursorOffset);
+        // this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
     };
     Object.defineProperty(DragItemWrapper.prototype, "position", {
         get: function () {
-            return {
-                left: this.x,
-                top: this.y
-            };
+            return { left: this.itemData.x + 'px', top: this.itemData.y + 'px' };
         },
         enumerable: true,
         configurable: true
     });
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
-    ], DragItemWrapper.prototype, "x", void 0);
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
-    ], DragItemWrapper.prototype, "y", void 0);
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
-    ], DragItemWrapper.prototype, "idx", void 0);
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
-    ], DragItemWrapper.prototype, "id", void 0);
+    ], DragItemWrapper.prototype, "itemData", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Mutation
     ], DragItemWrapper.prototype, "dragDropDataSet", void 0);
@@ -31928,29 +31913,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "base-block" }, [
-    _vm._m(0),
-    _c("div", { staticClass: "base-block__body" }, [
-      _c("p", [_vm._v(_vm._s(_vm.itemData.id + " " + _vm.itemData.name))])
-    ]),
-    _vm._m(1)
-  ])
+  return _vm._m(0)
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "base-block__header" }, [
-      _c("div", { staticClass: "input-connector" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "base-block__footer" }, [
-      _c("div", { staticClass: "output-connectors" })
+    return _c("div", { staticClass: "base-block" }, [
+      _c("div", { staticClass: "base-block__header" }, [
+        _c("div", { staticClass: "input-connector" })
+      ]),
+      _c("div", { staticClass: "base-block__body" }, [
+        _c("p", [_vm._v("Базовый блок")])
+      ]),
+      _c("div", { staticClass: "base-block__footer" }, [
+        _c("div", { staticClass: "output-connectors" })
+      ])
     ])
   }
 ]
@@ -31977,22 +31956,18 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      attrs: { id: "drop-area" },
-      on: { mousemove: _vm.mousemoveHandler, mouseup: _vm.mouseupHandler }
-    },
+    { attrs: { id: "drop-area" }, on: { mousemove: _vm.mousemoveHandler } },
     [
-      _vm._l(_vm.items, function(item, index) {
+      _vm._l(_vm.items, function(item) {
         return _c(
           "drag-item-wrapper",
-          { key: item.id, attrs: { idx: index, position: item.position } },
+          { key: item.id, attrs: { itemData: item } },
           [
             _c(item.component, {
               ref: "items",
               refInFor: true,
               tag: "component",
-              staticClass: "itemComponent",
-              attrs: { id: item.id, itemData: item }
+              staticClass: "itemComponent"
             })
           ],
           1
@@ -49596,8 +49571,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getCursorOffset = void 0;
 
-// import ModalWindow from "../components/ModalWindow.vue"
-// import Vue from 'vue'
 var getCursorOffset = function getCursorOffset(e) {
   var leftOffset = +Number(e.clientX - e.currentTarget.getBoundingClientRect().left).toFixed(),
       topOffset = +Number(e.clientY - e.currentTarget.getBoundingClientRect().top).toFixed(),
@@ -49609,49 +49582,7 @@ var getCursorOffset = function getCursorOffset(e) {
     right: rightOffset,
     bottom: bottomOffset
   };
-}; // declare module 'vue/types/vue' {
-//   interface Vue {
-//     closeHandler: any;
-//   }
-// }
-//
-// export const confirm = (title, message) => {
-//
-//   return new Promise((resolve, reject) => {
-//
-//     const dialog = new Vue({
-//
-//       methods: {
-//         closeHandler(fn, arg) {
-//           return function() {
-//             fn(arg);
-//             dialog.$destroy();
-//             dialog.$el.remove();
-//           };
-//         }
-//       },
-//
-//       render(h) {
-//         return h(ModalWindow, {
-//           props: {
-//             title,
-//             message,
-//           },
-//           on: {
-//             confirm: this.closeHandler(resolve),
-//             cancel: this.closeHandler(reject, new Error('canceled'))
-//           }
-//         });
-//       }
-//
-//     }).$mount();
-//
-//     document.body.appendChild(dialog.$el);
-//
-//   });
-//
-// };
-
+};
 
 exports.getCursorOffset = getCursorOffset;
 
@@ -50086,13 +50017,13 @@ function (_super) {
 
   Block.prototype.updateBlocks = function (blocks) {
     this.items = blocks.data;
-  };
+  }; // @Mutation
+  // setActiveTargetId( id: number ) {
+  //   if( id > 0 ) {
+  //     this.dd.targetId = id;
+  //   }
+  // }
 
-  Block.prototype.setActiveTargetId = function (id) {
-    if (id > 0) {
-      this.dd.targetId = id;
-    }
-  };
 
   Block.prototype.setBeginLineCoords = function (payload) {
     var itemId = payload.itemId,
@@ -50294,8 +50225,6 @@ function (_super) {
   })], Block.prototype, "fetchBlocks", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "updateBlocks", null);
-
-  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "setActiveTargetId", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "setBeginLineCoords", null);
 

@@ -9,7 +9,7 @@ use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Block extends Model
 {
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'x', 'y'];
 
 //    protected $appends = array('itemData' => []);
 //    public function getAvailabilityAttribute()

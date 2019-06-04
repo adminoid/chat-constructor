@@ -55,12 +55,12 @@ export default class Block extends VuexModule {
     this.items = blocks.data;
   }
 
-  @Mutation
-  setActiveTargetId( id: number ) {
-    if( id > 0 ) {
-      this.dd.targetId = id;
-    }
-  }
+  // @Mutation
+  // setActiveTargetId( id: number ) {
+  //   if( id > 0 ) {
+  //     this.dd.targetId = id;
+  //   }
+  // }
 
   @Mutation
   setBeginLineCoords( payload ) {
