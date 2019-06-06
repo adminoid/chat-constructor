@@ -1,15 +1,19 @@
 <template lang="pug">
 
-  #drop-area(@mousemove="mousemoveHandler")
+  #drop-area(@mousemove="mousemoveHandler" @mouseup="mouseupHandler")
     drag-item-wrapper(
-      v-for="item in items"
-      :key="item.id"
-      :itemData="item")
+      v-for="(item, index) in items"
+      :key="index"
+      :idx="index"
+      :id="item.id"
+      :x="item.x"
+      :y="item.y")
       component(
         ref="items"
         :is="item.component"
-        class="itemComponent")
-    line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
+        :active="item.active"
+        :itemData="item")
+      line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre.br {{ this.dd }}
 
 </template>
@@ -128,6 +132,8 @@
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
+          console.info('dragging id: ' + this.dd.id);
+
           let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
             $items: any = this.$refs.items,
             $beginItem = _.find($items, ['itemData.id', this.dd.id]);
@@ -200,30 +206,32 @@
 
       if( this.dd.sourcePath.length === 2 ) {
 
-        let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
-          sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
+        console.info('mouseUp event');
 
-        if( sourceConnector.type === 'create' ) {
-
-          if( this.dd.targetId >= 0 ) {
-            sourceConnector.target = this.dd.targetId;
-            sourceConnector.type = 'output';
-          }
-          else {
-            // remove target from output connector
-            let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
-              source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
-
-            _.unset(source, 'target');
-            _.unset(source, 'targetCoords');
-
-            this.lines = this.makeLinesFromItems();
-
-          }
-
-          _.remove( this.items, (item: any) => item.id === this.dd.id );
-
-        }
+        // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
+        //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
+        //
+        // if( sourceConnector.type === 'create' ) {
+        //
+        //   if( this.dd.targetId >= 0 ) {
+        //     sourceConnector.target = this.dd.targetId;
+        //     sourceConnector.type = 'output';
+        //   }
+        //   else {
+        //     // remove target from output connector
+        //     let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
+        //       source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
+        //
+        //     _.unset(source, 'target');
+        //     _.unset(source, 'targetCoords');
+        //
+        //     this.lines = this.makeLinesFromItems();
+        //
+        //   }
+        //
+        //   _.remove( this.items, (item: any) => item.id === this.dd.id );
+        //
+        // }
 
       }
 

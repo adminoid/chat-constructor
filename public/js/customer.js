@@ -31054,6 +31054,7 @@ var BlocksArea = /** @class */ (function (_super) {
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
+                console.info('dragging id: ' + this.dd.id);
                 var isNewLine_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]).component === 'ConnectorClone', $items = this.$refs.items, $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"]($items, ['itemData.id', this.dd.id]);
                 // console.log($beginItem.getLineEndCoords());
                 // update sourceCoords (BlockModule\updateEndLineCoords)
@@ -31102,23 +31103,32 @@ var BlocksArea = /** @class */ (function (_super) {
         }
     };
     BlocksArea.prototype.mouseupHandler = function () {
-        var _this = this;
         if (this.dd.sourcePath.length === 2) {
-            var source = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.sourcePath[0]]), sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
-            if (sourceConnector.type === 'create') {
-                if (this.dd.targetId >= 0) {
-                    sourceConnector.target = this.dd.targetId;
-                    sourceConnector.type = 'output';
-                }
-                else {
-                    // remove target from output connector
-                    var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.sourcePath[0]]), source_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
-                    lodash__WEBPACK_IMPORTED_MODULE_3__["unset"](source_1, 'target');
-                    lodash__WEBPACK_IMPORTED_MODULE_3__["unset"](source_1, 'targetCoords');
-                    this.lines = this.makeLinesFromItems();
-                }
-                lodash__WEBPACK_IMPORTED_MODULE_3__["remove"](this.items, function (item) { return item.id === _this.dd.id; });
-            }
+            console.info('mouseUp event');
+            // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
+            //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
+            //
+            // if( sourceConnector.type === 'create' ) {
+            //
+            //   if( this.dd.targetId >= 0 ) {
+            //     sourceConnector.target = this.dd.targetId;
+            //     sourceConnector.type = 'output';
+            //   }
+            //   else {
+            //     // remove target from output connector
+            //     let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
+            //       source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
+            //
+            //     _.unset(source, 'target');
+            //     _.unset(source, 'targetCoords');
+            //
+            //     this.lines = this.makeLinesFromItems();
+            //
+            //   }
+            //
+            //   _.remove( this.items, (item: any) => item.id === this.dd.id );
+            //
+            // }
         }
         this.dragDropDataReset();
     };
@@ -31284,21 +31294,30 @@ var DragItemWrapper = /** @class */ (function (_super) {
     function DragItemWrapper() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    DragItemWrapper.prototype.dragStart = function (e) {
-        var cursorOffset = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["getCursorOffset"])(e);
-        console.info(cursorOffset);
-        // this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
-    };
     Object.defineProperty(DragItemWrapper.prototype, "position", {
         get: function () {
-            return { left: this.itemData.x + 'px', top: this.itemData.y + 'px' };
+            return { left: this.x + 'px', top: this.y + 'px' };
         },
         enumerable: true,
         configurable: true
     });
+    ;
+    DragItemWrapper.prototype.dragStart = function (e) {
+        var cursorOffset = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["getCursorOffset"])(e);
+        this.dragDropDataSet({ id: this.id, idx: this.idx, offset: cursorOffset });
+    };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
-    ], DragItemWrapper.prototype, "itemData", void 0);
+    ], DragItemWrapper.prototype, "x", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
+    ], DragItemWrapper.prototype, "y", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
+    ], DragItemWrapper.prototype, "id", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
+    ], DragItemWrapper.prototype, "idx", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Mutation
     ], DragItemWrapper.prototype, "dragDropDataSet", void 0);
@@ -31913,23 +31932,31 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "base-block" }, [
+    _vm._m(0),
+    _c("div", { staticClass: "base-block__body" }, [
+      _c("p", [
+        _vm._v(_vm._s(_vm.itemData.id) + ". " + _vm._s(_vm.itemData.name))
+      ])
+    ]),
+    _vm._m(1)
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "base-block" }, [
-      _c("div", { staticClass: "base-block__header" }, [
-        _c("div", { staticClass: "input-connector" })
-      ]),
-      _c("div", { staticClass: "base-block__body" }, [
-        _c("p", [_vm._v("Базовый блок")])
-      ]),
-      _c("div", { staticClass: "base-block__footer" }, [
-        _c("div", { staticClass: "output-connectors" })
-      ])
+    return _c("div", { staticClass: "base-block__header" }, [
+      _c("div", { staticClass: "input-connector" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "base-block__footer" }, [
+      _c("div", { staticClass: "output-connectors" })
     ])
   }
 ]
@@ -31956,28 +31983,34 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { attrs: { id: "drop-area" }, on: { mousemove: _vm.mousemoveHandler } },
+    {
+      attrs: { id: "drop-area" },
+      on: { mousemove: _vm.mousemoveHandler, mouseup: _vm.mouseupHandler }
+    },
     [
-      _vm._l(_vm.items, function(item) {
+      _vm._l(_vm.items, function(item, index) {
         return _c(
           "drag-item-wrapper",
-          { key: item.id, attrs: { itemData: item } },
+          {
+            key: index,
+            attrs: { idx: index, id: item.id, x: item.x, y: item.y }
+          },
           [
             _c(item.component, {
               ref: "items",
               refInFor: true,
               tag: "component",
-              staticClass: "itemComponent"
+              attrs: { active: item.active, itemData: item }
+            }),
+            _vm._l(_vm.lines, function(line, index) {
+              return _c("line-svg", {
+                key: "line-" + index,
+                attrs: { lineData: line }
+              })
             })
           ],
-          1
+          2
         )
-      }),
-      _vm._l(_vm.lines, function(line, index) {
-        return _c("line-svg", {
-          key: "line-" + index,
-          attrs: { lineData: line }
-        })
       }),
       _c("pre", { staticClass: "br" }, [_vm._v(_vm._s(this.dd))])
     ],
@@ -50070,17 +50103,19 @@ function (_super) {
   };
 
   Block.prototype.updateCoords = function (coords) {
-    var _this = this;
-
-    console.log('this.updateCoords'); // TODO - work here, find how change coordinates of moved `DragItemWrapper`
-
+    // TODO - work here, find how change coordinates of moved `DragItemWrapper`
     if (this.dd.dragging) {
-      var actualCoords_1 = {};
-      Object.keys(coords).map(function (key) {
-        actualCoords_1[key] = coords[key] - _this.dd.elementOffset[key];
-      }); // console.info(actualCoords);
-
-      this.items[this.items.length - 1].position = actualCoords_1;
+      console.info('dragging ---- '); // let actualCoords = {};
+      //
+      // Object.keys( coords ).map(( key ) => {
+      //   actualCoords[key] = coords[key] - this.dd.elementOffset[key];
+      // });
+      //
+      // if (this.items[this.items.length-1].position) {
+      //   this.items[this.items.length-1].position = actualCoords;
+      // }
+      //
+      // this.items[this.items.length-1].position = actualCoords;
     }
   };
   /**

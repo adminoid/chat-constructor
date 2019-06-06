@@ -4,7 +4,7 @@
     .base-block__header
       .input-connector
     .base-block__body
-      p Базовый блок
+      p {{ itemData.id }}. {{ itemData.name }}
     .base-block__footer
       .output-connectors
 
@@ -17,7 +17,6 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-
 
   const BlockModule = namespace('Block');
 

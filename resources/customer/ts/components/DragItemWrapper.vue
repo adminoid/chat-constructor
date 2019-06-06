@@ -1,8 +1,9 @@
 <template lang="pug">
 
-  .drag-item-wrapper( @mousedown.prevent="dragStart"
+  .drag-item-wrapper(
+    @mousedown.prevent="dragStart"
     :style="position")
-    slot
+      slot
 
 </template>
 
@@ -17,28 +18,23 @@
   @Component
   export default class DragItemWrapper extends Vue {
 
-    @Prop({}) itemData!: any;
+    @Prop({}) x!: number;
+    @Prop({}) y!: number;
+    @Prop({}) id!: number;
+    @Prop({}) idx!: number;
 
     @BlockModule.Mutation dragDropDataSet;
+
+    get position() {
+      return {left: this.x + 'px', top: this.y + 'px'}
+    };
 
     dragStart (e) {
 
       let cursorOffset = getCursorOffset(e);
-
-      console.info(cursorOffset);
-
-      // this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
+      this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
 
     }
-
-    get position() {
-      return {left: this.itemData.x + 'px', top: this.itemData.y + 'px'};
-    }
-
-    // mounted() {
-    //   console.log(this.itemData.x, this.itemData.y);
-    //   console.log(this.position);
-    // }
 
   }
 
