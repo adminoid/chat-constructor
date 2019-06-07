@@ -82,20 +82,10 @@ var Block = /** @class */ (function (_super) {
         this.area.boundaries = data;
     };
     Block.prototype.updateCoords = function (coords) {
-        // TODO - work here, find how change coordinates of moved `DragItemWrapper`
-        if (this.dd.dragging) {
-            console.info('dragging ---- ');
-            // let actualCoords = {};
-            //
-            // Object.keys( coords ).map(( key ) => {
-            //   actualCoords[key] = coords[key] - this.dd.elementOffset[key];
-            // });
-            //
-            // if (this.items[this.items.length-1].position) {
-            //   this.items[this.items.length-1].position = actualCoords;
-            // }
-            //
-            // this.items[this.items.length-1].position = actualCoords;
+        if (coords && this.dd.dragging) {
+            var x = coords[0], y = coords[1], draggedItem = this.items[this.items.length - 1];
+            draggedItem.x = x;
+            draggedItem.y = y;
         }
     };
     /**

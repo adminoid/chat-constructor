@@ -31054,7 +31054,6 @@ var BlocksArea = /** @class */ (function (_super) {
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
-                console.info('dragging id: ' + this.dd.id);
                 var isNewLine_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]).component === 'ConnectorClone', $items = this.$refs.items, $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"]($items, ['itemData.id', this.dd.id]);
                 // console.log($beginItem.getLineEndCoords());
                 // update sourceCoords (BlockModule\updateEndLineCoords)
@@ -31094,10 +31093,7 @@ var BlocksArea = /** @class */ (function (_super) {
                             }
                         });
                     }
-                    _this.updateCoords({
-                        left: left_1,
-                        top: top_1,
-                    });
+                    _this.updateCoords([left_1, top_1]);
                 });
             }
         }
@@ -50103,19 +50099,12 @@ function (_super) {
   };
 
   Block.prototype.updateCoords = function (coords) {
-    // TODO - work here, find how change coordinates of moved `DragItemWrapper`
-    if (this.dd.dragging) {
-      console.info('dragging ---- '); // let actualCoords = {};
-      //
-      // Object.keys( coords ).map(( key ) => {
-      //   actualCoords[key] = coords[key] - this.dd.elementOffset[key];
-      // });
-      //
-      // if (this.items[this.items.length-1].position) {
-      //   this.items[this.items.length-1].position = actualCoords;
-      // }
-      //
-      // this.items[this.items.length-1].position = actualCoords;
+    if (coords && this.dd.dragging) {
+      var x = coords[0],
+          y = coords[1],
+          draggedItem = this.items[this.items.length - 1];
+      draggedItem.x = x;
+      draggedItem.y = y;
     }
   };
   /**

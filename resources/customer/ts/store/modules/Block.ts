@@ -109,24 +109,13 @@ export default class Block extends VuexModule {
 
   @Mutation
   updateCoords( coords ) {
+    if( coords && this.dd.dragging ) {
 
-    // TODO - work here, find how change coordinates of moved `DragItemWrapper`
+      let [x, y] = coords,
+        draggedItem = this.items[this.items.length-1];
 
-    if( this.dd.dragging ) {
-
-      console.info('dragging ---- ');
-
-      // let actualCoords = {};
-      //
-      // Object.keys( coords ).map(( key ) => {
-      //   actualCoords[key] = coords[key] - this.dd.elementOffset[key];
-      // });
-      //
-      // if (this.items[this.items.length-1].position) {
-      //   this.items[this.items.length-1].position = actualCoords;
-      // }
-      //
-      // this.items[this.items.length-1].position = actualCoords;
+      draggedItem.x = x;
+      draggedItem.y = y;
 
     }
   }

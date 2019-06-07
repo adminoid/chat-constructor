@@ -132,8 +132,6 @@
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
-          console.info('dragging id: ' + this.dd.id);
-
           let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
             $items: any = this.$refs.items,
             $beginItem = _.find($items, ['itemData.id', this.dd.id]);
@@ -188,10 +186,7 @@
                 });
             }
 
-            this.updateCoords({
-              left: left,
-              top: top,
-            });
+            this.updateCoords([left, top]);
 
           });
 
