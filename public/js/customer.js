@@ -31037,64 +31037,86 @@ var BlocksArea = /** @class */ (function (_super) {
         });
     };
     BlocksArea.prototype.mousemoveHandler = function (e) {
-        var _this = this;
         if (this.dd.dragging) {
-            var left_1 = +Number(e.clientX - this.area.boundaries.left).toFixed(), top_1 = +Number(e.clientY - this.area.boundaries.top).toFixed();
+            // let left = +Number(e.clientX - this.dd.elementOffset.left - this.area.boundaries.left).toFixed(),
+            //   top = +Number(e.clientY - this.dd.elementOffset.top - this.area.boundaries.top).toFixed();
+            var left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
+            // console.log(left, top); // is ok
+            // console.log(this.area.boundaries.left);
+            // console.log(this.area.boundaries.top);
+            console.log(this.dd.elementOffset.left);
+            console.log(this.dd.elementOffset.top);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
-                left_1 = this.dd.elementOffset.left;
+                left = this.dd.elementOffset.left;
             }
             if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
                 top_1 = this.dd.elementOffset.top;
             }
             if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
-                left_1 = (this.area.boundaries.right - this.area.boundaries.left) - this.dd.elementOffset.right;
+                left = (this.area.boundaries.right - this.area.boundaries.left) - this.dd.elementOffset.right;
             }
             if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
                 top_1 = (this.area.boundaries.bottom - this.area.boundaries.top) - this.dd.elementOffset.bottom;
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
-                var isNewLine_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]).component === 'ConnectorClone', $items = this.$refs.items, $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"]($items, ['itemData.id', this.dd.id]);
-                // console.log($beginItem.getLineEndCoords());
-                // update sourceCoords (BlockModule\updateEndLineCoords)
-                this.updateEndLineCoords({
-                    itemId: this.dd.id,
-                    coords: $beginItem_1.getLineEndCoords(),
-                });
-                lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
-                    var isActive = (isNewLine_1 && item.component === 'BlockBase' &&
-                        item.sourceCoords.left < left_1 + _this.closest &&
-                        item.sourceCoords.left > left_1 - _this.closest &&
-                        item.sourceCoords.top < top_1 + _this.closest &&
-                        item.sourceCoords.top > top_1 - _this.closest);
-                    if (lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output')) {
-                        lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
-                            // TODO: $beginItem updates not properly {Frozen error}
-                            if (item.id === _this.dd.id) {
-                                if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
-                                    var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
-                                    if ($beginConnector) {
-                                        connector.coords = $beginConnector.getLineBeginCoords();
-                                    }
-                                }
-                            }
-                            if (connector.target == _this.dd.id) {
-                                connector.targetCoords = $beginItem_1.getLineEndCoords();
-                            }
-                            // check if target item not itself
-                            else {
-                                item.active = isActive;
-                                if (isActive) {
-                                    // TODO: if active, set target id to dd
-                                    _this.setActiveTargetId(item.id);
-                                    left_1 = item.sourceCoords.left + _this.dd.elementOffset.left - _this.connectorWidth / 2;
-                                    top_1 = item.sourceCoords.top + _this.dd.elementOffset.top - _this.connectorWidth / 2;
-                                }
-                            }
-                        });
-                    }
-                    _this.updateCoords([left_1, top_1]);
-                });
+                this.updateCoords([left, top_1]);
+                // let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
+                //   $items: any = this.$refs.items,
+                //   $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+                //
+                //   // console.log($beginItem.getLineEndCoords());
+                //
+                // // update sourceCoords (BlockModule\updateEndLineCoords)
+                // this.updateEndLineCoords({
+                //   itemId: this.dd.id,
+                //   coords: $beginItem.getLineEndCoords(),
+                // });
+                //
+                // _.map(this.items, (item) => {
+                //
+                //   // const isActive = (
+                //   //   isNewLine && item.component === 'BlockBase' &&
+                //   //   item.sourceCoords.left < left + this.closest &&
+                //   //   item.sourceCoords.left > left - this.closest &&
+                //   //   item.sourceCoords.top < top + this.closest &&
+                //   //   item.sourceCoords.top > top - this.closest
+                //   // );
+                //   // if( _.get(item, 'itemData.connectors.output') ) {
+                //   //   _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+                //   //
+                //   //       // TODO: $beginItem updates not properly {Frozen error}
+                //   //       if (item.id === this.dd.id) {
+                //   //
+                //   //         if (!_.isEmpty($beginItem.$refs)) {
+                //   //           let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                //   //           if ($beginConnector) {
+                //   //             connector.coords = $beginConnector.getLineBeginCoords();
+                //   //           }
+                //   //         }
+                //   //
+                //   //       }
+                //   //
+                //   //       if (connector.target == this.dd.id) {
+                //   //         connector.targetCoords = $beginItem.getLineEndCoords();
+                //   //       }
+                //   //       // check if target item not itself
+                //   //       else {
+                //   //         item.active = isActive;
+                //   //         if (isActive) {
+                //   //           // TODO: if active, set target id to dd
+                //   //           this.setActiveTargetId(item.id);
+                //   //           left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
+                //   //           top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
+                //   //         }
+                //   //       }
+                //   //
+                //   //     });
+                //   // }
+                //
+                //   this.updateCoords([left, top]);
+                //
+                // });
             }
         }
     };

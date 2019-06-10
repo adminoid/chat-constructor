@@ -110,8 +110,17 @@
 
       if (this.dd.dragging) {
 
-        let left = +Number(e.clientX - this.area.boundaries.left).toFixed(),
-          top = +Number(e.clientY - this.area.boundaries.top).toFixed();
+        // let left = +Number(e.clientX - this.dd.elementOffset.left - this.area.boundaries.left).toFixed(),
+        //   top = +Number(e.clientY - this.dd.elementOffset.top - this.area.boundaries.top).toFixed();
+
+        let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left),
+          top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
+
+        // console.log(left, top); // is ok
+        // console.log(this.area.boundaries.left);
+        // console.log(this.area.boundaries.top);
+        console.log(this.dd.elementOffset.left);
+        console.log(this.dd.elementOffset.top);
 
         if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
           left = this.dd.elementOffset.left;
@@ -132,63 +141,64 @@
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
-          let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
-            $items: any = this.$refs.items,
-            $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+          this.updateCoords([left, top]);
 
-            // console.log($beginItem.getLineEndCoords());
-
-          // update sourceCoords (BlockModule\updateEndLineCoords)
-          this.updateEndLineCoords({
-            itemId: this.dd.id,
-            coords: $beginItem.getLineEndCoords(),
-          });
-
-          _.map(this.items, (item) => {
-
-            const isActive = (
-              isNewLine && item.component === 'BlockBase' &&
-              item.sourceCoords.left < left + this.closest &&
-              item.sourceCoords.left > left - this.closest &&
-              item.sourceCoords.top < top + this.closest &&
-              item.sourceCoords.top > top - this.closest
-            );
-
-            if( _.get(item, 'itemData.connectors.output') ) {
-              _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
-
-                  // TODO: $beginItem updates not properly {Frozen error}
-                  if (item.id === this.dd.id) {
-
-                    if (!_.isEmpty($beginItem.$refs)) {
-                      let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
-                      if ($beginConnector) {
-                        connector.coords = $beginConnector.getLineBeginCoords();
-                      }
-                    }
-
-                  }
-
-                  if (connector.target == this.dd.id) {
-                    connector.targetCoords = $beginItem.getLineEndCoords();
-                  }
-                  // check if target item not itself
-                  else {
-                    item.active = isActive;
-                    if (isActive) {
-                      // TODO: if active, set target id to dd
-                      this.setActiveTargetId(item.id);
-                      left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
-                      top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
-                    }
-                  }
-
-                });
-            }
-
-            this.updateCoords([left, top]);
-
-          });
+          // let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
+          //   $items: any = this.$refs.items,
+          //   $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+          //
+          //   // console.log($beginItem.getLineEndCoords());
+          //
+          // // update sourceCoords (BlockModule\updateEndLineCoords)
+          // this.updateEndLineCoords({
+          //   itemId: this.dd.id,
+          //   coords: $beginItem.getLineEndCoords(),
+          // });
+          //
+          // _.map(this.items, (item) => {
+          //
+          //   // const isActive = (
+          //   //   isNewLine && item.component === 'BlockBase' &&
+          //   //   item.sourceCoords.left < left + this.closest &&
+          //   //   item.sourceCoords.left > left - this.closest &&
+          //   //   item.sourceCoords.top < top + this.closest &&
+          //   //   item.sourceCoords.top > top - this.closest
+          //   // );
+          //   // if( _.get(item, 'itemData.connectors.output') ) {
+          //   //   _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+          //   //
+          //   //       // TODO: $beginItem updates not properly {Frozen error}
+          //   //       if (item.id === this.dd.id) {
+          //   //
+          //   //         if (!_.isEmpty($beginItem.$refs)) {
+          //   //           let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+          //   //           if ($beginConnector) {
+          //   //             connector.coords = $beginConnector.getLineBeginCoords();
+          //   //           }
+          //   //         }
+          //   //
+          //   //       }
+          //   //
+          //   //       if (connector.target == this.dd.id) {
+          //   //         connector.targetCoords = $beginItem.getLineEndCoords();
+          //   //       }
+          //   //       // check if target item not itself
+          //   //       else {
+          //   //         item.active = isActive;
+          //   //         if (isActive) {
+          //   //           // TODO: if active, set target id to dd
+          //   //           this.setActiveTargetId(item.id);
+          //   //           left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
+          //   //           top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
+          //   //         }
+          //   //       }
+          //   //
+          //   //     });
+          //   // }
+          //
+          //   this.updateCoords([left, top]);
+          //
+          // });
 
         }
 
