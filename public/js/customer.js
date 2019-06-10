@@ -31041,22 +31041,20 @@ var BlocksArea = /** @class */ (function (_super) {
             // let left = +Number(e.clientX - this.dd.elementOffset.left - this.area.boundaries.left).toFixed(),
             //   top = +Number(e.clientY - this.dd.elementOffset.top - this.area.boundaries.top).toFixed();
             var left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
-            // console.log(left, top); // is ok
-            // console.log(this.area.boundaries.left);
-            // console.log(this.area.boundaries.top);
-            console.log(this.dd.elementOffset.left);
-            console.log(this.dd.elementOffset.top);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
-                left = this.dd.elementOffset.left;
+                left = 0;
             }
             if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
-                top_1 = this.dd.elementOffset.top;
+                top_1 = 0;
             }
             if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
                 left = (this.area.boundaries.right - this.area.boundaries.left) - this.dd.elementOffset.right;
+                // TODO: make area expansion
+                console.info('// TODO: make area expansion to right');
             }
             if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
                 top_1 = (this.area.boundaries.bottom - this.area.boundaries.top) - this.dd.elementOffset.bottom;
+                console.info('// TODO: make area expansion to bottom');
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
