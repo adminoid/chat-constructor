@@ -39,6 +39,7 @@
 
     @BlockModule.Action fetchBlocks;
     @BlockModule.Action deleteBlock;
+    @BlockModule.Action saveBlockData;
 
     @BlockModule.State items;
     @BlockModule.State dd;
@@ -206,9 +207,29 @@
 
     mouseupHandler() {
 
-      if( this.dd.sourcePath.length === 2 ) {
+      // save new position to server
+      let blockId = this.dd.id,
+        botId = this.botId;
 
-        console.info('mouseUp event');
+      if( blockId > 0 ) {
+
+        let $item: any = _.find(this.$refs.items, ['itemData.id', blockId]);
+
+        let payload = {
+          'botId': botId,
+          'blockId': blockId,
+          'sendData': {
+            'x': $item.itemData.x,
+            'y': $item.itemData.y,
+            'moved': 1,
+          }
+        };
+
+        this.saveBlockData(payload);
+
+      }
+
+      // if( this.dd.sourcePath.length === 2 ) {
 
         // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
         //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
@@ -235,7 +256,7 @@
         //
         // }
 
-      }
+      // }
 
       this.dragDropDataReset();
 

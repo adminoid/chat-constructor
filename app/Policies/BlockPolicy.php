@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\User;
 use App\Block;
+use App\Bot;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BlockPolicy
@@ -36,13 +37,16 @@ class BlockPolicy
     /**
      * Determine whether the user can update the block.
      *
-     * @param  \App\User  $user
-     * @param  \App\Block  $block
-     * @return mixed
+     * @param User $user
+     * @param Block $block
+     * @param Bot $bot
+     * @return bool
      */
     public function update(User $user, Block $block)
     {
+
         return $user->id === $block->bot->user_id;
+
     }
 
     /**

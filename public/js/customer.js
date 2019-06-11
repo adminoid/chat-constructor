@@ -31119,33 +31119,47 @@ var BlocksArea = /** @class */ (function (_super) {
         }
     };
     BlocksArea.prototype.mouseupHandler = function () {
-        if (this.dd.sourcePath.length === 2) {
-            console.info('mouseUp event');
-            // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
-            //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
-            //
-            // if( sourceConnector.type === 'create' ) {
-            //
-            //   if( this.dd.targetId >= 0 ) {
-            //     sourceConnector.target = this.dd.targetId;
-            //     sourceConnector.type = 'output';
-            //   }
-            //   else {
-            //     // remove target from output connector
-            //     let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
-            //       source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
-            //
-            //     _.unset(source, 'target');
-            //     _.unset(source, 'targetCoords');
-            //
-            //     this.lines = this.makeLinesFromItems();
-            //
-            //   }
-            //
-            //   _.remove( this.items, (item: any) => item.id === this.dd.id );
-            //
-            // }
+        // save new position to server
+        var blockId = this.dd.id, botId = this.botId;
+        if (blockId > 0) {
+            var $item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.$refs.items, ['itemData.id', blockId]);
+            var payload = {
+                'botId': botId,
+                'blockId': blockId,
+                'sendData': {
+                    'x': $item.itemData.x,
+                    'y': $item.itemData.y,
+                    'moved': 1,
+                }
+            };
+            this.saveBlockData(payload);
         }
+        // if( this.dd.sourcePath.length === 2 ) {
+        // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
+        //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
+        //
+        // if( sourceConnector.type === 'create' ) {
+        //
+        //   if( this.dd.targetId >= 0 ) {
+        //     sourceConnector.target = this.dd.targetId;
+        //     sourceConnector.type = 'output';
+        //   }
+        //   else {
+        //     // remove target from output connector
+        //     let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
+        //       source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
+        //
+        //     _.unset(source, 'target');
+        //     _.unset(source, 'targetCoords');
+        //
+        //     this.lines = this.makeLinesFromItems();
+        //
+        //   }
+        //
+        //   _.remove( this.items, (item: any) => item.id === this.dd.id );
+        //
+        // }
+        // }
         this.dragDropDataReset();
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -31154,6 +31168,9 @@ var BlocksArea = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Action
     ], BlocksArea.prototype, "deleteBlock", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.Action
+    ], BlocksArea.prototype, "saveBlockData", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.State
     ], BlocksArea.prototype, "items", void 0);
@@ -50046,6 +50063,27 @@ function (_super) {
     return _this;
   }
 
+  Block.prototype.saveBlockData = function (data) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+      return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            console.info(data.botId, data.blockId, data.sendData);
+            return [4
+            /*yield*/
+            , _axios.default.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData).then(function (response) {
+              console.log(response);
+            })];
+
+          case 1:
+            return [2
+            /*return*/
+            , _a.sent()];
+        }
+      });
+    });
+  };
+
   Block.prototype.fetchBlocks = function (id) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
       return tslib_1.__generator(this, function (_a) {
@@ -50262,6 +50300,8 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
+
+  tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveBlockData", null);
 
   tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
     commit: 'updateBlocks',

@@ -16,7 +16,7 @@ class BlocksController extends Controller
     }
 
     protected $rules = [
-        'name' => 'required|min:2|max:32',
+        'name' => 'min:2|max:32',
     ];
 
     /**
@@ -68,30 +68,32 @@ class BlocksController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param $botId
      * @param $blockId
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, $botId, $blockId)
+    public function update($botId, $blockId, Request $request)
     {
 
-        $validator = Validator::make(request()->all(), $this->rules);
+//        return $blockId; // is ok
+//        return $botId; // is ok
+//        return $request->all(); // is ok
+
+
+        $block = Block::findOrFail($blockId);
+        $newBlockData = request()->all();
+
+        $validator = Validator::make($newBlockData, $this->rules);
         if ($validator->fails()) {
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
         }
 
-        $blockData = $request->only('name');
-
-//        $bot = Bot::findOrFail($botId);
         $block = Block::findOrFail($blockId);
 
-        $this->authorize('update', $block);
+        $this->authorize('update', $block, $botId);
 
-        $block->update($blockData);
-
-        return response()->json($blockData);
+        $block->update($newBlockData);
+        return response()->json($newBlockData);
 
     }
 

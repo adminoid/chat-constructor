@@ -46,6 +46,17 @@ export default class Block extends VuexModule {
 
   botId: -1;
 
+  @Action
+  async saveBlockData(data) {
+
+    console.info(data.botId, data.blockId, data.sendData);
+
+    return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
+      .then((response) => {
+        console.log(response);
+      });
+  }
+
   @Action({ commit: 'updateBlocks', rawError: true })
   async fetchBlocks(id) {
     return await axios.get(`private/bots/${id}/blocks`);

@@ -32,6 +32,21 @@ var Block = /** @class */ (function (_super) {
         };
         return _this;
     }
+    Block.prototype.saveBlockData = function (data) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.info(data.botId, data.blockId, data.sendData);
+                        return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)
+                                .then(function (response) {
+                                console.log(response);
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     Block.prototype.fetchBlocks = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
@@ -191,6 +206,9 @@ var Block = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    tslib_1.__decorate([
+        Action
+    ], Block.prototype, "saveBlockData", null);
     tslib_1.__decorate([
         Action({ commit: 'updateBlocks', rawError: true })
     ], Block.prototype, "fetchBlocks", null);
