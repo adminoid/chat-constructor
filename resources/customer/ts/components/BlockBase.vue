@@ -6,7 +6,14 @@
     .base-block__body
       p {{ itemData.id }}. {{ itemData.name }}
     .base-block__footer
-      .output-connectors
+      .outputs
+        connector-output(
+          v-for="(connector, index) in itemData.outputs"
+          :key="index"
+          :blockId="itemData.id"
+          :connectorData="connector"
+          ref="outputs"
+          :title="connector.id")
 
 
 </template>
@@ -17,11 +24,13 @@
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
+  import ConnectorOutput from './ConnectorOutput.vue'
+  import ConnectorClone from './ConnectorClone.vue'
 
   const BlockModule = namespace('Block');
 
   @Component({
-    // components: { ConnectorOutput, ConnectorCreate },
+    components: { ConnectorOutput, ConnectorClone },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 
@@ -58,7 +67,7 @@
     .base-block__footer
       position: relative
 
-    .output-connectors
+    .outputs
       padding: 2px
       margin: 0
       list-style: none
@@ -83,16 +92,5 @@
       opacity: .7
       &.active
         background: #f09593
-
-    .connector_new
-      height: 16px
-      width: 16px
-      border: 1px dashed #2a9055
-      background: #31b06f
-      border-radius: 3px
-      &:hover
-        border: 1px solid #005f26
-        background: #2a9055
-        cursor: pointer
 
 </style>

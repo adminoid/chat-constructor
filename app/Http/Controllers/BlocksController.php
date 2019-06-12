@@ -33,7 +33,7 @@ class BlocksController extends Controller
 
         $this->authorize('view', $bot);
 
-        return response()->json($bot->blocks()->get());
+        return response()->json($bot->blocks()->with('outputs')->get());
 
     }
 

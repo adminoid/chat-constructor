@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Block;
+use App\Output;
 
 class OutputsTableSeeder extends Seeder
 {
@@ -11,6 +13,12 @@ class OutputsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Output::class)->create();
+        $blocks = Block::all();
+        $blocks->each(static function ($locBlock){
+            $num = random_int(1, 3);
+            $locBlock->outputs()->saveMany(
+                factory(Output::class, $num)->create()
+            );
+        });
     }
 }

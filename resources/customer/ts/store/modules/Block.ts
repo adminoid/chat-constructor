@@ -75,11 +75,17 @@ export default class Block extends VuexModule {
 
   @Mutation
   setBeginLineCoords( payload ) {
+
+    console.log(payload);
+
     let { itemId, connectorId, coords } = payload;
 
     _.map( this.items, item => {
       if ( item.id === itemId ) {
-        item.itemData.connectors.output[connectorId].coords = coords;
+        console.log(item);
+        // item.itemData.outputs[connectorId].coords = coords; // TODO: now error here
+        let output = _.find(item.outputs, ['id', connectorId]);
+        output.coords = coords;
       }
     });
 
@@ -92,7 +98,7 @@ export default class Block extends VuexModule {
       if( item.id === itemId ) {
         item.sourceCoords = coords;
       }
-      _.map( _.get(item, 'itemData.connectors.output'), connector => {
+      _.map( _.get(item, 'itemData.outputs'), connector => {
         if( connector.target === itemId ) {
           connector.targetCoords = coords;
         }
@@ -102,13 +108,13 @@ export default class Block extends VuexModule {
   }
 
   @Mutation
-  setTargetForConnectorCreate( clickedConnectorInfo ) {
+  setTargetForConnector( clickedConnectorInfo ) {
 
     let [blockId, connectorId] = this.dd.sourcePath = clickedConnectorInfo,
       item = _.find(this.items, ['id', blockId]);
 
-    if( _.has(item, 'itemData.connectors.output') ) {
-      item.itemData.connectors.output[connectorId].target = this.dd.id;
+    if( _.has(item, 'itemData.outputs') ) {
+      item.itemData.outputs[connectorId].target = this.dd.id;
     }
 
   }
@@ -200,64 +206,64 @@ export default class Block extends VuexModule {
 
   }
 
-  @Mutation
-  checkCreateConnector(blockId: number) {
-
-    let item = _.find(this.items, ['id', blockId]),
-      connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
-      createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
-
-    if (!createButtonCnt || createButtonCnt < 1) {
-      !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
-
-      !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
-
-      item.itemData.connectors.output.push({
-        type: 'create',
-      });
-    }
-
-  }
+  // @Mutation
+  // checkCreateConnector(blockId: number) {
+  //
+  //   let item = _.find(this.items, ['id', blockId]),
+  //     connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
+  //     createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
+  //
+  //   if (!createButtonCnt || createButtonCnt < 1) {
+  //     !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
+  //
+  //     !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
+  //
+  //     item.itemData.connectors.output.push({
+  //       type: 'create',
+  //     });
+  //   }
+  //
+  // }
 
   /**
    * Action because in the future planned make async ajax queries to the server
    *
    * @param params
    */
-  @Action({rawError: true})
-  async insertBlock(params: any = {}) {
-
-    if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
-      params.component = 'BlockBase';
-    }
-
-    let blockData: object = {
-      blockName: `__Block)_`
-    };
-
-    _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
-
-    if ( _.has(params, 'connectors') ) {
-      delete params.connectors;
-    }
-
-    if( !_.has( params, 'position' ) ) {
-      let steps = (this.context.state as any).blockPositionSteps;
-      let total = (this.context.state as any).items.length;
-
-      let actualSteps = {};
-      Object.keys(steps).map((key) => {
-        actualSteps[key] = steps[key] * ( total + 1 );
-      });
-
-      params.position = actualSteps;
-    }
-
-    params.id = this.context.getters['itemsTotal'];
-
-    this.context.commit('insertItem', params);
-
-  }
+  // @Action({rawError: true})
+  // async insertBlock(params: any = {}) {
+  //
+  //   if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
+  //     params.component = 'BlockBase';
+  //   }
+  //
+  //   let blockData: object = {
+  //     blockName: `__Block)_`
+  //   };
+  //
+  //   _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
+  //
+  //   if ( _.has(params, 'connectors') ) {
+  //     delete params.connectors;
+  //   }
+  //
+  //   if( !_.has( params, 'position' ) ) {
+  //     let steps = (this.context.state as any).blockPositionSteps;
+  //     let total = (this.context.state as any).items.length;
+  //
+  //     let actualSteps = {};
+  //     Object.keys(steps).map((key) => {
+  //       actualSteps[key] = steps[key] * ( total + 1 );
+  //     });
+  //
+  //     params.position = actualSteps;
+  //   }
+  //
+  //   params.id = this.context.getters['itemsTotal'];
+  //
+  //   this.context.commit('insertItem', params);
+  //
+  // }
 
   get itemsTotal() {
     return this.items.length;

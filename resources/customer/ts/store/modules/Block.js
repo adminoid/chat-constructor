@@ -67,10 +67,14 @@ var Block = /** @class */ (function (_super) {
     //   }
     // }
     Block.prototype.setBeginLineCoords = function (payload) {
+        console.log(payload);
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
         _.map(this.items, function (item) {
             if (item.id === itemId) {
-                item.itemData.connectors.output[connectorId].coords = coords;
+                console.log(item);
+                // item.itemData.outputs[connectorId].coords = coords; // TODO: now error here
+                var output = _.find(item.outputs, ['id', connectorId]);
+                output.coords = coords;
             }
         });
     };
@@ -80,17 +84,17 @@ var Block = /** @class */ (function (_super) {
             if (item.id === itemId) {
                 item.sourceCoords = coords;
             }
-            _.map(_.get(item, 'itemData.connectors.output'), function (connector) {
+            _.map(_.get(item, 'itemData.outputs'), function (connector) {
                 if (connector.target === itemId) {
                     connector.targetCoords = coords;
                 }
             });
         });
     };
-    Block.prototype.setTargetForConnectorCreate = function (clickedConnectorInfo) {
+    Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {
         var _a = this.dd.sourcePath = clickedConnectorInfo, blockId = _a[0], connectorId = _a[1], item = _.find(this.items, ['id', blockId]);
-        if (_.has(item, 'itemData.connectors.output')) {
-            item.itemData.connectors.output[connectorId].target = this.dd.id;
+        if (_.has(item, 'itemData.outputs')) {
+            item.itemData.outputs[connectorId].target = this.dd.id;
         }
     };
     Block.prototype.setAreaBoundaries = function (data) {
@@ -154,52 +158,64 @@ var Block = /** @class */ (function (_super) {
             throw 'Error: Here no one block... What do you want to move?';
         }
     };
-    Block.prototype.checkCreateConnector = function (blockId) {
-        var item = _.find(this.items, ['id', blockId]), connectorsOutput = _.get(item.itemData, 'connectors.output') || [], createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
-        if (!createButtonCnt || createButtonCnt < 1) {
-            !_.has(item, 'itemData') && _.set(item, 'itemData', { connectors: { output: [] } });
-            !_.has(item, 'itemData.connectors') && _.set(item, 'itemData.connectors', { output: [] });
-            item.itemData.connectors.output.push({
-                type: 'create',
-            });
-        }
-    };
-    /**
-     * Action because in the future planned make async ajax queries to the server
-     *
-     * @param params
-     */
-    Block.prototype.insertBlock = function (params) {
-        if (params === void 0) { params = {}; }
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var blockData, steps_1, total_1, actualSteps_1;
-            return tslib_1.__generator(this, function (_a) {
-                if (!_.has(params, 'component') || params.component !== 'BlockBase') {
-                    params.component = 'BlockBase';
-                }
-                blockData = {
-                    blockName: "__Block)_"
-                };
-                _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
-                if (_.has(params, 'connectors')) {
-                    delete params.connectors;
-                }
-                if (!_.has(params, 'position')) {
-                    steps_1 = this.context.state.blockPositionSteps;
-                    total_1 = this.context.state.items.length;
-                    actualSteps_1 = {};
-                    Object.keys(steps_1).map(function (key) {
-                        actualSteps_1[key] = steps_1[key] * (total_1 + 1);
-                    });
-                    params.position = actualSteps_1;
-                }
-                params.id = this.context.getters['itemsTotal'];
-                this.context.commit('insertItem', params);
-                return [2 /*return*/];
-            });
-        });
-    };
     Object.defineProperty(Block.prototype, "itemsTotal", {
+        // @Mutation
+        // checkCreateConnector(blockId: number) {
+        //
+        //   let item = _.find(this.items, ['id', blockId]),
+        //     connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
+        //     createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
+        //
+        //   if (!createButtonCnt || createButtonCnt < 1) {
+        //     !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
+        //
+        //     !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
+        //
+        //     item.itemData.connectors.output.push({
+        //       type: 'create',
+        //     });
+        //   }
+        //
+        // }
+        /**
+         * Action because in the future planned make async ajax queries to the server
+         *
+         * @param params
+         */
+        // @Action({rawError: true})
+        // async insertBlock(params: any = {}) {
+        //
+        //   if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
+        //     params.component = 'BlockBase';
+        //   }
+        //
+        //   let blockData: object = {
+        //     blockName: `__Block)_`
+        //   };
+        //
+        //   _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
+        //
+        //   if ( _.has(params, 'connectors') ) {
+        //     delete params.connectors;
+        //   }
+        //
+        //   if( !_.has( params, 'position' ) ) {
+        //     let steps = (this.context.state as any).blockPositionSteps;
+        //     let total = (this.context.state as any).items.length;
+        //
+        //     let actualSteps = {};
+        //     Object.keys(steps).map((key) => {
+        //       actualSteps[key] = steps[key] * ( total + 1 );
+        //     });
+        //
+        //     params.position = actualSteps;
+        //   }
+        //
+        //   params.id = this.context.getters['itemsTotal'];
+        //
+        //   this.context.commit('insertItem', params);
+        //
+        // }
         get: function () {
             return this.items.length;
         },
@@ -223,7 +239,7 @@ var Block = /** @class */ (function (_super) {
     ], Block.prototype, "updateEndLineCoords", null);
     tslib_1.__decorate([
         Mutation
-    ], Block.prototype, "setTargetForConnectorCreate", null);
+    ], Block.prototype, "setTargetForConnector", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setAreaBoundaries", null);
@@ -242,12 +258,6 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "dragDropDataSet", null);
-    tslib_1.__decorate([
-        Mutation
-    ], Block.prototype, "checkCreateConnector", null);
-    tslib_1.__decorate([
-        Action({ rawError: true })
-    ], Block.prototype, "insertBlock", null);
     Block = tslib_1.__decorate([
         Module({
             name: 'Block',

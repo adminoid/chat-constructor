@@ -1,10 +1,13 @@
 import { Vue } from 'vue-property-decorator';
 export default class DragItemWrapper extends Vue {
-    itemData: any;
+    x: number;
+    y: number;
+    id: number;
+    idx: number;
     dragDropDataSet: any;
-    dragStart(e: any): void;
     readonly position: {
         left: string;
         top: string;
     };
+    dragStart(e: any): void;
 }

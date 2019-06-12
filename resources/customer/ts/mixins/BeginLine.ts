@@ -10,7 +10,7 @@ import { Mixin } from 'vue-mixin-decorator'
 @Mixin
 export default class BeginLine extends Vue {
 
-  connectorId: number;
+  connectorData: any;
   blockId: number;
 
   getLineBeginCoords () {
@@ -32,9 +32,9 @@ export default class BeginLine extends Vue {
   mounted () {
 
     // push begin coordinates to out connector
-    store.commit('DropAreaModule/setBeginLineCoords', {
+    store.commit('Block/setBeginLineCoords', {
       itemId: this.blockId,
-      connectorId: this.connectorId,
+      connectorId: this.connectorData.id,
       coords: this.getLineBeginCoords(),
     });
 

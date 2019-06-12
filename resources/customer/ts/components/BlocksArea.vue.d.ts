@@ -2,6 +2,7 @@ import { Vue } from 'vue-property-decorator';
 export default class BlocksArea extends Vue {
     fetchBlocks: any;
     deleteBlock: any;
+    saveBlockData: any;
     items: any;
     dd: any;
     area: any;

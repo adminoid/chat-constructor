@@ -26,7 +26,7 @@
 
   import DragItemWrapper from './DragItemWrapper.vue'
   import BlockBase from './BlockBase.vue'
-  // import ConnectorClone from './ConnectorClone.vue'
+  import ConnectorClone from './ConnectorClone.vue'
 
 
   const BlockModule = namespace('Block');
@@ -81,7 +81,7 @@
     makeLinesFromItems() {
       let lines = [];
       _.map( this.items, item => {
-        _.map( _.get(item, 'itemData.connectors.output'), connector => {
+        _.map( _.get(item, 'itemData.outputs'), connector => {
           if( connector.target && connector.coords && connector.targetCoords ) {
             lines.push({
               begin: connector.coords,
@@ -141,62 +141,62 @@
 
           this.updateCoords([left, top]);
 
-          // let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
-          //   $items: any = this.$refs.items,
-          //   $beginItem = _.find($items, ['itemData.id', this.dd.id]);
-          //
-          //   // console.log($beginItem.getLineEndCoords());
-          //
-          // // update sourceCoords (BlockModule\updateEndLineCoords)
-          // this.updateEndLineCoords({
-          //   itemId: this.dd.id,
-          //   coords: $beginItem.getLineEndCoords(),
-          // });
-          //
-          // _.map(this.items, (item) => {
-          //
-          //   // const isActive = (
-          //   //   isNewLine && item.component === 'BlockBase' &&
-          //   //   item.sourceCoords.left < left + this.closest &&
-          //   //   item.sourceCoords.left > left - this.closest &&
-          //   //   item.sourceCoords.top < top + this.closest &&
-          //   //   item.sourceCoords.top > top - this.closest
-          //   // );
-          //   // if( _.get(item, 'itemData.connectors.output') ) {
-          //   //   _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
-          //   //
-          //   //       // TODO: $beginItem updates not properly {Frozen error}
-          //   //       if (item.id === this.dd.id) {
-          //   //
-          //   //         if (!_.isEmpty($beginItem.$refs)) {
-          //   //           let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
-          //   //           if ($beginConnector) {
-          //   //             connector.coords = $beginConnector.getLineBeginCoords();
-          //   //           }
-          //   //         }
-          //   //
-          //   //       }
-          //   //
-          //   //       if (connector.target == this.dd.id) {
-          //   //         connector.targetCoords = $beginItem.getLineEndCoords();
-          //   //       }
-          //   //       // check if target item not itself
-          //   //       else {
-          //   //         item.active = isActive;
-          //   //         if (isActive) {
-          //   //           // TODO: if active, set target id to dd
-          //   //           this.setActiveTargetId(item.id);
-          //   //           left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
-          //   //           top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
-          //   //         }
-          //   //       }
-          //   //
-          //   //     });
-          //   // }
-          //
-          //   this.updateCoords([left, top]);
-          //
-          // });
+          let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
+            $items: any = this.$refs.items,
+            $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+
+            // console.log($beginItem.getLineEndCoords());
+
+          // update sourceCoords (BlockModule\updateEndLineCoords)
+          this.updateEndLineCoords({
+            itemId: this.dd.id,
+            coords: $beginItem.getLineEndCoords(),
+          });
+
+          _.map(this.items, (item) => {
+
+            const isActive = (
+              isNewLine && item.component === 'BlockBase' &&
+              item.sourceCoords.left < left + this.closest &&
+              item.sourceCoords.left > left - this.closest &&
+              item.sourceCoords.top < top + this.closest &&
+              item.sourceCoords.top > top - this.closest
+            );
+            if( _.get(item, 'itemData.connectors.output') ) {
+              _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+
+                  // TODO: $beginItem updates not properly {Frozen error}
+                  if (item.id === this.dd.id) {
+
+                    if (!_.isEmpty($beginItem.$refs)) {
+                      let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                      if ($beginConnector) {
+                        connector.coords = $beginConnector.getLineBeginCoords();
+                      }
+                    }
+
+                  }
+
+                  if (connector.target == this.dd.id) {
+                    connector.targetCoords = $beginItem.getLineEndCoords();
+                  }
+                  // check if target item not itself
+                  else {
+                    item.active = isActive;
+                    if (isActive) {
+                      // TODO: if active, set target id to dd
+                      this.setActiveTargetId(item.id);
+                      left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
+                      top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
+                    }
+                  }
+
+                });
+            }
+
+            this.updateCoords([left, top]);
+
+          });
 
         }
 

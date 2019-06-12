@@ -22,9 +22,9 @@ var BeginLine = /** @class */ (function (_super) {
     };
     BeginLine.prototype.mounted = function () {
         // push begin coordinates to out connector
-        store.commit('DropAreaModule/setBeginLineCoords', {
+        store.commit('Block/setBeginLineCoords', {
             itemId: this.blockId,
-            connectorId: this.connectorId,
+            connectorId: this.connectorData.id,
             coords: this.getLineBeginCoords(),
         });
     };
