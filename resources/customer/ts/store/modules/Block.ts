@@ -49,12 +49,10 @@ export default class Block extends VuexModule {
   @Action
   async saveBlockData(data) {
 
-    console.info(data.botId, data.blockId, data.sendData);
-
     return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
-      .then((response) => {
-        console.log(response);
-      });
+      // .then((response) => {
+      //   console.log(response);
+      // });
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
@@ -76,14 +74,10 @@ export default class Block extends VuexModule {
   @Mutation
   setBeginLineCoords( payload ) {
 
-    console.log(payload);
-
     let { itemId, connectorId, coords } = payload;
 
     _.map( this.items, item => {
       if ( item.id === itemId ) {
-        console.log(item);
-        // item.itemData.outputs[connectorId].coords = coords; // TODO: now error here
         let output = _.find(item.outputs, ['id', connectorId]);
         output.coords = coords;
       }
@@ -146,18 +140,17 @@ export default class Block extends VuexModule {
   insertConnectorClone( cloneData: any = {}) {
 
     // calculate position in area
-    let inAreaPosition = {
-      left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
-      top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top,
-    };
+    let x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
+      y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
 
     let connectorData = {
       component: 'ConnectorClone',
-      position: inAreaPosition,
-      id: this.items.length,
+      id: this.items.length + 1,
+      x: x,
+      y:y,
     };
 
-    this.dd.id = this.dd.newIdx = this.items.length;
+    this.dd.id = this.dd.newIdx = this.items.length + 1;
     this.dd.dragging = true;
     this.dd.elementOffset = cloneData.cursorOffset;
 

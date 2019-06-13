@@ -33,7 +33,7 @@
 
   @Component({
     //@ts-ignore
-    components: { DragItemWrapper, BlockBase },
+    components: { DragItemWrapper, BlockBase, ConnectorClone },
   })
   export default class BlocksArea extends Vue {
 
@@ -111,9 +111,6 @@
 
       if (this.dd.dragging) {
 
-        // let left = +Number(e.clientX - this.dd.elementOffset.left - this.area.boundaries.left).toFixed(),
-        //   top = +Number(e.clientY - this.dd.elementOffset.top - this.area.boundaries.top).toFixed();
-
         let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left),
           top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
 
@@ -141,29 +138,40 @@
 
           this.updateCoords([left, top]);
 
-          let isNewLine = _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone',
-            $items: any = this.$refs.items,
-            $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+          let item = _.find(this.items, ['id', this.dd.id]),
+            isNewLine = item.component === 'ConnectorClone',
+            $items: any = this.$refs.items;
+            // $beginItem = _.find($items, ['itemData.id', this.dd.id]);
 
-            // console.log($beginItem.getLineEndCoords());
+          let queue: any[] = $items;
 
-          // update sourceCoords (BlockModule\updateEndLineCoords)
-          this.updateEndLineCoords({
-            itemId: this.dd.id,
-            coords: $beginItem.getLineEndCoords(),
+          let $beginItem = _.find(queue, (item: any) => {
+            if( item && item.itemData ) {
+              return item.itemData.id === this.dd.id;
+            }
+
+            return false;
           });
 
-          _.map(this.items, (item) => {
+          if( $beginItem ) {
 
-            const isActive = (
-              isNewLine && item.component === 'BlockBase' &&
-              item.sourceCoords.left < left + this.closest &&
-              item.sourceCoords.left > left - this.closest &&
-              item.sourceCoords.top < top + this.closest &&
-              item.sourceCoords.top > top - this.closest
-            );
-            if( _.get(item, 'itemData.connectors.output') ) {
-              _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+            // update sourceCoords (BlockModule\updateEndLineCoords)
+            this.updateEndLineCoords({
+              itemId: this.dd.id,
+              coords: $beginItem.getLineEndCoords(),
+            });
+
+            _.map(this.items, (item) => {
+
+              const isActive = (
+                isNewLine && item.component === 'BlockBase' &&
+                item.sourceCoords.left < left + this.closest &&
+                item.sourceCoords.left > left - this.closest &&
+                item.sourceCoords.top < top + this.closest &&
+                item.sourceCoords.top > top - this.closest
+              );
+              if( _.get(item, 'itemData.connectors.output') ) {
+                _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
 
                   // TODO: $beginItem updates not properly {Frozen error}
                   if (item.id === this.dd.id) {
@@ -192,11 +200,13 @@
                   }
 
                 });
-            }
+              }
 
-            this.updateCoords([left, top]);
+              this.updateCoords([left, top]);
 
-          });
+            });
+
+          }
 
         }
 
@@ -215,17 +225,23 @@
 
         let $item: any = _.find(this.$refs.items, ['itemData.id', blockId]);
 
-        let payload = {
-          'botId': botId,
-          'blockId': blockId,
-          'sendData': {
-            'x': $item.itemData.x,
-            'y': $item.itemData.y,
-            'moved': 1,
-          }
-        };
 
-        this.saveBlockData(payload);
+        if( $item ) {
+
+          let payload = {
+            'botId': botId,
+            'blockId': blockId,
+            'sendData': {
+              'x': $item.itemData.x,
+              'y': $item.itemData.y,
+              'moved': 1,
+            }
+          };
+
+          console.log(payload);
+
+          this.saveBlockData(payload);
+        }
 
       }
 

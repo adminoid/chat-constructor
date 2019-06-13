@@ -31079,6 +31079,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _DragItemWrapper_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DragItemWrapper.vue */ "./resources/customer/ts/components/DragItemWrapper.vue");
 /* harmony import */ var _BlockBase_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BlockBase.vue */ "./resources/customer/ts/components/BlockBase.vue");
+/* harmony import */ var _ConnectorClone_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ConnectorClone.vue */ "./resources/customer/ts/components/ConnectorClone.vue");
+
 
 
 
@@ -31132,8 +31134,6 @@ var BlocksArea = /** @class */ (function (_super) {
     BlocksArea.prototype.mousemoveHandler = function (e) {
         var _this = this;
         if (this.dd.dragging) {
-            // let left = +Number(e.clientX - this.dd.elementOffset.left - this.area.boundaries.left).toFixed(),
-            //   top = +Number(e.clientY - this.dd.elementOffset.top - this.area.boundaries.top).toFixed();
             var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
                 left_1 = 0;
@@ -31153,47 +31153,56 @@ var BlocksArea = /** @class */ (function (_super) {
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
                 this.updateCoords([left_1, top_1]);
-                var isNewLine_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]).component === 'ConnectorClone', $items = this.$refs.items, $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"]($items, ['itemData.id', this.dd.id]);
-                // console.log($beginItem.getLineEndCoords());
-                // update sourceCoords (BlockModule\updateEndLineCoords)
-                this.updateEndLineCoords({
-                    itemId: this.dd.id,
-                    coords: $beginItem_1.getLineEndCoords(),
+                var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]), isNewLine_1 = item.component === 'ConnectorClone', $items = this.$refs.items;
+                // $beginItem = _.find($items, ['itemData.id', this.dd.id]);
+                var queue = $items;
+                var $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](queue, function (item) {
+                    if (item && item.itemData) {
+                        return item.itemData.id === _this.dd.id;
+                    }
+                    return false;
                 });
-                lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
-                    var isActive = (isNewLine_1 && item.component === 'BlockBase' &&
-                        item.sourceCoords.left < left_1 + _this.closest &&
-                        item.sourceCoords.left > left_1 - _this.closest &&
-                        item.sourceCoords.top < top_1 + _this.closest &&
-                        item.sourceCoords.top > top_1 - _this.closest);
-                    if (lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output')) {
-                        lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
-                            // TODO: $beginItem updates not properly {Frozen error}
-                            if (item.id === _this.dd.id) {
-                                if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
-                                    var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
-                                    if ($beginConnector) {
-                                        connector.coords = $beginConnector.getLineBeginCoords();
+                if ($beginItem_1) {
+                    // update sourceCoords (BlockModule\updateEndLineCoords)
+                    this.updateEndLineCoords({
+                        itemId: this.dd.id,
+                        coords: $beginItem_1.getLineEndCoords(),
+                    });
+                    lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
+                        var isActive = (isNewLine_1 && item.component === 'BlockBase' &&
+                            item.sourceCoords.left < left_1 + _this.closest &&
+                            item.sourceCoords.left > left_1 - _this.closest &&
+                            item.sourceCoords.top < top_1 + _this.closest &&
+                            item.sourceCoords.top > top_1 - _this.closest);
+                        if (lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output')) {
+                            lodash__WEBPACK_IMPORTED_MODULE_3__["map"](lodash__WEBPACK_IMPORTED_MODULE_3__["get"](item, 'itemData.connectors.output'), function (connector, cIdx) {
+                                // TODO: $beginItem updates not properly {Frozen error}
+                                if (item.id === _this.dd.id) {
+                                    if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
+                                        var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
+                                        if ($beginConnector) {
+                                            connector.coords = $beginConnector.getLineBeginCoords();
+                                        }
                                     }
                                 }
-                            }
-                            if (connector.target == _this.dd.id) {
-                                connector.targetCoords = $beginItem_1.getLineEndCoords();
-                            }
-                            // check if target item not itself
-                            else {
-                                item.active = isActive;
-                                if (isActive) {
-                                    // TODO: if active, set target id to dd
-                                    _this.setActiveTargetId(item.id);
-                                    left_1 = item.sourceCoords.left + _this.dd.elementOffset.left - _this.connectorWidth / 2;
-                                    top_1 = item.sourceCoords.top + _this.dd.elementOffset.top - _this.connectorWidth / 2;
+                                if (connector.target == _this.dd.id) {
+                                    connector.targetCoords = $beginItem_1.getLineEndCoords();
                                 }
-                            }
-                        });
-                    }
-                    _this.updateCoords([left_1, top_1]);
-                });
+                                // check if target item not itself
+                                else {
+                                    item.active = isActive;
+                                    if (isActive) {
+                                        // TODO: if active, set target id to dd
+                                        _this.setActiveTargetId(item.id);
+                                        left_1 = item.sourceCoords.left + _this.dd.elementOffset.left - _this.connectorWidth / 2;
+                                        top_1 = item.sourceCoords.top + _this.dd.elementOffset.top - _this.connectorWidth / 2;
+                                    }
+                                }
+                            });
+                        }
+                        _this.updateCoords([left_1, top_1]);
+                    });
+                }
             }
         }
     };
@@ -31202,16 +31211,19 @@ var BlocksArea = /** @class */ (function (_super) {
         var blockId = this.dd.id, botId = this.botId;
         if (blockId > 0) {
             var $item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.$refs.items, ['itemData.id', blockId]);
-            var payload = {
-                'botId': botId,
-                'blockId': blockId,
-                'sendData': {
-                    'x': $item.itemData.x,
-                    'y': $item.itemData.y,
-                    'moved': 1,
-                }
-            };
-            this.saveBlockData(payload);
+            if ($item) {
+                var payload = {
+                    'botId': botId,
+                    'blockId': blockId,
+                    'sendData': {
+                        'x': $item.itemData.x,
+                        'y': $item.itemData.y,
+                        'moved': 1,
+                    }
+                };
+                console.log(payload);
+                this.saveBlockData(payload);
+            }
         }
         // if( this.dd.sourcePath.length === 2 ) {
         // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
@@ -31280,7 +31292,7 @@ var BlocksArea = /** @class */ (function (_super) {
     BlocksArea = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             //@ts-ignore
-            components: { DragItemWrapper: _DragItemWrapper_vue__WEBPACK_IMPORTED_MODULE_4__["default"], BlockBase: _BlockBase_vue__WEBPACK_IMPORTED_MODULE_5__["default"] },
+            components: { DragItemWrapper: _DragItemWrapper_vue__WEBPACK_IMPORTED_MODULE_4__["default"], BlockBase: _BlockBase_vue__WEBPACK_IMPORTED_MODULE_5__["default"], ConnectorClone: _ConnectorClone_vue__WEBPACK_IMPORTED_MODULE_6__["default"] },
         })
     ], BlocksArea);
     return BlocksArea;
@@ -50564,17 +50576,20 @@ function (_super) {
       return tslib_1.__generator(this, function (_a) {
         switch (_a.label) {
           case 0:
-            console.info(data.botId, data.blockId, data.sendData);
             return [4
             /*yield*/
-            , _axios.default.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData).then(function (response) {
-              console.log(response);
-            })];
+            , _axios.default.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData) // .then((response) => {
+            //   console.log(response);
+            // });
+            ];
 
           case 1:
             return [2
             /*return*/
-            , _a.sent()];
+            , _a.sent() // .then((response) => {
+            //   console.log(response);
+            // });
+            ];
         }
       });
     });
@@ -50609,15 +50624,12 @@ function (_super) {
 
 
   Block.prototype.setBeginLineCoords = function (payload) {
-    console.log(payload);
     var itemId = payload.itemId,
         connectorId = payload.connectorId,
         coords = payload.coords;
 
     _.map(this.items, function (item) {
       if (item.id === itemId) {
-        console.log(item); // item.itemData.outputs[connectorId].coords = coords; // TODO: now error here
-
         var output = _.find(item.outputs, ['id', connectorId]);
 
         output.coords = coords;
@@ -50679,16 +50691,15 @@ function (_super) {
     } // calculate position in area
 
 
-    var inAreaPosition = {
-      left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
-      top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top
-    };
+    var x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
+        y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
     var connectorData = {
       component: 'ConnectorClone',
-      position: inAreaPosition,
-      id: this.items.length
+      id: this.items.length + 1,
+      x: x,
+      y: y
     };
-    this.dd.id = this.dd.newIdx = this.items.length;
+    this.dd.id = this.dd.newIdx = this.items.length + 1;
     this.dd.dragging = true;
     this.dd.elementOffset = cloneData.cursorOffset;
     this.items.push(connectorData);

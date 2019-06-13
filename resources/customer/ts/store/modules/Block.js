@@ -36,13 +36,16 @@ var Block = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.info(data.botId, data.blockId, data.sendData);
-                        return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)
-                                .then(function (response) {
-                                console.log(response);
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)
+                        // .then((response) => {
+                        //   console.log(response);
+                        // });
+                    ];
+                    case 1: return [2 /*return*/, _a.sent()
+                        // .then((response) => {
+                        //   console.log(response);
+                        // });
+                    ];
                 }
             });
         });
@@ -67,12 +70,9 @@ var Block = /** @class */ (function (_super) {
     //   }
     // }
     Block.prototype.setBeginLineCoords = function (payload) {
-        console.log(payload);
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
         _.map(this.items, function (item) {
             if (item.id === itemId) {
-                console.log(item);
-                // item.itemData.outputs[connectorId].coords = coords; // TODO: now error here
                 var output = _.find(item.outputs, ['id', connectorId]);
                 output.coords = coords;
             }
@@ -115,16 +115,14 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.insertConnectorClone = function (cloneData) {
         if (cloneData === void 0) { cloneData = {}; }
         // calculate position in area
-        var inAreaPosition = {
-            left: cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
-            top: cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top,
-        };
+        var x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left, y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
         var connectorData = {
             component: 'ConnectorClone',
-            position: inAreaPosition,
-            id: this.items.length,
+            id: this.items.length + 1,
+            x: x,
+            y: y,
         };
-        this.dd.id = this.dd.newIdx = this.items.length;
+        this.dd.id = this.dd.newIdx = this.items.length + 1;
         this.dd.dragging = true;
         this.dd.elementOffset = cloneData.cursorOffset;
         this.items.push(connectorData);
