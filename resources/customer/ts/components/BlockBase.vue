@@ -25,12 +25,12 @@
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput.vue'
-  import ConnectorClone from './ConnectorClone.vue'
+  // import ConnectorClone from './ConnectorClone.vue'
 
   const BlockModule = namespace('Block');
 
   @Component({
-    components: { ConnectorOutput, ConnectorClone },
+    components: { ConnectorOutput },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 

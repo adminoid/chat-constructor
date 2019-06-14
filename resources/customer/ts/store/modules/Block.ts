@@ -50,9 +50,9 @@ export default class Block extends VuexModule {
   async saveBlockData(data) {
 
     return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
-      // .then((response) => {
-      //   console.log(response);
-      // });
+    // .then((response) => {
+    //   console.log(response);
+    // });
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
@@ -64,15 +64,17 @@ export default class Block extends VuexModule {
     this.items = blocks.data;
   }
 
-  // @Mutation
-  // setActiveTargetId( id: number ) {
-  //   if( id > 0 ) {
-  //     this.dd.targetId = id;
-  //   }
-  // }
+  @Mutation
+  setActiveTargetId( id: number ) {
+    if( id > 0 ) {
+      this.dd.targetId = id;
+    }
+  }
 
   @Mutation
   setBeginLineCoords( payload ) {
+
+    // console.log(payload);
 
     let { itemId, connectorId, coords } = payload;
 
@@ -87,22 +89,31 @@ export default class Block extends VuexModule {
 
   @Mutation
   updateEndLineCoords( payload ) {
-    let { itemId, coords } = payload;
+
+    // console.log(payload);
+    // return;
+
+    let { itemId, x, y} = payload;
     _.map( this.items, (item) => {
       if( item.id === itemId ) {
-        item.sourceCoords = coords;
+
+        item.x = x;
+        item.y = y;
+
+        _.map( item.outputs, connector => {
+          if( connector.target_block_id === itemId ) {
+            connector.targetCoords = {left: x, top: y};
+          }
+        });
       }
-      _.map( _.get(item, 'itemData.outputs'), connector => {
-        if( connector.target === itemId ) {
-          connector.targetCoords = coords;
-        }
-      });
 
     } );
   }
 
   @Mutation
   setTargetForConnector( clickedConnectorInfo ) {
+
+    console.log(clickedConnectorInfo);
 
     let [blockId, connectorId] = this.dd.sourcePath = clickedConnectorInfo,
       item = _.find(this.items, ['id', blockId]);
@@ -139,18 +150,24 @@ export default class Block extends VuexModule {
   @Mutation
   insertConnectorClone( cloneData: any = {}) {
 
+    // console.log(cloneData);
+
     // calculate position in area
     let x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
       y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
 
+    // make virtual id for connector-clone without saving to backend
+    let virtualNextId = Math.max.apply(Math, this.items.map(function(o) { return o.id; })) + 1;
+    // console.log(virtualNextId);
+
     let connectorData = {
       component: 'ConnectorClone',
-      id: this.items.length + 1,
+      id: virtualNextId,
       x: x,
-      y:y,
+      y: y,
     };
 
-    this.dd.id = this.dd.newIdx = this.items.length + 1;
+    this.dd.id = this.dd.newIdx = virtualNextId;
     this.dd.dragging = true;
     this.dd.elementOffset = cloneData.cursorOffset;
 

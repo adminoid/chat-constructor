@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .connector(@mousedown.stop = "startDragConnector")
+  .connector(@mousedown.stop.prev = "startDragConnector")
 
 </template>
 
@@ -37,8 +37,11 @@
 
       // clicked block, then connector (source)
       const clickedConnectorInfo = [this.blockId, this.connectorData.id];
+
+      console.info(connectorData);
+
       this.insertConnectorClone(connectorData);
-      this.setTargetForConnector(clickedConnectorInfo);
+      this.setTargetForConnector(clickedConnectorInfo); // TODO: Check it
 
     }
 

@@ -63,13 +63,13 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.updateBlocks = function (blocks) {
         this.items = blocks.data;
     };
-    // @Mutation
-    // setActiveTargetId( id: number ) {
-    //   if( id > 0 ) {
-    //     this.dd.targetId = id;
-    //   }
-    // }
+    Block.prototype.setActiveTargetId = function (id) {
+        if (id > 0) {
+            this.dd.targetId = id;
+        }
+    };
     Block.prototype.setBeginLineCoords = function (payload) {
+        // console.log(payload);
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
         _.map(this.items, function (item) {
             if (item.id === itemId) {
@@ -79,19 +79,23 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var itemId = payload.itemId, coords = payload.coords;
+        // console.log(payload);
+        // return;
+        var itemId = payload.itemId, x = payload.x, y = payload.y;
         _.map(this.items, function (item) {
             if (item.id === itemId) {
-                item.sourceCoords = coords;
+                item.x = x;
+                item.y = y;
+                _.map(item.outputs, function (connector) {
+                    if (connector.target_block_id === itemId) {
+                        connector.targetCoords = { left: x, top: y };
+                    }
+                });
             }
-            _.map(_.get(item, 'itemData.outputs'), function (connector) {
-                if (connector.target === itemId) {
-                    connector.targetCoords = coords;
-                }
-            });
         });
     };
     Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {
+        console.log(clickedConnectorInfo);
         var _a = this.dd.sourcePath = clickedConnectorInfo, blockId = _a[0], connectorId = _a[1], item = _.find(this.items, ['id', blockId]);
         if (_.has(item, 'itemData.outputs')) {
             item.itemData.outputs[connectorId].target = this.dd.id;
@@ -113,16 +117,20 @@ var Block = /** @class */ (function (_super) {
      * @param cloneData
      */
     Block.prototype.insertConnectorClone = function (cloneData) {
+        // console.log(cloneData);
         if (cloneData === void 0) { cloneData = {}; }
         // calculate position in area
         var x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left, y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
+        // make virtual id for connector-clone without saving to backend
+        var virtualNextId = Math.max.apply(Math, this.items.map(function (o) { return o.id; })) + 1;
+        // console.log(virtualNextId);
         var connectorData = {
             component: 'ConnectorClone',
-            id: this.items.length + 1,
+            id: virtualNextId,
             x: x,
             y: y,
         };
-        this.dd.id = this.dd.newIdx = this.items.length + 1;
+        this.dd.id = this.dd.newIdx = virtualNextId;
         this.dd.dragging = true;
         this.dd.elementOffset = cloneData.cursorOffset;
         this.items.push(connectorData);
@@ -229,6 +237,9 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateBlocks", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "setActiveTargetId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setBeginLineCoords", null);

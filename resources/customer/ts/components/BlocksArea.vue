@@ -14,7 +14,7 @@
         :active="item.active"
         :itemData="item")
       line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
-    pre.br {{ this.dd }}
+    pre.br {{ this.lines }}
 
 </template>
 
@@ -27,13 +27,13 @@
   import DragItemWrapper from './DragItemWrapper.vue'
   import BlockBase from './BlockBase.vue'
   import ConnectorClone from './ConnectorClone.vue'
-
+  import LineSvg from './LineSvg.vue'
 
   const BlockModule = namespace('Block');
 
   @Component({
     //@ts-ignore
-    components: { DragItemWrapper, BlockBase, ConnectorClone },
+    components: { DragItemWrapper, BlockBase, ConnectorClone, LineSvg },
   })
   export default class BlocksArea extends Vue {
 
@@ -53,7 +53,7 @@
 
     lines = [];
 
-    closest = 20;
+    closest = 30;
 
     connectorWidth = 16;
 
@@ -80,11 +80,18 @@
 
     makeLinesFromItems() {
       let lines = [];
+
+      // console.log(this.items);
+
       _.map( this.items, item => {
-        _.map( _.get(item, 'itemData.outputs'), connector => {
-          if( connector.target && connector.coords && connector.targetCoords ) {
+        _.map( item.outputs, connector => {
+
+          // console.log(connector);
+          // TODO: make target: target_block_id, targetCoords to connector clone...
+
+          if( connector.target_block_id && connector.x && connector.y && connector.targetCoords ) {
             lines.push({
-              begin: connector.coords,
+              begin: {left: connector.x, top: connector.y},
               end: connector.targetCoords,
             });
           }
@@ -156,36 +163,50 @@
           if( $beginItem ) {
 
             // update sourceCoords (BlockModule\updateEndLineCoords)
+            let coords = $beginItem.getLineEndCoords();
+
+            // console.log(coords);
+
             this.updateEndLineCoords({
               itemId: this.dd.id,
-              coords: $beginItem.getLineEndCoords(),
+              x: coords.left,
+              y: coords.top,
             });
 
             _.map(this.items, (item) => {
 
+              // console.log(item);
+
+              // TODO: 76 is bad, but it fast...
               const isActive = (
                 isNewLine && item.component === 'BlockBase' &&
-                item.sourceCoords.left < left + this.closest &&
-                item.sourceCoords.left > left - this.closest &&
-                item.sourceCoords.top < top + this.closest &&
-                item.sourceCoords.top > top - this.closest
+                item.x + 76 < left + this.closest &&
+                item.x + 76 > left - this.closest &&
+                item.y < top + this.closest &&
+                item.y > top - this.closest
               );
-              if( _.get(item, 'itemData.connectors.output') ) {
-                _.map(_.get(item, 'itemData.connectors.output'), (connector, cIdx) => {
+
+              // console.log(isActive);
+              // console.log(item);
+
+              if( item.outputs ) {
+                _.map( item.outputs, (connector, cIdx) => {
 
                   // TODO: $beginItem updates not properly {Frozen error}
                   if (item.id === this.dd.id) {
 
-                    if (!_.isEmpty($beginItem.$refs)) {
+                    if ( ! _.isEmpty($beginItem.$refs) ) {
                       let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+                      let coords = $beginConnector.getLineBeginCoords();
                       if ($beginConnector) {
-                        connector.coords = $beginConnector.getLineBeginCoords();
+                        connector.x = coords.left;
+                        connector.y = coords.top;
                       }
                     }
 
                   }
 
-                  if (connector.target == this.dd.id) {
+                  if (connector.target_block_id == this.dd.id) {
                     connector.targetCoords = $beginItem.getLineEndCoords();
                   }
                   // check if target item not itself
@@ -193,9 +214,11 @@
                     item.active = isActive;
                     if (isActive) {
                       // TODO: if active, set target id to dd
+                      // console.log(item);
                       this.setActiveTargetId(item.id);
-                      left = item.sourceCoords.left + this.dd.elementOffset.left - this.connectorWidth / 2;
-                      top = item.sourceCoords.top + this.dd.elementOffset.top - this.connectorWidth / 2;
+
+                      left = item.x + this.dd.elementOffset.left - this.connectorWidth / 2 + 65;
+                      top = item.y + this.dd.elementOffset.top - this.connectorWidth / 2 - 9;
                     }
                   }
 
@@ -223,10 +246,13 @@
 
       if( blockId > 0 ) {
 
+        // TODO: 1. save id to `itemData.id` instead `id` for connector clone
         let $item: any = _.find(this.$refs.items, ['itemData.id', blockId]);
 
+        // console.log($item); // undefined
+        // TODO: 2. I will think about saving connector clone target
 
-        if( $item ) {
+        if( $item && $item.itemData.component !== 'ConnectorClone') {
 
           let payload = {
             'botId': botId,
@@ -237,8 +263,6 @@
               'moved': 1,
             }
           };
-
-          console.log(payload);
 
           this.saveBlockData(payload);
         }

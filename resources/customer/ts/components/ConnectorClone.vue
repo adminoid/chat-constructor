@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .connector_clone
+  .connector_clone(:title="itemData.id")
 
 </template>
 
@@ -13,7 +13,7 @@
   @Component({})
   export default class ConnectorClone extends mixins(EndLineMixin) {
 
-    @Prop({}) id!: number;
+    @Prop({}) itemData!: any;
 
   }
 
