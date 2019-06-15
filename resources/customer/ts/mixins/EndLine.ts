@@ -14,7 +14,7 @@ export default class EndLine extends Vue {
 
   getLineEndCoords () {
 
-    // console.log(this.$el);
+    console.log('getLineEndCoords');
 
     if (store.state.Block && this.$el) {
       let areaBoundaries = store.state.Block.area.boundaries,
@@ -23,26 +23,17 @@ export default class EndLine extends Vue {
         x = clientRect.left - areaBoundaries.left,
         y = clientRect.top - areaBoundaries.top;
 
-      // console.info(clientRect.left);
-      // console.log(this.$el.getBoundingClientRect());
-      // console.info(areaBoundaries.left);
-
-
-      // console.info(areaBoundaries);
-
       return {
         left: x + paddingLeft,
         top: y,
       };
-    }
 
+    }
 
     return {
       left: 0,
       top: 0,
     };
-
-
 
   }
 

@@ -31159,9 +31159,9 @@ var BlocksArea = /** @class */ (function (_super) {
         // console.log(this.items);
         lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector) {
-                // console.log(connector);
+                console.log(connector);
                 // TODO: make target: target_block_id, targetCoords to connector clone...
-                if (connector.target_block_id && connector.x && connector.y && connector.targetCoords) {
+                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
                     lines.push({
                         begin: { left: connector.x, top: connector.y },
                         end: connector.targetCoords,
@@ -31228,14 +31228,14 @@ var BlocksArea = /** @class */ (function (_super) {
                             item.x + 76 > left_1 - _this.closest &&
                             item.y < top_1 + _this.closest &&
                             item.y > top_1 - _this.closest);
-                        // console.log(isActive);
-                        // console.log(item);
+                        console.log($beginItem_1);
+                        console.log($beginItem_1.$refs['outputs']);
                         if (item.outputs) {
                             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector, cIdx) {
                                 // TODO: $beginItem updates not properly {Frozen error}
                                 if (item.id === _this.dd.id) {
                                     if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
-                                        var $beginConnector = $beginItem_1.$refs['output-connectors'][cIdx];
+                                        var $beginConnector = $beginItem_1.$refs['outputs'][cIdx];
                                         var coords_1 = $beginConnector.getLineBeginCoords();
                                         if ($beginConnector) {
                                             connector.x = coords_1.left;
@@ -31243,6 +31243,7 @@ var BlocksArea = /** @class */ (function (_super) {
                                         }
                                     }
                                 }
+                                // console.log(connector.target_block_id, this.dd.id);
                                 if (connector.target_block_id == _this.dd.id) {
                                     connector.targetCoords = $beginItem_1.getLineEndCoords();
                                 }
@@ -32487,16 +32488,16 @@ var render = function() {
               refInFor: true,
               tag: "component",
               attrs: { active: item.active, itemData: item }
-            }),
-            _vm._l(_vm.lines, function(line, index) {
-              return _c("line-svg", {
-                key: "line-" + index,
-                attrs: { lineData: line }
-              })
             })
           ],
-          2
+          1
         )
+      }),
+      _vm._l(_vm.lines, function(line, index) {
+        return _c("line-svg", {
+          key: "line-" + index,
+          attrs: { lineData: line }
+        })
       }),
       _c("pre", { staticClass: "br" }, [_vm._v(_vm._s(this.lines))])
     ],
@@ -50552,6 +50553,7 @@ function (_super) {
   }
 
   BeginLine.prototype.getLineBeginCoords = function () {
+    console.log('getLineBeginCoords');
     var areaBoundaries = _store.default.state.Block.area.boundaries;
     var clientRect = this.$el.getBoundingClientRect();
     var paddingLeft = clientRect.width / 2,
@@ -50622,17 +50624,14 @@ function (_super) {
   }
 
   EndLine.prototype.getLineEndCoords = function () {
-    // console.log(this.$el);
+    console.log('getLineEndCoords');
+
     if (_store.default.state.Block && this.$el) {
       var areaBoundaries = _store.default.state.Block.area.boundaries,
           clientRect = this.$el.getBoundingClientRect(),
           paddingLeft = clientRect.width / 2,
           x = clientRect.left - areaBoundaries.left,
-          y = clientRect.top - areaBoundaries.top; // console.info(clientRect.left);
-      // console.log(this.$el.getBoundingClientRect());
-      // console.info(areaBoundaries.left);
-      // console.info(areaBoundaries);
-
+          y = clientRect.top - areaBoundaries.top;
       return {
         left: x + paddingLeft,
         top: y

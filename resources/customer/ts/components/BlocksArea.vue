@@ -13,7 +13,7 @@
         :is="item.component"
         :active="item.active"
         :itemData="item")
-      line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
+    line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
     pre.br {{ this.lines }}
 
 </template>
@@ -86,10 +86,10 @@
       _.map( this.items, item => {
         _.map( item.outputs, connector => {
 
-          // console.log(connector);
+          console.log(connector);
           // TODO: make target: target_block_id, targetCoords to connector clone...
 
-          if( connector.target_block_id && connector.x && connector.y && connector.targetCoords ) {
+          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords ) {
             lines.push({
               begin: {left: connector.x, top: connector.y},
               end: connector.targetCoords,
@@ -186,8 +186,8 @@
                 item.y > top - this.closest
               );
 
-              // console.log(isActive);
-              // console.log(item);
+              console.log($beginItem);
+              console.log($beginItem.$refs['outputs']);
 
               if( item.outputs ) {
                 _.map( item.outputs, (connector, cIdx) => {
@@ -196,7 +196,8 @@
                   if (item.id === this.dd.id) {
 
                     if ( ! _.isEmpty($beginItem.$refs) ) {
-                      let $beginConnector = $beginItem.$refs['output-connectors'][cIdx];
+
+                      let $beginConnector = $beginItem.$refs['outputs'][cIdx];
                       let coords = $beginConnector.getLineBeginCoords();
                       if ($beginConnector) {
                         connector.x = coords.left;
@@ -205,6 +206,8 @@
                     }
 
                   }
+
+                  // console.log(connector.target_block_id, this.dd.id);
 
                   if (connector.target_block_id == this.dd.id) {
                     connector.targetCoords = $beginItem.getLineEndCoords();

@@ -15,6 +15,8 @@ export default class BeginLine extends Vue {
 
   getLineBeginCoords () {
 
+    console.log('getLineBeginCoords');
+
     let areaBoundaries = store.state.Block.area.boundaries;
     let clientRect = this.$el.getBoundingClientRect();
 
