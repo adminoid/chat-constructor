@@ -81,14 +81,8 @@
     makeLinesFromItems() {
       let lines = [];
 
-      // console.log(this.items);
-
       _.map( this.items, item => {
         _.map( item.outputs, connector => {
-
-          console.log(connector);
-          // TODO: make target: target_block_id, targetCoords to connector clone...
-
           if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords ) {
             lines.push({
               begin: {left: connector.x, top: connector.y},
@@ -186,8 +180,8 @@
                 item.y > top - this.closest
               );
 
-              console.log($beginItem);
-              console.log($beginItem.$refs['outputs']);
+              // console.log($beginItem);
+              // console.log($beginItem.$refs['outputs']);
 
               if( item.outputs ) {
                 _.map( item.outputs, (connector, cIdx) => {
@@ -217,7 +211,9 @@
                     item.active = isActive;
                     if (isActive) {
                       // TODO: if active, set target id to dd
+
                       // console.log(item);
+
                       this.setActiveTargetId(item.id);
 
                       left = item.x + this.dd.elementOffset.left - this.connectorWidth / 2 + 65;

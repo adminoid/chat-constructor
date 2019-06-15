@@ -95,10 +95,14 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {
-        console.log(clickedConnectorInfo);
+        // console.log(clickedConnectorInfo);
         var _a = this.dd.sourcePath = clickedConnectorInfo, blockId = _a[0], connectorId = _a[1], item = _.find(this.items, ['id', blockId]);
-        if (_.has(item, 'itemData.outputs')) {
-            item.itemData.outputs[connectorId].target = this.dd.id;
+        console.log(item.outputs);
+        console.log(connectorId);
+        var output = _.find(item.outputs, ['id', connectorId]);
+        if (output) {
+            output.target_block_id = this.dd.id;
+            // item.outputs[connectorId].target_block_id = this.dd.id;
         }
     };
     Block.prototype.setAreaBoundaries = function (data) {

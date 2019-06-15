@@ -31156,11 +31156,8 @@ var BlocksArea = /** @class */ (function (_super) {
     };
     BlocksArea.prototype.makeLinesFromItems = function () {
         var lines = [];
-        // console.log(this.items);
         lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector) {
-                console.log(connector);
-                // TODO: make target: target_block_id, targetCoords to connector clone...
                 if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
                     lines.push({
                         begin: { left: connector.x, top: connector.y },
@@ -31228,8 +31225,8 @@ var BlocksArea = /** @class */ (function (_super) {
                             item.x + 76 > left_1 - _this.closest &&
                             item.y < top_1 + _this.closest &&
                             item.y > top_1 - _this.closest);
-                        console.log($beginItem_1);
-                        console.log($beginItem_1.$refs['outputs']);
+                        // console.log($beginItem);
+                        // console.log($beginItem.$refs['outputs']);
                         if (item.outputs) {
                             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector, cIdx) {
                                 // TODO: $beginItem updates not properly {Frozen error}
@@ -51039,15 +51036,19 @@ function (_super) {
   };
 
   Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {
-    console.log(clickedConnectorInfo);
-
+    // console.log(clickedConnectorInfo);
     var _a = this.dd.sourcePath = clickedConnectorInfo,
         blockId = _a[0],
         connectorId = _a[1],
         item = _.find(this.items, ['id', blockId]);
 
-    if (_.has(item, 'itemData.outputs')) {
-      item.itemData.outputs[connectorId].target = this.dd.id;
+    console.log(item.outputs);
+    console.log(connectorId);
+
+    var output = _.find(item.outputs, ['id', connectorId]);
+
+    if (output) {
+      output.target_block_id = this.dd.id; // item.outputs[connectorId].target_block_id = this.dd.id;
     }
   };
 
