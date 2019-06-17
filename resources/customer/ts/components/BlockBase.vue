@@ -36,7 +36,7 @@
 
     @BlockModule.State dd;
 
-    @Prop({}) itemData!: any;
+    @Prop({}) itemData!: any; // TODO: here itemData, there - just id, it is bug. Pass id to mixin
 
     @Watch('dd', { deep: true })
     onItemsChanged() {

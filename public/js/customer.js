@@ -31144,23 +31144,28 @@ var BlocksArea = /** @class */ (function (_super) {
         return _this;
     }
     BlocksArea.prototype.created = function () {
+        var _this = this;
         this.botId = +this.$route.params.botId;
-        this.fetchBlocks(this.botId);
+        this.fetchBlocks(this.botId).then(function () {
+            _this.lines = _this.makeLinesFromItems();
+        });
     };
     BlocksArea.prototype.mounted = function () {
         this.setupSizesOfArea();
-        this.lines = this.makeLinesFromItems();
     };
     BlocksArea.prototype.onItemsChanged = function () {
         this.lines = this.makeLinesFromItems();
     };
     BlocksArea.prototype.makeLinesFromItems = function () {
         var lines = [];
+        console.log(this.items);
         lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
+            // console.log(item);
             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector) {
-                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
+                console.info(connector);
+                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top) {
                     lines.push({
-                        begin: { left: connector.x, top: connector.y },
+                        begin: connector.coords,
                         end: connector.targetCoords,
                     });
                 }
@@ -31211,7 +31216,6 @@ var BlocksArea = /** @class */ (function (_super) {
                 if ($beginItem_1) {
                     // update sourceCoords (BlockModule\updateEndLineCoords)
                     var coords = $beginItem_1.getLineEndCoords();
-                    // console.log(coords);
                     this.updateEndLineCoords({
                         itemId: this.dd.id,
                         x: coords.left,
@@ -31242,7 +31246,9 @@ var BlocksArea = /** @class */ (function (_super) {
                                 }
                                 // console.log(connector.target_block_id, this.dd.id);
                                 if (connector.target_block_id == _this.dd.id) {
+                                    // console.info('EndLine 2');
                                     connector.targetCoords = $beginItem_1.getLineEndCoords();
+                                    // console.log('EndLine 2: target', connector.targetCoords);
                                 }
                                 // check if target item not itself
                                 else {
@@ -31490,7 +31496,6 @@ var ConnectorOutput = /** @class */ (function (_super) {
         };
         // clicked block, then connector (source)
         var clickedConnectorInfo = [this.blockId, this.connectorData.id];
-        console.info(connectorData);
         this.insertConnectorClone(connectorData);
         this.setTargetForConnector(clickedConnectorInfo); // TODO: Check it
     };
@@ -31738,7 +31743,9 @@ var LineSvg = /** @class */ (function (_super) {
     });
     Object.defineProperty(LineSvg.prototype, "position", {
         get: function () {
-            var dataArray = lodash__WEBPACK_IMPORTED_MODULE_2__["values"](this.lineData);
+            // remove all undef from dataArray
+            var dataArray = lodash__WEBPACK_IMPORTED_MODULE_2__["compact"](lodash__WEBPACK_IMPORTED_MODULE_2__["values"](this.lineData));
+            console.log(dataArray);
             var leftMin = lodash__WEBPACK_IMPORTED_MODULE_2__["minBy"](dataArray, function (o) { return o.left; }).left;
             var topMin = lodash__WEBPACK_IMPORTED_MODULE_2__["minBy"](dataArray, function (o) { return o.top; }).top;
             // todo: refactor 1 px value
@@ -31766,7 +31773,9 @@ var LineSvg = /** @class */ (function (_super) {
     });
     Object.defineProperty(LineSvg.prototype, "height", {
         get: function () {
-            var dataArray = lodash__WEBPACK_IMPORTED_MODULE_2__["values"](this.lineData), topMin = lodash__WEBPACK_IMPORTED_MODULE_2__["minBy"](dataArray, function (o) { return o.top; }).top, topMax = lodash__WEBPACK_IMPORTED_MODULE_2__["maxBy"](dataArray, function (o) { return o.top; }).top, heightAbs = topMax - topMin, height = (heightAbs < this.lineMinSize) ? this.lineMinSize + 2 : heightAbs + 2;
+            // let dataArray = _.values(this.lineData);
+            var dataArray = lodash__WEBPACK_IMPORTED_MODULE_2__["compact"](lodash__WEBPACK_IMPORTED_MODULE_2__["values"](this.lineData));
+            var topMin = lodash__WEBPACK_IMPORTED_MODULE_2__["minBy"](dataArray, function (o) { return o.top; }).top, topMax = lodash__WEBPACK_IMPORTED_MODULE_2__["maxBy"](dataArray, function (o) { return o.top; }).top, heightAbs = topMax - topMin, height = (heightAbs < this.lineMinSize) ? this.lineMinSize + 2 : heightAbs + 2;
             if (this.verticalAdd) {
                 return height + this.topPadding * 2;
             }
@@ -50563,12 +50572,16 @@ function (_super) {
   };
 
   BeginLine.prototype.mounted = function () {
-    // push begin coordinates to out connector
-    _store.default.commit('Block/setBeginLineCoords', {
+    console.info('BeginLine getLineBeginCoords mounted'); // push begin coordinates to out connector
+
+    var payload = {
       itemId: this.blockId,
       connectorId: this.connectorData.id,
       coords: this.getLineBeginCoords()
-    });
+    };
+    console.log(payload);
+
+    _store.default.commit('Block/setBeginLineCoords', payload);
   };
 
   BeginLine = tslib_1.__decorate([_vueMixinDecorator.Mixin], BeginLine);
@@ -50621,18 +50634,18 @@ function (_super) {
   }
 
   EndLine.prototype.getLineEndCoords = function () {
-    console.log('getLineEndCoords');
-
     if (_store.default.state.Block && this.$el) {
       var areaBoundaries = _store.default.state.Block.area.boundaries,
           clientRect = this.$el.getBoundingClientRect(),
           paddingLeft = clientRect.width / 2,
           x = clientRect.left - areaBoundaries.left,
           y = clientRect.top - areaBoundaries.top;
-      return {
+      var ret = {
         left: x + paddingLeft,
         top: y
       };
+      console.log(ret);
+      return ret;
     }
 
     return {
@@ -50641,7 +50654,7 @@ function (_super) {
     };
   };
 
-  EndLine.prototype.created = function () {
+  EndLine.prototype.mounted = function () {
     _store.default.commit('Block/updateEndLineCoords', {
       itemId: this.id,
       coords: this.getLineEndCoords()
@@ -50997,7 +51010,6 @@ function (_super) {
   };
 
   Block.prototype.setBeginLineCoords = function (payload) {
-    // console.log(payload);
     var itemId = payload.itemId,
         connectorId = payload.connectorId,
         coords = payload.coords;
@@ -51012,6 +51024,7 @@ function (_super) {
   };
 
   Block.prototype.updateEndLineCoords = function (payload) {
+    // console.log('updateEndLineCoords');
     // console.log(payload);
     // return;
     var itemId = payload.itemId,
@@ -51025,6 +51038,7 @@ function (_super) {
 
         _.map(item.outputs, function (connector) {
           if (connector.target_block_id === itemId) {
+            // console.log(connector);
             connector.targetCoords = {
               left: x,
               top: y
@@ -51036,19 +51050,15 @@ function (_super) {
   };
 
   Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {
-    // console.log(clickedConnectorInfo);
     var _a = this.dd.sourcePath = clickedConnectorInfo,
         blockId = _a[0],
         connectorId = _a[1],
         item = _.find(this.items, ['id', blockId]);
 
-    console.log(item.outputs);
-    console.log(connectorId);
-
     var output = _.find(item.outputs, ['id', connectorId]);
 
     if (output) {
-      output.target_block_id = this.dd.id; // item.outputs[connectorId].target_block_id = this.dd.id;
+      output.target_block_id = this.dd.id;
     }
   };
 

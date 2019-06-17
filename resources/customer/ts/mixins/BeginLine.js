@@ -22,12 +22,15 @@ var BeginLine = /** @class */ (function (_super) {
         };
     };
     BeginLine.prototype.mounted = function () {
+        console.info('BeginLine getLineBeginCoords mounted');
         // push begin coordinates to out connector
-        store.commit('Block/setBeginLineCoords', {
+        var payload = {
             itemId: this.blockId,
             connectorId: this.connectorData.id,
             coords: this.getLineBeginCoords(),
-        });
+        };
+        console.log(payload);
+        store.commit('Block/setBeginLineCoords', payload);
     };
     BeginLine = tslib_1.__decorate([
         Mixin

@@ -65,12 +65,13 @@
 
     created () {
       this.botId = +this.$route.params.botId;
-      this.fetchBlocks(this.botId);
+      this.fetchBlocks(this.botId).then(() => {
+        this.lines = this.makeLinesFromItems();
+      });
     }
 
     mounted () {
       this.setupSizesOfArea();
-      this.lines = this.makeLinesFromItems();
     }
 
     @Watch('items', { deep: true })
@@ -81,11 +82,19 @@
     makeLinesFromItems() {
       let lines = [];
 
+      console.log(this.items);
+
       _.map( this.items, item => {
+
+        // console.log(item);
+
         _.map( item.outputs, connector => {
-          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords ) {
+
+          console.info(connector);
+
+          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top ) {
             lines.push({
-              begin: {left: connector.x, top: connector.y},
+              begin: connector.coords,
               end: connector.targetCoords,
             });
           }
@@ -159,8 +168,6 @@
             // update sourceCoords (BlockModule\updateEndLineCoords)
             let coords = $beginItem.getLineEndCoords();
 
-            // console.log(coords);
-
             this.updateEndLineCoords({
               itemId: this.dd.id,
               x: coords.left,
@@ -193,6 +200,7 @@
 
                       let $beginConnector = $beginItem.$refs['outputs'][cIdx];
                       let coords = $beginConnector.getLineBeginCoords();
+
                       if ($beginConnector) {
                         connector.x = coords.left;
                         connector.y = coords.top;
@@ -204,7 +212,9 @@
                   // console.log(connector.target_block_id, this.dd.id);
 
                   if (connector.target_block_id == this.dd.id) {
+                    // console.info('EndLine 2');
                     connector.targetCoords = $beginItem.getLineEndCoords();
+                    // console.log('EndLine 2: target', connector.targetCoords);
                   }
                   // check if target item not itself
                   else {

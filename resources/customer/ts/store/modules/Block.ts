@@ -74,8 +74,6 @@ export default class Block extends VuexModule {
   @Mutation
   setBeginLineCoords( payload ) {
 
-    // console.log(payload);
-
     let { itemId, connectorId, coords } = payload;
 
     _.map( this.items, item => {
@@ -90,6 +88,7 @@ export default class Block extends VuexModule {
   @Mutation
   updateEndLineCoords( payload ) {
 
+    // console.log('updateEndLineCoords');
     // console.log(payload);
     // return;
 
@@ -101,7 +100,10 @@ export default class Block extends VuexModule {
         item.y = y;
 
         _.map( item.outputs, connector => {
-          if( connector.target_block_id === itemId ) {
+          if ( connector.target_block_id === itemId ) {
+
+            // console.log(connector);
+
             connector.targetCoords = {left: x, top: y};
           }
         });
@@ -113,21 +115,12 @@ export default class Block extends VuexModule {
   @Mutation
   setTargetForConnector( clickedConnectorInfo ) {
 
-    // console.log(clickedConnectorInfo);
-
     let [blockId, connectorId] = this.dd.sourcePath = clickedConnectorInfo,
       item = _.find(this.items, ['id', blockId]);
 
-    console.log(item.outputs);
-    console.log(connectorId);
-
     let output = _.find(item.outputs, ['id', connectorId]);
-
     if( output ) {
-
       output.target_block_id = this.dd.id;
-
-      // item.outputs[connectorId].target_block_id = this.dd.id;
     }
 
   }

@@ -69,7 +69,6 @@ var Block = /** @class */ (function (_super) {
         }
     };
     Block.prototype.setBeginLineCoords = function (payload) {
-        // console.log(payload);
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
         _.map(this.items, function (item) {
             if (item.id === itemId) {
@@ -79,6 +78,7 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
+        // console.log('updateEndLineCoords');
         // console.log(payload);
         // return;
         var itemId = payload.itemId, x = payload.x, y = payload.y;
@@ -88,6 +88,7 @@ var Block = /** @class */ (function (_super) {
                 item.y = y;
                 _.map(item.outputs, function (connector) {
                     if (connector.target_block_id === itemId) {
+                        // console.log(connector);
                         connector.targetCoords = { left: x, top: y };
                     }
                 });
@@ -95,14 +96,10 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {
-        // console.log(clickedConnectorInfo);
         var _a = this.dd.sourcePath = clickedConnectorInfo, blockId = _a[0], connectorId = _a[1], item = _.find(this.items, ['id', blockId]);
-        console.log(item.outputs);
-        console.log(connectorId);
         var output = _.find(item.outputs, ['id', connectorId]);
         if (output) {
             output.target_block_id = this.dd.id;
-            // item.outputs[connectorId].target_block_id = this.dd.id;
         }
     };
     Block.prototype.setAreaBoundaries = function (data) {

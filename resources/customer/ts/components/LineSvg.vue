@@ -86,7 +86,10 @@
     }
 
     get position () {
-      let dataArray = _.values(this.lineData);
+
+      // remove all undef from dataArray
+      let dataArray = _.compact(_.values(this.lineData));
+      console.log(dataArray);
 
       let leftMin = _.minBy(dataArray, o => o.left).left;
       let topMin = _.minBy(dataArray, o => o.top).top;
@@ -114,8 +117,10 @@
     }
 
     get height () {
-      let dataArray = _.values(this.lineData),
-        topMin = _.minBy(dataArray, (o: any) => o.top).top,
+      // let dataArray = _.values(this.lineData);
+      let dataArray = _.compact(_.values(this.lineData));
+
+      let topMin = _.minBy(dataArray, (o: any) => o.top).top,
         topMax = _.maxBy(dataArray, (o: any) => o.top).top,
         heightAbs = topMax - topMin,
         height = (heightAbs < this.lineMinSize) ? this.lineMinSize + 2 : heightAbs + 2;
