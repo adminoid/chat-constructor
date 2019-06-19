@@ -89,7 +89,6 @@
 
       // remove all undef from dataArray
       let dataArray = _.compact(_.values(this.lineData));
-      console.log(dataArray);
 
       let leftMin = _.minBy(dataArray, o => o.left).left;
       let topMin = _.minBy(dataArray, o => o.top).top;

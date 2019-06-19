@@ -36,7 +36,6 @@ export default class Bot extends VuexModule {
 
   @Action({ commit: 'appendBot'})
   async createBot() {
-    // console.log(type); // todo: add TypeBot/TypeBlock
     return await axios.post(this.baseUrl, {
       'name': 'Billy' + Math.floor(Math.random() * 6) + 1
     });

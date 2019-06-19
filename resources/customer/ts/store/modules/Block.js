@@ -36,16 +36,8 @@ var Block = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)
-                        // .then((response) => {
-                        //   console.log(response);
-                        // });
-                    ];
-                    case 1: return [2 /*return*/, _a.sent()
-                        // .then((response) => {
-                        //   console.log(response);
-                        // });
-                    ];
+                    case 0: return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -78,50 +70,15 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var _this = this;
-        console.log('updateEndLineCoords');
-        // return;
-        console.log(payload);
         var itemId = payload.itemId;
         var x = payload.x, y = payload.y;
         if (payload.coords) {
             x = payload.coords.left;
             y = payload.coords.top;
         }
-        // console.log(payload.coords);
-        // console.log(payload, x, y);
         _.map(this.items, function (item) {
-            // console.log(item.id, itemId);
-            // console.log(item);
-            // if( item.id === itemId ) {
-            // item.x = x;
-            // item.y = y;
-            // console.log(item);
             _.map(item.outputs, function (connector) {
-                // console.log(connector);
                 if (connector.target_block_id === itemId) {
-                    console.log(connector.target_block_id);
-                    // TODO: get block by target_block_id, then assign his left and top to targetCoords
-                    var item_1 = _.find(_this.items, ['id', itemId]);
-                    // let queue: any[] = $items;
-                    // let $beginItem = _.find(queue, (item: any) => {
-                    //   if( item && item.itemData ) {
-                    //     return item.itemData.id === this.dd.id;
-                    //   }
-                    //
-                    //   return false;
-                    // });
-                    // if( $beginItem ) {
-                    // update sourceCoords (BlockModule\updateEndLineCoords)
-                    // let coords = $beginItem.getLineEndCoords();
-                    console.log(item_1);
-                    // TODO: make getLineEndCoords() with block id
-                    // this.updateEndLineCoords({
-                    //   itemId: this.dd.id,
-                    //   x: coords.left,
-                    //   y: coords.top,
-                    // });
-                    // }
                     connector.targetCoords = { left: x, top: y };
                 }
             });
@@ -157,7 +114,6 @@ var Block = /** @class */ (function (_super) {
         var x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left, y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
         // make virtual id for connector-clone without saving to backend
         var virtualNextId = Math.max.apply(Math, this.items.map(function (o) { return o.id; })) + 1;
-        // console.log(virtualNextId);
         var connectorData = {
             component: 'ConnectorClone',
             id: virtualNextId,

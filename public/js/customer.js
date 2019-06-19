@@ -31154,18 +31154,15 @@ var BlocksArea = /** @class */ (function (_super) {
         this.setupSizesOfArea();
     };
     BlocksArea.prototype.onItemsChanged = function () {
-        console.info('@Watch(items)');
         this.lines = this.makeLinesFromItems();
     };
     BlocksArea.prototype.makeLinesFromItems = function () {
         var lines = [];
         // console.log(this.items);
         lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
-            // console.log(item);
             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector) {
                 // console.info(connector);
-                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top) {
-                    console.info(connector);
+                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
                     lines.push({
                         begin: connector.coords,
                         end: connector.targetCoords,
@@ -31224,15 +31221,12 @@ var BlocksArea = /** @class */ (function (_super) {
                         y: coords.top,
                     });
                     lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
-                        // console.log(item);
                         // TODO: 76 is bad, but it fast...
-                        var isActive = (isNewLine_1 && item.component === 'BlockBase' &&
+                        var isActive = (isNewLine_1 && item.component === 'ConnectorClone' &&
                             item.x + 76 < left_1 + _this.closest &&
                             item.x + 76 > left_1 - _this.closest &&
                             item.y < top_1 + _this.closest &&
                             item.y > top_1 - _this.closest);
-                        // console.log($beginItem);
-                        // console.log($beginItem.$refs['outputs']);
                         if (item.outputs) {
                             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector, cIdx) {
                                 // TODO: $beginItem updates not properly {Frozen error}
@@ -31240,19 +31234,14 @@ var BlocksArea = /** @class */ (function (_super) {
                                     if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
                                         var $beginConnector = $beginItem_1.$refs['outputs'][cIdx];
                                         var coords_1 = $beginConnector.getLineBeginCoords();
-                                        // console.log($beginConnector);
-                                        // console.log(coords);
                                         if ($beginConnector) {
                                             connector.coords = coords_1;
-                                            // console.log(connector);
                                         }
                                     }
                                 }
                                 // console.log(connector.target_block_id, this.dd.id);
                                 if (connector.target_block_id == _this.dd.id) {
-                                    // console.info('EndLine 2');
                                     connector.targetCoords = $beginItem_1.getLineEndCoords();
-                                    // console.log('EndLine 2: target', connector.targetCoords);
                                 }
                                 // check if target item not itself
                                 else {
@@ -31279,7 +31268,6 @@ var BlocksArea = /** @class */ (function (_super) {
         if (blockId > 0) {
             // TODO: 1. save id to `itemData.id` instead `id` for connector clone
             var $item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.$refs.items, ['itemData.id', blockId]);
-            // console.log($item); // undefined
             // TODO: 2. I will think about saving connector clone target
             if ($item && $item.itemData.component !== 'ConnectorClone') {
                 var payload = {
@@ -31749,7 +31737,6 @@ var LineSvg = /** @class */ (function (_super) {
         get: function () {
             // remove all undef from dataArray
             var dataArray = lodash__WEBPACK_IMPORTED_MODULE_2__["compact"](lodash__WEBPACK_IMPORTED_MODULE_2__["values"](this.lineData));
-            console.log(dataArray);
             var leftMin = lodash__WEBPACK_IMPORTED_MODULE_2__["minBy"](dataArray, function (o) { return o.left; }).left;
             var topMin = lodash__WEBPACK_IMPORTED_MODULE_2__["minBy"](dataArray, function (o) { return o.top; }).top;
             // todo: refactor 1 px value
@@ -50635,27 +50622,18 @@ function (_super) {
   }
 
   EndLine.prototype.getLineEndCoords = function () {
-    // if (store.state.Block && this.$el) {
     var areaBoundaries = _store.default.state.Block.area.boundaries,
         clientRect = this.$el.getBoundingClientRect(),
         paddingLeft = clientRect.width / 2,
         x = clientRect.left - areaBoundaries.left,
         y = clientRect.top - areaBoundaries.top;
-    var ret = {
+    return {
       left: x + paddingLeft,
       top: y
     };
-    console.log(ret);
-    return ret; // }
-    // return {
-    //   left: 0,
-    //   top: 0,
-    // };
   };
 
   EndLine.prototype.mounted = function () {
-    // console.log(this.id);
-    // console.log(this.itemData);
     var id = this.id || this.itemData.id;
 
     _store.default.commit('Block/updateEndLineCoords', {
@@ -50967,18 +50945,12 @@ function (_super) {
           case 0:
             return [4
             /*yield*/
-            , _axios.default.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData) // .then((response) => {
-            //   console.log(response);
-            // });
-            ];
+            , _axios.default.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
 
           case 1:
             return [2
             /*return*/
-            , _a.sent() // .then((response) => {
-            //   console.log(response);
-            // });
-            ];
+            , _a.sent()];
         }
       });
     });
@@ -51027,11 +50999,6 @@ function (_super) {
   };
 
   Block.prototype.updateEndLineCoords = function (payload) {
-    var _this = this;
-
-    console.log('updateEndLineCoords'); // return;
-
-    console.log(payload);
     var itemId = payload.itemId;
     var x = payload.x,
         y = payload.y;
@@ -51039,43 +51006,11 @@ function (_super) {
     if (payload.coords) {
       x = payload.coords.left;
       y = payload.coords.top;
-    } // console.log(payload.coords);
-    // console.log(payload, x, y);
-
+    }
 
     _.map(this.items, function (item) {
-      // console.log(item.id, itemId);
-      // console.log(item);
-      // if( item.id === itemId ) {
-      // item.x = x;
-      // item.y = y;
-      // console.log(item);
       _.map(item.outputs, function (connector) {
-        // console.log(connector);
         if (connector.target_block_id === itemId) {
-          console.log(connector.target_block_id); // TODO: get block by target_block_id, then assign his left and top to targetCoords
-
-          var item_1 = _.find(_this.items, ['id', itemId]); // let queue: any[] = $items;
-          // let $beginItem = _.find(queue, (item: any) => {
-          //   if( item && item.itemData ) {
-          //     return item.itemData.id === this.dd.id;
-          //   }
-          //
-          //   return false;
-          // });
-          // if( $beginItem ) {
-          // update sourceCoords (BlockModule\updateEndLineCoords)
-          // let coords = $beginItem.getLineEndCoords();
-
-
-          console.log(item_1); // TODO: make getLineEndCoords() with block id
-          // this.updateEndLineCoords({
-          //   itemId: this.dd.id,
-          //   x: coords.left,
-          //   y: coords.top,
-          // });
-          // }
-
           connector.targetCoords = {
             left: x,
             top: y
@@ -51131,8 +51066,7 @@ function (_super) {
 
     var virtualNextId = Math.max.apply(Math, this.items.map(function (o) {
       return o.id;
-    })) + 1; // console.log(virtualNextId);
-
+    })) + 1;
     var connectorData = {
       component: 'ConnectorClone',
       id: virtualNextId,
@@ -51368,7 +51302,6 @@ function (_super) {
             })];
 
           case 1:
-            // console.log(type); // todo: add TypeBot/TypeBlock
             return [2
             /*return*/
             , _a.sent()];

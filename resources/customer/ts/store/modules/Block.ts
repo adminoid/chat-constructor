@@ -50,9 +50,6 @@ export default class Block extends VuexModule {
   async saveBlockData(data) {
 
     return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
-    // .then((response) => {
-    //   console.log(response);
-    // });
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
@@ -88,11 +85,6 @@ export default class Block extends VuexModule {
   @Mutation
   updateEndLineCoords( payload ) {
 
-    console.log('updateEndLineCoords');
-
-    // return;
-    console.log(payload);
-
     let itemId = payload.itemId;
 
     let x = payload.x,
@@ -104,58 +96,11 @@ export default class Block extends VuexModule {
     }
 
 
-    // console.log(payload.coords);
-    // console.log(payload, x, y);
-
     _.map( this.items, (item) => {
-
-      // console.log(item.id, itemId);
-      // console.log(item);
-
-      // if( item.id === itemId ) {
-
-        // item.x = x;
-        // item.y = y;
-
-        // console.log(item);
 
         _.map( item.outputs, connector => {
 
-          // console.log(connector);
-
           if ( connector.target_block_id === itemId ) {
-
-            console.log(connector.target_block_id);
-            // TODO: get block by target_block_id, then assign his left and top to targetCoords
-            let item = _.find(this.items, ['id', itemId]);
-
-            // let queue: any[] = $items;
-
-            // let $beginItem = _.find(queue, (item: any) => {
-            //   if( item && item.itemData ) {
-            //     return item.itemData.id === this.dd.id;
-            //   }
-            //
-            //   return false;
-            // });
-
-            // if( $beginItem ) {
-
-              // update sourceCoords (BlockModule\updateEndLineCoords)
-              // let coords = $beginItem.getLineEndCoords();
-
-            console.log(item);
-
-            // TODO: make getLineEndCoords() with block id
-
-              // this.updateEndLineCoords({
-              //   itemId: this.dd.id,
-              //   x: coords.left,
-              //   y: coords.top,
-              // });
-
-            // }
-
             connector.targetCoords = {left: x, top: y};
           }
         });
@@ -211,7 +156,6 @@ export default class Block extends VuexModule {
 
     // make virtual id for connector-clone without saving to backend
     let virtualNextId = Math.max.apply(Math, this.items.map(function(o) { return o.id; })) + 1;
-    // console.log(virtualNextId);
 
     let connectorData = {
       component: 'ConnectorClone',

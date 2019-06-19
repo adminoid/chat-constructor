@@ -34,9 +34,7 @@ var Bot = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
                             'name': 'Billy' + Math.floor(Math.random() * 6) + 1
                         })];
-                    case 1: 
-                    // console.log(type); // todo: add TypeBot/TypeBlock
-                    return [2 /*return*/, _a.sent()];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });

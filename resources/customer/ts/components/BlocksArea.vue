@@ -74,7 +74,6 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
-      console.info('@Watch(items)');
       this.lines = this.makeLinesFromItems();
     }
 
@@ -85,15 +84,11 @@
 
       _.map( this.items, item => {
 
-        // console.log(item);
-
         _.map( item.outputs, connector => {
 
           // console.info(connector);
 
-          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top) {
-
-            console.info(connector);
+          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
 
             lines.push({
               begin: connector.coords,
@@ -178,19 +173,14 @@
 
             _.map(this.items, (item) => {
 
-              // console.log(item);
-
               // TODO: 76 is bad, but it fast...
               const isActive = (
-                isNewLine && item.component === 'BlockBase' &&
+                isNewLine && item.component === 'ConnectorClone' &&
                 item.x + 76 < left + this.closest &&
                 item.x + 76 > left - this.closest &&
                 item.y < top + this.closest &&
                 item.y > top - this.closest
               );
-
-              // console.log($beginItem);
-              // console.log($beginItem.$refs['outputs']);
 
               if( item.outputs ) {
                 _.map( item.outputs, (connector, cIdx) => {
@@ -203,13 +193,8 @@
                       let $beginConnector = $beginItem.$refs['outputs'][cIdx];
                       let coords = $beginConnector.getLineBeginCoords();
 
-                      // console.log($beginConnector);
-                      // console.log(coords);
-
                       if ($beginConnector) {
                         connector.coords = coords;
-
-                        // console.log(connector);
                       }
                     }
 
@@ -218,9 +203,7 @@
                   // console.log(connector.target_block_id, this.dd.id);
 
                   if (connector.target_block_id == this.dd.id) {
-                    // console.info('EndLine 2');
                     connector.targetCoords = $beginItem.getLineEndCoords();
-                    // console.log('EndLine 2: target', connector.targetCoords);
                   }
                   // check if target item not itself
                   else {
@@ -264,7 +247,6 @@
         // TODO: 1. save id to `itemData.id` instead `id` for connector clone
         let $item: any = _.find(this.$refs.items, ['itemData.id', blockId]);
 
-        // console.log($item); // undefined
         // TODO: 2. I will think about saving connector clone target
 
         if( $item && $item.itemData.component !== 'ConnectorClone') {
