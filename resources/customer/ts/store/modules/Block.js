@@ -83,12 +83,10 @@ var Block = /** @class */ (function (_super) {
         // return;
         console.log(payload);
         var itemId = payload.itemId;
+        var x = payload.x, y = payload.y;
         if (payload.coords) {
-            var x = payload.coords.left, y = payload.coords.top;
-        }
-        else {
-            x = payload.left,
-                y = payload.top;
+            x = payload.coords.left;
+            y = payload.coords.top;
         }
         // console.log(payload.coords);
         // console.log(payload, x, y);

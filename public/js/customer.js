@@ -31154,6 +31154,7 @@ var BlocksArea = /** @class */ (function (_super) {
         this.setupSizesOfArea();
     };
     BlocksArea.prototype.onItemsChanged = function () {
+        console.info('@Watch(items)');
         this.lines = this.makeLinesFromItems();
     };
     BlocksArea.prototype.makeLinesFromItems = function () {
@@ -31163,7 +31164,8 @@ var BlocksArea = /** @class */ (function (_super) {
             // console.log(item);
             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector) {
                 // console.info(connector);
-                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
+                if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top) {
+                    console.info(connector);
                     lines.push({
                         begin: connector.coords,
                         end: connector.targetCoords,
@@ -31238,9 +31240,11 @@ var BlocksArea = /** @class */ (function (_super) {
                                     if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
                                         var $beginConnector = $beginItem_1.$refs['outputs'][cIdx];
                                         var coords_1 = $beginConnector.getLineBeginCoords();
+                                        // console.log($beginConnector);
+                                        // console.log(coords);
                                         if ($beginConnector) {
-                                            connector.x = coords_1.left;
-                                            connector.y = coords_1.top;
+                                            connector.coords = coords_1;
+                                            // console.log(connector);
                                         }
                                     }
                                 }
@@ -32505,7 +32509,7 @@ var render = function() {
           attrs: { lineData: line }
         })
       }),
-      _c("pre", { staticClass: "br" }, [_vm._v(_vm._s(this.lines))])
+      _c("pre", { staticClass: "br" }, [_vm._v(_vm._s(this.dd))])
     ],
     2
   )
@@ -51029,12 +51033,12 @@ function (_super) {
 
     console.log(payload);
     var itemId = payload.itemId;
+    var x = payload.x,
+        y = payload.y;
 
     if (payload.coords) {
-      var x = payload.coords.left,
-          y = payload.coords.top;
-    } else {
-      x = payload.left, y = payload.top;
+      x = payload.coords.left;
+      y = payload.coords.top;
     } // console.log(payload.coords);
     // console.log(payload, x, y);
 

@@ -95,12 +95,12 @@ export default class Block extends VuexModule {
 
     let itemId = payload.itemId;
 
+    let x = payload.x,
+      y = payload.y;
+
     if( payload.coords ) {
-      let x = payload.coords.left,
-        y = payload.coords.top;
-    } else {
-      x = payload.left,
-        y = payload.top;
+      x = payload.coords.left;
+      y = payload.coords.top;
     }
 
 

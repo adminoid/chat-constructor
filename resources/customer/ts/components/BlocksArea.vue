@@ -14,7 +14,7 @@
         :active="item.active"
         :itemData="item")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
-    pre.br {{ this.lines }}
+    pre.br {{ this.dd }}
 
 </template>
 
@@ -74,6 +74,7 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
+      console.info('@Watch(items)');
       this.lines = this.makeLinesFromItems();
     }
 
@@ -90,7 +91,10 @@
 
           // console.info(connector);
 
-          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
+          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top) {
+
+            console.info(connector);
+
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,
@@ -199,9 +203,13 @@
                       let $beginConnector = $beginItem.$refs['outputs'][cIdx];
                       let coords = $beginConnector.getLineBeginCoords();
 
+                      // console.log($beginConnector);
+                      // console.log(coords);
+
                       if ($beginConnector) {
-                        connector.x = coords.left;
-                        connector.y = coords.top;
+                        connector.coords = coords;
+
+                        // console.log(connector);
                       }
                     }
 
