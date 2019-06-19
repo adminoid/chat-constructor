@@ -59,8 +59,6 @@
 
     botId;
 
-    id;
-
     $route;
 
     created () {
@@ -82,7 +80,7 @@
     makeLinesFromItems() {
       let lines = [];
 
-      console.log(this.items);
+      // console.log(this.items);
 
       _.map( this.items, item => {
 
@@ -90,9 +88,9 @@
 
         _.map( item.outputs, connector => {
 
-          console.info(connector);
+          // console.info(connector);
 
-          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top ) {
+          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,

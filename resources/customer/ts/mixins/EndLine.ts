@@ -12,9 +12,11 @@ export default class EndLine extends Vue {
 
   id: number;
 
+  itemData: any;
+
   getLineEndCoords () {
 
-    if (store.state.Block && this.$el) {
+    // if (store.state.Block && this.$el) {
       let areaBoundaries = store.state.Block.area.boundaries,
         clientRect = this.$el.getBoundingClientRect(),
         paddingLeft = clientRect.width / 2,
@@ -30,18 +32,24 @@ export default class EndLine extends Vue {
 
       return ret;
 
-    }
+    // }
 
-    return {
-      left: 0,
-      top: 0,
-    };
+    // return {
+    //   left: 0,
+    //   top: 0,
+    // };
 
   }
 
   mounted () {
+
+    // console.log(this.id);
+    // console.log(this.itemData);
+
+    let id = this.id || this.itemData.id;
+
     store.commit('Block/updateEndLineCoords', {
-      itemId: this.id,
+      itemId: id,
       coords: this.getLineEndCoords(),
     });
   }

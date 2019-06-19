@@ -78,21 +78,56 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
-        // console.log('updateEndLineCoords');
-        // console.log(payload);
+        var _this = this;
+        console.log('updateEndLineCoords');
         // return;
-        var itemId = payload.itemId, x = payload.x, y = payload.y;
+        console.log(payload);
+        var itemId = payload.itemId;
+        if (payload.coords) {
+            var x = payload.coords.left, y = payload.coords.top;
+        }
+        else {
+            x = payload.left,
+                y = payload.top;
+        }
+        // console.log(payload.coords);
+        // console.log(payload, x, y);
         _.map(this.items, function (item) {
-            if (item.id === itemId) {
-                item.x = x;
-                item.y = y;
-                _.map(item.outputs, function (connector) {
-                    if (connector.target_block_id === itemId) {
-                        // console.log(connector);
-                        connector.targetCoords = { left: x, top: y };
-                    }
-                });
-            }
+            // console.log(item.id, itemId);
+            // console.log(item);
+            // if( item.id === itemId ) {
+            // item.x = x;
+            // item.y = y;
+            // console.log(item);
+            _.map(item.outputs, function (connector) {
+                // console.log(connector);
+                if (connector.target_block_id === itemId) {
+                    console.log(connector.target_block_id);
+                    // TODO: get block by target_block_id, then assign his left and top to targetCoords
+                    var item_1 = _.find(_this.items, ['id', itemId]);
+                    // let queue: any[] = $items;
+                    // let $beginItem = _.find(queue, (item: any) => {
+                    //   if( item && item.itemData ) {
+                    //     return item.itemData.id === this.dd.id;
+                    //   }
+                    //
+                    //   return false;
+                    // });
+                    // if( $beginItem ) {
+                    // update sourceCoords (BlockModule\updateEndLineCoords)
+                    // let coords = $beginItem.getLineEndCoords();
+                    console.log(item_1);
+                    // TODO: make getLineEndCoords() with block id
+                    // this.updateEndLineCoords({
+                    //   itemId: this.dd.id,
+                    //   x: coords.left,
+                    //   y: coords.top,
+                    // });
+                    // }
+                    connector.targetCoords = { left: x, top: y };
+                }
+            });
+            // }
         });
     };
     Block.prototype.setTargetForConnector = function (clickedConnectorInfo) {

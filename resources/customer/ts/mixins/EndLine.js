@@ -12,23 +12,26 @@ var EndLine = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EndLine.prototype.getLineEndCoords = function () {
-        if (store.state.Block && this.$el) {
-            var areaBoundaries = store.state.Block.area.boundaries, clientRect = this.$el.getBoundingClientRect(), paddingLeft = clientRect.width / 2, x = clientRect.left - areaBoundaries.left, y = clientRect.top - areaBoundaries.top;
-            var ret = {
-                left: x + paddingLeft,
-                top: y,
-            };
-            console.log(ret);
-            return ret;
-        }
-        return {
-            left: 0,
-            top: 0,
+        // if (store.state.Block && this.$el) {
+        var areaBoundaries = store.state.Block.area.boundaries, clientRect = this.$el.getBoundingClientRect(), paddingLeft = clientRect.width / 2, x = clientRect.left - areaBoundaries.left, y = clientRect.top - areaBoundaries.top;
+        var ret = {
+            left: x + paddingLeft,
+            top: y,
         };
+        console.log(ret);
+        return ret;
+        // }
+        // return {
+        //   left: 0,
+        //   top: 0,
+        // };
     };
     EndLine.prototype.mounted = function () {
+        // console.log(this.id);
+        // console.log(this.itemData);
+        var id = this.id || this.itemData.id;
         store.commit('Block/updateEndLineCoords', {
-            itemId: this.id,
+            itemId: id,
             coords: this.getLineEndCoords(),
         });
     };

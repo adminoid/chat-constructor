@@ -15,8 +15,6 @@ export default class BeginLine extends Vue {
 
   getLineBeginCoords () {
 
-    console.log('getLineBeginCoords');
-
     let areaBoundaries = store.state.Block.area.boundaries;
     let clientRect = this.$el.getBoundingClientRect();
 
@@ -32,15 +30,13 @@ export default class BeginLine extends Vue {
   }
 
   mounted () {
-    console.info('BeginLine getLineBeginCoords mounted');
+
     // push begin coordinates to out connector
     let payload = {
       itemId: this.blockId,
       connectorId: this.connectorData.id,
       coords: this.getLineBeginCoords(),
     };
-
-    console.log(payload);
 
     store.commit('Block/setBeginLineCoords', payload);
 
