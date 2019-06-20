@@ -170,7 +170,7 @@
 
               // TODO: 76 is bad, but it fast...
               const isActive = (
-                isNewLine && item.component === 'ConnectorClone' &&
+                isNewLine && item.component === 'BlockBase' &&
                 item.x + 76 < left + this.closest &&
                 item.x + 76 > left - this.closest &&
                 item.y < top + this.closest &&
@@ -195,7 +195,7 @@
 
                   }
 
-                  if (connector.target_block_id == this.dd.id) {
+                  if (connector.target_block_id === this.dd.id) {
                     connector.targetCoords = $beginItem.getLineEndCoords();
                   }
                   // check if target item not itself
@@ -267,6 +267,7 @@
 
         if( this.dd.targetId >= 0 ) {
           sourceConnector.target_block_id = this.dd.targetId;
+          // TODO: make here saving connector to backend
         }
         else {
           // remove target from output connector

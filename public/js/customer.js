@@ -31219,7 +31219,7 @@ var BlocksArea = /** @class */ (function (_super) {
                     });
                     lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
                         // TODO: 76 is bad, but it fast...
-                        var isActive = (isNewLine_1 && item.component === 'ConnectorClone' &&
+                        var isActive = (isNewLine_1 && item.component === 'BlockBase' &&
                             item.x + 76 < left_1 + _this.closest &&
                             item.x + 76 > left_1 - _this.closest &&
                             item.y < top_1 + _this.closest &&
@@ -31236,7 +31236,7 @@ var BlocksArea = /** @class */ (function (_super) {
                                         }
                                     }
                                 }
-                                if (connector.target_block_id == _this.dd.id) {
+                                if (connector.target_block_id === _this.dd.id) {
                                     connector.targetCoords = $beginItem_1.getLineEndCoords();
                                 }
                                 // check if target item not itself
@@ -31285,6 +31285,7 @@ var BlocksArea = /** @class */ (function (_super) {
             });
             if (this.dd.targetId >= 0) {
                 sourceConnector.target_block_id = this.dd.targetId;
+                // TODO: make here saving connector to backend
             }
             else {
                 // remove target from output connector
