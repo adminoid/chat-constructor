@@ -31285,7 +31285,8 @@ var BlocksArea = /** @class */ (function (_super) {
             });
             if (this.dd.targetId >= 0) {
                 sourceConnector.target_block_id = this.dd.targetId;
-                // TODO: make here saving connector to backend
+                // saving connector to backend
+                this.saveConnectorTarget(sourceConnector);
             }
             else {
                 // remove target from output connector
@@ -31307,6 +31308,9 @@ var BlocksArea = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Action
     ], BlocksArea.prototype, "saveBlockData", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.Action
+    ], BlocksArea.prototype, "saveConnectorTarget", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.State
     ], BlocksArea.prototype, "items", void 0);
@@ -51108,28 +51112,51 @@ function (_super) {
     } else {
       throw 'Error: Here no one block... What do you want to move?';
     }
+  }; // @Mutation
+  // checkCreateConnector(blockId: number) {
+  //
+  //   let item = _.find(this.items, ['id', blockId]),
+  //     connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
+  //     createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
+  //
+  //   if (!createButtonCnt || createButtonCnt < 1) {
+  //     !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
+  //
+  //     !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
+  //
+  //     item.itemData.connectors.output.push({
+  //       type: 'create',
+  //     });
+  //   }
+  //
+  // }
+
+
+  Block.prototype.saveConnectorTarget = function (connector) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+      var connectorId, targetBlockId;
+      return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            connectorId = connector.id, targetBlockId = connector.target_block_id;
+            console.log(connectorId, targetBlockId);
+            return [4
+            /*yield*/
+            , _axios.default.post("private/connector/save-target", {
+              'connector-id': connectorId,
+              'target-id': targetBlockId
+            })];
+
+          case 1:
+            return [2
+            /*return*/
+            , _a.sent()];
+        }
+      });
+    });
   };
 
   Object.defineProperty(Block.prototype, "itemsTotal", {
-    // @Mutation
-    // checkCreateConnector(blockId: number) {
-    //
-    //   let item = _.find(this.items, ['id', blockId]),
-    //     connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
-    //     createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
-    //
-    //   if (!createButtonCnt || createButtonCnt < 1) {
-    //     !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
-    //
-    //     !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
-    //
-    //     item.itemData.connectors.output.push({
-    //       type: 'create',
-    //     });
-    //   }
-    //
-    // }
-
     /**
      * Action because in the future planned make async ajax queries to the server
      *
@@ -51204,6 +51231,8 @@ function (_super) {
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataReset", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataSet", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveConnectorTarget", null);
 
   Block = tslib_1.__decorate([(0, _vuexModuleDecorators.Module)({
     name: 'Block',

@@ -40,6 +40,7 @@
     @BlockModule.Action fetchBlocks;
     @BlockModule.Action deleteBlock;
     @BlockModule.Action saveBlockData;
+    @BlockModule.Action saveConnectorTarget;
 
     @BlockModule.State items;
     @BlockModule.State dd;
@@ -267,7 +268,10 @@
 
         if( this.dd.targetId >= 0 ) {
           sourceConnector.target_block_id = this.dd.targetId;
-          // TODO: make here saving connector to backend
+
+          // saving connector to backend
+          this.saveConnectorTarget(sourceConnector);
+
         }
         else {
           // remove target from output connector

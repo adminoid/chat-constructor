@@ -230,6 +230,21 @@ export default class Block extends VuexModule {
   //
   // }
 
+  @Action
+  async saveConnectorTarget( connector: any ) {
+    let connectorId = connector.id,
+      targetBlockId = connector.target_block_id;
+
+    console.log(connectorId, targetBlockId);
+
+    return await axios.post(`private/connector/save-target`, {
+      'connector-id': connectorId,
+      'target-id': targetBlockId,
+    });
+
+    // return {test: 'TeSt'};
+  }
+
   /**
    * Action because in the future planned make async ajax queries to the server
    *

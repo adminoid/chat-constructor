@@ -30,5 +30,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
         'index', 'store', 'update', 'destroy'
     ]]);
 
+    Route::post('connector/save-target', 'ConnectorController@saveTarget');
+
 });
 
