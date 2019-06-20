@@ -148,8 +148,6 @@ export default class Block extends VuexModule {
   @Mutation
   insertConnectorClone( cloneData: any = {}) {
 
-    // console.log(cloneData);
-
     // calculate position in area
     let x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left,
       y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;

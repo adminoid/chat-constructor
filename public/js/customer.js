@@ -31158,10 +31158,8 @@ var BlocksArea = /** @class */ (function (_super) {
     };
     BlocksArea.prototype.makeLinesFromItems = function () {
         var lines = [];
-        // console.log(this.items);
         lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector) {
-                // console.info(connector);
                 if (connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
                     lines.push({
                         begin: connector.coords,
@@ -31204,7 +31202,6 @@ var BlocksArea = /** @class */ (function (_super) {
             if (this.dd.id >= 0) {
                 this.updateCoords([left_1, top_1]);
                 var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]), isNewLine_1 = item.component === 'ConnectorClone', $items = this.$refs.items;
-                // $beginItem = _.find($items, ['itemData.id', this.dd.id]);
                 var queue = $items;
                 var $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](queue, function (item) {
                     if (item && item.itemData) {
@@ -31229,7 +31226,7 @@ var BlocksArea = /** @class */ (function (_super) {
                             item.y > top_1 - _this.closest);
                         if (item.outputs) {
                             lodash__WEBPACK_IMPORTED_MODULE_3__["map"](item.outputs, function (connector, cIdx) {
-                                // TODO: $beginItem updates not properly {Frozen error}
+                                // $beginItem updates now properly
                                 if (item.id === _this.dd.id) {
                                     if (!lodash__WEBPACK_IMPORTED_MODULE_3__["isEmpty"]($beginItem_1.$refs)) {
                                         var $beginConnector = $beginItem_1.$refs['outputs'][cIdx];
@@ -31239,7 +31236,6 @@ var BlocksArea = /** @class */ (function (_super) {
                                         }
                                     }
                                 }
-                                // console.log(connector.target_block_id, this.dd.id);
                                 if (connector.target_block_id == _this.dd.id) {
                                     connector.targetCoords = $beginItem_1.getLineEndCoords();
                                 }
@@ -31248,7 +31244,6 @@ var BlocksArea = /** @class */ (function (_super) {
                                     item.active = isActive;
                                     if (isActive) {
                                         // TODO: if active, set target id to dd
-                                        // console.log(item);
                                         _this.setActiveTargetId(item.id);
                                         left_1 = item.x + _this.dd.elementOffset.left - _this.connectorWidth / 2 + 65;
                                         top_1 = item.y + _this.dd.elementOffset.top - _this.connectorWidth / 2 - 9;
@@ -31263,6 +31258,7 @@ var BlocksArea = /** @class */ (function (_super) {
         }
     };
     BlocksArea.prototype.mouseupHandler = function () {
+        var _this = this;
         // save new position to server
         var blockId = this.dd.id, botId = this.botId;
         if (blockId > 0) {
@@ -31282,32 +31278,23 @@ var BlocksArea = /** @class */ (function (_super) {
                 this.saveBlockData(payload);
             }
         }
-        // if( this.dd.sourcePath.length === 2 ) {
-        // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
-        //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
-        //
-        // if( sourceConnector.type === 'create' ) {
-        //
-        //   if( this.dd.targetId >= 0 ) {
-        //     sourceConnector.target = this.dd.targetId;
-        //     sourceConnector.type = 'output';
-        //   }
-        //   else {
-        //     // remove target from output connector
-        //     let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
-        //       source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
-        //
-        //     _.unset(source, 'target');
-        //     _.unset(source, 'targetCoords');
-        //
-        //     this.lines = this.makeLinesFromItems();
-        //
-        //   }
-        //
-        //   _.remove( this.items, (item: any) => item.id === this.dd.id );
-        //
-        // }
-        // }
+        if (this.dd.sourcePath.length === 2) {
+            var source = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.sourcePath[0]]);
+            var sourceConnector = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](source.outputs, function (output) {
+                return output.id === _this.dd.sourcePath[1];
+            });
+            if (this.dd.targetId >= 0) {
+                sourceConnector.target_block_id = this.dd.targetId;
+            }
+            else {
+                // remove target from output connector
+                lodash__WEBPACK_IMPORTED_MODULE_3__["unset"](sourceConnector, 'coords');
+                lodash__WEBPACK_IMPORTED_MODULE_3__["unset"](sourceConnector, 'targetCoords');
+                lodash__WEBPACK_IMPORTED_MODULE_3__["unset"](sourceConnector, 'target_block_id');
+                this.lines = this.makeLinesFromItems();
+            }
+            lodash__WEBPACK_IMPORTED_MODULE_3__["remove"](this.items, function (item) { return item.id === _this.dd.id; });
+        }
         this.dragDropDataReset();
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -32469,7 +32456,18 @@ var render = function() {
     "div",
     {
       attrs: { id: "drop-area" },
-      on: { mousemove: _vm.mousemoveHandler, mouseup: _vm.mouseupHandler }
+      on: {
+        mousemove: function($event) {
+          if (
+            !$event.type.indexOf("key") &&
+            _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
+          ) {
+            return null
+          }
+          return _vm.mousemoveHandler($event)
+        },
+        mouseup: _vm.mouseupHandler
+      }
     },
     [
       _vm._l(_vm.items, function(item, index) {
@@ -51055,7 +51053,6 @@ function (_super) {
 
 
   Block.prototype.insertConnectorClone = function (cloneData) {
-    // console.log(cloneData);
     if (cloneData === void 0) {
       cloneData = {};
     } // calculate position in area

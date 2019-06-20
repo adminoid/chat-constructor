@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #drop-area(@mousemove="mousemoveHandler" @mouseup="mouseupHandler")
+  #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler")
     drag-item-wrapper(
       v-for="(item, index) in items"
       :key="index"
@@ -80,13 +80,9 @@
     makeLinesFromItems() {
       let lines = [];
 
-      // console.log(this.items);
-
       _.map( this.items, item => {
 
         _.map( item.outputs, connector => {
-
-          // console.info(connector);
 
           if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
 
@@ -148,7 +144,6 @@
           let item = _.find(this.items, ['id', this.dd.id]),
             isNewLine = item.component === 'ConnectorClone',
             $items: any = this.$refs.items;
-            // $beginItem = _.find($items, ['itemData.id', this.dd.id]);
 
           let queue: any[] = $items;
 
@@ -185,7 +180,7 @@
               if( item.outputs ) {
                 _.map( item.outputs, (connector, cIdx) => {
 
-                  // TODO: $beginItem updates not properly {Frozen error}
+                  // $beginItem updates now properly
                   if (item.id === this.dd.id) {
 
                     if ( ! _.isEmpty($beginItem.$refs) ) {
@@ -200,8 +195,6 @@
 
                   }
 
-                  // console.log(connector.target_block_id, this.dd.id);
-
                   if (connector.target_block_id == this.dd.id) {
                     connector.targetCoords = $beginItem.getLineEndCoords();
                   }
@@ -210,8 +203,6 @@
                     item.active = isActive;
                     if (isActive) {
                       // TODO: if active, set target id to dd
-
-                      // console.log(item);
 
                       this.setActiveTargetId(item.id);
 
@@ -266,34 +257,30 @@
 
       }
 
-      // if( this.dd.sourcePath.length === 2 ) {
+      if( this.dd.sourcePath.length === 2 ) {
 
-        // let source = _.find(this.items, ['id', this.dd.sourcePath[0]]),
-        //   sourceConnector = source.itemData.connectors.output[this.dd.sourcePath[1]];
-        //
-        // if( sourceConnector.type === 'create' ) {
-        //
-        //   if( this.dd.targetId >= 0 ) {
-        //     sourceConnector.target = this.dd.targetId;
-        //     sourceConnector.type = 'output';
-        //   }
-        //   else {
-        //     // remove target from output connector
-        //     let item = _.find( this.items, ['id', this.dd.sourcePath[0]] ),
-        //       source = _.get(item, 'itemData.connectors.output[' + this.dd.sourcePath[1] + ']');
-        //
-        //     _.unset(source, 'target');
-        //     _.unset(source, 'targetCoords');
-        //
-        //     this.lines = this.makeLinesFromItems();
-        //
-        //   }
-        //
-        //   _.remove( this.items, (item: any) => item.id === this.dd.id );
-        //
-        // }
+        let source = _.find(this.items, ['id', this.dd.sourcePath[0]]);
 
-      // }
+        let sourceConnector = _.find(source.outputs, (output) => {
+          return output.id === this.dd.sourcePath[1];
+        });
+
+        if( this.dd.targetId >= 0 ) {
+          sourceConnector.target_block_id = this.dd.targetId;
+        }
+        else {
+          // remove target from output connector
+          _.unset(sourceConnector, 'coords');
+          _.unset(sourceConnector, 'targetCoords');
+          _.unset(sourceConnector, 'target_block_id');
+
+          this.lines = this.makeLinesFromItems();
+
+        }
+
+        _.remove( this.items, (item: any) => item.id === this.dd.id );
+
+      }
 
       this.dragDropDataReset();
 

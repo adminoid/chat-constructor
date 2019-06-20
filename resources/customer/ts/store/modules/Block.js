@@ -108,7 +108,6 @@ var Block = /** @class */ (function (_super) {
      * @param cloneData
      */
     Block.prototype.insertConnectorClone = function (cloneData) {
-        // console.log(cloneData);
         if (cloneData === void 0) { cloneData = {}; }
         // calculate position in area
         var x = cloneData.clickedCoords.left - this.area.boundaries.left - cloneData.cursorOffset.left, y = cloneData.clickedCoords.top - this.area.boundaries.top - cloneData.cursorOffset.top;
