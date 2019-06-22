@@ -27,7 +27,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
     ]]);
 
     Route::resource('bots.blocks', 'BlocksController', ['only' => [
-        'index', 'store', 'update', 'destroy'
+        'index', 'store', 'update', 'destroy',
     ]]);
 
     Route::post('connector/save-target', 'ConnectorController@saveTarget');

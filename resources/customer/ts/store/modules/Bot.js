@@ -32,7 +32,7 @@ var Bot = /** @class */ (function (_super) {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
-                            'name': 'Billy' + Math.floor(Math.random() * 6) + 1
+                            'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
                         })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

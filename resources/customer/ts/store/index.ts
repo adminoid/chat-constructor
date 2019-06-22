@@ -6,16 +6,34 @@ export default new Vuex.Store({
 
   actions: {
 
-    async createEntity(context, typeOfNew) {
+    async createEntity(context, payload) {
 
-      if (typeOfNew === 'bot') {
-        console.log('==bOt');
-        // await context.dispatch('Bot/createBot');
+      if (payload.type === 'bot') {
+
+        await context.dispatch('Bot/createBot');
+
       }
 
-      else if (typeOfNew === 'block') {
-        console.log('--blOck');
-        // await context.dispatch('Block/createBlock');
+      else if (payload.type === 'block') {
+
+        // TODO: take botId
+
+        try {
+
+          if (payload.botId > 0) {
+
+            await context.dispatch('Block/createBlock', payload.botId);
+
+          } else {
+
+            throw Error('Значение botId не передано');
+
+          }
+
+        } catch (e) {
+          console.error(e);
+        }
+
       }
 
     },
@@ -27,3 +45,6 @@ export default new Vuex.Store({
   }
 
 });
+
+// TODO: delete connection if drag to area from input connector
+// TODO: redraw lines if route change

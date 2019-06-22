@@ -22,8 +22,8 @@ export default class Block extends VuexModule {
   items = [];
 
   blockPositionSteps = {
-    left: 15,
-    top: 10,
+    x: 15,
+    y: 10,
   };
 
   dd = {
@@ -98,12 +98,12 @@ export default class Block extends VuexModule {
 
     _.map( this.items, (item) => {
 
-        _.map( item.outputs, connector => {
+      _.map( item.outputs, connector => {
 
-          if ( connector.target_block_id === itemId ) {
-            connector.targetCoords = {left: x, top: y};
-          }
-        });
+        if ( connector.target_block_id === itemId ) {
+          connector.targetCoords = {left: x, top: y};
+        }
+      });
       // }
 
     } );
@@ -235,8 +235,6 @@ export default class Block extends VuexModule {
     let connectorId = connector.id,
       targetBlockId = connector.target_block_id;
 
-    console.log(connectorId, targetBlockId);
-
     return await axios.post(`private/connector/save-target`, {
       'connector-id': connectorId,
       'target-id': targetBlockId,
@@ -245,45 +243,37 @@ export default class Block extends VuexModule {
     // return {test: 'TeSt'};
   }
 
-  /**
-   * Action because in the future planned make async ajax queries to the server
-   *
-   * @param params
-   */
-  // @Action({rawError: true})
-  // async insertBlock(params: any = {}) {
-  //
-  //   if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
-  //     params.component = 'BlockBase';
-  //   }
-  //
-  //   let blockData: object = {
-  //     blockName: `__Block)_`
-  //   };
-  //
-  //   _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
-  //
-  //   if ( _.has(params, 'connectors') ) {
-  //     delete params.connectors;
-  //   }
-  //
-  //   if( !_.has( params, 'position' ) ) {
-  //     let steps = (this.context.state as any).blockPositionSteps;
-  //     let total = (this.context.state as any).items.length;
-  //
-  //     let actualSteps = {};
-  //     Object.keys(steps).map((key) => {
-  //       actualSteps[key] = steps[key] * ( total + 1 );
-  //     });
-  //
-  //     params.position = actualSteps;
-  //   }
-  //
-  //   params.id = this.context.getters['itemsTotal'];
-  //
-  //   this.context.commit('insertItem', params);
-  //
-  // }
+  @Action({rawError: true, commit: 'appendBlock'})
+  async createBlock(botId) {
+
+    const baseUrl = `private/bots/${botId}/blocks`;
+
+    let steps = (this.context.state as any).blockPositionSteps;
+
+    let filtered = _.filter( this.items, (item) => {
+      return !item.moved;
+    });
+
+    let total = filtered.length;
+
+    // TODO: get all items who not moved
+    let actualSteps : any = {};
+    Object.keys(steps).map((key) => {
+      actualSteps[key] = steps[key] * ( total + 1 );
+    });
+
+    return await axios.post(baseUrl, {
+      'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+      'bot_id': botId,
+      x: actualSteps.x,
+      y: actualSteps.y,
+    });
+
+  }
+  @Mutation
+  appendBlock ( block ) {
+    this.items.push(block.data);
+  }
 
   get itemsTotal() {
     return this.items.length;

@@ -37,7 +37,7 @@ export default class Bot extends VuexModule {
   @Action({ commit: 'appendBot'})
   async createBot() {
     return await axios.post(this.baseUrl, {
-      'name': 'Billy' + Math.floor(Math.random() * 6) + 1
+      'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
     });
   }
   @Mutation

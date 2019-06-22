@@ -11,8 +11,8 @@ var Block = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.items = [];
         _this.blockPositionSteps = {
-            left: 15,
-            top: 10,
+            x: 15,
+            y: 10,
         };
         _this.dd = {
             dragging: false,
@@ -178,7 +178,6 @@ var Block = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         connectorId = connector.id, targetBlockId = connector.target_block_id;
-                        console.log(connectorId, targetBlockId);
                         return [4 /*yield*/, axios.post("private/connector/save-target", {
                                 'connector-id': connectorId,
                                 'target-id': targetBlockId,
@@ -188,46 +187,37 @@ var Block = /** @class */ (function (_super) {
             });
         });
     };
+    Block.prototype.createBlock = function (botId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var baseUrl, steps, filtered, total, actualSteps;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        baseUrl = "private/bots/" + botId + "/blocks";
+                        steps = this.context.state.blockPositionSteps;
+                        filtered = _.filter(this.items, function (item) {
+                            return !item.moved;
+                        });
+                        total = filtered.length;
+                        actualSteps = {};
+                        Object.keys(steps).map(function (key) {
+                            actualSteps[key] = steps[key] * (total + 1);
+                        });
+                        return [4 /*yield*/, axios.post(baseUrl, {
+                                'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+                                'bot_id': botId,
+                                x: actualSteps.x,
+                                y: actualSteps.y,
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Block.prototype.appendBlock = function (block) {
+        this.items.push(block.data);
+    };
     Object.defineProperty(Block.prototype, "itemsTotal", {
-        /**
-         * Action because in the future planned make async ajax queries to the server
-         *
-         * @param params
-         */
-        // @Action({rawError: true})
-        // async insertBlock(params: any = {}) {
-        //
-        //   if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
-        //     params.component = 'BlockBase';
-        //   }
-        //
-        //   let blockData: object = {
-        //     blockName: `__Block)_`
-        //   };
-        //
-        //   _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
-        //
-        //   if ( _.has(params, 'connectors') ) {
-        //     delete params.connectors;
-        //   }
-        //
-        //   if( !_.has( params, 'position' ) ) {
-        //     let steps = (this.context.state as any).blockPositionSteps;
-        //     let total = (this.context.state as any).items.length;
-        //
-        //     let actualSteps = {};
-        //     Object.keys(steps).map((key) => {
-        //       actualSteps[key] = steps[key] * ( total + 1 );
-        //     });
-        //
-        //     params.position = actualSteps;
-        //   }
-        //
-        //   params.id = this.context.getters['itemsTotal'];
-        //
-        //   this.context.commit('insertItem', params);
-        //
-        // }
         get: function () {
             return this.items.length;
         },
@@ -276,6 +266,12 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Action
     ], Block.prototype, "saveConnectorTarget", null);
+    tslib_1.__decorate([
+        Action({ rawError: true, commit: 'appendBlock' })
+    ], Block.prototype, "createBlock", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "appendBlock", null);
     Block = tslib_1.__decorate([
         Module({
             name: 'Block',

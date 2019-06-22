@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bot;
+use App\Output;
 use Illuminate\Http\Request;
 use App\Block;
 use Illuminate\Support\Facades\Validator;
@@ -41,36 +42,47 @@ class BlocksController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @param $botId
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|string
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request, $botId)
+    public function store(Request $request)
     {
 
-        $validator = Validator::make(request()->all(), $this->rules);
+        $botId = $request->get('bot_id');
+
+        $newBlockData = request()->all();
+
+        $validator = Validator::make($newBlockData, $this->rules);
         if ($validator->fails()) {
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
         }
 
         $bot = Bot::findOrFail($botId);
-
         $this->authorize('update', $bot);
 
-        $blockData = $request->only('name');
-        $block = new Block($blockData);
-        $bot->blocks()->save($block);
+        $blockDataFull = array_merge($request->all(), [
+            'active' => 1,
+            'component' => 'BlockBase',
+        ]);
 
-        return response()->json($blockData);
+        $block = new Block($blockDataFull);
+        $block->save();
+
+        $output = new Output();
+        $block->outputs()->save($output);
+
+        $block->load('outputs');
+
+        return response()->json($block);
 
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * @param $botId
      * @param $blockId
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update($botId, $blockId, Request $request)
     {

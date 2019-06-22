@@ -9,11 +9,17 @@ use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Block extends Model
 {
 
-    protected $fillable = ['name', 'x', 'y', 'moved'];
+    protected $fillable = ['id', 'name', 'client_input_type_id', 'bot_id', 'created_at', 'updated_at', 'active', 'component', 'intact', 'x', 'y'];
+
+//    protected $hidden = [];
 
 //    protected $appends = array('itemData' => []);
 //    public function getAvailabilityAttribute()
 //    {return $this->calculateAvailability();}
+
+//    protected $guarded = ['created_at'];
+
+//    protected $fillable = ['*'];
 
     public function bot() : BelongsTo
     {

@@ -31855,6 +31855,7 @@ var TopButton = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.text = 'Добавить бота';
         _this.type = 'bot';
+        _this.botId = '';
         return _this;
     }
     TopButton.prototype.onUrlChange = function (newRoute) {
@@ -31866,6 +31867,9 @@ var TopButton = /** @class */ (function (_super) {
             this.text = 'Добавить бота';
             this.type = 'bot';
         }
+    };
+    TopButton.prototype.mounted = function () {
+        this.botId = this.$route.params.botId;
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         vuex_class__WEBPACK_IMPORTED_MODULE_2__["Action"]
@@ -32869,7 +32873,7 @@ var render = function() {
       attrs: { type: "button" },
       on: {
         click: function($event) {
-          return _vm.createEntity(_vm.type)
+          return _vm.createEntity({ type: _vm.type, botId: _vm.botId })
         }
       }
     },
@@ -50850,18 +50854,69 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var _default = new _vuex.default.Store({
   actions: {
-    createEntity: function createEntity(context, typeOfNew) {
+    createEntity: function createEntity(context, payload) {
       return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var e_1;
         return tslib_1.__generator(this, function (_a) {
-          if (typeOfNew === 'bot') {
-            console.log('==bOt'); // await context.dispatch('Bot/createBot');
-          } else if (typeOfNew === 'block') {
-            console.log('--blOck'); // await context.dispatch('Block/createBlock');
-          }
+          switch (_a.label) {
+            case 0:
+              if (!(payload.type === 'bot')) return [3
+              /*break*/
+              , 2];
+              return [4
+              /*yield*/
+              , context.dispatch('Bot/createBot')];
 
-          return [2
-          /*return*/
-          ];
+            case 1:
+              _a.sent();
+
+              return [3
+              /*break*/
+              , 8];
+
+            case 2:
+              if (!(payload.type === 'block')) return [3
+              /*break*/
+              , 8];
+              _a.label = 3;
+
+            case 3:
+              _a.trys.push([3, 7,, 8]);
+
+              if (!(payload.botId > 0)) return [3
+              /*break*/
+              , 5];
+              return [4
+              /*yield*/
+              , context.dispatch('Block/createBlock', payload.botId)];
+
+            case 4:
+              _a.sent();
+
+              return [3
+              /*break*/
+              , 6];
+
+            case 5:
+              throw Error('Значение botId не передано');
+
+            case 6:
+              return [3
+              /*break*/
+              , 8];
+
+            case 7:
+              e_1 = _a.sent();
+              console.error(e_1);
+              return [3
+              /*break*/
+              , 8];
+
+            case 8:
+              return [2
+              /*return*/
+              ];
+          }
         });
       });
     }
@@ -50870,7 +50925,9 @@ var _default = new _vuex.default.Store({
     Bot: _Bot.default,
     Block: _Block.default
   }
-});
+}); // TODO: delete connection if drag to area from input connector
+// TODO: redraw lines if route change
+
 
 exports.default = _default;
 
@@ -50919,8 +50976,8 @@ function (_super) {
 
     _this.items = [];
     _this.blockPositionSteps = {
-      left: 15,
-      top: 10
+      x: 15,
+      y: 10
     };
     _this.dd = {
       dragging: false,
@@ -51139,7 +51196,6 @@ function (_super) {
         switch (_a.label) {
           case 0:
             connectorId = connector.id, targetBlockId = connector.target_block_id;
-            console.log(connectorId, targetBlockId);
             return [4
             /*yield*/
             , _axios.default.post("private/connector/save-target", {
@@ -51156,46 +51212,45 @@ function (_super) {
     });
   };
 
+  Block.prototype.createBlock = function (botId) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+      var baseUrl, steps, filtered, total, actualSteps;
+      return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            baseUrl = "private/bots/" + botId + "/blocks";
+            steps = this.context.state.blockPositionSteps;
+            filtered = _.filter(this.items, function (item) {
+              return !item.moved;
+            });
+            total = filtered.length;
+            actualSteps = {};
+            Object.keys(steps).map(function (key) {
+              actualSteps[key] = steps[key] * (total + 1);
+            });
+            return [4
+            /*yield*/
+            , _axios.default.post(baseUrl, {
+              'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+              'bot_id': botId,
+              x: actualSteps.x,
+              y: actualSteps.y
+            })];
+
+          case 1:
+            return [2
+            /*return*/
+            , _a.sent()];
+        }
+      });
+    });
+  };
+
+  Block.prototype.appendBlock = function (block) {
+    this.items.push(block.data);
+  };
+
   Object.defineProperty(Block.prototype, "itemsTotal", {
-    /**
-     * Action because in the future planned make async ajax queries to the server
-     *
-     * @param params
-     */
-    // @Action({rawError: true})
-    // async insertBlock(params: any = {}) {
-    //
-    //   if( !_.has( params, 'component' ) || params.component !== 'BlockBase' ) {
-    //     params.component = 'BlockBase';
-    //   }
-    //
-    //   let blockData: object = {
-    //     blockName: `__Block)_`
-    //   };
-    //
-    //   _.set(params, 'itemData', _.extend(blockData, _.omit(params, ['component', 'position'])));
-    //
-    //   if ( _.has(params, 'connectors') ) {
-    //     delete params.connectors;
-    //   }
-    //
-    //   if( !_.has( params, 'position' ) ) {
-    //     let steps = (this.context.state as any).blockPositionSteps;
-    //     let total = (this.context.state as any).items.length;
-    //
-    //     let actualSteps = {};
-    //     Object.keys(steps).map((key) => {
-    //       actualSteps[key] = steps[key] * ( total + 1 );
-    //     });
-    //
-    //     params.position = actualSteps;
-    //   }
-    //
-    //   params.id = this.context.getters['itemsTotal'];
-    //
-    //   this.context.commit('insertItem', params);
-    //
-    // }
     get: function get() {
       return this.items.length;
     },
@@ -51233,6 +51288,13 @@ function (_super) {
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataSet", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveConnectorTarget", null);
+
+  tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
+    rawError: true,
+    commit: 'appendBlock'
+  })], Block.prototype, "createBlock", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "appendBlock", null);
 
   Block = tslib_1.__decorate([(0, _vuexModuleDecorators.Module)({
     name: 'Block',
@@ -51325,7 +51387,7 @@ function (_super) {
             return [4
             /*yield*/
             , _axios.default.post(this.baseUrl, {
-              'name': 'Billy' + Math.floor(Math.random() * 6) + 1
+              'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
             })];
 
           case 1:

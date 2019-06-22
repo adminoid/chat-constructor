@@ -1,5 +1,5 @@
 <template lang="pug">
-  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="createEntity(type)") {{ text }}
+  button(type="button" class="top-panel__add-block-btn btn btn-success" @click="createEntity({type: type, botId: botId})") {{ text }}
 </template>
 
 <script lang="ts">
@@ -11,6 +11,7 @@
 
     text = 'Добавить бота';
     type = 'bot';
+    botId = '';
 
     @Action createEntity;
 
@@ -23,6 +24,12 @@
         this.text = 'Добавить бота';
         this.type = 'bot';
       }
+    }
+
+    mounted () {
+
+      this.botId = this.$route.params.botId;
+
     }
 
   }
