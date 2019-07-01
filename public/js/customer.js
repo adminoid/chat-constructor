@@ -11239,7 +11239,7 @@ module.exports = {
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  height: 100px;\n  width: 150px;\n  background: rgba(82, 176, 93, 0.57);\n  border: 1px solid rgba(14, 81, 0, 0.8);\n  border-radius: 5px;\n  -webkit-box-shadow: 4px 4px 14px 0 rgba(0, 0, 0, 0.3);\n          box-shadow: 4px 4px 14px 0 rgba(0, 0, 0, 0.3);\n}\n.base-block .base-block__header {\n  position: relative;\n}\n.base-block .base-block__body {\n  height: 100%;\n}\n.base-block .base-block__footer {\n  position: relative;\n}\n.base-block .outputs {\n  padding: 2px;\n  margin: 0;\n  list-style: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  position: relative;\n  bottom: -11px;\n  border: 1px dashed #7c7c7c;\n  border-radius: 3px;\n}\n.base-block .input-connector {\n  padding: 2px;\n  margin: 0;\n  list-style: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  position: relative;\n  top: -8px;\n  height: 16px;\n  width: 16px;\n  border: 1px dashed #4046b8;\n  background: #575dff;\n  border-radius: 3px;\n  opacity: 0.7;\n}\n.base-block .input-connector.active {\n  background: #f09593;\n}", ""]);
+exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  /*height: 136px*/\n  width: 140px;\n  background: rgba(82, 176, 93, 0.57);\n  border: 1px solid rgba(14, 81, 0, 0.8);\n  border-radius: 5px;\n  -webkit-box-shadow: 4px 4px 14px 0 rgba(0, 0, 0, 0.3);\n          box-shadow: 4px 4px 14px 0 rgba(0, 0, 0, 0.3);\n}\n.base-block .base-block__header {\n  position: relative;\n}\n.base-block .base-block__body {\n  height: 100%;\n}\n.base-block .base-block__body > p {\n  margin-bottom: 5px;\n}\n.base-block .base-block__footer {\n  position: relative;\n}\n.base-block .base-block__panel {\n  padding: 10px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.base-block .base-block__link {\n  margin: 10px;\n}\n.base-block .base-block_wrap {\n  white-space: normal !important;\n}\n.base-block .outputs {\n  padding: 2px;\n  margin: 0;\n  list-style: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  position: relative;\n  bottom: -11px;\n  border: 1px dashed #7c7c7c;\n  border-radius: 3px;\n}\n.base-block .input-connector {\n  padding: 2px;\n  margin: 0;\n  list-style: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  position: relative;\n  top: -8px;\n  height: 16px;\n  width: 16px;\n  border: 1px dashed #4046b8;\n  background: #575dff;\n  border-radius: 3px;\n  opacity: 0.7;\n}\n.base-block .input-connector.active {\n  background: #f09593;\n}", ""]);
 
 
 
@@ -31075,7 +31075,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import ConnectorClone from './ConnectorClone.vue'
 var BlockModule = Object(vuex_class__WEBPACK_IMPORTED_MODULE_4__["namespace"])('Block');
 var BlockBase = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](BlockBase, _super);
@@ -31085,6 +31084,23 @@ var BlockBase = /** @class */ (function (_super) {
     BlockBase.prototype.onItemsChanged = function () {
         // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
         this.$forceUpdate();
+    };
+    BlockBase.prototype.editBlock = function () {
+        console.info('there');
+        // for form need:
+        //  1. form title
+        //  2. title
+        //  3. active - for show/hide form
+        this.$form({
+            type: 'editBlock',
+        })
+            .then(function () {
+            console.log('then');
+        })
+            .catch(function (e) { console.error(e.message); });
+    };
+    BlockBase.prototype.removeBlock = function () {
+        console.info('removeBlock');
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.State
@@ -32407,6 +32423,62 @@ var render = function() {
     _c("div", { staticClass: "base-block__body" }, [
       _c("p", [
         _vm._v(_vm._s(_vm.itemData.id) + ". " + _vm._s(_vm.itemData.name))
+      ]),
+      _c("div", { staticClass: "base-block__panel" }, [
+        _c(
+          "a",
+          {
+            staticClass: "base-block__link btn btn-primary btn-sm",
+            attrs: { title: "Редактировать" },
+            on: {
+              mousedown: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k(
+                    $event.keyCode,
+                    "prev",
+                    undefined,
+                    $event.key,
+                    undefined
+                  )
+                ) {
+                  return null
+                }
+                $event.stopPropagation()
+                return _vm.editBlock($event)
+              }
+            }
+          },
+          [_c("fa-icon", { attrs: { icon: "edit" } })],
+          1
+        ),
+        _c(
+          "button",
+          {
+            staticClass: "base-block__link btn btn-outline-danger btn-sm",
+            attrs: { title: "Удалить" },
+            on: {
+              mousedown: function($event) {
+                if (
+                  !$event.type.indexOf("key") &&
+                  _vm._k(
+                    $event.keyCode,
+                    "prev",
+                    undefined,
+                    $event.key,
+                    undefined
+                  )
+                ) {
+                  return null
+                }
+                $event.stopPropagation()
+                return _vm.removeBlock($event)
+              }
+            }
+          },
+          [_c("fa-icon", { attrs: { icon: "trash" } })],
+          1
+        )
       ])
     ]),
     _c("div", { staticClass: "base-block__footer" }, [
@@ -32723,6 +32795,7 @@ var render = function() {
       on: {
         mousedown: function($event) {
           $event.preventDefault()
+          $event.stopPropagation()
           return _vm.dragStart($event)
         }
       }
@@ -50489,6 +50562,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fortawesome_vue_fontawesome__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @fortawesome/vue-fontawesome */ "./node_modules/@fortawesome/vue-fontawesome/index.es.js");
 /* harmony import */ var _plugins_windows__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/windows */ "./resources/customer/ts/plugins/windows.js");
 /* harmony import */ var _plugins_windows__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_plugins_windows__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _plugins_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/forms */ "./resources/customer/ts/plugins/forms.js");
+/* harmony import */ var _plugins_forms__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_plugins_forms__WEBPACK_IMPORTED_MODULE_9__);
 
 
 
@@ -50503,6 +50578,8 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('fa-icon', _fortawesome_vu
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].config.productionTip = false;
 
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(_plugins_windows__WEBPACK_IMPORTED_MODULE_8___default.a);
+
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(_plugins_forms__WEBPACK_IMPORTED_MODULE_9___default.a);
 new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
     el: '#customer-app',
     render: function (createElement) {
@@ -50655,6 +50732,111 @@ function (_super) {
 
 var _default = EndLine;
 exports.default = _default;
+
+/***/ }),
+
+/***/ "./resources/customer/ts/plugins/forms.js":
+/*!************************************************!*\
+  !*** ./resources/customer/ts/plugins/forms.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Promise) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  install: function install(Vue) {
+    Vue.prototype.$form = function (formData) {
+      return new Promise(function (resolve, reject) {
+        var FormData =
+        /** @class */
+        function () {
+          function FormData() {
+            this.titleDefault = 'Заполните данные';
+            this.title = '';
+            this.active = false;
+            this.clear();
+            this.active = true;
+          }
+
+          FormData.prototype.clear = function () {
+            this.title = this.titleDefault;
+            this.active = false;
+          };
+
+          FormData.prototype.init = function (newData) {
+            // component name for import
+            switch (newData.type) {
+              case 'editBlock':
+                this.componentName = 'ModalFormBlockEdit';
+                this.title = 'Редактирование блока';
+                break;
+              // this is test data for next form
+
+              case 'editBlock1':
+                console.info('edit block 1');
+                break;
+
+              default:
+                console.error('Ошибка: не верный тип блока');
+            } // dynamically activate necessary component
+            // if ( newData.type ) {
+            //
+            //   this.active = true;
+            //
+            //   if (!!newData.title) {
+            //     this.title = newData.title;
+            //   }
+            //
+            // }
+
+          };
+
+          FormData.prototype.close = function () {
+            this.active = false;
+          };
+
+          return FormData;
+        }();
+
+        var Modal = new FormData();
+        return;
+        Modal.init(formData);
+        console.info(Modal.componentName);
+        new Vue({
+          template: '<ModalForm :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="Modal.componentName"></ModalForm>',
+          data: function data() {
+            return {
+              modal: Modal
+            };
+          },
+          methods: {
+            confirmedAction: function confirmedAction() {
+              // @ts-ignore
+              this.modal.close();
+              resolve();
+            },
+            canceledAction: function canceledAction() {
+              // @ts-ignore
+              this.modal.close();
+              reject(new Error('Операция отменена'));
+            }
+          },
+          mounted: function mounted() {
+            console.log(Modal.componentName);
+          }
+        }).$mount('#modal-form');
+      });
+    };
+  }
+};
+exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! imports-loader?this=>global!exports-loader?global.Promise!es6-promise */ "./node_modules/imports-loader/index.js?this=>global!./node_modules/exports-loader/index.js?global.Promise!./node_modules/es6-promise/dist/es6-promise.js")))
 
 /***/ }),
 

@@ -1,7 +1,7 @@
 <template lang="pug">
 
   .drag-item-wrapper(
-    @mousedown.prevent="dragStart"
+    @mousedown.prevent.stop="dragStart"
     :style="position")
       slot
 

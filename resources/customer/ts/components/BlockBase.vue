@@ -5,6 +5,11 @@
       .input-connector
     .base-block__body
       p {{ itemData.id }}. {{ itemData.name }}
+      div.base-block__panel
+        a.base-block__link.btn.btn-primary.btn-sm(title="Редактировать" @mousedown.prev.stop="editBlock")
+          fa-icon(icon="edit")
+        button.base-block__link.btn.btn-outline-danger.btn-sm(title="Удалить" @mousedown.prev.stop="removeBlock")
+          fa-icon(icon="trash")
     .base-block__footer
       .outputs
         connector-output(
@@ -15,17 +20,21 @@
           ref="outputs"
           :title="connector.id")
 
-
 </template>
 
 <script lang="ts">
+
+  declare module 'vue/types/vue' {
+    interface Vue {
+      $form: any;
+    }
+  }
 
   import { Component, Prop, Watch } from 'vue-property-decorator'
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput.vue'
-  // import ConnectorClone from './ConnectorClone.vue'
 
   const BlockModule = namespace('Block');
 
@@ -33,6 +42,8 @@
     components: { ConnectorOutput },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
+
+    $form;
 
     @BlockModule.State dd;
 
@@ -42,6 +53,27 @@
     onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
       this.$forceUpdate();
+    }
+
+    editBlock () {
+
+      console.info('there');
+
+      // for form need:
+      //  1. form title
+      //  2. title
+      //  3. active - for show/hide form
+      this.$form({
+        type: 'editBlock', // need to pass through components, for fill form sub-component
+      })
+        .then(() => {
+          console.log('then');
+        })
+        .catch( e => { console.error(e.message) } );
+    }
+
+    removeBlock () {
+      console.info('removeBlock');
     }
 
   }
@@ -54,8 +86,8 @@
     flex-flow: column nowrap
     justify-content: space-between
     align-items: center
-    height: 100px
-    width: 150px
+    /*height: 136px*/
+    width: 140px
     background: rgba(82, 176, 93, 0.57)
     border: 1px solid rgba(14, 81, 0, 0.8)
     border-radius: 5px
@@ -64,8 +96,20 @@
       position: relative
     .base-block__body
       height: 100%
+      > p
+        margin-bottom: 5px
+
     .base-block__footer
       position: relative
+
+    .base-block__panel
+      padding: 10px
+      display: flex
+      justify-content: space-between
+    .base-block__link
+      margin: 10px
+    .base-block_wrap
+      white-space: normal !important
 
     .outputs
       padding: 2px

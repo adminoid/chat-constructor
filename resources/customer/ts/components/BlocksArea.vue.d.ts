@@ -3,6 +3,7 @@ export default class BlocksArea extends Vue {
     fetchBlocks: any;
     deleteBlock: any;
     saveBlockData: any;
+    saveConnectorTarget: any;
     items: any;
     dd: any;
     area: any;
@@ -15,7 +16,6 @@ export default class BlocksArea extends Vue {
     closest: number;
     connectorWidth: number;
     botId: any;
-    id: any;
     $route: any;
     created(): void;
     mounted(): void;

@@ -16,6 +16,9 @@ Vue.config.productionTip = false;
 import WindowsPlugin from './plugins/windows'
 Vue.use(WindowsPlugin);
 
+import FormsPlugin from './plugins/forms'
+Vue.use(FormsPlugin);
+
 new Vue({
 
   el: '#customer-app',
