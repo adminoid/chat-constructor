@@ -57,8 +57,6 @@
 
     editBlock () {
 
-      console.info('there');
-
       // for form need:
       //  1. form title
       //  2. title

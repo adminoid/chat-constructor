@@ -1,3 +1,4 @@
+import ModalForm from "../components/ModalForm.vue";
 export default {
     install: function (Vue) {
         Vue.prototype.$form = function (formData) {
@@ -45,11 +46,12 @@ export default {
                     return FormData;
                 }());
                 var Modal = new FormData();
-                return;
                 Modal.init(formData);
-                console.info(Modal.componentName);
                 new Vue({
-                    template: '<ModalForm :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="Modal.componentName"></ModalForm>',
+                    template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',
+                    components: {
+                        'modal-form': ModalForm
+                    },
                     data: function () {
                         return {
                             modal: Modal
@@ -67,9 +69,6 @@ export default {
                             reject(new Error('Операция отменена'));
                         },
                     },
-                    mounted: function () {
-                        console.log(Modal.componentName);
-                    }
                 }).$mount('#modal-form');
             });
         };

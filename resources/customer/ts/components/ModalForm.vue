@@ -10,7 +10,7 @@
               button.close(type='button', @click='cancel', data-dismiss='modal', aria-label='Close')
                 span(aria-hidden='true') ×
             .modal-body
-              p component(:is=FormComponent)
+              component(:is="formComponent")
             .modal-footer
               button.btn.btn-primary(type='button', @click='confirm') Подтвердить
               button.btn.btn-secondary(type='button', @click='cancel', data-dismiss='modal') Отмена
@@ -23,8 +23,8 @@
   import ModalFormBlockEdit from './ModalFormBlockEdit.vue'
 
   @Component({
-    // ts-ignore
-    components: ModalFormBlockEdit
+    //@ts-ignore
+    components: { ModalFormBlockEdit }
   })
   export default class ModalForm extends Vue {
 
@@ -40,12 +40,6 @@
 
     cancel () {
       this.$emit('canceled')
-    }
-
-    created () {
-      alert('created');
-
-      console.log(this.formComponent)
     }
 
   }
