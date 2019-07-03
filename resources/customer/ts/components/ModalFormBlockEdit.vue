@@ -1,6 +1,13 @@
 <template lang="pug">
 
-  strong Здесь будет форма
+  form
+    .form-group
+      label(for="exampleInputEmail1") Email address
+      input(type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email")
+      small#emailHelp.form-text.text-muted We'll never share your email with anyone else.
+    .form-group
+      label(for="exampleInputPassword1") Password
+      input#exampleInputPassword1.form-control(type="password" placeholder="Password")
 
 </template>
 
@@ -21,6 +28,12 @@
 
     cancel () {
       this.$emit('canceled')
+    }
+
+    mount () {
+
+
+
     }
 
   }

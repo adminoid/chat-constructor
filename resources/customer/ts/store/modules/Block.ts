@@ -48,8 +48,12 @@ export default class Block extends VuexModule {
 
   @Action
   async saveBlockData(data) {
-
     return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
+  }
+
+  @Action
+  async getBlockData(id) {
+    return await axios.get(`private/bot/${id}`);
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
@@ -97,16 +101,12 @@ export default class Block extends VuexModule {
 
 
     _.map( this.items, (item) => {
-
       _.map( item.outputs, connector => {
-
         if ( connector.target_block_id === itemId ) {
           connector.targetCoords = {left: x, top: y};
         }
       });
-      // }
-
-    } );
+    });
   }
 
   @Mutation
@@ -210,25 +210,6 @@ export default class Block extends VuexModule {
     }
 
   }
-
-  // @Mutation
-  // checkCreateConnector(blockId: number) {
-  //
-  //   let item = _.find(this.items, ['id', blockId]),
-  //     connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
-  //     createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
-  //
-  //   if (!createButtonCnt || createButtonCnt < 1) {
-  //     !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
-  //
-  //     !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
-  //
-  //     item.itemData.connectors.output.push({
-  //       type: 'create',
-  //     });
-  //   }
-  //
-  // }
 
   @Action
   async saveConnectorTarget( connector: any ) {

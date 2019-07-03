@@ -128,4 +128,14 @@ class BlocksController extends Controller
         return response()->json($block);
 
     }
+
+    public function getBlockData($id)
+    {
+
+        $block = Block::findOrFail($id);
+
+        return $block->toJson();
+
+    }
+
 }

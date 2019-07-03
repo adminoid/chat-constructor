@@ -31914,9 +31914,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
 /* harmony import */ var _ModalFormBlockEdit_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalFormBlockEdit.vue */ "./resources/customer/ts/components/ModalFormBlockEdit.vue");
+/* harmony import */ var vuex_class__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex-class */ "./node_modules/vuex-class/lib/index.js");
 
 
 
+
+var BlockModule = Object(vuex_class__WEBPACK_IMPORTED_MODULE_3__["namespace"])('Block');
 var ModalForm = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalForm, _super);
     function ModalForm() {
@@ -31934,6 +31937,9 @@ var ModalForm = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
     ], ModalForm.prototype, "formComponent", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.Action
+    ], ModalForm.prototype, "getBlock", void 0);
     ModalForm = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             //@ts-ignore
@@ -31970,6 +31976,8 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     };
     ModalFormBlockEdit.prototype.cancel = function () {
         this.$emit('canceled');
+    };
+    ModalFormBlockEdit.prototype.mount = function () {
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
@@ -33113,9 +33121,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("strong", [_vm._v("Здесь будет форма")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("form", [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "exampleInputEmail1" } }, [
+          _vm._v("Email address")
+        ]),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            type: "email",
+            id: "exampleInputEmail1",
+            "aria-describedby": "emailHelp",
+            placeholder: "Enter email"
+          }
+        }),
+        _c(
+          "small",
+          { staticClass: "form-text text-muted", attrs: { id: "emailHelp" } },
+          [_vm._v("We'll never share your email with anyone else.")]
+        )
+      ]),
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "exampleInputPassword1" } }, [
+          _vm._v("Password")
+        ]),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            id: "exampleInputPassword1",
+            type: "password",
+            placeholder: "Password"
+          }
+        })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -51657,6 +51705,24 @@ function (_super) {
     });
   };
 
+  Block.prototype.getBlockData = function (id) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+      return tslib_1.__generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , _axios.default.get("private/bot/" + id)];
+
+          case 1:
+            return [2
+            /*return*/
+            , _a.sent()];
+        }
+      });
+    });
+  };
+
   Block.prototype.fetchBlocks = function (id) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
       return tslib_1.__generator(this, function (_a) {
@@ -51717,8 +51783,7 @@ function (_super) {
             top: y
           };
         }
-      }); // }
-
+      });
     });
   };
 
@@ -51810,25 +51875,7 @@ function (_super) {
     } else {
       throw 'Error: Here no one block... What do you want to move?';
     }
-  }; // @Mutation
-  // checkCreateConnector(blockId: number) {
-  //
-  //   let item = _.find(this.items, ['id', blockId]),
-  //     connectorsOutput = _.get(item.itemData, 'connectors.output') || [],
-  //     createButtonCnt = _.filter(connectorsOutput, ['type', 'create']).length;
-  //
-  //   if (!createButtonCnt || createButtonCnt < 1) {
-  //     !_.has( item, 'itemData' ) && _.set( item, 'itemData', { connectors: { output: [] } } );
-  //
-  //     !_.has( item, 'itemData.connectors' ) && _.set( item, 'itemData.connectors', { output: [] } );
-  //
-  //     item.itemData.connectors.output.push({
-  //       type: 'create',
-  //     });
-  //   }
-  //
-  // }
-
+  };
 
   Block.prototype.saveConnectorTarget = function (connector) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -51900,6 +51947,8 @@ function (_super) {
   });
 
   tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveBlockData", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "getBlockData", null);
 
   tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
     commit: 'updateBlocks',
