@@ -31914,12 +31914,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
 /* harmony import */ var _ModalFormBlockEdit_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalFormBlockEdit.vue */ "./resources/customer/ts/components/ModalFormBlockEdit.vue");
-/* harmony import */ var vuex_class__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex-class */ "./node_modules/vuex-class/lib/index.js");
 
 
 
-
-var BlockModule = Object(vuex_class__WEBPACK_IMPORTED_MODULE_3__["namespace"])('Block');
 var ModalForm = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalForm, _super);
     function ModalForm() {
@@ -31937,9 +31934,6 @@ var ModalForm = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
     ], ModalForm.prototype, "formComponent", void 0);
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        BlockModule.Action
-    ], ModalForm.prototype, "getBlock", void 0);
     ModalForm = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             //@ts-ignore
@@ -31964,8 +31958,11 @@ var ModalForm = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+/* harmony import */ var vuex_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-class */ "./node_modules/vuex-class/lib/index.js");
 
 
+
+var BlockModule = Object(vuex_class__WEBPACK_IMPORTED_MODULE_2__["namespace"])('Block');
 var ModalFormBlockEdit = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEdit, _super);
     function ModalFormBlockEdit() {
@@ -31978,10 +31975,17 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         this.$emit('canceled');
     };
     ModalFormBlockEdit.prototype.mount = function () {
+        console.log(this.state);
+        // this.getBlock(this.botId).then(() => {
+        //   this.lines = this.makeLinesFromItems();
+        // });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
     ], ModalFormBlockEdit.prototype, "state", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.Action
+    ], ModalFormBlockEdit.prototype, "getBlock", void 0);
     ModalFormBlockEdit = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
     ], ModalFormBlockEdit);
@@ -33130,36 +33134,40 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("form", [
       _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "exampleInputEmail1" } }, [
-          _vm._v("Email address")
-        ]),
+        _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
         _c("input", {
           staticClass: "form-control",
           attrs: {
-            type: "email",
-            id: "exampleInputEmail1",
-            "aria-describedby": "emailHelp",
-            placeholder: "Enter email"
+            type: "text",
+            id: "name",
+            "aria-describedby": "blockHelp",
+            placeholder: "Block name"
           }
         }),
         _c(
           "small",
-          { staticClass: "form-text text-muted", attrs: { id: "emailHelp" } },
-          [_vm._v("We'll never share your email with anyone else.")]
+          { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
+          [_vm._v("Имя блока назначается, чтобы его запомнить.")]
         )
       ]),
       _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "exampleInputPassword1" } }, [
-          _vm._v("Password")
-        ]),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            id: "exampleInputPassword1",
-            type: "password",
-            placeholder: "Password"
-          }
-        })
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
+            _vm._v("Example select")
+          ]),
+          _c(
+            "select",
+            {
+              staticClass: "form-control",
+              attrs: { id: "exampleFormControlSelect1" }
+            },
+            [
+              _c("option", [_vm._v("1")]),
+              _c("option", [_vm._v("2")]),
+              _c("option", [_vm._v("3")])
+            ]
+          )
+        ])
       ])
     ])
   }

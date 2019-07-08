@@ -21,9 +21,6 @@
 
   import { Vue, Component, Prop } from 'vue-property-decorator'
   import ModalFormBlockEdit from './ModalFormBlockEdit.vue'
-  import { namespace } from 'vuex-class'
-
-  const BlockModule = namespace('Block');
 
   @Component({
     //@ts-ignore
@@ -36,8 +33,6 @@
     @Prop({}) state!: object;
 
     @Prop({}) formComponent!: string;
-
-    @BlockModule.Action getBlock;
 
     confirm () {
       this.$emit('confirmed')

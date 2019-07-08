@@ -2,18 +2,23 @@
 
   form
     .form-group
-      label(for="exampleInputEmail1") Email address
-      input(type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email")
-      small#emailHelp.form-text.text-muted We'll never share your email with anyone else.
+      label(for="name") Block name
+      input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name")
+      small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить.
     .form-group
-      label(for="exampleInputPassword1") Password
-      input#exampleInputPassword1.form-control(type="password" placeholder="Password")
-
+      .form-group
+        label(for="exampleFormControlSelect1") Example select
+        select#exampleFormControlSelect1.form-control
+          option 1
+          option 2
+          option 3
 </template>
 
 <script lang="ts">
 
   import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { namespace } from 'vuex-class'
+  const BlockModule = namespace('Block');
 
   @Component
   export default class ModalFormBlockEdit extends Vue {
@@ -21,6 +26,8 @@
     name: 'ModalFormBlockEdit';
 
     @Prop({}) state!: object;
+
+    @BlockModule.Action getBlock;
 
     confirm () {
       this.$emit('confirmed')
@@ -32,7 +39,11 @@
 
     mount () {
 
+      console.log(this.state);
 
+      // this.getBlock(this.botId).then(() => {
+      //   this.lines = this.makeLinesFromItems();
+      // });
 
     }
 
