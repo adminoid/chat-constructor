@@ -1,9 +1,9 @@
 <template lang="pug">
 
   .drag-item-wrapper(
-  :style="position | pixelize"
-  @mousedown.prevent = "dragStart")
-    slot
+    @mousedown.prevent.stop="dragStart"
+    :style="position")
+      slot
 
 </template>
 
@@ -13,43 +13,25 @@
   import { namespace } from 'vuex-class'
   import { getCursorOffset } from '../helpers'
 
-  const DropAreaModule = namespace('DropAreaModule');
+  const BlockModule = namespace('Block');
 
-  type positionInterface = {
-    left: number,
-    top: number
-  };
-
-  @Component({
-    filters: {
-      pixelize: function (object) {
-
-        let pixelizedObject = {};
-        for (let key in object) {
-          if (object.hasOwnProperty(key)) {
-            pixelizedObject[key] = object[key] + 'px';
-          }
-        }
-
-        return pixelizedObject;
-
-      }
-    }
-  })
+  @Component
   export default class DragItemWrapper extends Vue {
 
-    @Prop({}) position!: positionInterface;
-
+    @Prop({}) x!: number;
+    @Prop({}) y!: number;
+    @Prop({}) id!: number;
     @Prop({}) idx!: number;
 
-    @Prop({}) id: number;
+    @BlockModule.Mutation dragDropDataSet;
 
-    @DropAreaModule.Mutation dragDropDataSet;
+    get position() {
+      return {left: this.x + 'px', top: this.y + 'px'}
+    };
 
     dragStart (e) {
 
       let cursorOffset = getCursorOffset(e);
-
       this.dragDropDataSet({id: this.id, idx: this.idx, offset: cursorOffset});
 
     }

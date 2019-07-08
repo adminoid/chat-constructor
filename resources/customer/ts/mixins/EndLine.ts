@@ -12,29 +12,31 @@ export default class EndLine extends Vue {
 
   id: number;
 
+  itemData: any;
+
   getLineEndCoords () {
 
-    let areaBoundaries = store.state.DropAreaModule.area.boundaries;
-    let clientRect = this.$el.getBoundingClientRect();
-
-    let paddingLeft = clientRect.width / 2,
-      left = clientRect.left - areaBoundaries.left,
-      top = clientRect.top - areaBoundaries.top;
+    let areaBoundaries = store.state.Block.area.boundaries,
+      clientRect = this.$el.getBoundingClientRect(),
+      paddingLeft = clientRect.width / 2,
+      x = clientRect.left - areaBoundaries.left,
+      y = clientRect.top - areaBoundaries.top;
 
     return {
-      left: left + paddingLeft,
-      top: top,
+      left: x + paddingLeft,
+      top: y,
     };
 
   }
 
   mounted () {
 
-    store.commit('DropAreaModule/updateEndLineCoords', {
-      itemId: this.id,
+    let id = this.id || this.itemData.id;
+
+    store.commit('Block/updateEndLineCoords', {
+      itemId: id,
       coords: this.getLineEndCoords(),
     });
-
   }
 
 }

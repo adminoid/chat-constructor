@@ -1,6 +1,8 @@
 <?php
 
+use App\Bot;
 use Illuminate\Database\Seeder;
+use App\User;
 
 class BotsTableSeeder extends Seeder
 {
@@ -12,7 +14,13 @@ class BotsTableSeeder extends Seeder
     public function run()
     {
 
-        factory(App\Bot::class)->create();
+        $user = User::first();
+
+        $user->each(static function ($u) {
+            $u->bots()->saveMany(
+                factory(Bot::class, 3)->create()
+            );
+        });
 
     }
 }

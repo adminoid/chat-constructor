@@ -2,8 +2,6 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Output::class, function (Faker $faker) {
-    return [
-        //
-    ];
+$factory->define(App\Output::class, static function (Faker $faker) {
+    return [];
 });

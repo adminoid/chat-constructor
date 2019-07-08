@@ -1,25 +1,50 @@
-// TODO: For upgrade look here <https://codeburst.io/vuex-and-typescript-3427ba78cfa8>
-
-import DropAreaModule from "./modules/DropAreaModule";
-import Vue from 'vue';
 import Vuex from 'vuex';
-
-Vue.use(Vuex);
+import Bot from "./modules/Bot";
+import Block from "./modules/Block";
 
 export default new Vuex.Store({
 
-  state: {
-    version: '0.9.1'
-  },
+  actions: {
 
-  mutations: {
-    rootMoot(state, newVersion) {
-      state.version = newVersion;
-    }
+    async createEntity(context, payload) {
+
+      if (payload.type === 'bot') {
+
+        await context.dispatch('Bot/createBot');
+
+      }
+
+      else if (payload.type === 'block') {
+
+        // TODO: take botId
+
+        try {
+
+          if (payload.botId > 0) {
+
+            await context.dispatch('Block/createBlock', payload.botId);
+
+          } else {
+
+            throw Error('Значение botId не передано');
+
+          }
+
+        } catch (e) {
+          console.error(e);
+        }
+
+      }
+
+    },
+
   },
 
   modules: {
-    DropAreaModule
+    Bot, Block
   }
 
 });
+
+// TODO: delete connection if drag to area from input connector
+// TODO: redraw lines if route change

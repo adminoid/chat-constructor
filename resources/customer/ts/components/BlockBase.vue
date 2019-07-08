@@ -2,61 +2,76 @@
 
   .base-block
     .base-block__header
-      .input-connector(:class="{ active: active }")
+      .input-connector
     .base-block__body
-      p {{ itemData.blockName }}
+      p {{ itemData.id }}. {{ itemData.name }}
+      div.base-block__panel
+        a.base-block__link.btn.btn-primary.btn-sm(title="Редактировать" @mousedown.prev.stop="editBlock")
+          fa-icon(icon="edit")
+        button.base-block__link.btn.btn-outline-danger.btn-sm(title="Удалить" @mousedown.prev.stop="removeBlock")
+          fa-icon(icon="trash")
     .base-block__footer
-      .output-connectors
-        component(
-        v-for="(connector, index) in itemData.connectors.output"
-        :key="index"
-        :connectorId="index"
-        :blockId="id"
-        :connectorData="connector"
-        :is="'connector-' + connector.type"
-        ref="output-connectors")
+      .outputs
+        connector-output(
+          v-for="(connector, index) in itemData.outputs"
+          :key="index"
+          :blockId="itemData.id"
+          :connectorData="connector"
+          ref="outputs"
+          :title="connector.id")
 
 </template>
 
 <script lang="ts">
 
+  declare module 'vue/types/vue' {
+    interface Vue {
+      $form: any;
+    }
+  }
+
   import { Component, Prop, Watch } from 'vue-property-decorator'
   import { mixins } from 'vue-class-component'
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
-  import ConnectorOutput from './ConnectorOutput'
-  import ConnectorCreate from './ConnectorCreate'
-  // import * as _ from 'lodash'
+  import ConnectorOutput from './ConnectorOutput.vue'
 
-  const DropAreaModule = namespace('DropAreaModule');
+  const BlockModule = namespace('Block');
 
   @Component({
-    components: { ConnectorOutput, ConnectorCreate },
+    components: { ConnectorOutput },
   })
   export default class BlockBase extends mixins(EndLineMixin) {
 
-    @DropAreaModule.Mutation checkCreateConnector;
-    @DropAreaModule.State dd;
+    $form;
 
-    @Prop({}) id!: number;
-    @Prop({}) itemData!: object;
-    @Prop({}) active: boolean;
+    @BlockModule.State dd;
+
+    @Prop({}) itemData!: any; // TODO: here itemData, there - just id, it is bug. Pass id to mixin
 
     @Watch('dd', { deep: true })
     onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-
-      // console.log('watching ' + this.id);
-
-      this.checkCreateConnector(this.id);
       this.$forceUpdate();
-
     }
 
-    created() {
+    editBlock () {
 
-      this.checkCreateConnector(this.id);
+      // for form need:
+      //  1. form title
+      //  2. title
+      //  3. active - for show/hide form
+      this.$form({
+        type: 'editBlock', // need to pass through components, for fill form sub-component
+      })
+        .then(() => {
+          console.log('then');
+        })
+        .catch( e => { console.error(e.message) } );
+    }
 
+    removeBlock () {
+      console.info('removeBlock');
     }
 
   }
@@ -69,8 +84,8 @@
     flex-flow: column nowrap
     justify-content: space-between
     align-items: center
-    height: 100px
-    width: 150px
+    /*height: 136px*/
+    width: 140px
     background: rgba(82, 176, 93, 0.57)
     border: 1px solid rgba(14, 81, 0, 0.8)
     border-radius: 5px
@@ -79,44 +94,45 @@
       position: relative
     .base-block__body
       height: 100%
+      > p
+        margin-bottom: 5px
+
     .base-block__footer
       position: relative
 
-  .output-connectors
-    padding: 2px
-    margin: 0
-    list-style: none
-    display: flex
-    position: relative
-    bottom: -11px
-    border: 1px dashed #7c7c7c
-    border-radius: 3px
+    .base-block__panel
+      padding: 10px
+      display: flex
+      justify-content: space-between
+    .base-block__link
+      margin: 10px
+    .base-block_wrap
+      white-space: normal !important
 
-  .input-connector
-    padding: 2px
-    margin: 0
-    list-style: none
-    display: flex
-    position: relative
-    top: -8px
-    height: 16px
-    width: 16px
-    border: 1px dashed #4046b8
-    background: #575dff
-    border-radius: 3px
-    opacity: .7
-    &.active
-      background: #f09593
+    .outputs
+      padding: 2px
+      margin: 0
+      list-style: none
+      display: flex
+      position: relative
+      bottom: -11px
+      border: 1px dashed #7c7c7c
+      border-radius: 3px
 
-  .connector_new
-    height: 16px
-    width: 16px
-    border: 1px dashed #2a9055
-    background: #31b06f
-    border-radius: 3px
-    &:hover
-      border: 1px solid #005f26
-      background: #2a9055
-      cursor: pointer
+    .input-connector
+      padding: 2px
+      margin: 0
+      list-style: none
+      display: flex
+      position: relative
+      top: -8px
+      height: 16px
+      width: 16px
+      border: 1px dashed #4046b8
+      background: #575dff
+      border-radius: 3px
+      opacity: .7
+      &.active
+        background: #f09593
 
 </style>

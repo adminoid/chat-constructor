@@ -11,14 +11,28 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', static function () {
     return view('home');
 });
 
 Auth::routes(['verify' => true]);
 
-//Route::get('/', function () {
-//    return view('customer.index');
-//});
-
 Route::get('/cabinet', 'CabinetController@index')->name('cabinet');
+
+Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
+{
+
+    Route::resource('bots', 'BotsController', ['only' => [
+        'index', 'store', 'update', 'destroy'
+    ]]);
+
+    Route::resource('bots.blocks', 'BlocksController', ['only' => [
+        'index', 'store', 'update', 'destroy',
+    ]]);
+
+    Route::post('connector/save-target', 'ConnectorController@saveTarget');
+
+    Route::get('bot/{id}', 'BlocksController@getBlockData');
+
+});
+

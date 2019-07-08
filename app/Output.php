@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Output extends Model
 {
 
+    protected $fillable = ['id', 'block_id', 'target_block_id'];
+
     public function block()
     {
         return $this->belongsTo(Block::class);
@@ -24,7 +26,7 @@ class Output extends Model
 
     public static function boot() {
         parent::boot();
-        static::deleting(function($output) {
+        static::deleting(static function($output) {
             $output->outputable()->delete();
         });
     }

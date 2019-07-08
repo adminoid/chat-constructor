@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Bot extends Model
 {
 
+    protected $fillable = ['name'];
+
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);

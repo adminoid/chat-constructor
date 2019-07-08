@@ -9,6 +9,18 @@ use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Block extends Model
 {
 
+    protected $fillable = ['id', 'name', 'client_input_type_id', 'bot_id', 'created_at', 'updated_at', 'active', 'component', 'intact', 'x', 'y'];
+
+//    protected $hidden = [];
+
+//    protected $appends = array('itemData' => []);
+//    public function getAvailabilityAttribute()
+//    {return $this->calculateAvailability();}
+
+//    protected $guarded = ['created_at'];
+
+//    protected $fillable = ['*'];
+
     public function bot() : BelongsTo
     {
         return $this->belongsTo(Bot::class);
@@ -31,7 +43,7 @@ class Block extends Model
 
     public function outputSources() : HasMany
     {
-        return $this->hasMany(Output::class, 'target_block_id', 'id');
+        return $this->hasMany(Output::class, 'block_id_target', 'id');
     }
 
 }

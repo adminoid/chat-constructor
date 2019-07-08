@@ -1,19 +1,33 @@
 {
+  "types": [
+    "jest"
+  ],
   "compilerOptions": {
+    "strictFunctionTypes": false,
+    "lib": ["es6", "dom"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "sourceMap": true,
-    "target": "esnext",
     "strict": true,
-    "module": "esnext",
+    "module": "es2015",
     "moduleResolution": "node",
+    "target": "es5",
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "importHelpers": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "baseUrl": ".",
+    "paths": {
+      "@r/*": ["/resources/*"]
+    }
   },
   "include": [
-    "resources/customer/ts/**/*.ts",
-    "resources/customer/ts/**/*.vue"
+    "resources/**/*.vue",
+    "resources/**/*.ts",
+    "tests/vue/**/*.spec.js"
   ],
   "exclude": [ "node_modules" ]
 }

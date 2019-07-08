@@ -10,12 +10,12 @@ import { Mixin } from 'vue-mixin-decorator'
 @Mixin
 export default class BeginLine extends Vue {
 
-  connectorId: number;
+  connectorData: any;
   blockId: number;
 
   getLineBeginCoords () {
 
-    let areaBoundaries = store.state.DropAreaModule.area.boundaries;
+    let areaBoundaries = store.state.Block.area.boundaries;
     let clientRect = this.$el.getBoundingClientRect();
 
     let paddingLeft = clientRect.width / 2,
@@ -32,11 +32,13 @@ export default class BeginLine extends Vue {
   mounted () {
 
     // push begin coordinates to out connector
-    store.commit('DropAreaModule/setBeginLineCoords', {
+    let payload = {
       itemId: this.blockId,
-      connectorId: this.connectorId,
+      connectorId: this.connectorData.id,
       coords: this.getLineBeginCoords(),
-    });
+    };
+
+    store.commit('Block/setBeginLineCoords', payload);
 
   }
 

@@ -11,20 +11,17 @@
 </head>
 <body>
 
-
-<div class="row no-gutters" id="app">
-
-    <main-sidebar></main-sidebar>
-    <main-content></main-content>
-
-</div>
-
+<div id="customer-app"></div>
 
 <footer>
     <div class="copy">
         &copy; 2019
     </div>
 </footer>
+
+<div id="modal-window"></div>
+
+<div id="modal-form"></div>
 
 <script src="{{ asset('/js/customer.js') }}"></script>
 
