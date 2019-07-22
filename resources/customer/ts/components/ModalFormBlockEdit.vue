@@ -4,14 +4,12 @@
     .form-group
       label(for="name") Block name
       input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name")
-      small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить.
+      small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить. {{ subFormName }}
     .form-group
       .form-group
         label(for="exampleFormControlSelect1") Example select
-        select#exampleFormControlSelect1.form-control
-          option 1
-          option 2
-          option 3
+        select#exampleFormControlSelect1.form-control(v-model="subFormName")
+          option(v-for="subForm in subFormList" :value="subForm.component") {{ subForm.name }}
 </template>
 
 <script lang="ts">
@@ -25,6 +23,19 @@
 
     name: 'ModalFormBlockEdit';
 
+    subFormName = null;
+
+    subFormList = [
+      {
+        name: 'Блок с кнопками',
+        component: 'SubFormButton'
+      },
+      {
+        name: 'Блок с ответом',
+        component: 'SubFormAnswer'
+      },
+    ];
+
     @Prop({}) state!: object;
 
     @BlockModule.Action getBlock;
@@ -37,9 +48,9 @@
       this.$emit('canceled')
     }
 
-    mount () {
+    created () {
 
-      console.log(this.state);
+      console.log('mounted');
 
       // this.getBlock(this.botId).then(() => {
       //   this.lines = this.makeLinesFromItems();

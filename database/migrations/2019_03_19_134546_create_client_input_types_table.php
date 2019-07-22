@@ -11,11 +11,12 @@ class CreateClientInputTypesTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() : void
     {
-        Schema::create('client_input_types', function (Blueprint $table) {
+        Schema::create('client_input_types', static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('component');
             $table->timestamps();
         });
     }
@@ -25,7 +26,7 @@ class CreateClientInputTypesTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down() : void
     {
         Schema::dropIfExists('client_input_types');
     }

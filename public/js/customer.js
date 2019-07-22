@@ -31966,7 +31966,19 @@ var BlockModule = Object(vuex_class__WEBPACK_IMPORTED_MODULE_2__["namespace"])('
 var ModalFormBlockEdit = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEdit, _super);
     function ModalFormBlockEdit() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.subFormName = null;
+        _this.subFormList = [
+            {
+                name: 'Блок с кнопками',
+                component: 'SubFormButton'
+            },
+            {
+                name: 'Блок с ответом',
+                component: 'SubFormAnswer'
+            },
+        ];
+        return _this;
     }
     ModalFormBlockEdit.prototype.confirm = function () {
         this.$emit('confirmed');
@@ -31974,8 +31986,8 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     ModalFormBlockEdit.prototype.cancel = function () {
         this.$emit('canceled');
     };
-    ModalFormBlockEdit.prototype.mount = function () {
-        console.log(this.state);
+    ModalFormBlockEdit.prototype.created = function () {
+        console.log('mounted');
         // this.getBlock(this.botId).then(() => {
         //   this.lines = this.makeLinesFromItems();
         // });
@@ -33125,53 +33137,75 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("form", [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            id: "name",
-            "aria-describedby": "blockHelp",
-            placeholder: "Block name"
-          }
-        }),
-        _c(
-          "small",
-          { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
-          [_vm._v("Имя блока назначается, чтобы его запомнить.")]
-        )
-      ]),
-      _c("div", { staticClass: "form-group" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
-            _vm._v("Example select")
-          ]),
-          _c(
-            "select",
-            {
-              staticClass: "form-control",
-              attrs: { id: "exampleFormControlSelect1" }
-            },
-            [
-              _c("option", [_vm._v("1")]),
-              _c("option", [_vm._v("2")]),
-              _c("option", [_vm._v("3")])
-            ]
+  return _c("form", [
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          id: "name",
+          "aria-describedby": "blockHelp",
+          placeholder: "Block name"
+        }
+      }),
+      _c(
+        "small",
+        { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
+        [
+          _vm._v(
+            "Имя блока назначается, чтобы его запомнить. " +
+              _vm._s(_vm.subFormName)
           )
-        ])
+        ]
+      )
+    ]),
+    _c("div", { staticClass: "form-group" }, [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
+          _vm._v("Example select")
+        ]),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.subFormName,
+                expression: "subFormName"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "exampleFormControlSelect1" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.subFormName = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          _vm._l(_vm.subFormList, function(subForm) {
+            return _c("option", { domProps: { value: subForm.component } }, [
+              _vm._v(_vm._s(subForm.name))
+            ])
+          }),
+          0
+        )
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
