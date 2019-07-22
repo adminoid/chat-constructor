@@ -31959,6 +31959,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
 /* harmony import */ var vuex_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-class */ "./node_modules/vuex-class/lib/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -31968,16 +31971,7 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     function ModalFormBlockEdit() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.subFormName = null;
-        _this.subFormList = [
-            {
-                name: 'Блок с кнопками',
-                component: 'SubFormButton'
-            },
-            {
-                name: 'Блок с ответом',
-                component: 'SubFormAnswer'
-            },
-        ];
+        _this.subFormList = [];
         return _this;
     }
     ModalFormBlockEdit.prototype.confirm = function () {
@@ -31987,10 +31981,14 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         this.$emit('canceled');
     };
     ModalFormBlockEdit.prototype.created = function () {
-        console.log('mounted');
-        // this.getBlock(this.botId).then(() => {
-        //   this.lines = this.makeLinesFromItems();
-        // });
+        var _this = this;
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/client-input-types').then(function (response) {
+            _this.subFormList = response.data;
+            axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/3').then(function (blockData) {
+                console.log(blockData.data.client_input_type.component);
+                _this.subFormName = blockData.data.client_input_type.component;
+            });
+        });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})

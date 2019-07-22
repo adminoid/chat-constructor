@@ -34,5 +34,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::get('block/{id}', 'BlocksController@getBlockData');
 
+    Route::get('client-input-types', 'ClientInputTypesController@getClientInputTypes');
+
 });
 

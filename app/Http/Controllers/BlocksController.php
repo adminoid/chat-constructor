@@ -132,7 +132,7 @@ class BlocksController extends Controller
     public function getBlockData($id)
     {
 
-        $block = Block::with('client_input_type')->findOrFail($id);
+        $block = Block::with('client_input_type:id,name,component')->findOrFail($id);
 
         return $block->toJson();
 

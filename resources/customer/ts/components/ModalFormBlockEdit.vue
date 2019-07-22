@@ -16,6 +16,8 @@
 
   import { Vue, Component, Prop } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
+  import axios from 'axios'
+
   const BlockModule = namespace('Block');
 
   @Component
@@ -25,16 +27,16 @@
 
     subFormName = null;
 
-    subFormList = [
-      {
-        name: 'Блок с кнопками',
-        component: 'SubFormButton'
-      },
-      {
-        name: 'Блок с ответом',
-        component: 'SubFormAnswer'
-      },
-    ];
+    subFormList = [];
+      // {
+      //   name: 'Блок с кнопками',
+      //   component: 'SubFormButton'
+      // },
+      // {
+      //   name: 'Блок с ответом',
+      //   component: 'SubFormAnswer'
+      // },
+    // ];
 
     @Prop({}) state!: object;
 
@@ -50,11 +52,17 @@
 
     created () {
 
-      console.log('mounted');
+      axios.get('/private/client-input-types').then((response) => {
 
-      // this.getBlock(this.botId).then(() => {
-      //   this.lines = this.makeLinesFromItems();
-      // });
+        this.subFormList = response.data;
+
+        axios.get('/private/block/3').then((blockData) => {
+          console.log(blockData.data.client_input_type.component);
+
+          this.subFormName = blockData.data.client_input_type.component;
+        });
+
+      });
 
     }
 
