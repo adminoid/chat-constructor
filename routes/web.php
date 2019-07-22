@@ -32,7 +32,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::post('connector/save-target', 'ConnectorController@saveTarget');
 
-    Route::get('bot/{id}', 'BlocksController@getBlockData');
+    Route::get('block/{id}', 'BlocksController@getBlockData');
 
 });
 
