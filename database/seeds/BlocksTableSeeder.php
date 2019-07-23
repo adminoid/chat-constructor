@@ -4,6 +4,7 @@ use App\Block;
 use App\ClientInputType;
 use Illuminate\Database\Seeder;
 use App\Bot;
+use App\Message;
 
 class BlocksTableSeeder extends Seeder
 {
@@ -24,6 +25,12 @@ class BlocksTableSeeder extends Seeder
             $locBot->blocks()->saveMany(
                 factory(Block::class, $num)->create()->each( function ($block) {
                     $block->client_input_type()->associate(ClientInputType::find(2));
+                    $message = Message::create([
+                        'delay' => 1.0,
+                        'text' => 'Вы просто напишите слова, а я буду говорить :D',
+                        'sort_order_id' => 1,
+                    ]);
+                    $block->messages()->save($message);
                 } )
             );
         });
