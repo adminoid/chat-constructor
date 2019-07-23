@@ -11374,7 +11374,7 @@ exports.push([module.i, ".modal-mask[data-v-a6bc5c62] {\n  position: fixed;\n  z
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".modal-mask[data-v-7f0cd450] {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  -webkit-transition: opacity 0.3s ease;\n  transition: opacity 0.3s ease;\n}\n.modal-mask .modal-wrapper[data-v-7f0cd450] {\n  display: table-cell;\n  vertical-align: middle;\n}", ""]);
+exports.push([module.i, ".modal-mask[data-v-7f0cd450] {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  -webkit-transition: opacity 0.3s ease;\n  transition: opacity 0.3s ease;\n}\n.modal-mask .modal-wrapper[data-v-7f0cd450] {\n  display: table-cell;\n  vertical-align: middle;\n}\n.messages .messages__block[data-v-7f0cd450] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.messages .messages__delay[data-v-7f0cd450] {\n  max-width: 50px;\n}\n.messages .messages__message[data-v-7f0cd450] {\n  margin: 0 10px;\n}", ""]);
 
 
 
@@ -31970,7 +31970,11 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEdit, _super);
     function ModalFormBlockEdit() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.subFormName = null;
+        _this.subFormData = {
+            client_input_type: {
+                component: null
+            }
+        };
         _this.subFormList = [];
         return _this;
     }
@@ -31984,9 +31988,8 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         var _this = this;
         axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/client-input-types').then(function (response) {
             _this.subFormList = response.data;
-            axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/3').then(function (blockData) {
-                console.log(blockData.data.client_input_type.component);
-                _this.subFormName = blockData.data.client_input_type.component;
+            axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/3').then(function (response) {
+                _this.subFormData = response.data;
             });
         });
     };
@@ -33135,75 +33138,140 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [
-    _c("div", { staticClass: "form-group" }, [
-      _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "name",
-          "aria-describedby": "blockHelp",
-          placeholder: "Block name"
-        }
-      }),
-      _c(
-        "small",
-        { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
-        [
-          _vm._v(
-            "Имя блока назначается, чтобы его запомнить. " +
-              _vm._s(_vm.subFormName)
+  return _c("div", { staticClass: "container" }, [
+    _c("form", { staticClass: "messages" }, [
+      _c("label", [_vm._v("Сообщения")]),
+      _c("div", { staticClass: "messages__block" }, [
+        _c("input", {
+          staticClass: "messages__delay form-control",
+          attrs: { type: "text", "aria-label": "delay" }
+        }),
+        _vm._m(0),
+        _c("div", { staticClass: "messages__panel" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "btn btn-outline-secondary btn-outline-danger btn-sm",
+              attrs: { type: "button" }
+            },
+            [_c("fa-icon", { attrs: { icon: "trash" } })],
+            1
           )
-        ]
-      )
+        ])
+      ]),
+      _c("hr"),
+      _vm._m(1),
+      _c("hr")
     ]),
-    _c("div", { staticClass: "form-group" }, [
+    _c("form", [
       _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
-          _vm._v("Example select")
-        ]),
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.subFormName,
-                expression: "subFormName"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { id: "exampleFormControlSelect1" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.subFormName = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
+        _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.subFormData.name,
+              expression: "subFormData.name"
             }
+          ],
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            id: "name",
+            "aria-describedby": "blockHelp",
+            placeholder: "Block name"
           },
-          _vm._l(_vm.subFormList, function(subForm) {
-            return _c("option", { domProps: { value: subForm.component } }, [
-              _vm._v(_vm._s(subForm.name))
-            ])
-          }),
-          0
+          domProps: { value: _vm.subFormData.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.subFormData, "name", $event.target.value)
+            }
+          }
+        }),
+        _c(
+          "small",
+          { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
+          [
+            _vm._v(
+              "Имя блока назначается, чтобы его запомнить. " +
+                _vm._s(_vm.subFormData.client_input_type.component)
+            )
+          ]
         )
+      ]),
+      _c("div", { staticClass: "form-group" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
+            _vm._v("Example select")
+          ]),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.subFormData.client_input_type.component,
+                  expression: "subFormData.client_input_type.component"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "exampleFormControlSelect1" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.subFormData.client_input_type,
+                    "component",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            _vm._l(_vm.subFormList, function(subForm) {
+              return _c("option", { domProps: { value: subForm.component } }, [
+                _vm._v(_vm._s(subForm.name))
+              ])
+            }),
+            0
+          )
+        ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group" }, [
+      _c("textarea", { staticClass: "messages__message form-control" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "messages__add" }, [
+      _c("button", { staticClass: "btn btn-outline-primary" }, [
+        _vm._v("Добавить сообщение")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -33663,8 +33731,8 @@ function isPromise(obj) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /*!
-  * vue-router v3.0.2
-  * (c) 2018 Evan You
+  * vue-router v3.0.3
+  * (c) 2019 Evan You
   * @license MIT
   */
 /*  */
@@ -34746,16 +34814,24 @@ function fillParams (
   params,
   routeMsg
 ) {
+  params = params || {};
   try {
     var filler =
       regexpCompileCache[path] ||
       (regexpCompileCache[path] = pathToRegexp_1.compile(path));
-    return filler(params || {}, { pretty: true })
+
+    // Fix #2505 resolving asterisk routes { name: 'not-found', params: { pathMatch: '/not-found' }}
+    if (params.pathMatch) { params[0] = params.pathMatch; }
+
+    return filler(params, { pretty: true })
   } catch (e) {
     if (true) {
       warn(false, ("missing param for " + routeMsg + ": " + (e.message)));
     }
     return ''
+  } finally {
+    // delete the 0 if it was added
+    delete params[0];
   }
 }
 
@@ -34934,8 +35010,10 @@ function normalizeLocation (
 ) {
   var next = typeof raw === 'string' ? { path: raw } : raw;
   // named target
-  if (next.name || next._normalized) {
+  if (next._normalized) {
     return next
+  } else if (next.name) {
+    return extend({}, raw)
   }
 
   // relative params
@@ -35792,7 +35870,7 @@ function poll (
 
 /*  */
 
-var HTML5History = (function (History$$1) {
+var HTML5History = /*@__PURE__*/(function (History$$1) {
   function HTML5History (router, base) {
     var this$1 = this;
 
@@ -35880,7 +35958,7 @@ function getLocation (base) {
 
 /*  */
 
-var HashHistory = (function (History$$1) {
+var HashHistory = /*@__PURE__*/(function (History$$1) {
   function HashHistory (router, base, fallback) {
     History$$1.call(this, router, base);
     // check history fallback deeplinking
@@ -36017,7 +36095,7 @@ function replaceHash (path) {
 
 /*  */
 
-var AbstractHistory = (function (History$$1) {
+var AbstractHistory = /*@__PURE__*/(function (History$$1) {
   function AbstractHistory (router, base) {
     History$$1.call(this, router, base);
     this.stack = [];
@@ -36230,9 +36308,10 @@ VueRouter.prototype.resolve = function resolve (
   current,
   append
 ) {
+  current = current || this.history.current;
   var location = normalizeLocation(
     to,
-    current || this.history.current,
+    current,
     append,
     this
   );
@@ -36273,7 +36352,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.0.2';
+VueRouter.version = '3.0.3';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);

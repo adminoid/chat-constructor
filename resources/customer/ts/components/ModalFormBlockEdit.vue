@@ -1,15 +1,35 @@
 <template lang="pug">
 
-  form
-    .form-group
-      label(for="name") Block name
-      input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name")
-      small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить. {{ subFormName }}
-    .form-group
+  .container
+
+    form.messages
+      label Сообщения
+      .messages__block
+        input.messages__delay.form-control(type="text" aria-label="delay")
+        .input-group
+          textarea.messages__message.form-control
+        .messages__panel
+          button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button")
+            fa-icon(icon="trash")
+
+      hr
+
+      .messages__add
+        button.btn.btn-outline-primary Добавить сообщение
+
+      hr
+
+    form
       .form-group
-        label(for="exampleFormControlSelect1") Example select
-        select#exampleFormControlSelect1.form-control(v-model="subFormName")
-          option(v-for="subForm in subFormList" :value="subForm.component") {{ subForm.name }}
+        label(for="name") Block name
+        input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name" v-model="subFormData.name")
+        small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить. {{ subFormData.client_input_type.component }}
+      .form-group
+        .form-group
+          label(for="exampleFormControlSelect1") Example select
+          select#exampleFormControlSelect1.form-control(v-model="subFormData.client_input_type.component")
+            option(v-for="subForm in subFormList" :value="subForm.component") {{ subForm.name }}
+
 </template>
 
 <script lang="ts">
@@ -25,18 +45,13 @@
 
     name: 'ModalFormBlockEdit';
 
-    subFormName = null;
+    subFormData = {
+      client_input_type: {
+        component: null
+      }
+    };
 
     subFormList = [];
-      // {
-      //   name: 'Блок с кнопками',
-      //   component: 'SubFormButton'
-      // },
-      // {
-      //   name: 'Блок с ответом',
-      //   component: 'SubFormAnswer'
-      // },
-    // ];
 
     @Prop({}) state!: object;
 
@@ -52,16 +67,11 @@
 
     created () {
 
-      axios.get('/private/client-input-types').then((response) => {
-
+      axios.get('/private/client-input-types').then(( response ) => {
         this.subFormList = response.data;
-
-        axios.get('/private/block/3').then((blockData) => {
-          console.log(blockData.data.client_input_type.component);
-
-          this.subFormName = blockData.data.client_input_type.component;
+        axios.get('/private/block/3').then(( response ) => {
+          this.subFormData = response.data;
         });
-
       });
 
     }
@@ -85,5 +95,12 @@
     .modal-wrapper
       display: table-cell
       vertical-align: middle
+  .messages
+    .messages__block
+      display: flex
+    .messages__delay
+      max-width: 50px
+    .messages__message
+      margin: 0 10px
 
 </style>
