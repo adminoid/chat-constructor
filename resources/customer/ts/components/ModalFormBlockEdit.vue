@@ -2,28 +2,30 @@
 
   .container
 
-    form.messages
-      label Сообщения
-      .messages__block
-        input.messages__delay.form-control(type="text" aria-label="delay")
-        .input-group
-          textarea.messages__message.form-control
-        .messages__panel
-          button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button")
-            fa-icon(icon="trash")
-
-      hr
-
-      .messages__add
-        button.btn.btn-outline-primary Добавить сообщение
-
-      hr
-
     form
+
       .form-group
-        label(for="name") Block name
+        label(for="name") Имя блока
         input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name" v-model="subFormData.name")
         small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить. {{ subFormData.client_input_type.component }}
+
+      fieldset.border.p-2.messages
+        legend.w-auto Сообщения
+        .messages__block(v-for="message in subFormData.messages" :key="message.sort_order_id")
+          input.messages__delay.form-control(type="text" aria-label="delay" v-model="message.delay")
+          .input-group
+            textarea.messages__message.form-control {{ message.text }}
+          .messages__panel
+            button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button")
+              fa-icon(icon="trash")
+
+      fieldset.border.p-2
+
+        .messages__add
+          button.btn.btn-outline-primary Добавить сообщение
+
+      hr
+
       .form-group
         .form-group
           label(for="exampleFormControlSelect1") Example select
@@ -46,10 +48,13 @@
     name: 'ModalFormBlockEdit';
 
     subFormData = {
+      messages: [],
       client_input_type: {
         component: null
       }
     };
+
+    messages = [];
 
     subFormList = [];
 

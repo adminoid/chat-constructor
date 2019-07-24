@@ -31971,10 +31971,12 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     function ModalFormBlockEdit() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.subFormData = {
+            messages: [],
             client_input_type: {
                 component: null
             }
         };
+        _this.messages = [];
         _this.subFormList = [];
         return _this;
     }
@@ -33139,34 +33141,9 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("form", { staticClass: "messages" }, [
-      _c("label", [_vm._v("Сообщения")]),
-      _c("div", { staticClass: "messages__block" }, [
-        _c("input", {
-          staticClass: "messages__delay form-control",
-          attrs: { type: "text", "aria-label": "delay" }
-        }),
-        _vm._m(0),
-        _c("div", { staticClass: "messages__panel" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "btn btn-outline-secondary btn-outline-danger btn-sm",
-              attrs: { type: "button" }
-            },
-            [_c("fa-icon", { attrs: { icon: "trash" } })],
-            1
-          )
-        ])
-      ]),
-      _c("hr"),
-      _vm._m(1),
-      _c("hr")
-    ]),
     _c("form", [
       _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
+        _c("label", { attrs: { for: "name" } }, [_vm._v("Имя блока")]),
         _c("input", {
           directives: [
             {
@@ -33204,6 +33181,64 @@ var render = function() {
           ]
         )
       ]),
+      _c(
+        "fieldset",
+        { staticClass: "border p-2 messages" },
+        [
+          _c("legend", { staticClass: "w-auto" }, [_vm._v("Сообщения")]),
+          _vm._l(_vm.subFormData.messages, function(message) {
+            return _c(
+              "div",
+              { key: message.sort_order_id, staticClass: "messages__block" },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: message.delay,
+                      expression: "message.delay"
+                    }
+                  ],
+                  staticClass: "messages__delay form-control",
+                  attrs: { type: "text", "aria-label": "delay" },
+                  domProps: { value: message.delay },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(message, "delay", $event.target.value)
+                    }
+                  }
+                }),
+                _c("div", { staticClass: "input-group" }, [
+                  _c(
+                    "textarea",
+                    { staticClass: "messages__message form-control" },
+                    [_vm._v(_vm._s(message.text))]
+                  )
+                ]),
+                _c("div", { staticClass: "messages__panel" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "btn btn-outline-secondary btn-outline-danger btn-sm",
+                      attrs: { type: "button" }
+                    },
+                    [_c("fa-icon", { attrs: { icon: "trash" } })],
+                    1
+                  )
+                ])
+              ]
+            )
+          })
+        ],
+        2
+      ),
+      _vm._m(0),
+      _c("hr"),
       _c("div", { staticClass: "form-group" }, [
         _c("div", { staticClass: "form-group" }, [
           _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
@@ -33257,17 +33292,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group" }, [
-      _c("textarea", { staticClass: "messages__message form-control" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "messages__add" }, [
-      _c("button", { staticClass: "btn btn-outline-primary" }, [
-        _vm._v("Добавить сообщение")
+    return _c("fieldset", { staticClass: "border p-2" }, [
+      _c("div", { staticClass: "messages__add" }, [
+        _c("button", { staticClass: "btn btn-outline-primary" }, [
+          _vm._v("Добавить сообщение")
+        ])
       ])
     ])
   }
