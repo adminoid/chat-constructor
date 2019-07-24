@@ -63,6 +63,8 @@
       //  3. active - for show/hide form
       this.$form({
         type: 'editBlock', // need to pass through components, for fill form sub-component
+      }, {
+        blockId: this.itemData.id
       })
         .then(() => {
           console.log('then');

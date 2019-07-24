@@ -4,7 +4,7 @@ export default {
 
   install (Vue) {
 
-    Vue.prototype.$form = function(formData) {
+    Vue.prototype.$form = function(formData, params) {
 
       return new Promise((resolve, reject) => {
 
@@ -16,11 +16,14 @@ export default {
           active = false;
           type: string;
 
+          params: {};
+
           componentName;
 
-          constructor() {
+          constructor(params) {
             this.clear();
             this.active = true;
+            this.params = params;
           }
 
           clear() {
@@ -70,7 +73,7 @@ export default {
 
         }
 
-        const Modal = new FormData();
+        const Modal = new FormData(params);
 
         Modal.init(formData);
 

@@ -31182,6 +31182,8 @@ var BlockBase = /** @class */ (function (_super) {
         //  3. active - for show/hide form
         this.$form({
             type: 'editBlock',
+        }, {
+            blockId: this.itemData.id
         })
             .then(function () {
             console.log('then');
@@ -31990,9 +31992,18 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         var _this = this;
         axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/client-input-types').then(function (response) {
             _this.subFormList = response.data;
-            axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/3').then(function (response) {
+            axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/' + _this.state.params.blockId).then(function (response) {
                 _this.subFormData = response.data;
             });
+        });
+    };
+    ModalFormBlockEdit.prototype.addMessage = function () {
+        var _this = this;
+        console.info('addMessage');
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/messages/create-new/' + this.state.params.blockId)
+            .then(function (resp) {
+            _this.subFormData.messages = resp.data;
+            // console.log(resp.data);
         });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -33087,7 +33098,12 @@ var render = function() {
                   _c(
                     "div",
                     { staticClass: "modal-body" },
-                    [_c(_vm.formComponent, { tag: "component" })],
+                    [
+                      _c(_vm.formComponent, {
+                        tag: "component",
+                        attrs: { state: _vm.state }
+                      })
+                    ],
                     1
                   ),
                   _c("div", { staticClass: "modal-footer" }, [
@@ -33237,7 +33253,35 @@ var render = function() {
         ],
         2
       ),
-      _vm._m(0),
+      _c("fieldset", { staticClass: "border p-2" }, [
+        _c("div", { staticClass: "messages__add" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-primary",
+              on: {
+                click: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k(
+                      $event.keyCode,
+                      "prev",
+                      undefined,
+                      $event.key,
+                      undefined
+                    )
+                  ) {
+                    return null
+                  }
+                  $event.stopPropagation()
+                  return _vm.addMessage($event)
+                }
+              }
+            },
+            [_vm._v("Добавить сообщение")]
+          )
+        ])
+      ]),
       _c("hr"),
       _c("div", { staticClass: "form-group" }, [
         _c("div", { staticClass: "form-group" }, [
@@ -33287,20 +33331,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("fieldset", { staticClass: "border p-2" }, [
-      _c("div", { staticClass: "messages__add" }, [
-        _c("button", { staticClass: "btn btn-outline-primary" }, [
-          _vm._v("Добавить сообщение")
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -51408,17 +51439,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _default = {
   install: function install(Vue) {
-    Vue.prototype.$form = function (formData) {
+    Vue.prototype.$form = function (formData, params) {
       return new Promise(function (resolve, reject) {
         var FormData =
         /** @class */
         function () {
-          function FormData() {
+          function FormData(params) {
             this.titleDefault = 'Заполните данные';
             this.title = '';
             this.active = false;
             this.clear();
             this.active = true;
+            this.params = params;
           }
 
           FormData.prototype.clear = function () {
@@ -51461,7 +51493,7 @@ var _default = {
           return FormData;
         }();
 
-        var Modal = new FormData();
+        var Modal = new FormData(params);
         Modal.init(formData);
         new Vue({
           template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',

@@ -1,15 +1,16 @@
 import ModalForm from "../components/ModalForm.vue";
 export default {
     install: function (Vue) {
-        Vue.prototype.$form = function (formData) {
+        Vue.prototype.$form = function (formData, params) {
             return new Promise(function (resolve, reject) {
                 var FormData = /** @class */ (function () {
-                    function FormData() {
+                    function FormData(params) {
                         this.titleDefault = 'Заполните данные';
                         this.title = '';
                         this.active = false;
                         this.clear();
                         this.active = true;
+                        this.params = params;
                     }
                     FormData.prototype.clear = function () {
                         this.title = this.titleDefault;
@@ -45,7 +46,7 @@ export default {
                     };
                     return FormData;
                 }());
-                var Modal = new FormData();
+                var Modal = new FormData(params);
                 Modal.init(formData);
                 new Vue({
                     template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',

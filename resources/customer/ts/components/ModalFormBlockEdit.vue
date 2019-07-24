@@ -22,7 +22,7 @@
       fieldset.border.p-2
 
         .messages__add
-          button.btn.btn-outline-primary Добавить сообщение
+          button.btn.btn-outline-primary(@click.prev.stop="addMessage") Добавить сообщение
 
       hr
 
@@ -58,7 +58,11 @@
 
     subFormList = [];
 
-    @Prop({}) state!: object;
+    @Prop({}) state!: {
+      params: {
+        blockId: -1
+      }
+    };
 
     @BlockModule.Action getBlock;
 
@@ -74,10 +78,22 @@
 
       axios.get('/private/client-input-types').then(( response ) => {
         this.subFormList = response.data;
-        axios.get('/private/block/3').then(( response ) => {
+        axios.get('/private/block/' + this.state.params.blockId).then(( response ) => {
           this.subFormData = response.data;
         });
       });
+
+    }
+
+    addMessage () {
+
+      console.info('addMessage');
+
+      axios.get('/private/messages/create-new/' + this.state.params.blockId)
+        .then(resp => {
+          this.subFormData.messages = resp.data;
+          // console.log(resp.data);
+        });
 
     }
 
