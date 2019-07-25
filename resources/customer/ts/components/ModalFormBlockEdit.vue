@@ -7,7 +7,7 @@
       .form-group
         label(for="name") Имя блока
         input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name" v-model="subFormData.name")
-        small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить. {{ subFormData.client_input_type.component }}
+        small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить.
 
       fieldset.border.p-2.messages
         legend.w-auto Сообщения
@@ -28,7 +28,7 @@
 
       .form-group
         .form-group
-          label(for="exampleFormControlSelect1") Example select
+          label(for="exampleFormControlSelect1") Тип блока {{ subFormData.client_input_type.component }}
           select#exampleFormControlSelect1.form-control(v-model="subFormData.client_input_type.component")
             option(v-for="subForm in subFormList" :value="subForm.component") {{ subForm.name }}
 

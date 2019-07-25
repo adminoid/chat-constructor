@@ -21,7 +21,7 @@
 
 <div id="modal-window"></div>
 
-<div id="modal-form"></div>
+<div id="modal-form" class="modal"></div>
 
 <script src="{{ asset('/js/customer.js') }}"></script>
 

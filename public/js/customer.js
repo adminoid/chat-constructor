@@ -33064,74 +33064,83 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "modal-form" } }, [
-    _vm.state.active
-      ? _c("div", { staticClass: "modal-mask" }, [
-          _c("div", { staticClass: "modal-wrapper" }, [
-            _c(
-              "div",
-              { staticClass: "modal-dialog", attrs: { role: "document" } },
-              [
-                _c("div", { staticClass: "modal-content" }, [
-                  _c("div", { staticClass: "modal-header" }, [
-                    _c("h5", { staticClass: "modal-title" }, [
-                      _vm._v(_vm._s(_vm.state.title))
-                    ]),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "close",
-                        attrs: {
-                          type: "button",
-                          "data-dismiss": "modal",
-                          "aria-label": "Close"
-                        },
-                        on: { click: _vm.cancel }
-                      },
-                      [
-                        _c("span", { attrs: { "aria-hidden": "true" } }, [
-                          _vm._v("×")
-                        ])
-                      ]
-                    )
-                  ]),
-                  _c(
-                    "div",
-                    { staticClass: "modal-body" },
-                    [
-                      _c(_vm.formComponent, {
-                        tag: "component",
-                        attrs: { state: _vm.state }
-                      })
-                    ],
-                    1
-                  ),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button" },
-                        on: { click: _vm.confirm }
-                      },
-                      [_vm._v("Подтвердить")]
-                    ),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary",
-                        attrs: { type: "button", "data-dismiss": "modal" },
-                        on: { click: _vm.cancel }
-                      },
-                      [_vm._v("Отмена")]
-                    )
-                  ])
-                ])
-              ]
-            )
-          ])
-        ])
-      : _vm._e()
+  return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "modal fade show",
+        staticStyle: { display: "block" },
+        attrs: {
+          id: "exampleModalLong",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLongTitle"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h5", { staticClass: "modal-title" }, [
+                  _vm._v(_vm._s(_vm.state.title))
+                ]),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    },
+                    on: { click: _vm.cancel }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _c(
+                "div",
+                { staticClass: "modal-body" },
+                [
+                  _c(_vm.formComponent, {
+                    tag: "component",
+                    attrs: { state: _vm.state }
+                  })
+                ],
+                1
+              ),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.confirm }
+                  },
+                  [_vm._v("Подтвердить")]
+                ),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: { click: _vm.cancel }
+                  },
+                  [_vm._v("Отмена")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -33189,12 +33198,7 @@ var render = function() {
         _c(
           "small",
           { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
-          [
-            _vm._v(
-              "Имя блока назначается, чтобы его запомнить. " +
-                _vm._s(_vm.subFormData.client_input_type.component)
-            )
-          ]
+          [_vm._v("Имя блока назначается, чтобы его запомнить.")]
         )
       ]),
       _c(
@@ -33286,7 +33290,9 @@ var render = function() {
       _c("div", { staticClass: "form-group" }, [
         _c("div", { staticClass: "form-group" }, [
           _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
-            _vm._v("Example select")
+            _vm._v(
+              "Тип блока " + _vm._s(_vm.subFormData.client_input_type.component)
+            )
           ]),
           _c(
             "select",
