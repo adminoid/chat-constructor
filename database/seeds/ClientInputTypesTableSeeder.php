@@ -16,8 +16,8 @@ class ClientInputTypesTableSeeder extends Seeder
 //        factory(App\ClientInputType::class)->create();
 
         $data = [
-            ['name'=>'Блок с кнопками', 'component' => 'SubFormButton'],
-            ['name'=>'Блок с ответом', 'component' => 'SubFormAnswer'],
+            ['name'=>'Блок с кнопками', 'component' => 'ModalFormBlockEditSubFormButton'],
+            ['name'=>'Блок с ответом', 'component' => 'ModalFormBlockEditSubFormAnswer'],
         ];
 
         ClientInputType::insert($data);

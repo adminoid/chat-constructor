@@ -28,9 +28,13 @@
 
       .form-group
         .form-group
-          label(for="exampleFormControlSelect1") Тип блока {{ subFormData.client_input_type.component }}
+          label(for="exampleFormControlSelect1") Тип блока
           select#exampleFormControlSelect1.form-control(v-model="subFormData.client_input_type.component")
             option(v-for="subForm in subFormList" :value="subForm.component") {{ subForm.name }}
+
+      hr
+
+      component(:is="subFormData.client_input_type.component")
 
 </template>
 
@@ -40,9 +44,15 @@
   import { namespace } from 'vuex-class'
   import axios from 'axios'
 
+  import ModalFormBlockEditSubFormButton from './ModalFormBlockEditSubFormButton.vue'
+  import ModalFormBlockEditSubFormAnswer from './ModalFormBlockEditSubFormAnswer.vue'
+
   const BlockModule = namespace('Block');
 
-  @Component
+  @Component({
+    // ts-ignore
+    components: { ModalFormBlockEditSubFormButton, ModalFormBlockEditSubFormAnswer }
+  })
   export default class ModalFormBlockEdit extends Vue {
 
     name: 'ModalFormBlockEdit';
@@ -87,12 +97,9 @@
 
     addMessage () {
 
-      console.info('addMessage');
-
       axios.get('/private/messages/create-new/' + this.state.params.blockId)
         .then(resp => {
           this.subFormData.messages = resp.data;
-          // console.log(resp.data);
         });
 
     }

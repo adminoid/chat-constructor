@@ -31963,6 +31963,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-class */ "./node_modules/vuex-class/lib/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _ModalFormBlockEditSubFormButton_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormButton.vue */ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue");
+/* harmony import */ var _ModalFormBlockEditSubFormAnswer_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormAnswer.vue */ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue");
+
+
 
 
 
@@ -31999,11 +32003,9 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     };
     ModalFormBlockEdit.prototype.addMessage = function () {
         var _this = this;
-        console.info('addMessage');
         axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/messages/create-new/' + this.state.params.blockId)
             .then(function (resp) {
             _this.subFormData.messages = resp.data;
-            // console.log(resp.data);
         });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -32013,11 +32015,70 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         BlockModule.Action
     ], ModalFormBlockEdit.prototype, "getBlock", void 0);
     ModalFormBlockEdit = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            // ts-ignore
+            components: { ModalFormBlockEditSubFormButton: _ModalFormBlockEditSubFormButton_vue__WEBPACK_IMPORTED_MODULE_4__["default"], ModalFormBlockEditSubFormAnswer: _ModalFormBlockEditSubFormAnswer_vue__WEBPACK_IMPORTED_MODULE_5__["default"] }
+        })
     ], ModalFormBlockEdit);
     return ModalFormBlockEdit;
 }(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Vue"]));
 /* harmony default export */ __webpack_exports__["default"] = (ModalFormBlockEdit);
+
+
+/***/ }),
+
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--5!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& ***!
+  \******************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+
+
+var ModalFormBlockEditSubFormAnswer = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEditSubFormAnswer, _super);
+    function ModalFormBlockEditSubFormAnswer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ModalFormBlockEditSubFormAnswer = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
+    ], ModalFormBlockEditSubFormAnswer);
+    return ModalFormBlockEditSubFormAnswer;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Vue"]));
+/* harmony default export */ __webpack_exports__["default"] = (ModalFormBlockEditSubFormAnswer);
+
+
+/***/ }),
+
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--5!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& ***!
+  \******************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+
+
+var ModalFormBlockEditSubFormButton = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEditSubFormButton, _super);
+    function ModalFormBlockEditSubFormButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ModalFormBlockEditSubFormButton = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
+    ], ModalFormBlockEditSubFormButton);
+    return ModalFormBlockEditSubFormButton;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Vue"]));
+/* harmony default export */ __webpack_exports__["default"] = (ModalFormBlockEditSubFormButton);
 
 
 /***/ }),
@@ -33166,176 +33227,230 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("form", [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "name" } }, [_vm._v("Имя блока")]),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.subFormData.name,
-              expression: "subFormData.name"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            id: "name",
-            "aria-describedby": "blockHelp",
-            placeholder: "Block name"
-          },
-          domProps: { value: _vm.subFormData.name },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.subFormData, "name", $event.target.value)
-            }
-          }
-        }),
-        _c(
-          "small",
-          { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
-          [_vm._v("Имя блока назначается, чтобы его запомнить.")]
-        )
-      ]),
-      _c(
-        "fieldset",
-        { staticClass: "border p-2 messages" },
-        [
-          _c("legend", { staticClass: "w-auto" }, [_vm._v("Сообщения")]),
-          _vm._l(_vm.subFormData.messages, function(message) {
-            return _c(
-              "div",
-              { key: message.sort_order_id, staticClass: "messages__block" },
-              [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: message.delay,
-                      expression: "message.delay"
-                    }
-                  ],
-                  staticClass: "messages__delay form-control",
-                  attrs: { type: "text", "aria-label": "delay" },
-                  domProps: { value: message.delay },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(message, "delay", $event.target.value)
-                    }
-                  }
-                }),
-                _c("div", { staticClass: "input-group" }, [
-                  _c(
-                    "textarea",
-                    { staticClass: "messages__message form-control" },
-                    [_vm._v(_vm._s(message.text))]
-                  )
-                ]),
-                _c("div", { staticClass: "messages__panel" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "btn btn-outline-secondary btn-outline-danger btn-sm",
-                      attrs: { type: "button" }
-                    },
-                    [_c("fa-icon", { attrs: { icon: "trash" } })],
-                    1
-                  )
-                ])
-              ]
-            )
-          })
-        ],
-        2
-      ),
-      _c("fieldset", { staticClass: "border p-2" }, [
-        _c("div", { staticClass: "messages__add" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-outline-primary",
-              on: {
-                click: function($event) {
-                  if (
-                    !$event.type.indexOf("key") &&
-                    _vm._k(
-                      $event.keyCode,
-                      "prev",
-                      undefined,
-                      $event.key,
-                      undefined
-                    )
-                  ) {
-                    return null
-                  }
-                  $event.stopPropagation()
-                  return _vm.addMessage($event)
-                }
-              }
-            },
-            [_vm._v("Добавить сообщение")]
-          )
-        ])
-      ]),
-      _c("hr"),
-      _c("div", { staticClass: "form-group" }, [
+    _c(
+      "form",
+      [
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
-            _vm._v(
-              "Тип блока " + _vm._s(_vm.subFormData.client_input_type.component)
-            )
-          ]),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.subFormData.client_input_type.component,
-                  expression: "subFormData.client_input_type.component"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { id: "exampleFormControlSelect1" },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.$set(
-                    _vm.subFormData.client_input_type,
-                    "component",
-                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                  )
-                }
+          _c("label", { attrs: { for: "name" } }, [_vm._v("Имя блока")]),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.subFormData.name,
+                expression: "subFormData.name"
               }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              id: "name",
+              "aria-describedby": "blockHelp",
+              placeholder: "Block name"
             },
-            _vm._l(_vm.subFormList, function(subForm) {
-              return _c("option", { domProps: { value: subForm.component } }, [
-                _vm._v(_vm._s(subForm.name))
-              ])
-            }),
-            0
+            domProps: { value: _vm.subFormData.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.subFormData, "name", $event.target.value)
+              }
+            }
+          }),
+          _c(
+            "small",
+            { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
+            [_vm._v("Имя блока назначается, чтобы его запомнить.")]
           )
-        ])
-      ])
-    ])
+        ]),
+        _c(
+          "fieldset",
+          { staticClass: "border p-2 messages" },
+          [
+            _c("legend", { staticClass: "w-auto" }, [_vm._v("Сообщения")]),
+            _vm._l(_vm.subFormData.messages, function(message) {
+              return _c(
+                "div",
+                { key: message.sort_order_id, staticClass: "messages__block" },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: message.delay,
+                        expression: "message.delay"
+                      }
+                    ],
+                    staticClass: "messages__delay form-control",
+                    attrs: { type: "text", "aria-label": "delay" },
+                    domProps: { value: message.delay },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(message, "delay", $event.target.value)
+                      }
+                    }
+                  }),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "textarea",
+                      { staticClass: "messages__message form-control" },
+                      [_vm._v(_vm._s(message.text))]
+                    )
+                  ]),
+                  _c("div", { staticClass: "messages__panel" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn btn-outline-secondary btn-outline-danger btn-sm",
+                        attrs: { type: "button" }
+                      },
+                      [_c("fa-icon", { attrs: { icon: "trash" } })],
+                      1
+                    )
+                  ])
+                ]
+              )
+            })
+          ],
+          2
+        ),
+        _c("fieldset", { staticClass: "border p-2" }, [
+          _c("div", { staticClass: "messages__add" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary",
+                on: {
+                  click: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k(
+                        $event.keyCode,
+                        "prev",
+                        undefined,
+                        $event.key,
+                        undefined
+                      )
+                    ) {
+                      return null
+                    }
+                    $event.stopPropagation()
+                    return _vm.addMessage($event)
+                  }
+                }
+              },
+              [_vm._v("Добавить сообщение")]
+            )
+          ])
+        ]),
+        _c("hr"),
+        _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
+              _vm._v("Тип блока")
+            ]),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.subFormData.client_input_type.component,
+                    expression: "subFormData.client_input_type.component"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { id: "exampleFormControlSelect1" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.subFormData.client_input_type,
+                      "component",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              _vm._l(_vm.subFormList, function(subForm) {
+                return _c(
+                  "option",
+                  { domProps: { value: subForm.component } },
+                  [_vm._v(_vm._s(subForm.name))]
+                )
+              }),
+              0
+            )
+          ])
+        ]),
+        _c("hr"),
+        _c(_vm.subFormData.client_input_type.component, { tag: "component" })
+      ],
+      1
+    )
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/pug-plain-loader!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("strong", [_vm._v("Блок с ответом")])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/pug-plain-loader!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("strong", [_vm._v("Блок с кнопками")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -51036,6 +51151,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEdit_vue_vue_type_template_id_7f0cd450_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEdit_vue_vue_type_template_id_7f0cd450_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue":
+/*!******************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&");
+/* harmony import */ var _ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "3694338c",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& ***!
+  \*******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--5!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&":
+/*!**********************************************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& ***!
+  \**********************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/pug-plain-loader!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue":
+/*!******************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&");
+/* harmony import */ var _ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "7e3618a4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& ***!
+  \*******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--5!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&":
+/*!**********************************************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& ***!
+  \**********************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/pug-plain-loader!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
