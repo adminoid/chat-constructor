@@ -28,9 +28,9 @@
 
       .form-group
         .form-group
-          label(for="exampleFormControlSelect1") Тип блока
-          select#exampleFormControlSelect1.form-control(v-model="subFormData.client_input_type.component")
-            option(v-for="subForm in subFormList" :value="subForm.component") {{ subForm.name }}
+          label(for="select-block-type") Тип блока
+          select#select-block-type.form-control(v-model="subFormData.client_input_type" @change="onChange")
+            option(v-for="subForm in subFormList" :value="{id: subForm.id, name: subForm.name, component: subForm.component}") {{ subForm.id }} - {{ subForm.name }} - {{ subForm.component }}
 
       hr
 
@@ -60,8 +60,11 @@
     subFormData = {
       messages: [],
       client_input_type: {
-        component: null
-      }
+        id: null,
+        name: null,
+        component: null,
+      },
+      client_input_type_id: null,
     };
 
     messages = [];
@@ -93,6 +96,16 @@
         });
       });
 
+    }
+
+    onChange () {
+      this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
+
+      // save block type to server
+      axios.post('private/save-client-input-types', {
+        id: this.subFormData.client_input_type_id,
+        block_id: this.state.params.blockId,
+      });
     }
 
     addMessage () {

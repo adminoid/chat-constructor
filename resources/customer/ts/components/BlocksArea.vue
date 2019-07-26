@@ -14,7 +14,6 @@
         :active="item.active"
         :itemData="item")
     line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
-    pre.br {{ this.dd }}
 
 </template>
 

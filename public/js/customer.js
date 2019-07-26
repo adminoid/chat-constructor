@@ -31979,8 +31979,11 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         _this.subFormData = {
             messages: [],
             client_input_type: {
-                component: null
-            }
+                id: null,
+                name: null,
+                component: null,
+            },
+            client_input_type_id: null,
         };
         _this.messages = [];
         _this.subFormList = [];
@@ -31999,6 +32002,14 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
             axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/' + _this.state.params.blockId).then(function (response) {
                 _this.subFormData = response.data;
             });
+        });
+    };
+    ModalFormBlockEdit.prototype.onChange = function () {
+        this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
+        // save block type to server
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('private/save-client-input-types', {
+            id: this.subFormData.client_input_type_id,
+            block_id: this.state.params.blockId,
         });
     };
     ModalFormBlockEdit.prototype.addMessage = function () {
@@ -32844,8 +32855,7 @@ var render = function() {
           key: "line-" + index,
           attrs: { lineData: line }
         })
-      }),
-      _c("pre", { staticClass: "br" }, [_vm._v(_vm._s(this.dd))])
+      })
     ],
     2
   )
@@ -33352,7 +33362,7 @@ var render = function() {
         _c("hr"),
         _c("div", { staticClass: "form-group" }, [
           _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
+            _c("label", { attrs: { for: "select-block-type" } }, [
               _vm._v("Тип блока")
             ]),
             _c(
@@ -33362,35 +33372,56 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.subFormData.client_input_type.component,
-                    expression: "subFormData.client_input_type.component"
+                    value: _vm.subFormData.client_input_type,
+                    expression: "subFormData.client_input_type"
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { id: "exampleFormControlSelect1" },
+                attrs: { id: "select-block-type" },
                 on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.subFormData.client_input_type,
-                      "component",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
-                  }
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.subFormData,
+                        "client_input_type",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                    _vm.onChange
+                  ]
                 }
               },
               _vm._l(_vm.subFormList, function(subForm) {
                 return _c(
                   "option",
-                  { domProps: { value: subForm.component } },
-                  [_vm._v(_vm._s(subForm.name))]
+                  {
+                    domProps: {
+                      value: {
+                        id: subForm.id,
+                        name: subForm.name,
+                        component: subForm.component
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(subForm.id) +
+                        " - " +
+                        _vm._s(subForm.name) +
+                        " - " +
+                        _vm._s(subForm.component)
+                    )
+                  ]
                 )
               }),
               0

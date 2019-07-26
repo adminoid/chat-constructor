@@ -38,5 +38,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::get('messages/create-new/{blockId}', 'MessagesController@createMessage');
 
+    Route::post('save-client-input-types', 'ClientInputTypesController@saveClientInputType');
+
 });
 
