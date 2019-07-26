@@ -17,6 +17,7 @@ export default {
                         this.active = false;
                     };
                     FormData.prototype.init = function (newData) {
+                        this.active = true;
                         // component name for import
                         switch (newData.type) {
                             case 'editBlock':

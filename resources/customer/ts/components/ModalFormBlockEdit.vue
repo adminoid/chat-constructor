@@ -34,7 +34,7 @@
 
       hr
 
-      component(:is="subFormData.client_input_type.component")
+      component(v-if="subFormData.client_input_type.component" :is="subFormData.client_input_type.component")
 
 </template>
 
@@ -62,7 +62,7 @@
       client_input_type: {
         id: null,
         name: null,
-        component: null,
+        component: 'ModalFormBlockEditSubFormAnswer',
       },
       client_input_type_id: null,
     };
@@ -87,7 +87,7 @@
       this.$emit('canceled')
     }
 
-    created () {
+    beforeCreate () {
 
       axios.get('/private/client-input-types').then(( response ) => {
         this.subFormList = response.data;

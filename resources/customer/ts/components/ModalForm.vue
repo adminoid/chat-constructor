@@ -1,7 +1,7 @@
 <template lang="pug">
 
-  div
-    #exampleModalLong.modal.fade.show(tabindex='-1' role='dialog' aria-labelledby='exampleModalLongTitle' style='display: block;')
+  #modal-form
+    .modal.fade.show(v-if="state.active" tabindex='-1' role='dialog' aria-labelledby='exampleModalLongTitle')
       .modal-dialog(role='document')
         .modal-content
           .modal-header
@@ -44,21 +44,3 @@
   }
 
 </script>
-
-<style lang="sass" scoped>
-
-  .modal-mask
-    position: fixed
-    z-index: 9998
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    background-color: rgba(0, 0, 0, .5)
-    display: table
-    transition: opacity .3s ease
-    .modal-wrapper
-      display: table-cell
-      vertical-align: middle
-
-</style>

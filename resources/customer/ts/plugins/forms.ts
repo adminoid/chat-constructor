@@ -33,6 +33,8 @@ export default {
 
           init(newData) {
 
+            this.active = true;
+
             // component name for import
             switch ( newData.type ) {
 
@@ -78,7 +80,6 @@ export default {
         Modal.init(formData);
 
         new Vue({
-
           template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',
           components: {
             'modal-form': ModalForm

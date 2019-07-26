@@ -11677,6 +11677,7 @@ footer .copy {
 
 .modal {
   overflow-y: auto;
+  display: block;
 }
 
 
