@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bot;
+use App\Message;
 use App\Output;
 use Illuminate\Http\Request;
 use App\Block;
@@ -138,9 +139,32 @@ class BlocksController extends Controller
 
     }
 
-    public function saveExtendedBlockData(Request $request) : string
+    public function saveExtendedBlockData(Request $request) : void
     {
-        dd($request->all());
+
+        $blockId = $blockData = $request->get('id');
+        $block = Block::findOrFail($blockId);
+
+        $this->authorize('update', $block);
+
+        $blockData = $request->only(['name', 'client_input_type_id']);
+        $block->update($blockData);
+
+        // save related messages
+        $messagesData = $request->get('messages');
+        $messagesDataForUpdate = [];
+        foreach ($messagesData as $value) {
+            $messagesDataForUpdate[] = array_diff_key($value, array_flip(['created_at', 'updated_at']));
+        }
+
+        // save messages
+        foreach ($messagesDataForUpdate as $value) {
+            $messageId = $value['id'];
+            unset($value['id']);
+
+            Message::where('id', $messageId)->update($value);
+        }
+
     }
 
 }
