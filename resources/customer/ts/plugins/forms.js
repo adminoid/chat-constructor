@@ -1,4 +1,5 @@
 import ModalForm from "../components/ModalForm.vue";
+import axios from 'axios';
 export default {
     install: function (Vue) {
         Vue.prototype.$form = function (formData, params) {
@@ -12,6 +13,12 @@ export default {
                         this.active = true;
                         this.params = params;
                     }
+                    FormData.prototype.sendForm = function () {
+                        // send formData to the backend
+                        axios.post('/private/save-extended-block-data', this.formData).then(function (resp) {
+                            console.log(resp);
+                        });
+                    };
                     FormData.prototype.clear = function () {
                         this.title = this.titleDefault;
                         this.active = false;
@@ -31,16 +38,6 @@ export default {
                             default:
                                 console.error('Ошибка: не верный тип блока');
                         }
-                        // dynamically activate necessary component
-                        // if ( newData.type ) {
-                        //
-                        //   this.active = true;
-                        //
-                        //   if (!!newData.title) {
-                        //     this.title = newData.title;
-                        //   }
-                        //
-                        // }
                     };
                     FormData.prototype.close = function () {
                         this.active = false;
@@ -63,6 +60,8 @@ export default {
                         confirmedAction: function () {
                             // @ts-ignore
                             this.modal.close();
+                            // @ts-ignore
+                            this.modal.sendForm();
                             resolve();
                         },
                         canceledAction: function () {

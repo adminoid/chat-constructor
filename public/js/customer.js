@@ -31865,7 +31865,7 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
             client_input_type: {
                 id: null,
                 name: null,
-                component: 'ModalFormBlockEditSubFormAnswer',
+                component: null,
             },
             client_input_type_id: null,
         };
@@ -31873,12 +31873,6 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
         _this.subFormList = [];
         return _this;
     }
-    ModalFormBlockEdit.prototype.confirm = function () {
-        this.$emit('confirmed');
-    };
-    ModalFormBlockEdit.prototype.cancel = function () {
-        this.$emit('canceled');
-    };
     ModalFormBlockEdit.prototype.beforeCreate = function () {
         var _this = this;
         axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/client-input-types').then(function (response) {
@@ -31903,12 +31897,18 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
             _this.subFormData.messages = resp.data;
         });
     };
+    ModalFormBlockEdit.prototype.onSubFormDataChanged = function (val) {
+        this.state.formData = val;
+    };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
     ], ModalFormBlockEdit.prototype, "state", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Action
     ], ModalFormBlockEdit.prototype, "getBlock", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Watch"])('subFormData', { immediate: true, deep: true })
+    ], ModalFormBlockEdit.prototype, "onSubFormDataChanged", null);
     ModalFormBlockEdit = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             // ts-ignore
@@ -51595,6 +51595,8 @@ exports.default = void 0;
 
 var _ModalForm = _interopRequireDefault(__webpack_require__(/*! ../components/ModalForm.vue */ "./resources/customer/ts/components/ModalForm.vue"));
 
+var _axios = _interopRequireDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = {
@@ -51612,6 +51614,13 @@ var _default = {
             this.active = true;
             this.params = params;
           }
+
+          FormData.prototype.sendForm = function () {
+            // send formData to the backend
+            _axios.default.post('/private/save-extended-block-data', this.formData).then(function (resp) {
+              console.log(resp);
+            });
+          };
 
           FormData.prototype.clear = function () {
             this.title = this.titleDefault;
@@ -51634,17 +51643,7 @@ var _default = {
 
               default:
                 console.error('Ошибка: не верный тип блока');
-            } // dynamically activate necessary component
-            // if ( newData.type ) {
-            //
-            //   this.active = true;
-            //
-            //   if (!!newData.title) {
-            //     this.title = newData.title;
-            //   }
-            //
-            // }
-
+            }
           };
 
           FormData.prototype.close = function () {
@@ -51669,7 +51668,9 @@ var _default = {
           methods: {
             confirmedAction: function confirmedAction() {
               // @ts-ignore
-              this.modal.close();
+              this.modal.close(); // @ts-ignore
+
+              this.modal.sendForm();
               resolve();
             },
             canceledAction: function canceledAction() {

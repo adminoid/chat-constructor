@@ -40,5 +40,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::post('save-client-input-types', 'ClientInputTypesController@saveClientInputType');
 
+    Route::post('save-extended-block-data', 'BlocksController@saveExtendedBlockData');
+
 });
 

@@ -40,7 +40,7 @@
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
   import axios from 'axios'
 
@@ -62,7 +62,7 @@
       client_input_type: {
         id: null,
         name: null,
-        component: 'ModalFormBlockEditSubFormAnswer',
+        component: null,
       },
       client_input_type_id: null,
     };
@@ -74,18 +74,11 @@
     @Prop({}) state!: {
       params: {
         blockId: -1
-      }
+      },
+      formData: {},
     };
 
     @BlockModule.Action getBlock;
-
-    confirm () {
-      this.$emit('confirmed')
-    }
-
-    cancel () {
-      this.$emit('canceled')
-    }
 
     beforeCreate () {
 
@@ -115,6 +108,11 @@
           this.subFormData.messages = resp.data;
         });
 
+    }
+
+    @Watch('subFormData', { immediate: true, deep: true })
+    onSubFormDataChanged(val) {
+      this.state.formData = val;
     }
 
   }

@@ -1,4 +1,5 @@
 import ModalForm from "../components/ModalForm.vue";
+import axios from 'axios';
 
 export default {
 
@@ -16,7 +17,11 @@ export default {
           active = false;
           type: string;
 
-          params: {};
+          formData: {};
+
+          params: {
+            blockId: null,
+          };
 
           componentName;
 
@@ -24,6 +29,15 @@ export default {
             this.clear();
             this.active = true;
             this.params = params;
+          }
+
+          sendForm () {
+
+            // send formData to the backend
+            axios.post('/private/save-extended-block-data', this.formData).then(resp => {
+              console.log(resp);
+            });
+
           }
 
           clear() {
@@ -55,18 +69,6 @@ export default {
 
             }
 
-            // dynamically activate necessary component
-
-            // if ( newData.type ) {
-            //
-            //   this.active = true;
-            //
-            //   if (!!newData.title) {
-            //     this.title = newData.title;
-            //   }
-            //
-            // }
-
           }
 
           close() {
@@ -93,6 +95,8 @@ export default {
             confirmedAction () {
               // @ts-ignore
               this.modal.close();
+              // @ts-ignore
+              this.modal.sendForm();
               resolve();
             },
             canceledAction () {
