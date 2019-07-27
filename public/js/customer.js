@@ -31869,7 +31869,6 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
             },
             client_input_type_id: null,
         };
-        _this.messages = [];
         _this.subFormList = [];
         return _this;
     }
@@ -33163,7 +33162,7 @@ var render = function() {
           { staticClass: "border p-2 messages" },
           [
             _c("legend", { staticClass: "w-auto" }, [_vm._v("Сообщения")]),
-            _vm._l(_vm.subFormData.messages, function(message) {
+            _vm._l(_vm.subFormData.messages, function(message, index) {
               return _c(
                 "div",
                 { key: message.sort_order_id, staticClass: "messages__block" },
@@ -33173,26 +33172,55 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: message.delay,
-                        expression: "message.delay"
+                        value: _vm.subFormData.messages[index].delay,
+                        expression: "subFormData.messages[index].delay"
                       }
                     ],
                     staticClass: "messages__delay form-control",
                     attrs: { type: "text", "aria-label": "delay" },
-                    domProps: { value: message.delay },
+                    domProps: { value: _vm.subFormData.messages[index].delay },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(message, "delay", $event.target.value)
+                        _vm.$set(
+                          _vm.subFormData.messages[index],
+                          "delay",
+                          $event.target.value
+                        )
                       }
                     }
                   }),
                   _c("div", { staticClass: "input-group" }, [
                     _c(
                       "textarea",
-                      { staticClass: "messages__message form-control" },
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.subFormData.messages[index].text,
+                            expression: "subFormData.messages[index].text"
+                          }
+                        ],
+                        staticClass: "messages__message form-control",
+                        domProps: {
+                          value: _vm.subFormData.messages[index].text
+                        },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.subFormData.messages[index],
+                              "text",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      },
                       [_vm._v(_vm._s(message.text))]
                     )
                   ]),

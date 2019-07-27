@@ -11,10 +11,10 @@
 
       fieldset.border.p-2.messages
         legend.w-auto Сообщения
-        .messages__block(v-for="message in subFormData.messages" :key="message.sort_order_id")
-          input.messages__delay.form-control(type="text" aria-label="delay" v-model="message.delay")
+        .messages__block(v-for="message, index in subFormData.messages" :key="message.sort_order_id")
+          input.messages__delay.form-control(type="text" aria-label="delay" v-model="subFormData.messages[index].delay")
           .input-group
-            textarea.messages__message.form-control {{ message.text }}
+            textarea.messages__message.form-control(v-model="subFormData.messages[index].text") {{ message.text }}
           .messages__panel
             button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button")
               fa-icon(icon="trash")
@@ -66,8 +66,6 @@
       },
       client_input_type_id: null,
     };
-
-    messages = [];
 
     subFormList = [];
 
