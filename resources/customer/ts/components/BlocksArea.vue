@@ -115,8 +115,14 @@
 
       if (this.dd.dragging) {
 
-        let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left),
-          top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
+        // calculate scroll position
+        let topScroll = this.$el.scrollTop;
+        let leftScroll = this.$el.scrollLeft;
+
+        // console.log(topScroll, leftScroll);
+
+        let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + leftScroll),
+          top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + topScroll);
 
         if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
           left = 0;
@@ -300,12 +306,12 @@
   #frame-drop-area
     overflow: scroll
     height: calc(100vh - 140px)
-    z-index: 0
     background: #d7d7d7
     border-radius: 5px
   #drop-area
     width: 2000px
     height: 2000px
     position: relative
+    z-index: 0
 
 </style>

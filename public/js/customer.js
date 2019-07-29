@@ -11210,7 +11210,7 @@ exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  z-index: 0;\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  width: 2000px;\n  height: 2000px;\n  position: relative;\n}", ""]);
+exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  width: 2000px;\n  height: 2000px;\n  position: relative;\n  z-index: 0;\n}", ""]);
 
 
 
@@ -31173,7 +31173,11 @@ var BlocksArea = /** @class */ (function (_super) {
     BlocksArea.prototype.mousemoveHandler = function (e) {
         var _this = this;
         if (this.dd.dragging) {
-            var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
+            // calculate scroll position
+            var topScroll = this.$el.scrollTop;
+            var leftScroll = this.$el.scrollLeft;
+            // console.log(topScroll, leftScroll);
+            var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + leftScroll), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + topScroll);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
                 left_1 = 0;
             }
