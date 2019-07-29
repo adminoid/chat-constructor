@@ -11210,7 +11210,7 @@ exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "#drop-area {\n  z-index: 0;\n  height: calc(100vh - 140px);\n  position: relative;\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area .br {\n  position: absolute;\n  bottom: 10px;\n  right: 10px;\n}", ""]);
+exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  z-index: 0;\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  width: 2000px;\n  height: 2000px;\n  position: relative;\n}", ""]);
 
 
 
@@ -32697,51 +32697,53 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      attrs: { id: "drop-area" },
-      on: {
-        mousemove: function($event) {
-          if (
-            !$event.type.indexOf("key") &&
-            _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
-          ) {
-            return null
-          }
-          return _vm.mousemoveHandler($event)
-        },
-        mouseup: _vm.mouseupHandler
-      }
-    },
-    [
-      _vm._l(_vm.items, function(item, index) {
-        return _c(
-          "drag-item-wrapper",
-          {
-            key: index,
-            attrs: { idx: index, id: item.id, x: item.x, y: item.y }
+  return _c("div", { attrs: { id: "frame-drop-area" } }, [
+    _c(
+      "div",
+      {
+        attrs: { id: "drop-area" },
+        on: {
+          mousemove: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
+            ) {
+              return null
+            }
+            return _vm.mousemoveHandler($event)
           },
-          [
-            _c(item.component, {
-              ref: "items",
-              refInFor: true,
-              tag: "component",
-              attrs: { active: item.active, itemData: item }
-            })
-          ],
-          1
-        )
-      }),
-      _vm._l(_vm.lines, function(line, index) {
-        return _c("line-svg", {
-          key: "line-" + index,
-          attrs: { lineData: line }
+          mouseup: _vm.mouseupHandler
+        }
+      },
+      [
+        _vm._l(_vm.items, function(item, index) {
+          return _c(
+            "drag-item-wrapper",
+            {
+              key: index,
+              attrs: { idx: index, id: item.id, x: item.x, y: item.y }
+            },
+            [
+              _c(item.component, {
+                ref: "items",
+                refInFor: true,
+                tag: "component",
+                attrs: { active: item.active, itemData: item }
+              })
+            ],
+            1
+          )
+        }),
+        _vm._l(_vm.lines, function(line, index) {
+          return _c("line-svg", {
+            key: "line-" + index,
+            attrs: { lineData: line }
+          })
         })
-      })
-    ],
-    2
-  )
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

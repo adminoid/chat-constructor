@@ -1,19 +1,20 @@
 <template lang="pug">
 
-  #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler")
-    drag-item-wrapper(
-      v-for="(item, index) in items"
-      :key="index"
-      :idx="index"
-      :id="item.id"
-      :x="item.x"
-      :y="item.y")
-      component(
-        ref="items"
-        :is="item.component"
-        :active="item.active"
-        :itemData="item")
-    line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
+  #frame-drop-area
+    #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler")
+      drag-item-wrapper(
+        v-for="(item, index) in items"
+        :key="index"
+        :idx="index"
+        :id="item.id"
+        :x="item.x"
+        :y="item.y")
+        component(
+          ref="items"
+          :is="item.component"
+          :active="item.active"
+          :itemData="item")
+      line-svg(v-for="(line, index) in lines" :key="'line-' + index" :lineData="line")
 
 </template>
 
@@ -296,15 +297,15 @@
 
 <style lang="sass">
 
-  #drop-area
-    z-index: 0
+  #frame-drop-area
+    overflow: scroll
     height: calc(100vh - 140px)
-    position: relative
+    z-index: 0
     background: #d7d7d7
     border-radius: 5px
-    .br
-      position: absolute
-      bottom: 10px
-      right: 10px
+  #drop-area
+    width: 2000px
+    height: 2000px
+    position: relative
 
 </style>
