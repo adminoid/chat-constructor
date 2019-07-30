@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #frame-drop-area
+  #frame-drop-area(@scroll="handleScroll")
     #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler")
       drag-item-wrapper(
         v-for="(item, index) in items"
@@ -45,12 +45,14 @@
     @BlockModule.State items;
     @BlockModule.State dd;
     @BlockModule.State area;
+    @BlockModule.State scrollPosition;
 
     @BlockModule.Mutation setAreaBoundaries;
     @BlockModule.Mutation dragDropDataReset;
     @BlockModule.Mutation updateCoords;
     @BlockModule.Mutation updateEndLineCoords;
     @BlockModule.Mutation setActiveTargetId;
+    @BlockModule.Mutation setScrollOffset;
 
     lines = [];
 
@@ -76,6 +78,16 @@
     @Watch('items', { deep: true })
     onItemsChanged() {
       this.lines = this.makeLinesFromItems();
+    }
+
+    handleScroll () {
+
+      // calculate scroll position
+      this.setScrollOffset({
+        top: this.$el.scrollTop,
+        left: this.$el.scrollLeft,
+      });
+
     }
 
     makeLinesFromItems() {
@@ -115,14 +127,8 @@
 
       if (this.dd.dragging) {
 
-        // calculate scroll position
-        let topScroll = this.$el.scrollTop;
-        let leftScroll = this.$el.scrollLeft;
-
-        // console.log(topScroll, leftScroll);
-
-        let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + leftScroll),
-          top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + topScroll);
+        let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left),
+          top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
 
         if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
           left = 0;

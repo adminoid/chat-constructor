@@ -30,6 +30,10 @@ var Block = /** @class */ (function (_super) {
                 bottom: -1,
             }
         };
+        _this.scrollPosition = {
+            top: 0,
+            left: 0,
+        };
         return _this;
     }
     Block.prototype.saveBlockData = function (data) {
@@ -162,6 +166,9 @@ var Block = /** @class */ (function (_super) {
             throw 'Error: Here no one block... What do you want to move?';
         }
     };
+    Block.prototype.setScrollOffset = function (positions) {
+        this.scrollPosition = positions;
+    };
     Block.prototype.saveConnectorTarget = function (connector) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var connectorId, targetBlockId;
@@ -257,6 +264,9 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "dragDropDataSet", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "setScrollOffset", null);
     tslib_1.__decorate([
         Action
     ], Block.prototype, "saveConnectorTarget", null);

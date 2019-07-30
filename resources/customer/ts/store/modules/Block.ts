@@ -46,6 +46,11 @@ export default class Block extends VuexModule {
 
   botId: -1;
 
+  scrollPosition = {
+    top: 0,
+    left: 0,
+  };
+
   @Action
   async saveBlockData(data) {
     return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
@@ -211,6 +216,11 @@ export default class Block extends VuexModule {
 
   }
 
+  @Mutation
+  setScrollOffset(positions) {
+    this.scrollPosition = positions;
+  }
+
   @Action
   async saveConnectorTarget( connector: any ) {
     let connectorId = connector.id,
@@ -221,7 +231,6 @@ export default class Block extends VuexModule {
       'target-id': targetBlockId,
     });
 
-    // return {test: 'TeSt'};
   }
 
   @Action({rawError: true, commit: 'appendBlock'})

@@ -31147,6 +31147,13 @@ var BlocksArea = /** @class */ (function (_super) {
     BlocksArea.prototype.onItemsChanged = function () {
         this.lines = this.makeLinesFromItems();
     };
+    BlocksArea.prototype.handleScroll = function () {
+        // calculate scroll position
+        this.setScrollOffset({
+            top: this.$el.scrollTop,
+            left: this.$el.scrollLeft,
+        });
+    };
     BlocksArea.prototype.makeLinesFromItems = function () {
         var lines = [];
         lodash__WEBPACK_IMPORTED_MODULE_3__["map"](this.items, function (item) {
@@ -31173,11 +31180,7 @@ var BlocksArea = /** @class */ (function (_super) {
     BlocksArea.prototype.mousemoveHandler = function (e) {
         var _this = this;
         if (this.dd.dragging) {
-            // calculate scroll position
-            var topScroll = this.$el.scrollTop;
-            var leftScroll = this.$el.scrollLeft;
-            // console.log(topScroll, leftScroll);
-            var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + leftScroll), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + topScroll);
+            var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
                 left_1 = 0;
             }
@@ -31316,6 +31319,9 @@ var BlocksArea = /** @class */ (function (_super) {
         BlockModule.State
     ], BlocksArea.prototype, "area", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.State
+    ], BlocksArea.prototype, "scrollPosition", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Mutation
     ], BlocksArea.prototype, "setAreaBoundaries", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -31330,6 +31336,9 @@ var BlocksArea = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Mutation
     ], BlocksArea.prototype, "setActiveTargetId", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.Mutation
+    ], BlocksArea.prototype, "setScrollOffset", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Watch"])('items', { deep: true })
     ], BlocksArea.prototype, "onItemsChanged", null);
@@ -32701,53 +32710,57 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "frame-drop-area" } }, [
-    _c(
-      "div",
-      {
-        attrs: { id: "drop-area" },
-        on: {
-          mousemove: function($event) {
-            if (
-              !$event.type.indexOf("key") &&
-              _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
-            ) {
-              return null
-            }
-            return _vm.mousemoveHandler($event)
-          },
-          mouseup: _vm.mouseupHandler
-        }
-      },
-      [
-        _vm._l(_vm.items, function(item, index) {
-          return _c(
-            "drag-item-wrapper",
-            {
-              key: index,
-              attrs: { idx: index, id: item.id, x: item.x, y: item.y }
+  return _c(
+    "div",
+    { attrs: { id: "frame-drop-area" }, on: { scroll: _vm.handleScroll } },
+    [
+      _c(
+        "div",
+        {
+          attrs: { id: "drop-area" },
+          on: {
+            mousemove: function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
+              ) {
+                return null
+              }
+              return _vm.mousemoveHandler($event)
             },
-            [
-              _c(item.component, {
-                ref: "items",
-                refInFor: true,
-                tag: "component",
-                attrs: { active: item.active, itemData: item }
-              })
-            ],
-            1
-          )
-        }),
-        _vm._l(_vm.lines, function(line, index) {
-          return _c("line-svg", {
-            key: "line-" + index,
-            attrs: { lineData: line }
+            mouseup: _vm.mouseupHandler
+          }
+        },
+        [
+          _vm._l(_vm.items, function(item, index) {
+            return _c(
+              "drag-item-wrapper",
+              {
+                key: index,
+                attrs: { idx: index, id: item.id, x: item.x, y: item.y }
+              },
+              [
+                _c(item.component, {
+                  ref: "items",
+                  refInFor: true,
+                  tag: "component",
+                  attrs: { active: item.active, itemData: item }
+                })
+              ],
+              1
+            )
+          }),
+          _vm._l(_vm.lines, function(line, index) {
+            return _c("line-svg", {
+              key: "line-" + index,
+              attrs: { lineData: line }
+            })
           })
-        })
-      ],
-      2
-    )
-  ])
+        ],
+        2
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -51514,8 +51527,8 @@ function (_super) {
     var areaBoundaries = _store.default.state.Block.area.boundaries;
     var clientRect = this.$el.getBoundingClientRect();
     var paddingLeft = clientRect.width / 2,
-        left = clientRect.left - areaBoundaries.left + paddingLeft,
-        top = clientRect.bottom - areaBoundaries.top;
+        left = clientRect.left - areaBoundaries.left + paddingLeft + _store.default.state.Block.scrollPosition.left,
+        top = clientRect.bottom - areaBoundaries.top + _store.default.state.Block.scrollPosition.top;
     return {
       left: left,
       top: top
@@ -51586,8 +51599,8 @@ function (_super) {
     var areaBoundaries = _store.default.state.Block.area.boundaries,
         clientRect = this.$el.getBoundingClientRect(),
         paddingLeft = clientRect.width / 2,
-        x = clientRect.left - areaBoundaries.left,
-        y = clientRect.top - areaBoundaries.top;
+        x = clientRect.left - areaBoundaries.left + +_store.default.state.Block.scrollPosition.left,
+        y = clientRect.top - areaBoundaries.top + +_store.default.state.Block.scrollPosition.top;
     return {
       left: x + paddingLeft,
       top: y
@@ -52060,6 +52073,10 @@ function (_super) {
         bottom: -1
       }
     };
+    _this.scrollPosition = {
+      top: 0,
+      left: 0
+    };
     return _this;
   }
 
@@ -52253,6 +52270,10 @@ function (_super) {
     }
   };
 
+  Block.prototype.setScrollOffset = function (positions) {
+    this.scrollPosition = positions;
+  };
+
   Block.prototype.saveConnectorTarget = function (connector) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
       var connectorId, targetBlockId;
@@ -52352,6 +52373,8 @@ function (_super) {
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataReset", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataSet", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "setScrollOffset", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveConnectorTarget", null);
 

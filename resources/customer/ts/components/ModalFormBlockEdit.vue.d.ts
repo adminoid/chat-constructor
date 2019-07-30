@@ -4,19 +4,22 @@ export default class ModalFormBlockEdit extends Vue {
     subFormData: {
         messages: any[];
         client_input_type: {
+            id: any;
+            name: any;
             component: any;
         };
+        client_input_type_id: any;
     };
-    messages: any[];
     subFormList: any[];
     state: {
         params: {
             blockId: -1;
         };
+        formData: {};
     };
     getBlock: any;
-    confirm(): void;
-    cancel(): void;
-    created(): void;
+    beforeCreate(): void;
+    onChange(): void;
     addMessage(): void;
+    onSubFormDataChanged(val: any): void;
 }
