@@ -31182,19 +31182,21 @@ var BlocksArea = /** @class */ (function (_super) {
         if (this.dd.dragging) {
             var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
             if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
-                left_1 = 0;
+                // left = 0;
+                console.info('touch left of visible area');
             }
             if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
-                top_1 = 0;
+                // top = 0;
+                console.info('touch top of visible area');
             }
             if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
-                left_1 = (this.area.boundaries.right - this.area.boundaries.left) - this.dd.elementOffset.right;
+                // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
                 // TODO: make area expansion
-                console.info('// TODO: make area expansion to right');
+                console.info('touch right of visible area');
             }
             if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
-                top_1 = (this.area.boundaries.bottom - this.area.boundaries.top) - this.dd.elementOffset.bottom;
-                console.info('// TODO: make area expansion to bottom');
+                // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
+                console.info('touch bottom of visible area');
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {

@@ -131,22 +131,24 @@
           top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
 
         if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
-          left = 0;
+          // left = 0;
+          console.info('touch left of visible area');
         }
 
         if( e.clientY - this.dd.elementOffset.top < this.area.boundaries.top ) {
-          top = 0;
+          // top = 0;
+          console.info('touch top of visible area');
         }
 
         if( e.clientX + this.dd.elementOffset.right > this.area.boundaries.right ) {
-          left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
+          // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
           // TODO: make area expansion
-          console.info('// TODO: make area expansion to right');
+          console.info('touch right of visible area');
         }
 
         if( e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom ) {
-          top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
-          console.info('// TODO: make area expansion to bottom');
+          // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
+          console.info('touch bottom of visible area');
         }
 
         // Update all begin and end coordinates who concern to this item
