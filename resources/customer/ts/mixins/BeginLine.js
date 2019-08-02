@@ -17,7 +17,7 @@ var BeginLine = /** @class */ (function (_super) {
         var paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left + paddingLeft + store.state.Block.scrollPosition.left, top = clientRect.bottom - areaBoundaries.top + store.state.Block.scrollPosition.top;
         return {
             left: left,
-            top: top
+            top: top,
         };
     };
     BeginLine.prototype.mounted = function () {

@@ -24,7 +24,7 @@ export default class BeginLine extends Vue {
 
     return {
       left: left,
-      top: top
+      top: top,
     };
 
   }

@@ -1,7 +1,7 @@
 <template lang="pug">
-
-  #frame-drop-area(@scroll="handleScroll")
-    #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler")
+  #frame-drop-area(@scroll="handleScroll" ref="frame")
+    pre#debugger {{ dd }}
+    #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler" ref="area")
       drag-item-wrapper(
         v-for="(item, index) in items"
         :key="index"
@@ -37,6 +37,12 @@
   })
   export default class BlocksArea extends Vue {
 
+    $refs!: {
+      area: HTMLElement,
+      frame: HTMLElement,
+      items
+    };
+
     @BlockModule.Action fetchBlocks;
     @BlockModule.Action deleteBlock;
     @BlockModule.Action saveBlockData;
@@ -64,6 +70,11 @@
 
     $route;
 
+    areaSize = {
+      width: 0,
+      height: 0,
+    };
+
     created () {
       this.botId = +this.$route.params.botId;
       this.fetchBlocks(this.botId).then(() => {
@@ -73,6 +84,12 @@
 
     mounted () {
       this.setupSizesOfArea();
+      this.saveAreaSize();
+    }
+
+    saveAreaSize() {
+      this.areaSize.height = this.$refs.area.clientHeight;
+      this.areaSize.width = this.$refs.area.clientWidth;
     }
 
     @Watch('items', { deep: true })
@@ -130,25 +147,12 @@
         let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left),
           top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
 
-        if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
-          // left = 0;
-          console.info('touch left of visible area');
+        if( left < 0 ) {
+          left = 0;
         }
 
-        if( e.clientY - this.dd.elementOffset.top < this.area.boundaries.top ) {
-          // top = 0;
-          console.info('touch top of visible area');
-        }
-
-        if( e.clientX + this.dd.elementOffset.right > this.area.boundaries.right ) {
-          // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
-          // TODO: make area expansion
-          console.info('touch right of visible area');
-        }
-
-        if( e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom ) {
-          // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
-          console.info('touch bottom of visible area');
+        if( top < 0 ) {
+          top = 0;
         }
 
         // Update all begin and end coordinates who concern to this item
@@ -157,20 +161,66 @@
           this.updateCoords([left, top]);
 
           let item = _.find(this.items, ['id', this.dd.id]),
-            isNewLine = item.component === 'ConnectorClone',
-            $items: any = this.$refs.items;
+            isNewLine = item.component === 'ConnectorClone';
 
-          let queue: any[] = $items;
-
-          let $beginItem = _.find(queue, (item: any) => {
+          let $beginItem = _.find(this.$refs.items, (item: any) => {
             if( item && item.itemData ) {
               return item.itemData.id === this.dd.id;
             }
-
             return false;
           });
 
           if( $beginItem ) {
+
+            let bounding = $beginItem.$el.getBoundingClientRect(),
+              rightPosition = left + bounding.width + 10,
+              bottomPosition = top + bounding.height + 10 + 10;
+
+            if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
+              // touch left of visible area
+              if( left > 0 ) {
+                this.$refs.frame.scrollLeft -= 10;
+              }
+            }
+
+            if( e.clientY - this.dd.elementOffset.top < this.area.boundaries.top ) {
+              // touch top of visible area
+              if( top > 0 ) {
+                this.$refs.frame.scrollTop -= 10;
+              }
+            }
+
+            if( e.clientX + this.dd.elementOffset.right > this.area.boundaries.right ) {
+              // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
+
+              // touch right of visible area
+              if( left > 0 ) { // todo: if left less than area height
+                // check for increase width
+                if( rightPosition >= this.areaSize.width ) {
+                  console.info('width need to increase');
+                  return false;
+                } else {
+                  this.$refs.frame.scrollLeft += 10;
+                }
+              }
+
+            }
+
+            if( e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom ) {
+              // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
+
+              // touch bottom of visible area
+              if( top > 0 ) { // todo: if top less than area width
+
+                // check for increase height
+                if( bottomPosition >= this.areaSize.height ) {
+                  console.info('height need to increase');
+                  return false;
+                } else {
+                  this.$refs.frame.scrollTop += 10;
+                }
+              }
+            }
 
             // update sourceCoords (BlockModule\updateEndLineCoords)
             let coords = $beginItem.getLineEndCoords();
@@ -317,9 +367,13 @@
     background: #d7d7d7
     border-radius: 5px
   #drop-area
-    width: 2000px
-    height: 2000px
+    width: 1200px
+    height: 1000px
     position: relative
     z-index: 0
+  pre#debugger
+    position: fixed
+    top: 90px
+    right: 30px
 
 </style>

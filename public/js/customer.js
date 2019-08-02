@@ -11210,7 +11210,7 @@ exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  width: 2000px;\n  height: 2000px;\n  position: relative;\n  z-index: 0;\n}", ""]);
+exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  width: 1200px;\n  height: 1000px;\n  position: relative;\n  z-index: 0;\n}\npre#debugger {\n  position: fixed;\n  top: 90px;\n  right: 30px;\n}", ""]);
 
 
 
@@ -31132,6 +31132,10 @@ var BlocksArea = /** @class */ (function (_super) {
         _this.lines = [];
         _this.closest = 30;
         _this.connectorWidth = 16;
+        _this.areaSize = {
+            width: 0,
+            height: 0,
+        };
         return _this;
     }
     BlocksArea.prototype.created = function () {
@@ -31143,6 +31147,11 @@ var BlocksArea = /** @class */ (function (_super) {
     };
     BlocksArea.prototype.mounted = function () {
         this.setupSizesOfArea();
+        this.saveAreaSize();
+    };
+    BlocksArea.prototype.saveAreaSize = function () {
+        this.areaSize.height = this.$refs.area.clientHeight;
+        this.areaSize.width = this.$refs.area.clientWidth;
     };
     BlocksArea.prototype.onItemsChanged = function () {
         this.lines = this.makeLinesFromItems();
@@ -31181,35 +31190,64 @@ var BlocksArea = /** @class */ (function (_super) {
         var _this = this;
         if (this.dd.dragging) {
             var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
-            if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
-                // left = 0;
-                console.info('touch left of visible area');
+            if (left_1 < 0) {
+                left_1 = 0;
             }
-            if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
-                // top = 0;
-                console.info('touch top of visible area');
-            }
-            if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
-                // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
-                // TODO: make area expansion
-                console.info('touch right of visible area');
-            }
-            if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
-                // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
-                console.info('touch bottom of visible area');
+            if (top_1 < 0) {
+                top_1 = 0;
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
                 this.updateCoords([left_1, top_1]);
-                var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]), isNewLine_1 = item.component === 'ConnectorClone', $items = this.$refs.items;
-                var queue = $items;
-                var $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](queue, function (item) {
+                var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]), isNewLine_1 = item.component === 'ConnectorClone';
+                var $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.$refs.items, function (item) {
                     if (item && item.itemData) {
                         return item.itemData.id === _this.dd.id;
                     }
                     return false;
                 });
                 if ($beginItem_1) {
+                    var bounding = $beginItem_1.$el.getBoundingClientRect(), rightPosition = left_1 + bounding.width + 10, bottomPosition = top_1 + bounding.height + 10 + 10;
+                    if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
+                        // touch left of visible area
+                        if (left_1 > 0) {
+                            this.$refs.frame.scrollLeft -= 10;
+                        }
+                    }
+                    if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
+                        // touch top of visible area
+                        if (top_1 > 0) {
+                            this.$refs.frame.scrollTop -= 10;
+                        }
+                    }
+                    if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
+                        // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
+                        // touch right of visible area
+                        if (left_1 > 0) { // todo: if left less than area height
+                            // check for increase width
+                            if (rightPosition >= this.areaSize.width) {
+                                console.info('width need to increase');
+                                return false;
+                            }
+                            else {
+                                this.$refs.frame.scrollLeft += 10;
+                            }
+                        }
+                    }
+                    if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
+                        // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
+                        // touch bottom of visible area
+                        if (top_1 > 0) { // todo: if top less than area width
+                            // check for increase height
+                            if (bottomPosition >= this.areaSize.height) {
+                                console.info('height need to increase');
+                                return false;
+                            }
+                            else {
+                                this.$refs.frame.scrollTop += 10;
+                            }
+                        }
+                    }
                     // update sourceCoords (BlockModule\updateEndLineCoords)
                     var coords = $beginItem_1.getLineEndCoords();
                     this.updateEndLineCoords({
@@ -32714,11 +32752,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { attrs: { id: "frame-drop-area" }, on: { scroll: _vm.handleScroll } },
+    {
+      ref: "frame",
+      attrs: { id: "frame-drop-area" },
+      on: { scroll: _vm.handleScroll }
+    },
     [
+      _c("pre", { attrs: { id: "debugger" } }, [_vm._v(_vm._s(_vm.dd))]),
       _c(
         "div",
         {
+          ref: "area",
           attrs: { id: "drop-area" },
           on: {
             mousemove: function($event) {
