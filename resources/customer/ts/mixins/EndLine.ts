@@ -19,8 +19,8 @@ export default class EndLine extends Vue {
     let areaBoundaries = store.state.Block.area.boundaries,
       clientRect = this.$el.getBoundingClientRect(),
       paddingLeft = clientRect.width / 2,
-      x = clientRect.left - areaBoundaries.left,
-      y = clientRect.top - areaBoundaries.top;
+      x = clientRect.left - areaBoundaries.left + + store.state.Block.scrollPosition.left,
+      y = clientRect.top - areaBoundaries.top + + store.state.Block.scrollPosition.top;
 
     return {
       left: x + paddingLeft,

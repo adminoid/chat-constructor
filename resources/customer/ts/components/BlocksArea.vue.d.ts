@@ -7,11 +7,13 @@ export default class BlocksArea extends Vue {
     items: any;
     dd: any;
     area: any;
+    scroll: any;
     setAreaBoundaries: any;
     dragDropDataReset: any;
     updateCoords: any;
     updateEndLineCoords: any;
     setActiveTargetId: any;
+    setScrollOffset: any;
     lines: any[];
     closest: number;
     connectorWidth: number;
@@ -20,6 +22,7 @@ export default class BlocksArea extends Vue {
     created(): void;
     mounted(): void;
     onItemsChanged(): void;
+    handleScroll(): void;
     makeLinesFromItems(): any[];
     setupSizesOfArea(): void;
     mousemoveHandler(e: any): void;

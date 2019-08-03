@@ -1,50 +1,116 @@
 <template lang="pug">
 
-  form
-    .form-group
-      label(for="name") Block name
-      input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name")
-      small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить.
-    .form-group
+  .container
+
+    form
+
       .form-group
-        label(for="exampleFormControlSelect1") Example select
-        select#exampleFormControlSelect1.form-control
-          option 1
-          option 2
-          option 3
+        label(for="name") Имя блока
+        input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name" v-model="subFormData.name")
+        small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить.
+
+      fieldset.border.p-2.messages
+        legend.w-auto Сообщения
+        .messages__block(v-for="message, index in subFormData.messages" :key="message.sort_order_id")
+          input.messages__delay.form-control(type="text" aria-label="delay" v-model="subFormData.messages[index].delay")
+          .input-group
+            textarea.messages__message.form-control(v-model="subFormData.messages[index].text") {{ message.text }}
+          .messages__panel
+            button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button")
+              fa-icon(icon="trash")
+
+      fieldset.border.p-2
+
+        .messages__add
+          button.btn.btn-outline-primary(@click.prev.stop="addMessage") Добавить сообщение
+
+      hr
+
+      .form-group
+        .form-group
+          label(for="select-block-type") Тип блока
+          select#select-block-type.form-control(v-model="subFormData.client_input_type" @change="onChange")
+            option(v-for="subForm in subFormList" :value="{id: subForm.id, name: subForm.name, component: subForm.component}") {{ subForm.id }} - {{ subForm.name }} - {{ subForm.component }}
+
+      hr
+
+      component(v-if="subFormData.client_input_type.component" :is="subFormData.client_input_type.component")
+
 </template>
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
+  import axios from 'axios'
+
+  import ModalFormBlockEditSubFormButton from './ModalFormBlockEditSubFormButton.vue'
+  import ModalFormBlockEditSubFormAnswer from './ModalFormBlockEditSubFormAnswer.vue'
+
   const BlockModule = namespace('Block');
 
-  @Component
+  @Component({
+    // ts-ignore
+    components: { ModalFormBlockEditSubFormButton, ModalFormBlockEditSubFormAnswer }
+  })
   export default class ModalFormBlockEdit extends Vue {
 
     name: 'ModalFormBlockEdit';
 
-    @Prop({}) state!: object;
+    subFormData = {
+      messages: [],
+      client_input_type: {
+        id: null,
+        name: null,
+        component: null,
+      },
+      client_input_type_id: null,
+    };
+
+    subFormList = [];
+
+    @Prop({}) state!: {
+      params: {
+        blockId: -1
+      },
+      formData: {},
+    };
 
     @BlockModule.Action getBlock;
 
-    confirm () {
-      this.$emit('confirmed')
+    beforeCreate () {
+
+      axios.get('/private/client-input-types').then(( response ) => {
+        this.subFormList = response.data;
+        axios.get('/private/block/' + this.state.params.blockId).then(( response ) => {
+          this.subFormData = response.data;
+        });
+      });
+
     }
 
-    cancel () {
-      this.$emit('canceled')
+    onChange () {
+      this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
+
+      // save block type to server
+      axios.post('private/save-client-input-types', {
+        id: this.subFormData.client_input_type_id,
+        block_id: this.state.params.blockId,
+      });
     }
 
-    mount () {
+    addMessage () {
 
-      console.log(this.state);
+      axios.get('/private/messages/create-new/' + this.state.params.blockId)
+        .then(resp => {
+          this.subFormData.messages = resp.data;
+        });
 
-      // this.getBlock(this.botId).then(() => {
-      //   this.lines = this.makeLinesFromItems();
-      // });
+    }
 
+    @Watch('subFormData', { immediate: true, deep: true })
+    onSubFormDataChanged(val) {
+      this.state.formData = val;
     }
 
   }
@@ -66,5 +132,12 @@
     .modal-wrapper
       display: table-cell
       vertical-align: middle
+  .messages
+    .messages__block
+      display: flex
+    .messages__delay
+      max-width: 50px
+    .messages__message
+      margin: 0 10px
 
 </style>

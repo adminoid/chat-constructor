@@ -9584,7 +9584,6 @@ var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "./node_modules/
 var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
 var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
 var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(/*! ./../helpers/btoa */ "./node_modules/axios/lib/helpers/btoa.js");
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -9596,22 +9595,6 @@ module.exports = function xhrAdapter(config) {
     }
 
     var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if ( true &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
 
     // HTTP basic authentication
     if (config.auth) {
@@ -9626,8 +9609,8 @@ module.exports = function xhrAdapter(config) {
     request.timeout = config.timeout;
 
     // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
+    request.onreadystatechange = function handleLoad() {
+      if (!request || request.readyState !== 4) {
         return;
       }
 
@@ -9644,9 +9627,8 @@ module.exports = function xhrAdapter(config) {
       var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
       var response = {
         data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        status: request.status,
+        statusText: request.statusText,
         headers: responseHeaders,
         config: config,
         request: request
@@ -10464,54 +10446,6 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ "./node_modules/axios/lib/helpers/btoa.js":
-/*!************************************************!*\
-  !*** ./node_modules/axios/lib/helpers/btoa.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
-
-var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-function E() {
-  this.message = 'String contains an invalid character';
-}
-E.prototype = new Error;
-E.prototype.code = 5;
-E.prototype.name = 'InvalidCharacterError';
-
-function btoa(input) {
-  var str = String(input);
-  var output = '';
-  for (
-    // initialize result and counter
-    var block, charCode, idx = 0, map = chars;
-    // if the next str index does not exist:
-    //   change the mapping table to "="
-    //   check if d has no fractional digits
-    str.charAt(idx | 0) || (map = '=', idx % 1);
-    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
-  ) {
-    charCode = str.charCodeAt(idx += 3 / 4);
-    if (charCode > 0xFF) {
-      throw new E();
-    }
-    block = block << 8 | charCode;
-  }
-  return output;
-}
-
-module.exports = btoa;
-
-
-/***/ }),
-
 /***/ "./node_modules/axios/lib/helpers/buildURL.js":
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/helpers/buildURL.js ***!
@@ -10926,7 +10860,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -11230,6 +11164,28 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+module.exports = function isBuffer (obj) {
+  return obj != null && obj.constructor != null &&
+    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/BlockBase.vue?vue&type=style&index=0&lang=sass&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--10-2!./node_modules/sass-loader/lib/loader.js??ref--10-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/BlockBase.vue?vue&type=style&index=0&lang=sass& ***!
@@ -11254,7 +11210,7 @@ exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "#drop-area {\n  z-index: 0;\n  height: calc(100vh - 140px);\n  position: relative;\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area .br {\n  position: absolute;\n  bottom: 10px;\n  right: 10px;\n}", ""]);
+exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  position: relative;\n  z-index: 0;\n}\npre#debugger {\n  position: fixed;\n  top: 90px;\n  right: 30px;\n}", ""]);
 
 
 
@@ -11350,21 +11306,6 @@ exports.push([module.i, ".svg {\n  z-index: -1;\n  position: absolute;\n}\n.svg 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--10-2!./node_modules/sass-loader/lib/loader.js??ref--10-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
-// Module
-exports.push([module.i, ".modal-mask[data-v-a6bc5c62] {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  -webkit-transition: opacity 0.3s ease;\n  transition: opacity 0.3s ease;\n}\n.modal-mask .modal-wrapper[data-v-a6bc5c62] {\n  display: table-cell;\n  vertical-align: middle;\n}", ""]);
-
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEdit.vue?vue&type=style&index=0&id=7f0cd450&lang=sass&scoped=true&":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--10-2!./node_modules/sass-loader/lib/loader.js??ref--10-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEdit.vue?vue&type=style&index=0&id=7f0cd450&lang=sass&scoped=true& ***!
@@ -11374,7 +11315,7 @@ exports.push([module.i, ".modal-mask[data-v-a6bc5c62] {\n  position: fixed;\n  z
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".modal-mask[data-v-7f0cd450] {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  -webkit-transition: opacity 0.3s ease;\n  transition: opacity 0.3s ease;\n}\n.modal-mask .modal-wrapper[data-v-7f0cd450] {\n  display: table-cell;\n  vertical-align: middle;\n}", ""]);
+exports.push([module.i, ".modal-mask[data-v-7f0cd450] {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  -webkit-transition: opacity 0.3s ease;\n  transition: opacity 0.3s ease;\n}\n.modal-mask .modal-wrapper[data-v-7f0cd450] {\n  display: table-cell;\n  vertical-align: middle;\n}\n.messages .messages__block[data-v-7f0cd450] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.messages .messages__delay[data-v-7f0cd450] {\n  max-width: 50px;\n}\n.messages .messages__message[data-v-7f0cd450] {\n  margin: 0 10px;\n}", ""]);
 
 
 
@@ -12692,38 +12633,6 @@ module.exports = global.Promise;
 
 /***/ }),
 
-/***/ "./node_modules/is-buffer/index.js":
-/*!*****************************************!*\
-  !*** ./node_modules/is-buffer/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-// The _isBuffer check is for Safari 5-7 support, because it's missing
-// Object.prototype.constructor. Remove this eventually
-module.exports = function (obj) {
-  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
-}
-
-function isBuffer (obj) {
-  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
-
-// For Node v0.10 support. Remove this eventually.
-function isSlowBuffer (obj) {
-  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/lodash/lodash.js":
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
@@ -12734,7 +12643,7 @@ function isSlowBuffer (obj) {
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
  * @license
  * Lodash <https://lodash.com/>
- * Copyright JS Foundation and other contributors <https://js.foundation/>
+ * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -12745,7 +12654,7 @@ function isSlowBuffer (obj) {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.11';
+  var VERSION = '4.17.15';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -15404,16 +15313,10 @@ function isSlowBuffer (obj) {
         value.forEach(function(subValue) {
           result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
         });
-
-        return result;
-      }
-
-      if (isMap(value)) {
+      } else if (isMap(value)) {
         value.forEach(function(subValue, key) {
           result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
         });
-
-        return result;
       }
 
       var keysFunc = isFull
@@ -16337,8 +16240,8 @@ function isSlowBuffer (obj) {
         return;
       }
       baseFor(source, function(srcValue, key) {
+        stack || (stack = new Stack);
         if (isObject(srcValue)) {
-          stack || (stack = new Stack);
           baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
         }
         else {
@@ -18155,7 +18058,7 @@ function isSlowBuffer (obj) {
       return function(number, precision) {
         number = toNumber(number);
         precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
-        if (precision) {
+        if (precision && nativeIsFinite(number)) {
           // Shift with exponential notation to avoid floating-point issues.
           // See [MDN](https://mdn.io/round#Examples) for more details.
           var pair = (toString(number) + 'e').split('e'),
@@ -19338,7 +19241,7 @@ function isSlowBuffer (obj) {
     }
 
     /**
-     * Gets the value at `key`, unless `key` is "__proto__".
+     * Gets the value at `key`, unless `key` is "__proto__" or "constructor".
      *
      * @private
      * @param {Object} object The object to query.
@@ -19346,6 +19249,10 @@ function isSlowBuffer (obj) {
      * @returns {*} Returns the property value.
      */
     function safeGet(object, key) {
+      if (key === 'constructor' && typeof object[key] === 'function') {
+        return;
+      }
+
       if (key == '__proto__') {
         return;
       }
@@ -23146,6 +23053,7 @@ function isSlowBuffer (obj) {
           }
           if (maxing) {
             // Handle invocations in a tight loop.
+            clearTimeout(timerId);
             timerId = setTimeout(timerExpired, wait);
             return invokeFunc(lastCallTime);
           }
@@ -27532,9 +27440,12 @@ function isSlowBuffer (obj) {
       , 'g');
 
       // Use a sourceURL for easier debugging.
+      // The sourceURL gets injected into the source that's eval-ed, so be careful
+      // with lookup (in case of e.g. prototype pollution), and strip newlines if any.
+      // A newline wouldn't be a valid sourceURL anyway, and it'd enable code injection.
       var sourceURL = '//# sourceURL=' +
-        ('sourceURL' in options
-          ? options.sourceURL
+        (hasOwnProperty.call(options, 'sourceURL')
+          ? (options.sourceURL + '').replace(/[\r\n]/g, ' ')
           : ('lodash.templateSources[' + (++templateCounter) + ']')
         ) + '\n';
 
@@ -27567,7 +27478,9 @@ function isSlowBuffer (obj) {
 
       // If `variable` is not specified wrap a with-statement around the generated
       // code to add the data object to the top of the scope chain.
-      var variable = options.variable;
+      // Like with sourceURL, we take care to not check the option's prototype,
+      // as this configuration is a code injection vector.
+      var variable = hasOwnProperty.call(options, 'variable') && options.variable;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
       }
@@ -29772,10 +29685,11 @@ function isSlowBuffer (obj) {
     baseForOwn(LazyWrapper.prototype, function(func, methodName) {
       var lodashFunc = lodash[methodName];
       if (lodashFunc) {
-        var key = (lodashFunc.name + ''),
-            names = realNames[key] || (realNames[key] = []);
-
-        names.push({ 'name': methodName, 'func': lodashFunc });
+        var key = lodashFunc.name + '';
+        if (!hasOwnProperty.call(realNames, key)) {
+          realNames[key] = [];
+        }
+        realNames[key].push({ 'name': methodName, 'func': lodashFunc });
       }
     });
 
@@ -30447,36 +30361,6 @@ if(false) {}
 
 
 var content = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--10-2!../../../../node_modules/sass-loader/lib/loader.js??ref--10-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./LineSvg.vue?vue&type=style&index=0&lang=sass& */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/LineSvg.vue?vue&type=style&index=0&lang=sass&");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true&":
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--10-2!./node_modules/sass-loader/lib/loader.js??ref--10-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true& ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--10-2!../../../../node_modules/sass-loader/lib/loader.js??ref--10-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true& */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -31182,6 +31066,8 @@ var BlockBase = /** @class */ (function (_super) {
         //  3. active - for show/hide form
         this.$form({
             type: 'editBlock',
+        }, {
+            blockId: this.itemData.id
         })
             .then(function () {
             console.log('then');
@@ -31246,20 +31132,59 @@ var BlocksArea = /** @class */ (function (_super) {
         _this.lines = [];
         _this.closest = 30;
         _this.connectorWidth = 16;
+        _this.areaSize = {
+            width: 0,
+            height: 0,
+        };
         return _this;
     }
     BlocksArea.prototype.created = function () {
         var _this = this;
         this.botId = +this.$route.params.botId;
         this.fetchBlocks(this.botId).then(function () {
+            // todo: find the farthest items
+            var maxX = lodash__WEBPACK_IMPORTED_MODULE_3__["maxBy"](_this.items, 'x').x;
+            var maxY = lodash__WEBPACK_IMPORTED_MODULE_3__["maxBy"](_this.items, 'y').y;
+            _this.setAreaSize(maxX, maxY);
             _this.lines = _this.makeLinesFromItems();
         });
     };
-    BlocksArea.prototype.mounted = function () {
-        this.setupSizesOfArea();
+    BlocksArea.prototype.setAreaSize = function (maxX, maxY) {
+        this.areaSize.width = maxX + 200;
+        this.areaSize.height = maxY + 200;
+        console.info(maxX, maxY);
+        console.log(this.areaSize);
+        console.log(this.areaSizePx);
+        this.setAreaBorders();
     };
+    BlocksArea.prototype.setAreaBorders = function () {
+        var bounding = this.$el.getBoundingClientRect();
+        this.setAreaBoundaries({
+            left: bounding.left,
+            top: bounding.top,
+            right: bounding.right,
+            bottom: bounding.bottom
+        });
+    };
+    Object.defineProperty(BlocksArea.prototype, "areaSizePx", {
+        get: function () {
+            return {
+                width: this.areaSize.width + 'px',
+                height: this.areaSize.height + 'px',
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
     BlocksArea.prototype.onItemsChanged = function () {
         this.lines = this.makeLinesFromItems();
+    };
+    BlocksArea.prototype.handleScroll = function () {
+        // calculate scroll position
+        this.setScrollOffset({
+            top: this.$el.scrollTop,
+            left: this.$el.scrollLeft,
+        });
     };
     BlocksArea.prototype.makeLinesFromItems = function () {
         var lines = [];
@@ -31275,46 +31200,68 @@ var BlocksArea = /** @class */ (function (_super) {
         });
         return lines;
     };
-    BlocksArea.prototype.setupSizesOfArea = function () {
-        var bounding = this.$el.getBoundingClientRect();
-        this.setAreaBoundaries({
-            left: bounding.left,
-            top: bounding.top,
-            right: bounding.right,
-            bottom: bounding.bottom
-        });
-    };
     BlocksArea.prototype.mousemoveHandler = function (e) {
         var _this = this;
         if (this.dd.dragging) {
-            var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top);
-            if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
+            var left_1 = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left), top_1 = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
+            if (left_1 < 0) {
                 left_1 = 0;
             }
-            if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
+            if (top_1 < 0) {
                 top_1 = 0;
-            }
-            if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
-                left_1 = (this.area.boundaries.right - this.area.boundaries.left) - this.dd.elementOffset.right;
-                // TODO: make area expansion
-                console.info('// TODO: make area expansion to right');
-            }
-            if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
-                top_1 = (this.area.boundaries.bottom - this.area.boundaries.top) - this.dd.elementOffset.bottom;
-                console.info('// TODO: make area expansion to bottom');
             }
             // Update all begin and end coordinates who concern to this item
             if (this.dd.id >= 0) {
                 this.updateCoords([left_1, top_1]);
-                var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]), isNewLine_1 = item.component === 'ConnectorClone', $items = this.$refs.items;
-                var queue = $items;
-                var $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](queue, function (item) {
+                var item = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.items, ['id', this.dd.id]), isNewLine_1 = item.component === 'ConnectorClone';
+                var $beginItem_1 = lodash__WEBPACK_IMPORTED_MODULE_3__["find"](this.$refs.items, function (item) {
                     if (item && item.itemData) {
                         return item.itemData.id === _this.dd.id;
                     }
                     return false;
                 });
                 if ($beginItem_1) {
+                    var bounding = $beginItem_1.$el.getBoundingClientRect(), rightPosition = left_1 + bounding.width + 10, bottomPosition = top_1 + bounding.height + 10 + 10;
+                    if (e.clientX - this.dd.elementOffset.left < this.area.boundaries.left) {
+                        // touch left of visible area
+                        if (left_1 > 0) {
+                            this.$refs.frame.scrollLeft -= 10;
+                        }
+                    }
+                    if (e.clientY - this.dd.elementOffset.top < this.area.boundaries.top) {
+                        // touch top of visible area
+                        if (top_1 > 0) {
+                            this.$refs.frame.scrollTop -= 10;
+                        }
+                    }
+                    if (e.clientX + this.dd.elementOffset.right > this.area.boundaries.right) {
+                        // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
+                        // touch right of visible area
+                        if (left_1 > 0) { // todo: if left less than area height
+                            // check for increase width
+                            if (rightPosition >= this.areaSize.width) {
+                                // width need to increase
+                                this.areaSize.width += 200;
+                            }
+                            else {
+                                this.$refs.frame.scrollLeft += 10;
+                            }
+                        }
+                    }
+                    if (e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom) {
+                        // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
+                        // touch bottom of visible area
+                        if (top_1 > 0) { // todo: if top less than area width
+                            // check for increase height
+                            if (bottomPosition >= this.areaSize.height) {
+                                // height need to increase
+                                this.areaSize.height += 200;
+                            }
+                            else {
+                                this.$refs.frame.scrollTop += 10;
+                            }
+                        }
+                    }
                     // update sourceCoords (BlockModule\updateEndLineCoords)
                     var coords = $beginItem_1.getLineEndCoords();
                     this.updateEndLineCoords({
@@ -31426,6 +31373,9 @@ var BlocksArea = /** @class */ (function (_super) {
         BlockModule.State
     ], BlocksArea.prototype, "area", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.State
+    ], BlocksArea.prototype, "scrollPosition", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Mutation
     ], BlocksArea.prototype, "setAreaBoundaries", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -31440,6 +31390,9 @@ var BlocksArea = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Mutation
     ], BlocksArea.prototype, "setActiveTargetId", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        BlockModule.Mutation
+    ], BlocksArea.prototype, "setScrollOffset", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Watch"])('items', { deep: true })
     ], BlocksArea.prototype, "onItemsChanged", null);
@@ -31959,6 +31912,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
 /* harmony import */ var vuex_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex-class */ "./node_modules/vuex-class/lib/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _ModalFormBlockEditSubFormButton_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormButton.vue */ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue");
+/* harmony import */ var _ModalFormBlockEditSubFormAnswer_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormAnswer.vue */ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue");
+
+
+
 
 
 
@@ -31966,19 +31926,45 @@ var BlockModule = Object(vuex_class__WEBPACK_IMPORTED_MODULE_2__["namespace"])('
 var ModalFormBlockEdit = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEdit, _super);
     function ModalFormBlockEdit() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.subFormData = {
+            messages: [],
+            client_input_type: {
+                id: null,
+                name: null,
+                component: null,
+            },
+            client_input_type_id: null,
+        };
+        _this.subFormList = [];
+        return _this;
     }
-    ModalFormBlockEdit.prototype.confirm = function () {
-        this.$emit('confirmed');
+    ModalFormBlockEdit.prototype.beforeCreate = function () {
+        var _this = this;
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/client-input-types').then(function (response) {
+            _this.subFormList = response.data;
+            axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/block/' + _this.state.params.blockId).then(function (response) {
+                _this.subFormData = response.data;
+            });
+        });
     };
-    ModalFormBlockEdit.prototype.cancel = function () {
-        this.$emit('canceled');
+    ModalFormBlockEdit.prototype.onChange = function () {
+        this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
+        // save block type to server
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('private/save-client-input-types', {
+            id: this.subFormData.client_input_type_id,
+            block_id: this.state.params.blockId,
+        });
     };
-    ModalFormBlockEdit.prototype.mount = function () {
-        console.log(this.state);
-        // this.getBlock(this.botId).then(() => {
-        //   this.lines = this.makeLinesFromItems();
-        // });
+    ModalFormBlockEdit.prototype.addMessage = function () {
+        var _this = this;
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/private/messages/create-new/' + this.state.params.blockId)
+            .then(function (resp) {
+            _this.subFormData.messages = resp.data;
+        });
+    };
+    ModalFormBlockEdit.prototype.onSubFormDataChanged = function (val) {
+        this.state.formData = val;
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Prop"])({})
@@ -31986,12 +31972,74 @@ var ModalFormBlockEdit = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         BlockModule.Action
     ], ModalFormBlockEdit.prototype, "getBlock", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Watch"])('subFormData', { immediate: true, deep: true })
+    ], ModalFormBlockEdit.prototype, "onSubFormDataChanged", null);
     ModalFormBlockEdit = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            // ts-ignore
+            components: { ModalFormBlockEditSubFormButton: _ModalFormBlockEditSubFormButton_vue__WEBPACK_IMPORTED_MODULE_4__["default"], ModalFormBlockEditSubFormAnswer: _ModalFormBlockEditSubFormAnswer_vue__WEBPACK_IMPORTED_MODULE_5__["default"] }
+        })
     ], ModalFormBlockEdit);
     return ModalFormBlockEdit;
 }(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Vue"]));
 /* harmony default export */ __webpack_exports__["default"] = (ModalFormBlockEdit);
+
+
+/***/ }),
+
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--5!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& ***!
+  \******************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+
+
+var ModalFormBlockEditSubFormAnswer = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEditSubFormAnswer, _super);
+    function ModalFormBlockEditSubFormAnswer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ModalFormBlockEditSubFormAnswer = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
+    ], ModalFormBlockEditSubFormAnswer);
+    return ModalFormBlockEditSubFormAnswer;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Vue"]));
+/* harmony default export */ __webpack_exports__["default"] = (ModalFormBlockEditSubFormAnswer);
+
+
+/***/ }),
+
+/***/ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&":
+/*!******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/ts-loader??ref--5!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& ***!
+  \******************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+
+
+var ModalFormBlockEditSubFormButton = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](ModalFormBlockEditSubFormButton, _super);
+    function ModalFormBlockEditSubFormButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ModalFormBlockEditSubFormButton = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
+    ], ModalFormBlockEditSubFormButton);
+    return ModalFormBlockEditSubFormButton;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Vue"]));
+/* harmony default export */ __webpack_exports__["default"] = (ModalFormBlockEditSubFormButton);
 
 
 /***/ }),
@@ -32719,48 +32767,60 @@ var render = function() {
   return _c(
     "div",
     {
-      attrs: { id: "drop-area" },
-      on: {
-        mousemove: function($event) {
-          if (
-            !$event.type.indexOf("key") &&
-            _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
-          ) {
-            return null
-          }
-          return _vm.mousemoveHandler($event)
-        },
-        mouseup: _vm.mouseupHandler
-      }
+      ref: "frame",
+      attrs: { id: "frame-drop-area" },
+      on: { scroll: _vm.handleScroll }
     },
     [
-      _vm._l(_vm.items, function(item, index) {
-        return _c(
-          "drag-item-wrapper",
-          {
-            key: index,
-            attrs: { idx: index, id: item.id, x: item.x, y: item.y }
-          },
-          [
-            _c(item.component, {
-              ref: "items",
-              refInFor: true,
-              tag: "component",
-              attrs: { active: item.active, itemData: item }
+      _c("pre", { attrs: { id: "debugger" } }, [_vm._v(_vm._s(_vm.dd))]),
+      _c(
+        "div",
+        {
+          ref: "area",
+          style: _vm.areaSizePx,
+          attrs: { id: "drop-area" },
+          on: {
+            mousemove: function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "prev", undefined, $event.key, undefined)
+              ) {
+                return null
+              }
+              return _vm.mousemoveHandler($event)
+            },
+            mouseup: _vm.mouseupHandler
+          }
+        },
+        [
+          _vm._l(_vm.items, function(item, index) {
+            return _c(
+              "drag-item-wrapper",
+              {
+                key: index,
+                attrs: { idx: index, id: item.id, x: item.x, y: item.y }
+              },
+              [
+                _c(item.component, {
+                  ref: "items",
+                  refInFor: true,
+                  tag: "component",
+                  attrs: { active: item.active, itemData: item }
+                })
+              ],
+              1
+            )
+          }),
+          _vm._l(_vm.lines, function(line, index) {
+            return _c("line-svg", {
+              key: "line-" + index,
+              attrs: { lineData: line }
             })
-          ],
-          1
-        )
-      }),
-      _vm._l(_vm.lines, function(line, index) {
-        return _c("line-svg", {
-          key: "line-" + index,
-          attrs: { lineData: line }
-        })
-      }),
-      _c("pre", { staticClass: "br" }, [_vm._v(_vm._s(this.dd))])
-    ],
-    2
+          })
+        ],
+        2
+      )
+    ]
   )
 }
 var staticRenderFns = []
@@ -33023,10 +33083,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug&":
-/*!**************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/pug-plain-loader!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug& ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug&":
+/*!**************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/pug-plain-loader!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -33040,8 +33100,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "modal-form" } }, [
     _vm.state.active
-      ? _c("div", { staticClass: "modal-mask" }, [
-          _c("div", { staticClass: "modal-wrapper" }, [
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade show",
+            attrs: {
+              tabindex: "-1",
+              role: "dialog",
+              "aria-labelledby": "exampleModalLongTitle"
+            }
+          },
+          [
             _c(
               "div",
               { staticClass: "modal-dialog", attrs: { role: "document" } },
@@ -33072,7 +33141,12 @@ var render = function() {
                   _c(
                     "div",
                     { staticClass: "modal-body" },
-                    [_c(_vm.formComponent, { tag: "component" })],
+                    [
+                      _c(_vm.formComponent, {
+                        tag: "component",
+                        attrs: { state: _vm.state }
+                      })
+                    ],
                     1
                   ),
                   _c("div", { staticClass: "modal-footer" }, [
@@ -33098,8 +33172,8 @@ var render = function() {
                 ])
               ]
             )
-          ])
-        ])
+          ]
+        )
       : _vm._e()
   ])
 }
@@ -33125,53 +33199,287 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("form", [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "name" } }, [_vm._v("Block name")]),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            id: "name",
-            "aria-describedby": "blockHelp",
-            placeholder: "Block name"
-          }
-        }),
-        _c(
-          "small",
-          { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
-          [_vm._v("Имя блока назначается, чтобы его запомнить.")]
-        )
-      ]),
-      _c("div", { staticClass: "form-group" }, [
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "form",
+      [
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
-            _vm._v("Example select")
-          ]),
-          _c(
-            "select",
-            {
-              staticClass: "form-control",
-              attrs: { id: "exampleFormControlSelect1" }
+          _c("label", { attrs: { for: "name" } }, [_vm._v("Имя блока")]),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.subFormData.name,
+                expression: "subFormData.name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              id: "name",
+              "aria-describedby": "blockHelp",
+              placeholder: "Block name"
             },
-            [
-              _c("option", [_vm._v("1")]),
-              _c("option", [_vm._v("2")]),
-              _c("option", [_vm._v("3")])
-            ]
+            domProps: { value: _vm.subFormData.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.subFormData, "name", $event.target.value)
+              }
+            }
+          }),
+          _c(
+            "small",
+            { staticClass: "form-text text-muted", attrs: { id: "blockHelp" } },
+            [_vm._v("Имя блока назначается, чтобы его запомнить.")]
           )
-        ])
-      ])
-    ])
-  }
-]
+        ]),
+        _c(
+          "fieldset",
+          { staticClass: "border p-2 messages" },
+          [
+            _c("legend", { staticClass: "w-auto" }, [_vm._v("Сообщения")]),
+            _vm._l(_vm.subFormData.messages, function(message, index) {
+              return _c(
+                "div",
+                { key: message.sort_order_id, staticClass: "messages__block" },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.subFormData.messages[index].delay,
+                        expression: "subFormData.messages[index].delay"
+                      }
+                    ],
+                    staticClass: "messages__delay form-control",
+                    attrs: { type: "text", "aria-label": "delay" },
+                    domProps: { value: _vm.subFormData.messages[index].delay },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.subFormData.messages[index],
+                          "delay",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c(
+                      "textarea",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.subFormData.messages[index].text,
+                            expression: "subFormData.messages[index].text"
+                          }
+                        ],
+                        staticClass: "messages__message form-control",
+                        domProps: {
+                          value: _vm.subFormData.messages[index].text
+                        },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.subFormData.messages[index],
+                              "text",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(message.text))]
+                    )
+                  ]),
+                  _c("div", { staticClass: "messages__panel" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn btn-outline-secondary btn-outline-danger btn-sm",
+                        attrs: { type: "button" }
+                      },
+                      [_c("fa-icon", { attrs: { icon: "trash" } })],
+                      1
+                    )
+                  ])
+                ]
+              )
+            })
+          ],
+          2
+        ),
+        _c("fieldset", { staticClass: "border p-2" }, [
+          _c("div", { staticClass: "messages__add" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary",
+                on: {
+                  click: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k(
+                        $event.keyCode,
+                        "prev",
+                        undefined,
+                        $event.key,
+                        undefined
+                      )
+                    ) {
+                      return null
+                    }
+                    $event.stopPropagation()
+                    return _vm.addMessage($event)
+                  }
+                }
+              },
+              [_vm._v("Добавить сообщение")]
+            )
+          ])
+        ]),
+        _c("hr"),
+        _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "select-block-type" } }, [
+              _vm._v("Тип блока")
+            ]),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.subFormData.client_input_type,
+                    expression: "subFormData.client_input_type"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { id: "select-block-type" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.subFormData,
+                        "client_input_type",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                    _vm.onChange
+                  ]
+                }
+              },
+              _vm._l(_vm.subFormList, function(subForm) {
+                return _c(
+                  "option",
+                  {
+                    domProps: {
+                      value: {
+                        id: subForm.id,
+                        name: subForm.name,
+                        component: subForm.component
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(subForm.id) +
+                        " - " +
+                        _vm._s(subForm.name) +
+                        " - " +
+                        _vm._s(subForm.component)
+                    )
+                  ]
+                )
+              }),
+              0
+            )
+          ])
+        ]),
+        _c("hr"),
+        _vm.subFormData.client_input_type.component
+          ? _c(_vm.subFormData.client_input_type.component, {
+              tag: "component"
+            })
+          : _vm._e()
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/pug-plain-loader!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("strong", [_vm._v("Блок с ответом")])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/pug-plain-loader!./node_modules/vue-loader/lib??vue-loader-options!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("strong", [_vm._v("Блок с кнопками")])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -33631,8 +33939,8 @@ function isPromise(obj) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /*!
-  * vue-router v3.0.2
-  * (c) 2018 Evan You
+  * vue-router v3.0.3
+  * (c) 2019 Evan You
   * @license MIT
   */
 /*  */
@@ -34714,16 +35022,24 @@ function fillParams (
   params,
   routeMsg
 ) {
+  params = params || {};
   try {
     var filler =
       regexpCompileCache[path] ||
       (regexpCompileCache[path] = pathToRegexp_1.compile(path));
-    return filler(params || {}, { pretty: true })
+
+    // Fix #2505 resolving asterisk routes { name: 'not-found', params: { pathMatch: '/not-found' }}
+    if (params.pathMatch) { params[0] = params.pathMatch; }
+
+    return filler(params, { pretty: true })
   } catch (e) {
     if (true) {
       warn(false, ("missing param for " + routeMsg + ": " + (e.message)));
     }
     return ''
+  } finally {
+    // delete the 0 if it was added
+    delete params[0];
   }
 }
 
@@ -34902,8 +35218,10 @@ function normalizeLocation (
 ) {
   var next = typeof raw === 'string' ? { path: raw } : raw;
   // named target
-  if (next.name || next._normalized) {
+  if (next._normalized) {
     return next
+  } else if (next.name) {
+    return extend({}, raw)
   }
 
   // relative params
@@ -35760,7 +36078,7 @@ function poll (
 
 /*  */
 
-var HTML5History = (function (History$$1) {
+var HTML5History = /*@__PURE__*/(function (History$$1) {
   function HTML5History (router, base) {
     var this$1 = this;
 
@@ -35848,7 +36166,7 @@ function getLocation (base) {
 
 /*  */
 
-var HashHistory = (function (History$$1) {
+var HashHistory = /*@__PURE__*/(function (History$$1) {
   function HashHistory (router, base, fallback) {
     History$$1.call(this, router, base);
     // check history fallback deeplinking
@@ -35985,7 +36303,7 @@ function replaceHash (path) {
 
 /*  */
 
-var AbstractHistory = (function (History$$1) {
+var AbstractHistory = /*@__PURE__*/(function (History$$1) {
   function AbstractHistory (router, base) {
     History$$1.call(this, router, base);
     this.stack = [];
@@ -36198,9 +36516,10 @@ VueRouter.prototype.resolve = function resolve (
   current,
   append
 ) {
+  current = current || this.history.current;
   var location = normalizeLocation(
     to,
-    current || this.history.current,
+    current,
     append,
     this
   );
@@ -36241,7 +36560,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.0.2';
+VueRouter.version = '3.0.3';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);
@@ -50699,11 +51018,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ModalForm_vue_vue_type_template_id_a6bc5c62_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug& */ "./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug&");
+/* harmony import */ var _ModalForm_vue_vue_type_template_id_a6bc5c62_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug& */ "./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug&");
 /* harmony import */ var _ModalForm_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalForm.vue?vue&type=script&lang=ts& */ "./resources/customer/ts/components/ModalForm.vue?vue&type=script&lang=ts&");
-/* empty/unused harmony star reexport *//* harmony import */ var _ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true& */ "./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -50711,13 +51028,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _ModalForm_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ModalForm_vue_vue_type_template_id_a6bc5c62_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ModalForm_vue_vue_type_template_id_a6bc5c62_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ModalForm_vue_vue_type_template_id_a6bc5c62_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalForm_vue_vue_type_template_id_a6bc5c62_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "a6bc5c62",
+  null,
   null
   
 )
@@ -50743,35 +51060,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true&":
-/*!******************************************************************************************************************!*\
-  !*** ./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true& ***!
-  \******************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_sass_loader_lib_loader_js_ref_10_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--10-2!../../../../node_modules/sass-loader/lib/loader.js??ref--10-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=style&index=0&id=a6bc5c62&lang=sass&scoped=true&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_sass_loader_lib_loader_js_ref_10_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_sass_loader_lib_loader_js_ref_10_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_sass_loader_lib_loader_js_ref_10_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_sass_loader_lib_loader_js_ref_10_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_2_node_modules_sass_loader_lib_loader_js_ref_10_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_style_index_0_id_a6bc5c62_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug&":
-/*!************************************************************************************************************!*\
-  !*** ./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug& ***!
-  \************************************************************************************************************/
+/***/ "./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug&":
+/*!************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug& ***!
+  \************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_template_id_a6bc5c62_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/pug-plain-loader!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&scoped=true&lang=pug&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_template_id_a6bc5c62_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_template_id_a6bc5c62_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/pug-plain-loader!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalForm.vue?vue&type=template&id=a6bc5c62&lang=pug&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_template_id_a6bc5c62_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_template_id_a6bc5c62_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalForm_vue_vue_type_template_id_a6bc5c62_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -50859,6 +51160,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEdit_vue_vue_type_template_id_7f0cd450_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEdit_vue_vue_type_template_id_7f0cd450_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue":
+/*!******************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&");
+/* harmony import */ var _ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "3694338c",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& ***!
+  \*******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--5!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&":
+/*!**********************************************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& ***!
+  \**********************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/pug-plain-loader!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormAnswer.vue?vue&type=template&id=3694338c&scoped=true&lang=pug&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormAnswer_vue_vue_type_template_id_3694338c_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue":
+/*!******************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&");
+/* harmony import */ var _ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& */ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "7e3618a4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& ***!
+  \*******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/ts-loader??ref--5!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts& */ "./node_modules/ts-loader/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=script&lang=ts&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_ts_loader_index_js_ref_5_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&":
+/*!**********************************************************************************************************************************!*\
+  !*** ./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& ***!
+  \**********************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/pug-plain-loader!../../../../node_modules/vue-loader/lib??vue-loader-options!./ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/pug-plain-loader/index.js!./node_modules/vue-loader/lib/index.js?!./resources/customer/ts/components/ModalFormBlockEditSubFormButton.vue?vue&type=template&id=7e3618a4&scoped=true&lang=pug&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_pug_plain_loader_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalFormBlockEditSubFormButton_vue_vue_type_template_id_7e3618a4_scoped_true_lang_pug___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -51149,8 +51588,8 @@ function (_super) {
     var areaBoundaries = _store.default.state.Block.area.boundaries;
     var clientRect = this.$el.getBoundingClientRect();
     var paddingLeft = clientRect.width / 2,
-        left = clientRect.left - areaBoundaries.left + paddingLeft,
-        top = clientRect.bottom - areaBoundaries.top;
+        left = clientRect.left - areaBoundaries.left + paddingLeft + _store.default.state.Block.scrollPosition.left,
+        top = clientRect.bottom - areaBoundaries.top + _store.default.state.Block.scrollPosition.top;
     return {
       left: left,
       top: top
@@ -51221,8 +51660,8 @@ function (_super) {
     var areaBoundaries = _store.default.state.Block.area.boundaries,
         clientRect = this.$el.getBoundingClientRect(),
         paddingLeft = clientRect.width / 2,
-        x = clientRect.left - areaBoundaries.left,
-        y = clientRect.top - areaBoundaries.top;
+        x = clientRect.left - areaBoundaries.left + +_store.default.state.Block.scrollPosition.left,
+        y = clientRect.top - areaBoundaries.top + +_store.default.state.Block.scrollPosition.top;
     return {
       left: x + paddingLeft,
       top: y
@@ -51264,22 +51703,32 @@ exports.default = void 0;
 
 var _ModalForm = _interopRequireDefault(__webpack_require__(/*! ../components/ModalForm.vue */ "./resources/customer/ts/components/ModalForm.vue"));
 
+var _axios = _interopRequireDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = {
   install: function install(Vue) {
-    Vue.prototype.$form = function (formData) {
+    Vue.prototype.$form = function (formData, params) {
       return new Promise(function (resolve, reject) {
         var FormData =
         /** @class */
         function () {
-          function FormData() {
+          function FormData(params) {
             this.titleDefault = 'Заполните данные';
             this.title = '';
             this.active = false;
             this.clear();
             this.active = true;
+            this.params = params;
           }
+
+          FormData.prototype.sendForm = function () {
+            // send formData to the backend
+            _axios.default.post('/private/save-extended-block-data', this.formData).then(function (resp) {
+              console.log(resp);
+            });
+          };
 
           FormData.prototype.clear = function () {
             this.title = this.titleDefault;
@@ -51287,7 +51736,8 @@ var _default = {
           };
 
           FormData.prototype.init = function (newData) {
-            // component name for import
+            this.active = true; // component name for import
+
             switch (newData.type) {
               case 'editBlock':
                 this.componentName = 'ModalFormBlockEdit';
@@ -51301,17 +51751,7 @@ var _default = {
 
               default:
                 console.error('Ошибка: не верный тип блока');
-            } // dynamically activate necessary component
-            // if ( newData.type ) {
-            //
-            //   this.active = true;
-            //
-            //   if (!!newData.title) {
-            //     this.title = newData.title;
-            //   }
-            //
-            // }
-
+            }
           };
 
           FormData.prototype.close = function () {
@@ -51321,7 +51761,7 @@ var _default = {
           return FormData;
         }();
 
-        var Modal = new FormData();
+        var Modal = new FormData(params);
         Modal.init(formData);
         new Vue({
           template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',
@@ -51336,7 +51776,9 @@ var _default = {
           methods: {
             confirmedAction: function confirmedAction() {
               // @ts-ignore
-              this.modal.close();
+              this.modal.close(); // @ts-ignore
+
+              this.modal.sendForm();
               resolve();
             },
             canceledAction: function canceledAction() {
@@ -51420,7 +51862,6 @@ var _default = {
         var Modal = new ModalData();
         Modal.open(windowData);
         new Vue({
-          // el: '#modal-window',
           template: '<modal-window :state="modal" @confirmed="confirmedAction" @canceled="canceledAction"></modal-window>',
           components: {
             'modal-window': _ModalWindowConfirm.default
@@ -51595,7 +52036,8 @@ var _default = new _vuex.default.Store({
               , 6];
 
             case 5:
-              throw Error('Значение botId не передано');
+              console.error('Значение botId не передано');
+              _a.label = 6;
 
             case 6:
               return [3
@@ -51692,6 +52134,10 @@ function (_super) {
         bottom: -1
       }
     };
+    _this.scrollPosition = {
+      top: 0,
+      left: 0
+    };
     return _this;
   }
 
@@ -51703,24 +52149,6 @@ function (_super) {
             return [4
             /*yield*/
             , _axios.default.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
-
-          case 1:
-            return [2
-            /*return*/
-            , _a.sent()];
-        }
-      });
-    });
-  };
-
-  Block.prototype.getBlockData = function (id) {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-      return tslib_1.__generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            return [4
-            /*yield*/
-            , _axios.default.get("private/bot/" + id)];
 
           case 1:
             return [2
@@ -51881,8 +52309,12 @@ function (_super) {
     } else if (this.items.length == 1) {
       this.dd.newIdx = 0;
     } else {
-      throw 'Error: Here no one block... What do you want to move?';
+      console.error('Error: Here no one block... What do you want to move?');
     }
+  };
+
+  Block.prototype.setScrollOffset = function (positions) {
+    this.scrollPosition = positions;
   };
 
   Block.prototype.saveConnectorTarget = function (connector) {
@@ -51956,8 +52388,6 @@ function (_super) {
 
   tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveBlockData", null);
 
-  tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "getBlockData", null);
-
   tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
     commit: 'updateBlocks',
     rawError: true
@@ -51984,6 +52414,8 @@ function (_super) {
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataReset", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "dragDropDataSet", null);
+
+  tslib_1.__decorate([_vuexModuleDecorators.Mutation], Block.prototype, "setScrollOffset", null);
 
   tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveConnectorTarget", null);
 

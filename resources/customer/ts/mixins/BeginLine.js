@@ -14,10 +14,10 @@ var BeginLine = /** @class */ (function (_super) {
     BeginLine.prototype.getLineBeginCoords = function () {
         var areaBoundaries = store.state.Block.area.boundaries;
         var clientRect = this.$el.getBoundingClientRect();
-        var paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left + paddingLeft, top = clientRect.bottom - areaBoundaries.top;
+        var paddingLeft = clientRect.width / 2, left = clientRect.left - areaBoundaries.left + paddingLeft + store.state.Block.scrollPosition.left, top = clientRect.bottom - areaBoundaries.top + store.state.Block.scrollPosition.top;
         return {
             left: left,
-            top: top
+            top: top,
         };
     };
     BeginLine.prototype.mounted = function () {

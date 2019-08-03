@@ -17,7 +17,6 @@ export default new Vuex.Store({
       else if (payload.type === 'block') {
 
         // TODO: take botId
-
         try {
 
           if (payload.botId > 0) {
@@ -26,7 +25,7 @@ export default new Vuex.Store({
 
           } else {
 
-            throw Error('Значение botId не передано');
+            console.error('Значение botId не передано');
 
           }
 

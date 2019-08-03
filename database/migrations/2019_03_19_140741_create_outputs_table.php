@@ -13,7 +13,7 @@ class CreateOutputsTable extends Migration
      */
     public function up()
     {
-        Schema::create('outputs', function (Blueprint $table) {
+        Schema::create('outputs', static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('block_id')->nullable();
             $table->unsignedBigInteger('target_block_id')->nullable();
@@ -33,7 +33,7 @@ class CreateOutputsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down() : void
     {
         Schema::dropIfExists('outputs');
     }

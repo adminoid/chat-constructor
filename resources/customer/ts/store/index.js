@@ -25,7 +25,9 @@ export default new Vuex.Store({
                         case 4:
                             _a.sent();
                             return [3 /*break*/, 6];
-                        case 5: throw Error('Значение botId не передано');
+                        case 5:
+                            console.error('Значение botId не передано');
+                            _a.label = 6;
                         case 6: return [3 /*break*/, 8];
                         case 7:
                             e_1 = _a.sent();

@@ -11675,5 +11675,10 @@ footer .copy {
   float: right;
 }
 
+.modal {
+  overflow-y: auto;
+  display: block;
+}
+
 
 /*# sourceMappingURL=customer.css.map*/
