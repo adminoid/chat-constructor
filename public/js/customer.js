@@ -11210,7 +11210,7 @@ exports.push([module.i, ".base-block {\n  display: -webkit-box;\n  display: -ms-
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  width: 1200px;\n  height: 1000px;\n  position: relative;\n  z-index: 0;\n}\npre#debugger {\n  position: fixed;\n  top: 90px;\n  right: 30px;\n}", ""]);
+exports.push([module.i, "#frame-drop-area {\n  overflow: scroll;\n  height: calc(100vh - 140px);\n  background: #d7d7d7;\n  border-radius: 5px;\n}\n#drop-area {\n  position: relative;\n  z-index: 0;\n}\npre#debugger {\n  position: fixed;\n  top: 90px;\n  right: 30px;\n}", ""]);
 
 
 
@@ -31142,17 +31142,40 @@ var BlocksArea = /** @class */ (function (_super) {
         var _this = this;
         this.botId = +this.$route.params.botId;
         this.fetchBlocks(this.botId).then(function () {
+            // todo: find the farthest items
+            var maxX = lodash__WEBPACK_IMPORTED_MODULE_3__["maxBy"](_this.items, 'x').x;
+            var maxY = lodash__WEBPACK_IMPORTED_MODULE_3__["maxBy"](_this.items, 'y').y;
+            _this.setAreaSize(maxX, maxY);
             _this.lines = _this.makeLinesFromItems();
         });
     };
-    BlocksArea.prototype.mounted = function () {
-        this.setupSizesOfArea();
-        this.saveAreaSize();
+    BlocksArea.prototype.setAreaSize = function (maxX, maxY) {
+        this.areaSize.width = maxX + 200;
+        this.areaSize.height = maxY + 200;
+        console.info(maxX, maxY);
+        console.log(this.areaSize);
+        console.log(this.areaSizePx);
+        this.setAreaBorders();
     };
-    BlocksArea.prototype.saveAreaSize = function () {
-        this.areaSize.height = this.$refs.area.clientHeight;
-        this.areaSize.width = this.$refs.area.clientWidth;
+    BlocksArea.prototype.setAreaBorders = function () {
+        var bounding = this.$el.getBoundingClientRect();
+        this.setAreaBoundaries({
+            left: bounding.left,
+            top: bounding.top,
+            right: bounding.right,
+            bottom: bounding.bottom
+        });
     };
+    Object.defineProperty(BlocksArea.prototype, "areaSizePx", {
+        get: function () {
+            return {
+                width: this.areaSize.width + 'px',
+                height: this.areaSize.height + 'px',
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
     BlocksArea.prototype.onItemsChanged = function () {
         this.lines = this.makeLinesFromItems();
     };
@@ -31176,15 +31199,6 @@ var BlocksArea = /** @class */ (function (_super) {
             });
         });
         return lines;
-    };
-    BlocksArea.prototype.setupSizesOfArea = function () {
-        var bounding = this.$el.getBoundingClientRect();
-        this.setAreaBoundaries({
-            left: bounding.left,
-            top: bounding.top,
-            right: bounding.right,
-            bottom: bounding.bottom
-        });
     };
     BlocksArea.prototype.mousemoveHandler = function (e) {
         var _this = this;
@@ -31226,8 +31240,8 @@ var BlocksArea = /** @class */ (function (_super) {
                         if (left_1 > 0) { // todo: if left less than area height
                             // check for increase width
                             if (rightPosition >= this.areaSize.width) {
-                                console.info('width need to increase');
-                                return false;
+                                // width need to increase
+                                this.areaSize.width += 200;
                             }
                             else {
                                 this.$refs.frame.scrollLeft += 10;
@@ -31240,8 +31254,8 @@ var BlocksArea = /** @class */ (function (_super) {
                         if (top_1 > 0) { // todo: if top less than area width
                             // check for increase height
                             if (bottomPosition >= this.areaSize.height) {
-                                console.info('height need to increase');
-                                return false;
+                                // height need to increase
+                                this.areaSize.height += 200;
                             }
                             else {
                                 this.$refs.frame.scrollTop += 10;
@@ -32763,6 +32777,7 @@ var render = function() {
         "div",
         {
           ref: "area",
+          style: _vm.areaSizePx,
           attrs: { id: "drop-area" },
           on: {
             mousemove: function($event) {
@@ -52144,24 +52159,6 @@ function (_super) {
     });
   };
 
-  Block.prototype.getBlockData = function (id) {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-      return tslib_1.__generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            return [4
-            /*yield*/
-            , _axios.default.get("private/bot/" + id)];
-
-          case 1:
-            return [2
-            /*return*/
-            , _a.sent()];
-        }
-      });
-    });
-  };
-
   Block.prototype.fetchBlocks = function (id) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
       return tslib_1.__generator(this, function (_a) {
@@ -52312,7 +52309,7 @@ function (_super) {
     } else if (this.items.length == 1) {
       this.dd.newIdx = 0;
     } else {
-      throw 'Error: Here no one block... What do you want to move?';
+      console.error('Error: Here no one block... What do you want to move?');
     }
   };
 
@@ -52390,8 +52387,6 @@ function (_super) {
   });
 
   tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "saveBlockData", null);
-
-  tslib_1.__decorate([_vuexModuleDecorators.Action], Block.prototype, "getBlockData", null);
 
   tslib_1.__decorate([(0, _vuexModuleDecorators.Action)({
     commit: 'updateBlocks',

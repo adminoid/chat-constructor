@@ -1,7 +1,7 @@
 <template lang="pug">
   #frame-drop-area(@scroll="handleScroll" ref="frame")
     pre#debugger {{ dd }}
-    #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler" ref="area")
+    #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler" ref="area" :style="areaSizePx")
       drag-item-wrapper(
         v-for="(item, index) in items"
         :key="index"
@@ -78,18 +78,46 @@
     created () {
       this.botId = +this.$route.params.botId;
       this.fetchBlocks(this.botId).then(() => {
+
+        // todo: find the farthest items
+        let maxX = (_.maxBy(this.items, 'x') as any).x;
+        let maxY = (_.maxBy(this.items, 'y') as any).y;
+
+        this.setAreaSize(maxX, maxY);
+
         this.lines = this.makeLinesFromItems();
       });
     }
 
-    mounted () {
-      this.setupSizesOfArea();
-      this.saveAreaSize();
+    setAreaSize(maxX, maxY) {
+      this.areaSize.width = maxX + 200;
+      this.areaSize.height = maxY + 200;
+
+      console.info(maxX, maxY);
+      console.log(this.areaSize);
+      console.log(this.areaSizePx);
+
+      this.setAreaBorders();
     }
 
-    saveAreaSize() {
-      this.areaSize.height = this.$refs.area.clientHeight;
-      this.areaSize.width = this.$refs.area.clientWidth;
+    setAreaBorders() {
+
+      let bounding = this.$el.getBoundingClientRect();
+
+      this.setAreaBoundaries({
+        left: bounding.left,
+        top: bounding.top,
+        right: bounding.right,
+        bottom: bounding.bottom
+      });
+
+    }
+
+    get areaSizePx () {
+      return {
+        width: this.areaSize.width + 'px',
+        height: this.areaSize.height + 'px',
+      }
     }
 
     @Watch('items', { deep: true })
@@ -125,19 +153,6 @@
       });
 
       return lines;
-    }
-
-    setupSizesOfArea() {
-
-      let bounding = this.$el.getBoundingClientRect();
-
-      this.setAreaBoundaries({
-        left: bounding.left,
-        top: bounding.top,
-        right: bounding.right,
-        bottom: bounding.bottom
-      });
-
     }
 
     mousemoveHandler(e) {
@@ -197,8 +212,8 @@
               if( left > 0 ) { // todo: if left less than area height
                 // check for increase width
                 if( rightPosition >= this.areaSize.width ) {
-                  console.info('width need to increase');
-                  return false;
+                  // width need to increase
+                  this.areaSize.width += 200;
                 } else {
                   this.$refs.frame.scrollLeft += 10;
                 }
@@ -214,8 +229,8 @@
 
                 // check for increase height
                 if( bottomPosition >= this.areaSize.height ) {
-                  console.info('height need to increase');
-                  return false;
+                  // height need to increase
+                  this.areaSize.height += 200;
                 } else {
                   this.$refs.frame.scrollTop += 10;
                 }
@@ -367,8 +382,6 @@
     background: #d7d7d7
     border-radius: 5px
   #drop-area
-    width: 1200px
-    height: 1000px
     position: relative
     z-index: 0
   pre#debugger

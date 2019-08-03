@@ -19,7 +19,7 @@ Vue.use(Vuex);
 })
 export default class Block extends VuexModule {
 
-  items = [];
+  items : Array<any> = [];
 
   blockPositionSteps = {
     x: 15,
@@ -54,11 +54,6 @@ export default class Block extends VuexModule {
   @Action
   async saveBlockData(data) {
     return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
-  }
-
-  @Action
-  async getBlockData(id) {
-    return await axios.get(`private/bot/${id}`);
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
@@ -211,7 +206,7 @@ export default class Block extends VuexModule {
       this.dd.newIdx = 0;
 
     } else {
-      throw 'Error: Here no one block... What do you want to move?'
+      console.error('Error: Here no one block... What do you want to move?');
     }
 
   }
