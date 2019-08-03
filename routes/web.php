@@ -32,7 +32,15 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::post('connector/save-target', 'ConnectorController@saveTarget');
 
-    Route::get('bot/{id}', 'BlocksController@getBlockData');
+    Route::get('block/{id}', 'BlocksController@getBlockData');
+
+    Route::get('client-input-types', 'ClientInputTypesController@getClientInputTypes');
+
+    Route::get('messages/create-new/{blockId}', 'MessagesController@createMessage');
+
+    Route::post('save-client-input-types', 'ClientInputTypesController@saveClientInputType');
+
+    Route::post('save-extended-block-data', 'BlocksController@saveExtendedBlockData');
 
 });
 

@@ -30,6 +30,10 @@ var Block = /** @class */ (function (_super) {
                 bottom: -1,
             }
         };
+        _this.scrollPosition = {
+            top: 0,
+            left: 0,
+        };
         return _this;
     }
     Block.prototype.saveBlockData = function (data) {
@@ -37,16 +41,6 @@ var Block = /** @class */ (function (_super) {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    Block.prototype.getBlockData = function (id) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get("private/bot/" + id)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -159,8 +153,11 @@ var Block = /** @class */ (function (_super) {
             this.dd.newIdx = 0;
         }
         else {
-            throw 'Error: Here no one block... What do you want to move?';
+            console.error('Error: Here no one block... What do you want to move?');
         }
+    };
+    Block.prototype.setScrollOffset = function (positions) {
+        this.scrollPosition = positions;
     };
     Block.prototype.saveConnectorTarget = function (connector) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -219,9 +216,6 @@ var Block = /** @class */ (function (_super) {
         Action
     ], Block.prototype, "saveBlockData", null);
     tslib_1.__decorate([
-        Action
-    ], Block.prototype, "getBlockData", null);
-    tslib_1.__decorate([
         Action({ commit: 'updateBlocks', rawError: true })
     ], Block.prototype, "fetchBlocks", null);
     tslib_1.__decorate([
@@ -257,6 +251,9 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "dragDropDataSet", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "setScrollOffset", null);
     tslib_1.__decorate([
         Action
     ], Block.prototype, "saveConnectorTarget", null);

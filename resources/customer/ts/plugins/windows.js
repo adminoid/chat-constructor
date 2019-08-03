@@ -36,7 +36,6 @@ export default {
                 var Modal = new ModalData();
                 Modal.open(windowData);
                 new Vue({
-                    // el: '#modal-window',
                     template: '<modal-window :state="modal" @confirmed="confirmedAction" @canceled="canceledAction"></modal-window>',
                     components: {
                         'modal-window': ModalWindowConfirm

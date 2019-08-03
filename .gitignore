@@ -12,4 +12,5 @@ yarn-error.log
 resources/**/*.map.js
 resources/**/components/*.vue.js
 resources/**/components/*.vue.js.map
-
+public/js
+public/css

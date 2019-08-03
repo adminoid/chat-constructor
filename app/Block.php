@@ -28,7 +28,8 @@ class Block extends Model
 
     public function messages() : HasMany
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class)
+            ->orderBy('messages.sort_order_id');
     }
 
     public function client_input_type() : BelongsTo
