@@ -12,7 +12,13 @@
 */
 
 Route::get('/', static function () {
-    return view('home');
+
+    if(Auth::check()) {
+        return redirect('/cabinet');
+    } else {
+        return view('auth.login');
+    }
+
 });
 
 Auth::routes(['verify' => true]);
