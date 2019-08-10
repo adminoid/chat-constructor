@@ -68,6 +68,7 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
+        var _this = this;
         var itemId = payload.itemId;
         var x = payload.x, y = payload.y;
         if (payload.coords) {
@@ -78,6 +79,7 @@ var Block = /** @class */ (function (_super) {
             _.map(item.outputs, function (connector) {
                 if (connector.target_block_id === itemId) {
                     connector.targetCoords = { left: x, top: y };
+                    console.log(_this.items);
                 }
             });
         });

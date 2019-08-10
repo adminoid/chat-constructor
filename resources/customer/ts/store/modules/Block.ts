@@ -99,11 +99,11 @@ export default class Block extends VuexModule {
       y = payload.coords.top;
     }
 
-
     _.map( this.items, (item) => {
       _.map( item.outputs, connector => {
         if ( connector.target_block_id === itemId ) {
           connector.targetCoords = {left: x, top: y};
+          console.log(this.items);
         }
       });
     });

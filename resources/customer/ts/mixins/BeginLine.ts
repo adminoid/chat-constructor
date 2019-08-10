@@ -38,8 +38,9 @@ export default class BeginLine extends Vue {
         coords: this.getLineBeginCoords(),
       };
 
-      store.commit('Block/setBeginLineCoords', payload);
+      console.log(payload);
 
+      store.commit('Block/setBeginLineCoords', payload);
   }
 
 }

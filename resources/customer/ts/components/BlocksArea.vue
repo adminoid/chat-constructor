@@ -75,6 +75,8 @@
       height: 0,
     };
 
+    isItemsChanged = false;
+
     created () {
       this.botId = +this.$route.params.botId;
     }
@@ -82,12 +84,12 @@
     mounted () {
       this.setAreaBorders();
       this.fetchBlocks(this.botId).then(() => {
+        console.info(this.items);
         this.setAreaSize();
       });
     }
 
     setAreaSize() {
-
       // todo: find the farthest items
       let maxX = (_.maxBy(this.items, 'x') as any).x;
       let maxY = (_.maxBy(this.items, 'y') as any).y;
@@ -95,10 +97,9 @@
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
 
-      setTimeout(() => {
-        this.lines = this.makeLinesFromItems();
-      }, 800);
-
+      console.info('setAreaSize');
+      this.lines = this.makeLinesFromItems();
+      this.isItemsChanged = true;
     }
 
     setAreaBorders() {
@@ -123,7 +124,7 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
-      this.lines = this.makeLinesFromItems();
+      if (this.isItemsChanged) this.lines = this.makeLinesFromItems();
     }
 
     handleScroll () {
@@ -149,6 +150,8 @@
           }
         });
       });
+
+      console.log(lines);
 
       return lines;
     }
@@ -238,6 +241,7 @@
             // update sourceCoords (BlockModule\updateEndLineCoords)
             let coords = $beginItem.getLineEndCoords();
 
+            console.info('don\'t loaded');
             this.updateEndLineCoords({
               itemId: this.dd.id,
               x: coords.left,
@@ -295,14 +299,9 @@
               this.updateCoords([left, top]);
 
             });
-
           }
-
         }
-
       }
-
-
     }
 
     mouseupHandler() {
