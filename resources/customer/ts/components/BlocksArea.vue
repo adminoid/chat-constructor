@@ -77,32 +77,35 @@
 
     created () {
       this.botId = +this.$route.params.botId;
+    }
+
+    mounted () {
       this.fetchBlocks(this.botId).then(() => {
-
-        // todo: find the farthest items
-        let maxX = (_.maxBy(this.items, 'x') as any).x;
-        let maxY = (_.maxBy(this.items, 'y') as any).y;
-
-        this.setAreaSize(maxX, maxY);
-
-        this.lines = this.makeLinesFromItems();
+        this.setAreaSize();
       });
     }
 
-    setAreaSize(maxX, maxY) {
+    setAreaSize() {
+
+      // todo: find the farthest items
+      let maxX = (_.maxBy(this.items, 'x') as any).x;
+      let maxY = (_.maxBy(this.items, 'y') as any).y;
+
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
-
-      console.info(maxX, maxY);
-      console.log(this.areaSize);
-      console.log(this.areaSizePx);
-
       this.setAreaBorders();
+
+      setTimeout(() => {
+        this.lines = this.makeLinesFromItems();
+      }, 800);
+
     }
 
     setAreaBorders() {
 
       let bounding = this.$el.getBoundingClientRect();
+
+      console.log(bounding);
 
       this.setAreaBoundaries({
         left: bounding.left,
@@ -143,6 +146,8 @@
         _.map( item.outputs, connector => {
 
           if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
+
+            console.info('here');
 
             lines.push({
               begin: connector.coords,

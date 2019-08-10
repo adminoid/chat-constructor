@@ -53,12 +53,12 @@ export default class Block extends VuexModule {
 
   @Action
   async saveBlockData(data) {
-    return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
+    return axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
   async fetchBlocks(id) {
-    return await axios.get(`private/bots/${id}/blocks`);
+    return axios.get(`private/bots/${id}/blocks`);
   }
   @Mutation
   updateBlocks( blocks ) {
@@ -221,7 +221,7 @@ export default class Block extends VuexModule {
     let connectorId = connector.id,
       targetBlockId = connector.target_block_id;
 
-    return await axios.post(`private/connector/save-target`, {
+    return axios.post(`private/connector/save-target`, {
       'connector-id': connectorId,
       'target-id': targetBlockId,
     });
@@ -247,7 +247,7 @@ export default class Block extends VuexModule {
       actualSteps[key] = steps[key] * ( total + 1 );
     });
 
-    return await axios.post(baseUrl, {
+    return axios.post(baseUrl, {
       'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
       'bot_id': botId,
       x: actualSteps.x,
