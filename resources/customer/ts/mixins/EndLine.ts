@@ -33,12 +33,10 @@ export default class EndLine extends Vue {
 
     let id = this.id || this.itemData.id;
 
-    setTimeout(() => {
       store.commit('Block/updateEndLineCoords', {
         itemId: id,
         coords: this.getLineEndCoords(),
       });
-    }, 600);
 
   }
 

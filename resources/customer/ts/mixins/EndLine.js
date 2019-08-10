@@ -19,14 +19,11 @@ var EndLine = /** @class */ (function (_super) {
         };
     };
     EndLine.prototype.mounted = function () {
-        var _this = this;
         var id = this.id || this.itemData.id;
-        setTimeout(function () {
-            store.commit('Block/updateEndLineCoords', {
-                itemId: id,
-                coords: _this.getLineEndCoords(),
-            });
-        }, 600);
+        store.commit('Block/updateEndLineCoords', {
+            itemId: id,
+            coords: this.getLineEndCoords(),
+        });
     };
     EndLine = tslib_1.__decorate([
         Mixin

@@ -80,6 +80,7 @@
     }
 
     mounted () {
+      this.setAreaBorders();
       this.fetchBlocks(this.botId).then(() => {
         this.setAreaSize();
       });
@@ -93,7 +94,6 @@
 
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
-      this.setAreaBorders();
 
       setTimeout(() => {
         this.lines = this.makeLinesFromItems();
@@ -104,8 +104,6 @@
     setAreaBorders() {
 
       let bounding = this.$el.getBoundingClientRect();
-
-      console.log(bounding);
 
       this.setAreaBoundaries({
         left: bounding.left,
@@ -142,13 +140,8 @@
       let lines = [];
 
       _.map( this.items, item => {
-
         _.map( item.outputs, connector => {
-
           if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
-
-            console.info('here');
-
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,

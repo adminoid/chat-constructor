@@ -21,16 +21,13 @@ var BeginLine = /** @class */ (function (_super) {
         };
     };
     BeginLine.prototype.mounted = function () {
-        var _this = this;
-        setTimeout(function () {
-            // push begin coordinates to out connector
-            var payload = {
-                itemId: _this.blockId,
-                connectorId: _this.connectorData.id,
-                coords: _this.getLineBeginCoords(),
-            };
-            store.commit('Block/setBeginLineCoords', payload);
-        }, 600);
+        // push begin coordinates to out connector
+        var payload = {
+            itemId: this.blockId,
+            connectorId: this.connectorData.id,
+            coords: this.getLineBeginCoords(),
+        };
+        store.commit('Block/setBeginLineCoords', payload);
     };
     BeginLine = tslib_1.__decorate([
         Mixin

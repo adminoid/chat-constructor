@@ -31,7 +31,6 @@ export default class BeginLine extends Vue {
 
   mounted () {
 
-    setTimeout(() => {
       // push begin coordinates to out connector
       let payload = {
         itemId: this.blockId,
@@ -40,7 +39,6 @@ export default class BeginLine extends Vue {
       };
 
       store.commit('Block/setBeginLineCoords', payload);
-    }, 600);
 
   }
 
