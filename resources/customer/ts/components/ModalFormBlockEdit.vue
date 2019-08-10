@@ -2,7 +2,7 @@
 
   .container
 
-    form
+    form(v-on:submit.prevent)
 
       .form-group
         label(for="name") Имя блока
