@@ -16,7 +16,7 @@
           .input-group
             textarea.messages__message.form-control(v-model="subFormData.messages[index].text") {{ message.text }}
           .messages__panel
-            button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button")
+            button.btn.btn-outline-secondary.btn-outline-danger.btn-sm(type="button" @click.prevent.stop="deleteMessage(message)")
               fa-icon(icon="trash")
 
       fieldset.border.p-2
@@ -98,12 +98,17 @@
     }
 
     addMessage () {
-
       axios.get('/private/messages/create-new/' + this.state.params.blockId)
         .then(resp => {
           this.subFormData.messages = resp.data;
         });
+    }
 
+    deleteMessage (message) {
+      axios.get('/private/messages/delete/' + message.id)
+        .then(resp => {
+          this.subFormData.messages = resp.data;
+        });
     }
 
     @Watch('subFormData', { immediate: true, deep: true })

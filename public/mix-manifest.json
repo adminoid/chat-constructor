@@ -4,7 +4,5 @@
     "/js/customer.js": "/js/customer.js",
     "/css/customer.css": "/css/customer.css",
     "/css/app.css": "/css/app.css",
-    "/js/customer.js.map": "/js/customer.js.map",
-    "/css/customer.css.map": "/css/customer.css.map",
-    "/css/app.css.map": "/css/app.css.map"
+    "/js/customer.js.map": "/js/customer.js.map"
 }
