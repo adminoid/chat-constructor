@@ -1,5 +1,7 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
+import store from '../store';
+import _ from 'lodash';
 export default {
     install: function (Vue) {
         Vue.prototype.$form = function (formData, params) {
@@ -14,6 +16,9 @@ export default {
                         this.params = params;
                     }
                     FormData.prototype.sendForm = function () {
+                        var _this = this;
+                        var block = _.find(store.state.Block.items, function (item) { return item.id === _this.formData.id; });
+                        block.name = this.formData.name;
                         // send formData to the backend
                         axios.post('/private/save-extended-block-data', this.formData).then(function (resp) {
                             console.log(resp);

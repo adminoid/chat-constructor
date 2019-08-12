@@ -90,8 +90,6 @@
     }
 
     onChange () {
-      this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
-
       // save block type to server
       axios.post('private/save-client-input-types', {
         id: this.subFormData.client_input_type_id,
