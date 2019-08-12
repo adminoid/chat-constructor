@@ -27,7 +27,6 @@ var BeginLine = /** @class */ (function (_super) {
             connectorId: this.connectorData.id,
             coords: this.getLineBeginCoords(),
         };
-        console.log(payload);
         store.commit('Block/setBeginLineCoords', payload);
     };
     BeginLine = tslib_1.__decorate([

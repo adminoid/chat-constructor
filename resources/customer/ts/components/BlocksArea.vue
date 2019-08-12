@@ -84,7 +84,6 @@
     mounted () {
       this.setAreaBorders();
       this.fetchBlocks(this.botId).then(() => {
-        console.info(this.items);
         this.setAreaSize();
       });
     }
@@ -96,8 +95,6 @@
 
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
-
-      console.info('setAreaSize');
       this.lines = this.makeLinesFromItems();
       this.isItemsChanged = true;
     }
@@ -150,8 +147,6 @@
           }
         });
       });
-
-      console.log(lines);
 
       return lines;
     }
@@ -241,7 +236,6 @@
             // update sourceCoords (BlockModule\updateEndLineCoords)
             let coords = $beginItem.getLineEndCoords();
 
-            console.info('don\'t loaded');
             this.updateEndLineCoords({
               itemId: this.dd.id,
               x: coords.left,

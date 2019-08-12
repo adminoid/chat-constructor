@@ -68,18 +68,15 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var _this = this;
-        var itemId = payload.itemId;
-        var x = payload.x, y = payload.y;
-        if (payload.coords) {
-            x = payload.coords.left;
-            y = payload.coords.top;
+        var itemId = payload.itemId, x = payload.x, y = payload.y, coords = payload.coords;
+        if (coords) {
+            x = coords.left;
+            y = coords.top;
         }
         _.map(this.items, function (item) {
             _.map(item.outputs, function (connector) {
                 if (connector.target_block_id === itemId) {
                     connector.targetCoords = { left: x, top: y };
-                    console.log(_this.items);
                 }
             });
         });

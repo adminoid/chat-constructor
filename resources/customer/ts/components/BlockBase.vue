@@ -66,9 +66,6 @@
       }, {
         blockId: this.itemData.id
       })
-        .then(() => {
-          console.log('then');
-        })
         .catch( e => { console.error(e.message) } );
     }
 
@@ -97,7 +94,7 @@
     .base-block__body
       height: 100%
       > p
-        margin-bottom: 5px
+        margin: 5px 10px
 
     .base-block__footer
       position: relative
