@@ -46,4 +46,3 @@ export default new Vuex.Store({
 });
 
 // TODO: delete connection if drag to area from input connector
-// TODO: redraw lines if route change

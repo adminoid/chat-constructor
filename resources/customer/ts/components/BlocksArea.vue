@@ -23,6 +23,7 @@
   import { Vue, Component, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
   import * as _ from 'lodash'
+  import axios from 'axios'
 
   import DragItemWrapper from './DragItemWrapper.vue'
   import BlockBase from './BlockBase.vue'
@@ -169,8 +170,6 @@
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
-          this.updateCoords([left, top]);
-
           let item = _.find(this.items, ['id', this.dd.id]),
             isNewLine = item.component === 'ConnectorClone';
 
@@ -312,7 +311,6 @@
         // TODO: 2. I will think about saving connector clone target
 
         if( $item && $item.itemData.component !== 'ConnectorClone') {
-
           let payload = {
             'botId': botId,
             'blockId': blockId,
@@ -345,12 +343,18 @@
         }
         else {
           // remove target from output connector
-          _.unset(sourceConnector, 'coords');
           _.unset(sourceConnector, 'targetCoords');
           _.unset(sourceConnector, 'target_block_id');
 
           this.lines = this.makeLinesFromItems();
 
+          // send axios request for delete target from here
+          if( this.dd.target_old ) {
+            axios.post(`private/connector/save-target`, {
+              'connector-id': sourceConnector.id,
+              'target-id': null,
+            });
+          }
         }
 
         _.remove( this.items, (item: any) => item.id === this.dd.id );
