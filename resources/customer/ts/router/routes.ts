@@ -11,6 +11,10 @@ export default [
     component: BlocksArea,
     beforeEnter: (to, from, next) => {
       store.state.Block.items = [];
+      store.state.Block.scrollPosition = {
+        top: 0,
+        left: 0,
+      };
       next();
     },
   },
