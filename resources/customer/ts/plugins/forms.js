@@ -20,9 +20,7 @@ export default {
                         var block = _.find(store.state.Block.items, function (item) { return item.id === _this.formData.id; });
                         block.name = this.formData.name;
                         // send formData to the backend
-                        axios.post('/private/save-extended-block-data', this.formData).then(function (resp) {
-                            console.log(resp);
-                        });
+                        axios.post('/private/save-extended-block-data', this.formData);
                     };
                     FormData.prototype.clear = function () {
                         this.title = this.titleDefault;

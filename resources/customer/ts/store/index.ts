@@ -9,9 +9,7 @@ export default new Vuex.Store({
     async createEntity(context, payload) {
 
       if (payload.type === 'bot') {
-
         await context.dispatch('Bot/createBot');
-
       }
 
       else if (payload.type === 'block') {

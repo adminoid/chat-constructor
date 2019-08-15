@@ -91,8 +91,8 @@
 
     setAreaSize() {
       // todo: find the farthest items
-      let maxX = (_.maxBy(this.items, 'x') as any).x;
-      let maxY = (_.maxBy(this.items, 'y') as any).y;
+      let maxX = (this.items.length > 0) ? (_.maxBy(this.items, 'x') as any).x : 0;
+      let maxY = (this.items.length > 0) ? (_.maxBy(this.items, 'y') as any).y : 0;
 
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;

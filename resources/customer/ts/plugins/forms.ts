@@ -38,9 +38,7 @@ export default {
             block.name = this.formData.name;
 
             // send formData to the backend
-            axios.post('/private/save-extended-block-data', this.formData).then(resp => {
-              console.log(resp);
-            });
+            axios.post('/private/save-extended-block-data', this.formData);
           }
 
           clear() {

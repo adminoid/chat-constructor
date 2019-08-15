@@ -17,10 +17,7 @@ var Bot = /** @class */ (function (_super) {
     Bot.prototype.fetchBots = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get(this.baseUrl)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.get(this.baseUrl)];
             });
         });
     };
@@ -30,17 +27,15 @@ var Bot = /** @class */ (function (_super) {
     Bot.prototype.createBot = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
-                            'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
-                        })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.post(this.baseUrl, {
+                        'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
+                    }).then(function (resp) { return resp; }).catch(function (e) { return e.message; })];
             });
         });
     };
-    Bot.prototype.appendBot = function (block) {
-        this.bots.push(block.data);
+    Bot.prototype.appendBot = function (response) {
+        if (typeof response !== 'string')
+            this.bots.push(response.data);
     };
     Bot.prototype.deleteBot = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
