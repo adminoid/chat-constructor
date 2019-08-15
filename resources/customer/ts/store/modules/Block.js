@@ -170,16 +170,14 @@ var Block = /** @class */ (function (_super) {
             return tslib_1.__generator(this, function (_a) {
                 baseUrl = "private/bots/" + botId + "/blocks";
                 steps = this.context.state.blockPositionSteps;
-                filtered = _.filter(this.items, function (item) {
-                    return !item.moved;
-                });
+                filtered = _.filter(this.items, function (item) { return !item.moved; });
                 total = filtered.length;
                 actualSteps = {};
                 Object.keys(steps).map(function (key) {
                     actualSteps[key] = steps[key] * (total + 1);
                 });
                 return [2 /*return*/, axios.post(baseUrl, {
-                        'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+                        // 'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
                         'bot_id': botId,
                         x: actualSteps.x,
                         y: actualSteps.y,

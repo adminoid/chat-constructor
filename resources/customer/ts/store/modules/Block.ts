@@ -231,20 +231,18 @@ export default class Block extends VuexModule {
 
     let steps = (this.context.state as any).blockPositionSteps;
 
-    let filtered = _.filter( this.items, (item) => {
-      return !item.moved;
-    });
+    let filtered = _.filter( this.items, item => !item.moved );
 
     let total = filtered.length;
 
     // TODO: get all items who not moved
     let actualSteps : any = {};
-    Object.keys(steps).map((key) => {
+    Object.keys(steps).map(key => {
       actualSteps[key] = steps[key] * ( total + 1 );
     });
 
     return axios.post(baseUrl, {
-      'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+      // 'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
       'bot_id': botId,
       x: actualSteps.x,
       y: actualSteps.y,
