@@ -9,7 +9,7 @@ use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Block extends Model
 {
 
-    protected $fillable = ['id', 'name', 'client_input_type_id', 'bot_id', 'created_at', 'updated_at', 'active', 'component', 'intact', 'x', 'y'];
+    protected $fillable = ['id', 'name', 'client_input_type_id', 'bot_id', 'created_at', 'updated_at', 'active', 'component', 'x', 'y', 'moved'];
 
 //    protected $hidden = [];
 

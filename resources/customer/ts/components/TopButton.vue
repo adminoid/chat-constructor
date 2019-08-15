@@ -28,7 +28,6 @@
 
     @Watch('$route.params.botId')
     onBotIdChange(newBotId) {
-      console.info(newBotId);
       this.botId = newBotId;
     }
 
