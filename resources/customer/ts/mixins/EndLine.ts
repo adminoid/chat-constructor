@@ -16,11 +16,16 @@ export default class EndLine extends Vue {
 
   getLineEndCoords () {
 
+    let addTop = 0;
+    if( this.$options.name == 'ConnectorClone' ) {
+      addTop = 8;
+    }
+
     let areaBoundaries = store.state.Block.area.boundaries,
       clientRect = this.$el.getBoundingClientRect(),
       paddingLeft = clientRect.width / 2,
       x = clientRect.left - areaBoundaries.left + store.state.Block.scrollPosition.left,
-      y = clientRect.top - areaBoundaries.top + store.state.Block.scrollPosition.top;
+      y = clientRect.top - areaBoundaries.top + store.state.Block.scrollPosition.top + addTop;
 
     return {
       left: x + paddingLeft,

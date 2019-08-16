@@ -63,7 +63,7 @@
 
     lines = [];
 
-    closest = 30;
+    closest = 20;
 
     connectorWidth = 16;
 
@@ -246,8 +246,8 @@
               // TODO: 76 is bad, but it fast...
               const isActive = (
                 isNewLine && item.component === 'BlockBase' &&
-                item.x + 76 < left + this.closest &&
-                item.x + 76 > left - this.closest &&
+                item.x + 70 < left + this.closest &&
+                item.x + 70 > left - this.closest &&
                 item.y < top + this.closest &&
                 item.y > top - this.closest
               );
@@ -278,11 +278,10 @@
                     item.active = isActive;
                     if (isActive) {
                       // TODO: if active, set target id to dd
-
                       this.setActiveTargetId(item.id);
 
-                      left = item.x + this.dd.elementOffset.left - this.connectorWidth / 2 + 65;
-                      top = item.y + this.dd.elementOffset.top - this.connectorWidth / 2 - 9;
+                      left = item.x - this.connectorWidth / 2 + 70;
+                      top = item.y - this.connectorWidth / 2 + 1;
                     }
                   }
 
@@ -346,8 +345,6 @@
           _.unset(sourceConnector, 'targetCoords');
           _.unset(sourceConnector, 'target_block_id');
 
-          this.lines = this.makeLinesFromItems();
-
           // send axios request for delete target from here
           if( this.dd.target_old ) {
             axios.post(`private/connector/save-target`, {
@@ -358,6 +355,10 @@
         }
 
         _.remove( this.items, (item: any) => item.id === this.dd.id );
+
+        this.$nextTick(() => {
+          this.lines = this.makeLinesFromItems();
+        });
 
       }
 
