@@ -23,6 +23,7 @@
   import { Vue, Component, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
   import * as _ from 'lodash'
+  import axios from 'axios'
 
   import DragItemWrapper from './DragItemWrapper.vue'
   import BlockBase from './BlockBase.vue'
@@ -62,7 +63,7 @@
 
     lines = [];
 
-    closest = 30;
+    closest = 20;
 
     connectorWidth = 16;
 
@@ -75,29 +76,28 @@
       height: 0,
     };
 
+    isItemsChanged = false;
+
     created () {
       this.botId = +this.$route.params.botId;
+    }
+
+    mounted () {
+      this.setAreaBorders();
       this.fetchBlocks(this.botId).then(() => {
-
-        // todo: find the farthest items
-        let maxX = (_.maxBy(this.items, 'x') as any).x;
-        let maxY = (_.maxBy(this.items, 'y') as any).y;
-
-        this.setAreaSize(maxX, maxY);
-
-        this.lines = this.makeLinesFromItems();
+        this.setAreaSize();
       });
     }
 
-    setAreaSize(maxX, maxY) {
+    setAreaSize() {
+      // todo: find the farthest items
+      let maxX = (this.items.length > 0) ? (_.maxBy(this.items, 'x') as any).x : 0;
+      let maxY = (this.items.length > 0) ? (_.maxBy(this.items, 'y') as any).y : 0;
+
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
-
-      console.info(maxX, maxY);
-      console.log(this.areaSize);
-      console.log(this.areaSizePx);
-
-      this.setAreaBorders();
+      this.lines = this.makeLinesFromItems();
+      this.isItemsChanged = true;
     }
 
     setAreaBorders() {
@@ -122,7 +122,7 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
-      this.lines = this.makeLinesFromItems();
+      if (this.isItemsChanged) this.lines = this.makeLinesFromItems();
     }
 
     handleScroll () {
@@ -139,11 +139,8 @@
       let lines = [];
 
       _.map( this.items, item => {
-
         _.map( item.outputs, connector => {
-
           if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
-
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,
@@ -172,8 +169,6 @@
 
         // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
-
-          this.updateCoords([left, top]);
 
           let item = _.find(this.items, ['id', this.dd.id]),
             isNewLine = item.component === 'ConnectorClone';
@@ -251,8 +246,8 @@
               // TODO: 76 is bad, but it fast...
               const isActive = (
                 isNewLine && item.component === 'BlockBase' &&
-                item.x + 76 < left + this.closest &&
-                item.x + 76 > left - this.closest &&
+                item.x + 70 < left + this.closest &&
+                item.x + 70 > left - this.closest &&
                 item.y < top + this.closest &&
                 item.y > top - this.closest
               );
@@ -283,11 +278,10 @@
                     item.active = isActive;
                     if (isActive) {
                       // TODO: if active, set target id to dd
-
                       this.setActiveTargetId(item.id);
 
-                      left = item.x + this.dd.elementOffset.left - this.connectorWidth / 2 + 65;
-                      top = item.y + this.dd.elementOffset.top - this.connectorWidth / 2 - 9;
+                      left = item.x - this.connectorWidth / 2 + 70;
+                      top = item.y - this.connectorWidth / 2 + 1;
                     }
                   }
 
@@ -297,14 +291,9 @@
               this.updateCoords([left, top]);
 
             });
-
           }
-
         }
-
       }
-
-
     }
 
     mouseupHandler() {
@@ -321,7 +310,6 @@
         // TODO: 2. I will think about saving connector clone target
 
         if( $item && $item.itemData.component !== 'ConnectorClone') {
-
           let payload = {
             'botId': botId,
             'blockId': blockId,
@@ -354,15 +342,23 @@
         }
         else {
           // remove target from output connector
-          _.unset(sourceConnector, 'coords');
           _.unset(sourceConnector, 'targetCoords');
           _.unset(sourceConnector, 'target_block_id');
 
-          this.lines = this.makeLinesFromItems();
-
+          // send axios request for delete target from here
+          if( this.dd.target_old ) {
+            axios.post(`private/connector/save-target`, {
+              'connector-id': sourceConnector.id,
+              'target-id': null,
+            });
+          }
         }
 
         _.remove( this.items, (item: any) => item.id === this.dd.id );
+
+        this.$nextTick(() => {
+          this.lines = this.makeLinesFromItems();
+        });
 
       }
 

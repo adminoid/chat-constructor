@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
 
-    protected $fillable = ['*'];
+    protected $fillable = ['name', 'delay', 'text', 'sort_order_id'];
 
     public function block()
     {

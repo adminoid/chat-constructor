@@ -27,7 +27,7 @@ export default class Bot extends VuexModule {
 
   @Action({ commit: 'updateBots', rawError: true })
   async fetchBots() {
-    return await axios.get(this.baseUrl)
+    return axios.get(this.baseUrl)
   }
   @Mutation
   updateBots( bots ) {
@@ -36,13 +36,13 @@ export default class Bot extends VuexModule {
 
   @Action({ commit: 'appendBot'})
   async createBot() {
-    return await axios.post(this.baseUrl, {
+    return axios.post(this.baseUrl, {
       'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
-    });
+    }).then(resp => resp).catch(e => e.message);
   }
   @Mutation
-  appendBot ( block ) {
-    this.bots.push(block.data);
+  appendBot ( response ) {
+    if ( typeof response !== 'string' ) this.bots.push(response.data);
   }
 
   @Action({ commit: 'removeBot', rawError: true})

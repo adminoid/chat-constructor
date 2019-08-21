@@ -26,4 +26,17 @@ class MessagesController extends Controller
         return Message::where('block_id', $blockId)->get()->toJson();
 
     }
+
+    public function deleteMessage($messageId) : string
+    {
+        $message = Message::findOrFail($messageId);
+
+        // get the block (owner of the message with the received id)
+        $block = $message->block()->first();
+
+        $message->delete();
+
+        return $block->messages()->get()->toJson();
+
+    }
 }

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Bot;
+use App\ClientInputType;
 use App\Message;
 use App\Output;
 use Illuminate\Http\Request;
 use App\Block;
 use Illuminate\Support\Facades\Validator;
+use Faker\Generator as Faker;
 
 class BlocksController extends Controller
 {
@@ -46,22 +48,23 @@ class BlocksController extends Controller
      * @return \Illuminate\Http\JsonResponse|string
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request)
+    public function store(Request $request, Faker $faker)
     {
 
         $botId = $request->get('bot_id');
 
         $newBlockData = request()->all();
+        $newBlockData['name'] = $faker->name;
+
+        $bot = Bot::findOrFail($botId);
+        $this->authorize('update', $bot);
 
         $validator = Validator::make($newBlockData, $this->rules);
         if ($validator->fails()) {
             return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
         }
 
-        $bot = Bot::findOrFail($botId);
-        $this->authorize('update', $bot);
-
-        $blockDataFull = array_merge($request->all(), [
+        $blockDataFull = array_merge($newBlockData, [
             'active' => 1,
             'component' => 'BlockBase',
         ]);
@@ -71,6 +74,22 @@ class BlocksController extends Controller
 
         $output = new Output();
         $block->outputs()->save($output);
+
+        $block->client_input_type()->associate(ClientInputType::find(2));
+        $block->save();
+
+        $message = Message::create([
+            'delay' => 1.1,
+            'text' => '+1 Вы просто напишите слова, а я буду говорить :D',
+            'sort_order_id' => 1,
+        ]);
+        $message2 = Message::create([
+            'delay' => 1.2,
+            'text' => '+2 Вы просто напишите слова, а я буду говорить :D',
+            'sort_order_id' => 2,
+        ]);
+        $block->messages()->save($message);
+        $block->messages()->save($message2);
 
         $block->load('outputs');
 

@@ -26,10 +26,17 @@
       }
     }
 
+    @Watch('$route.params.botId')
+    onBotIdChange(newBotId) {
+      this.botId = newBotId;
+    }
+
     mounted () {
-
       this.botId = this.$route.params.botId;
+    }
 
+    changed () {
+      console.log(this.$route.params.botId);
     }
 
   }

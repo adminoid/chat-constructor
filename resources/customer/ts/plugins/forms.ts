@@ -1,5 +1,7 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
+import store from '../store'
+import _ from 'lodash'
 
 export default {
 
@@ -17,7 +19,7 @@ export default {
           active = false;
           type: string;
 
-          formData: {};
+          formData: any;
 
           params: {
             blockId: null,
@@ -32,12 +34,11 @@ export default {
           }
 
           sendForm () {
+            let block : any = _.find(store.state.Block.items, item => item.id === this.formData.id);
+            block.name = this.formData.name;
 
             // send formData to the backend
-            axios.post('/private/save-extended-block-data', this.formData).then(resp => {
-              console.log(resp);
-            });
-
+            axios.post('/private/save-extended-block-data', this.formData);
           }
 
           clear() {

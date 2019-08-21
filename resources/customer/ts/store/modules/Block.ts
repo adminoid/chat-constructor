@@ -53,12 +53,12 @@ export default class Block extends VuexModule {
 
   @Action
   async saveBlockData(data) {
-    return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
+    return axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
   async fetchBlocks(id) {
-    return await axios.get(`private/bots/${id}/blocks`);
+    return axios.get(`private/bots/${id}/blocks`);
   }
   @Mutation
   updateBlocks( blocks ) {
@@ -89,16 +89,12 @@ export default class Block extends VuexModule {
   @Mutation
   updateEndLineCoords( payload ) {
 
-    let itemId = payload.itemId;
+    let { itemId, x, y, coords } = payload;
 
-    let x = payload.x,
-      y = payload.y;
-
-    if( payload.coords ) {
-      x = payload.coords.left;
-      y = payload.coords.top;
+    if( coords ) {
+      x = coords.left;
+      y = coords.top;
     }
-
 
     _.map( this.items, (item) => {
       _.map( item.outputs, connector => {
@@ -221,7 +217,7 @@ export default class Block extends VuexModule {
     let connectorId = connector.id,
       targetBlockId = connector.target_block_id;
 
-    return await axios.post(`private/connector/save-target`, {
+    return axios.post(`private/connector/save-target`, {
       'connector-id': connectorId,
       'target-id': targetBlockId,
     });
@@ -235,20 +231,18 @@ export default class Block extends VuexModule {
 
     let steps = (this.context.state as any).blockPositionSteps;
 
-    let filtered = _.filter( this.items, (item) => {
-      return !item.moved;
-    });
+    let filtered = _.filter( this.items, item => !item.moved );
 
     let total = filtered.length;
 
     // TODO: get all items who not moved
     let actualSteps : any = {};
-    Object.keys(steps).map((key) => {
+    Object.keys(steps).map(key => {
       actualSteps[key] = steps[key] * ( total + 1 );
     });
 
-    return await axios.post(baseUrl, {
-      'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+    return axios.post(baseUrl, {
+      // 'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
       'bot_id': botId,
       x: actualSteps.x,
       y: actualSteps.y,

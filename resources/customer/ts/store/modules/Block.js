@@ -39,20 +39,14 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.saveBlockData = function (data) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
             });
         });
     };
     Block.prototype.fetchBlocks = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get("private/bots/" + id + "/blocks")];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.get("private/bots/" + id + "/blocks")];
             });
         });
     };
@@ -74,11 +68,10 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var itemId = payload.itemId;
-        var x = payload.x, y = payload.y;
-        if (payload.coords) {
-            x = payload.coords.left;
-            y = payload.coords.top;
+        var itemId = payload.itemId, x = payload.x, y = payload.y, coords = payload.coords;
+        if (coords) {
+            x = coords.left;
+            y = coords.top;
         }
         _.map(this.items, function (item) {
             _.map(item.outputs, function (connector) {
@@ -163,15 +156,11 @@ var Block = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var connectorId, targetBlockId;
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        connectorId = connector.id, targetBlockId = connector.target_block_id;
-                        return [4 /*yield*/, axios.post("private/connector/save-target", {
-                                'connector-id': connectorId,
-                                'target-id': targetBlockId,
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                connectorId = connector.id, targetBlockId = connector.target_block_id;
+                return [2 /*return*/, axios.post("private/connector/save-target", {
+                        'connector-id': connectorId,
+                        'target-id': targetBlockId,
+                    })];
             });
         });
     };
@@ -179,26 +168,20 @@ var Block = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var baseUrl, steps, filtered, total, actualSteps;
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        baseUrl = "private/bots/" + botId + "/blocks";
-                        steps = this.context.state.blockPositionSteps;
-                        filtered = _.filter(this.items, function (item) {
-                            return !item.moved;
-                        });
-                        total = filtered.length;
-                        actualSteps = {};
-                        Object.keys(steps).map(function (key) {
-                            actualSteps[key] = steps[key] * (total + 1);
-                        });
-                        return [4 /*yield*/, axios.post(baseUrl, {
-                                'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
-                                'bot_id': botId,
-                                x: actualSteps.x,
-                                y: actualSteps.y,
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                baseUrl = "private/bots/" + botId + "/blocks";
+                steps = this.context.state.blockPositionSteps;
+                filtered = _.filter(this.items, function (item) { return !item.moved; });
+                total = filtered.length;
+                actualSteps = {};
+                Object.keys(steps).map(function (key) {
+                    actualSteps[key] = steps[key] * (total + 1);
+                });
+                return [2 /*return*/, axios.post(baseUrl, {
+                        // 'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+                        'bot_id': botId,
+                        x: actualSteps.x,
+                        y: actualSteps.y,
+                    })];
             });
         });
     };

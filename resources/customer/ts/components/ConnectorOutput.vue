@@ -11,6 +11,7 @@
   import BeginLineMixin from '../mixins/BeginLine'
   import { namespace } from 'vuex-class'
   import { getCursorOffset } from '../helpers'
+  import _ from 'lodash'
 
   const BlockModule = namespace('Block');
 
@@ -18,6 +19,8 @@
   export default class ConnectorOutput extends mixins(BeginLineMixin) {
 
     @BlockModule.State area;
+    @BlockModule.State items;
+    @BlockModule.State dd;
     @BlockModule.Mutation setTargetForConnector;
     @BlockModule.Mutation insertConnectorClone;
     @BlockModule.Mutation setConnectorTarget;
@@ -27,8 +30,11 @@
 
     startDragConnector (e) {
 
-      // TODO: pass info about create and clone connectors to store for drawing line between
+      let $connector = _.find(_.find(this.items, ['id', this.blockId]).outputs, ['id', this.connectorData.id]);
+      this.dd.target_old = $connector.target_block_id;
+      delete $connector.target_block_id;
 
+      // pass info about creating and clone connectors to store for drawing line between
       let connectorData = {
         blockId: this.blockId,
         clickedCoords: {left: e.clientX, top: e.clientY},
