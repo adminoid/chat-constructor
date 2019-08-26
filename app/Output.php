@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\morphTo;
 class Output extends Model
 {
 
-    protected $fillable = ['id', 'block_id', 'target_block_id'];
+    protected $fillable = ['id', 'block_id', 'target_block_id', 'sort_order_id'];
 
     public function block() : BelongsTo
     {

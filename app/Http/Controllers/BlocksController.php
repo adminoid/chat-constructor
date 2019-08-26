@@ -6,6 +6,7 @@ use App\Bot;
 use App\ClientInputType;
 use App\Message;
 use App\Output;
+use App\OutputButton;
 use Illuminate\Http\Request;
 use App\Block;
 use Illuminate\Support\Facades\Validator;
@@ -175,13 +176,45 @@ class BlocksController extends Controller
         foreach ($messagesData as $value) {
             $messagesDataForUpdate[] = array_diff_key($value, array_flip(['created_at', 'updated_at']));
         }
-
-        // save messages
         foreach ($messagesDataForUpdate as $value) {
             $messageId = $value['id'];
             unset($value['id']);
 
             Message::where('id', $messageId)->update($value);
+        }
+
+        // save outputs
+        // todo: now only for buttons, later add others
+        if( $request->get('client_input_type_id') === 1) {
+
+            $rawButtons = $request->get('buttons');
+            if( count($rawButtons) > 0 ) {
+
+                // todo: remove exists outputs
+
+                $buttonsData = [];
+                $outputs = [];
+                foreach ($rawButtons as $key => $rawButton) {
+                    // create outputs with outputButtons for current block
+                    $output = Output::create([
+                        'sort_order_id' => $key,
+                    ]);
+
+//                    $output->save();
+
+                    // todo: Validate (custom) text
+                    $outputButton = OutputButton::create([
+                        'text' => $rawButton['text'],
+                    ]);
+
+                    $output->outputable()->associate($outputButton);
+                    $outputs[] = $output;
+                }
+
+                $block->outputs()->saveMany($outputs);
+
+            }
+
         }
 
     }
