@@ -191,9 +191,9 @@ class BlocksController extends Controller
             if( count($rawButtons) > 0 ) {
 
                 // remove exists outputs
-//                $block->outputs()->outputable()->delete();
-                // todo: when delete output, delete outputable automatically
-                $block->outputs()->delete();
+                foreach ($block->outputs()->get() as $output) {
+                    $output->delete();
+                }
 
                 $buttonsData = [];
                 $outputs = [];

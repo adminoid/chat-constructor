@@ -11,6 +11,14 @@ class Output extends Model
 
     protected $fillable = ['id', 'block_id', 'target_block_id', 'sort_order_id'];
 
+    public static function boot() : void
+    {
+        parent::boot();
+        static::deleting(static function($output) {
+            $output->outputable()->delete();
+        });
+    }
+
     public function block() : BelongsTo
     {
         return $this->belongsTo(Block::class);
@@ -25,15 +33,5 @@ class Output extends Model
     {
         return $this->morphTo();
     }
-
-    public static function boot() : void
-    {
-        parent::boot();
-        static::deleting(static function($output) {
-            $output->outputable()->delete();
-        });
-    }
-
-    // TODO: when change, check outputs and if need - delete exist outputs. See above boot method
 
 }
