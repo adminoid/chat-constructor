@@ -190,7 +190,10 @@ class BlocksController extends Controller
             $rawButtons = $request->get('buttons');
             if( count($rawButtons) > 0 ) {
 
-                // todo: remove exists outputs
+                // remove exists outputs
+//                $block->outputs()->outputable()->delete();
+                // todo: when delete output, delete outputable automatically
+                $block->outputs()->delete();
 
                 $buttonsData = [];
                 $outputs = [];
@@ -200,9 +203,7 @@ class BlocksController extends Controller
                         'sort_order_id' => $key,
                     ]);
 
-//                    $output->save();
-
-                    // todo: Validate (custom) text
+                    // todo: Validate (custom) text of button
                     $outputButton = OutputButton::create([
                         'text' => $rawButton['text'],
                     ]);
