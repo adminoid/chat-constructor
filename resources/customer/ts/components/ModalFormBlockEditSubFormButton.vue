@@ -1,12 +1,14 @@
 <template lang="pug">
 
-  .buttons
+  div
     h4 Блок с кнопками
-    ul.buttons__wrapper
-      li(v-for="button in orderedButtons" :key="button.sort_order_id")
-        input.btn.btn-primary(v-model="button.text")
-      li
-        button.btn.btn-info(type="button" @click="addButton") Добавить кнопку
+    ul.buttons
+      draggable.buttons__wrapper(tag='ul', v-model='buttons', v-bind='dragOptions', @start='drag = true', @end='drag = false')
+        transition-group(type='transition', :name="!drag ? 'flip-list' : null")
+          li.buttons__item(v-for='button in buttons', :key='button.sort_order_id')
+            input.btn.btn-primary(v-model="button.text")
+
+    button.btn.btn-info(type="button" @click="addButton") Добавить кнопку
 
 </template>
 
@@ -15,8 +17,14 @@
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
   import axios from 'axios'
   import _ from 'lodash'
+  // @ts-ignore
+  import draggable from 'vuedraggable'
 
-  @Component
+  @Component({
+    components: {
+      draggable
+    }
+  })
   export default class ModalFormBlockEditSubFormButton extends Vue {
 
     name: 'ModalFormBlockEditSubFormButton';
@@ -28,6 +36,8 @@
         sort_order_id: 0,
       },
     ];
+
+    drag = false;
 
     @Prop({}) state!: {
       params: {
@@ -45,6 +55,15 @@
           this.buttons = buttons;
         }
       });
+    }
+
+    get dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
 
     get orderedButtons () {
@@ -74,6 +93,9 @@
 </script>
 
 <style lang="sass" scoped>
+
+  .buttons
+    padding: 0
 
   .buttons__wrapper
     list-style: none

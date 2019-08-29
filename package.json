@@ -26,7 +26,6 @@
     "@types/lodash": "^4.14.121",
     "@vue/test-utils": "^1.0.0-beta.29",
     "acorn-dynamic-import": "^4.0.0",
-    "axios": "^0.18.1",
     "axios-mock-adapter": "^1.16.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.7.1",
@@ -49,7 +48,6 @@
     "jest-transform-stub": "^2.0.0",
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
-    "lodash": "^4.17.15",
     "popper.js": "^1.12",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
@@ -76,11 +74,14 @@
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
+    "lodash": "^4.17.15",
+    "axios": "^0.18.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "vue": "^2.6.4",
     "vue-router": "^3.0.2",
+    "vuedraggable": "^2.23.0",
     "vuex": "^3.1.0"
   },
   "browserslist": [

@@ -1,5 +1,10 @@
 import { Vue } from 'vue-property-decorator';
 export default class BlocksArea extends Vue {
+    $refs: {
+        area: HTMLElement;
+        frame: HTMLElement;
+        items;
+    };
     fetchBlocks: any;
     deleteBlock: any;
     saveBlockData: any;
@@ -7,7 +12,7 @@ export default class BlocksArea extends Vue {
     items: any;
     dd: any;
     area: any;
-    scroll: any;
+    scrollPosition: any;
     setAreaBoundaries: any;
     dragDropDataReset: any;
     updateCoords: any;
@@ -19,12 +24,22 @@ export default class BlocksArea extends Vue {
     connectorWidth: number;
     botId: any;
     $route: any;
+    areaSize: {
+        width: number;
+        height: number;
+    };
+    isItemsChanged: boolean;
     created(): void;
     mounted(): void;
+    setAreaSize(): void;
+    setAreaBorders(): void;
+    readonly areaSizePx: {
+        width: string;
+        height: string;
+    };
     onItemsChanged(): void;
     handleScroll(): void;
     makeLinesFromItems(): any[];
-    setupSizesOfArea(): void;
     mousemoveHandler(e: any): void;
     mouseupHandler(): void;
 }

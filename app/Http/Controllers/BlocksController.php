@@ -173,6 +173,7 @@ class BlocksController extends Controller
                 $output->delete();
             }
         }
+        // todo: else if client_input_type_id not changed, find output by id and rewrite it
 
         $this->authorize('update', $block);
         $block->update($blockData);
