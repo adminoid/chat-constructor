@@ -13,6 +13,7 @@
 <script lang="ts">
 
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+  import axios from 'axios'
 
   @Component
   export default class ModalFormBlockEditSubFormButton extends Vue {
@@ -26,7 +27,6 @@
       },
     ];
 
-
     @Prop({}) state!: {
       params: {
         blockId: -1
@@ -35,6 +35,18 @@
         buttons: [],
       },
     };
+
+    created() {
+      console.log(this.state.params.blockId);
+      axios.get('/private/outputs/' + this.state.params.blockId).then(resp => {
+        let buttons = resp.data;
+
+        if( buttons.length > 0 ) {
+          this.buttons = buttons;
+        }
+
+      });
+    }
 
     onInput(e, idx) {
       console.log(idx);
