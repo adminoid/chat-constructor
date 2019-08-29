@@ -14,16 +14,4 @@ class ClientInputTypesController extends Controller
         return ClientInputType::all('id', 'name', 'component')->toJson();
     }
 
-    public function saveClientInputType(Request $request) : void
-    {
-
-        $blockId = $request->get('block_id');
-        $inputTypeId = $request->get('id');
-
-        $block = Block::findOrFail($blockId);
-        $block->client_input_type_id = $inputTypeId;
-        $block->save();
-
-    }
-
 }

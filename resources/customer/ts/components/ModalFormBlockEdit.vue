@@ -92,10 +92,6 @@
     onChange () {
       // save block type to server
       this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
-      axios.post('private/save-client-input-types', {
-        id: this.subFormData.client_input_type_id,
-        block_id: this.state.params.blockId,
-      });
     }
 
     addMessage () {

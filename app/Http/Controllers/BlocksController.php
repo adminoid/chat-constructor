@@ -7,6 +7,7 @@ use App\ClientInputType;
 use App\Message;
 use App\Output;
 use App\OutputButton;
+use App\OutputText;
 use Illuminate\Http\Request;
 use App\Block;
 use Illuminate\Support\Facades\Validator;
@@ -164,10 +165,16 @@ class BlocksController extends Controller
 
         $blockId = $blockData = $request->get('id');
         $block = Block::findOrFail($blockId);
+        $blockData = $request->only(['name', 'client_input_type_id']);
+
+        if( $block->client_input_type_id !== $blockData['client_input_type_id'] ) {
+            // remove exists outputs
+            foreach ($block->outputs()->get() as $output) {
+                $output->delete();
+            }
+        }
 
         $this->authorize('update', $block);
-
-        $blockData = $request->only(['name', 'client_input_type_id']);
         $block->update($blockData);
 
         // save related messages
@@ -184,18 +191,12 @@ class BlocksController extends Controller
         }
 
         // save outputs
-        // todo: now only for buttons, later add others
+        // only for buttons
         if( $request->get('client_input_type_id') === 1) {
 
             $rawButtons = $request->get('buttons');
             if( count($rawButtons) > 0 ) {
 
-                // remove exists outputs
-                foreach ($block->outputs()->get() as $output) {
-                    $output->delete();
-                }
-
-                $buttonsData = [];
                 $outputs = [];
                 foreach ($rawButtons as $key => $rawButton) {
                     // create outputs with outputButtons for current block
@@ -216,6 +217,18 @@ class BlocksController extends Controller
 
             }
 
+        }
+        // only for texts
+        elseif( $request->get('client_input_type_id') === 2) {
+            // create output with outputText for current block
+            $output = Output::create([
+                'sort_order_id' => 0,
+            ]);
+
+            // todo: Validate (custom) text of button
+            $outputText = OutputText::create();
+            $output->outputable()->associate($outputText);
+            $block->outputs()->save($output);
         }
 
     }

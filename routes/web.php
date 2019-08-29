@@ -46,8 +46,6 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::get('messages/delete/{messageId}', 'MessagesController@deleteMessage');
 
-    Route::post('save-client-input-types', 'ClientInputTypesController@saveClientInputType');
-
     Route::post('save-extended-block-data', 'BlocksController@saveExtendedBlockData');
 
 });

@@ -16,7 +16,7 @@ class OutputsTableSeeder extends Seeder
     {
         $blocks = Block::all();
         $blocks->each(static function ($locBlock){
-            $output = factory(Output::class)->create();
+            $output = factory(Output::class)->create(['sort_order_id' => 0]);
             $output->outputable()->associate($outputButton = OutputText::create());
             $locBlock->outputs()->save($output);
         });
