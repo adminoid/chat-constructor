@@ -163,20 +163,11 @@ class BlocksController extends Controller
     public function saveExtendedBlockData(Request $request) : void
     {
 
-        $blockId = $blockData = $request->get('id');
+        $blockId = $request->get('id');
         $block = Block::findOrFail($blockId);
         $blockData = $request->only(['name', 'client_input_type_id']);
 
-        if( $block->client_input_type_id !== $blockData['client_input_type_id'] ) {
-            // remove exists outputs
-            foreach ($block->outputs()->get() as $output) {
-                $output->delete();
-            }
-        }
-        // todo: else if client_input_type_id not changed, find output by id and rewrite it
-
         $this->authorize('update', $block);
-        $block->update($blockData);
 
         // save related messages
         $messagesData = $request->get('messages');
@@ -191,18 +182,53 @@ class BlocksController extends Controller
             Message::where('id', $messageId)->update($value);
         }
 
+        if( $block->client_input_type_id !== $blockData['client_input_type_id'] ) {
+            // remove exists outputs
+            foreach ($block->outputs()->get() as $output) {
+                $output->delete();
+            }
+        }
+
+        $block->update($blockData);
+
         // save outputs
         // only for buttons
-        if( $request->get('client_input_type_id') === 1) {
+        if( $blockData['client_input_type_id'] === 1 ) {
+
+            // get the identifiers of $rawButtons, delete all identifiers in the database that are not in the identifiers of $rawButtons
 
             $rawButtons = $request->get('buttons');
-            if( count($rawButtons) > 0 ) {
+            if (count($rawButtons) > 0) {
+                // stores exists ids in db
+                $rawButtonIds = array_column($rawButtons, 'id');
+                while(($key = array_search(0, $rawButtonIds)) !== false) {
+                    unset($rawButtonIds[$key]);
+                }
 
-                $outputs = [];
-                foreach ($rawButtons as $key => $rawButton) {
+                if( count($rawButtonIds) > 0 ) {
+//                    $atest = $block->outputs()->whereNotIn('id', $rawButtonIds)->get();
+                    $block->outputs()->whereNotIn('id', $rawButtonIds)->delete();
+                }
+
+            }
+
+            foreach ($rawButtons as $rawButton) {
+
+                if ($rawButton['id'] > 0) {
+                    $output = Output::findOrFail($rawButton['id']);
+                    $output->sort_order_id = $rawButton['sort_order_id'];
+                    $output->save();
+                    $outputable = $output->outputable;
+                    $outputable->text = $rawButton['text'];
+                    $outputable->save();
+                } else {
+
+                    // get maximum sort_order_id of block related outputs
+                    $maxSortOrderId = $block->outputs()->max('sort_order_id');
+
                     // create outputs with outputButtons for current block
                     $output = Output::create([
-                        'sort_order_id' => $key,
+                        'sort_order_id' => ($maxSortOrderId === null) ? 0 : $maxSortOrderId + 1,
                     ]);
 
                     // todo: Validate (custom) text of button
@@ -211,16 +237,17 @@ class BlocksController extends Controller
                     ]);
 
                     $output->outputable()->associate($outputButton);
-                    $outputs[] = $output;
+                    $block->outputs()->save($output);
                 }
-
-                $block->outputs()->saveMany($outputs);
 
             }
 
         }
         // only for texts
         elseif( $request->get('client_input_type_id') === 2) {
+
+            // todo: check if output text exist, then update ot create
+
             // create output with outputText for current block
             $output = Output::create([
                 'sort_order_id' => 0,

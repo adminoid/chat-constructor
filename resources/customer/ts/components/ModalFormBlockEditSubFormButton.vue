@@ -76,6 +76,7 @@
     }
 
     addButton() {
+      console.log(this.buttons.length);
       this.buttons.push({
         id: 0,
         text: 'Текст на кнопке ' + this.buttons.length,

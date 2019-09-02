@@ -14,8 +14,12 @@ class OutputsController extends Controller
         $block = Block::findOrFail($blockId);
         $compiledOutputs = [];
         if( $block->client_input_type_id === 1 ) {
-            foreach ($block->outputs()->with('outputable:id,text')->get() as $output) {
-                $compiledOutputs[] = array_merge($output->outputable->toArray(), ['sort_order_id' => $output->sort_order_id]);
+            foreach ($block->outputs()->with('outputable:text')->get() as $output) {
+                $outputable = $output->outputable()->first();
+                $compiledOutputs[] = array_merge($outputable->toArray(), [
+                    'id' => $output->id,
+                    'sort_order_id' => $output->sort_order_id,
+                ]);
             }
         }
 
