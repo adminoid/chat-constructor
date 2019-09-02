@@ -23,6 +23,8 @@ class OutputsController extends Controller
             }
         }
 
+//        $sortedCompiledOutputs = collect($compiledOutputs)->sortBy('sort_order_id')->toJson();
+
         return $compiledOutputs;
 
     }

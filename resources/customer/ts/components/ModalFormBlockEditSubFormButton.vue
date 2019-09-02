@@ -52,7 +52,7 @@
       axios.get('/private/outputs/' + this.state.params.blockId).then(resp => {
         let buttons = resp.data;
         if( buttons.length > 0 ) {
-          this.buttons = buttons;
+          this.buttons = _.orderBy(buttons, 'sort_order_id');
         }
       });
     }
@@ -76,7 +76,6 @@
     }
 
     addButton() {
-      console.log(this.buttons.length);
       this.buttons.push({
         id: 0,
         text: 'Текст на кнопке ' + this.buttons.length,

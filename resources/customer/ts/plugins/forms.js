@@ -19,6 +19,9 @@ export default {
                         var _this = this;
                         var block = _.find(store.state.Block.items, function (item) { return item.id === _this.formData.id; });
                         block.name = this.formData.name;
+                        this.formData.buttons.forEach(function (item, index) {
+                            item.sort_order_id = index;
+                        });
                         // send formData to the backend
                         axios.post('/private/save-extended-block-data', this.formData);
                     };
