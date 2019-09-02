@@ -160,6 +160,13 @@ class BlocksController extends Controller
 
     }
 
+    public function getBlockSurfaceData($blockId) : string
+    {
+        $block = Block::with('outputs')->findOrFail($blockId);
+        $this->authorize('view', $block);
+        return $block->toJson();
+    }
+
     public function saveExtendedBlockData(Request $request) : void
     {
 
@@ -196,7 +203,6 @@ class BlocksController extends Controller
         if( $blockData['client_input_type_id'] === 1 ) {
 
             // get the identifiers of $rawButtons, delete all identifiers in the database that are not in the identifiers of $rawButtons
-
             $rawButtons = $request->get('buttons');
             if (count($rawButtons) > 0) {
                 // stores exists ids in db
@@ -206,7 +212,6 @@ class BlocksController extends Controller
                 }
 
                 if( count($rawButtonIds) > 0 ) {
-//                    $atest = $block->outputs()->whereNotIn('id', $rawButtonIds)->get();
                     $block->outputs()->whereNotIn('id', $rawButtonIds)->delete();
                 }
 

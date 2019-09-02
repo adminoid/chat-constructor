@@ -65,6 +65,20 @@ export default class Block extends VuexModule {
     this.items = blocks.data;
   }
 
+  @Action({ commit: 'updateBlock', rawError: true })
+  async fetchBlock(blockId) {
+    return axios.get(`private/block-surface/${blockId}`);
+  }
+  @Mutation
+  updateBlock( blockData ) {
+    let data = blockData.data;
+    delete data['bot'];
+
+    // data.id - stores blockId
+    let index = _.findIndex(this.items, {id: data.id});
+    this.items.splice(index, 1, data);
+  }
+
   @Mutation
   setActiveTargetId( id: number ) {
     if( id > 0 ) {

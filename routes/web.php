@@ -50,5 +50,7 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::get('outputs/{blockId}', 'OutputsController@getOutputs');
 
+    Route::get('block-surface/{blockId}', 'BlocksController@getBlockSurfaceData');
+
 });
 

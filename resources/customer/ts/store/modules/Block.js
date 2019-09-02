@@ -53,6 +53,20 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.updateBlocks = function (blocks) {
         this.items = blocks.data;
     };
+    Block.prototype.fetchBlock = function (blockId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                return [2 /*return*/, axios.get("private/block-surface/" + blockId)];
+            });
+        });
+    };
+    Block.prototype.updateBlock = function (blockData) {
+        var data = blockData.data;
+        delete data['bot'];
+        // data.id - stores blockId
+        var index = _.findIndex(this.items, { id: data.id });
+        this.items.splice(index, 1, data);
+    };
     Block.prototype.setActiveTargetId = function (id) {
         if (id > 0) {
             this.dd.targetId = id;
@@ -204,6 +218,12 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateBlocks", null);
+    tslib_1.__decorate([
+        Action({ commit: 'updateBlock', rawError: true })
+    ], Block.prototype, "fetchBlock", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "updateBlock", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setActiveTargetId", null);

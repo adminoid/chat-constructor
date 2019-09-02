@@ -1,7 +1,6 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
 import store from '../store';
-import _ from 'lodash';
 export default {
     install: function (Vue) {
         Vue.prototype.$form = function (formData, params) {
@@ -16,14 +15,17 @@ export default {
                         this.params = params;
                     }
                     FormData.prototype.sendForm = function () {
+                        // let block : any = _.find(store.state.Block.items, item => item.id === this.formData.id);
+                        // block.name = this.formData.name;
                         var _this = this;
-                        var block = _.find(store.state.Block.items, function (item) { return item.id === _this.formData.id; });
-                        block.name = this.formData.name;
                         this.formData.buttons.forEach(function (item, index) {
                             item.sort_order_id = index;
                         });
                         // send formData to the backend
-                        axios.post('/private/save-extended-block-data', this.formData);
+                        axios.post('/private/save-extended-block-data', this.formData).then(function () {
+                            // todo: run action for update this.formData.id block
+                            store.dispatch('Block/fetchBlock', _this.formData.id);
+                        });
                     };
                     FormData.prototype.clear = function () {
                         this.title = this.titleDefault;
