@@ -60,12 +60,9 @@
     @BlockModule.Mutation updateEndLineCoords;
     @BlockModule.Mutation setActiveTargetId;
     @BlockModule.Mutation setScrollOffset;
+    @BlockModule.Mutation updateCoordsForLines;
 
     lines = [];
-
-    closest = 20;
-
-    connectorWidth = 16;
 
     botId;
 
@@ -152,158 +149,111 @@
       return lines;
     }
 
+    getMovingPositions(clientX, clientY) {
+
+      let elementBorders = {
+        left: clientX - this.dd.elementOffset.left,
+        top: clientY - this.dd.elementOffset.top,
+        right: clientX + this.dd.elementOffset.right,
+        bottom: clientY + this.dd.elementOffset.bottom,
+      };
+
+      let left = +Number(elementBorders.left - this.area.boundaries.left + this.scrollPosition.left),
+        top = +Number(elementBorders.top - this.area.boundaries.top + this.scrollPosition.top);
+
+      if( left < 0 ) {
+        left = 0;
+      }
+
+      if( top < 0 ) {
+        top = 0;
+      }
+
+      return {
+        left: left,
+        top: top,
+        elementBorders: elementBorders,
+      }
+
+    }
+
     mousemoveHandler(e) {
 
       if (this.dd.dragging) {
 
-        let elementBorders = {
-          left: e.clientX - this.dd.elementOffset.left,
-          top: e.clientY - this.dd.elementOffset.top,
-          right: e.clientX + this.dd.elementOffset.right,
-          bottom: e.clientY + this.dd.elementOffset.bottom,
-        };
-
-        let left = +Number(elementBorders.left - this.area.boundaries.left + this.scrollPosition.left),
-          top = +Number(elementBorders.top - this.area.boundaries.top + this.scrollPosition.top);
-
-        if( left < 0 ) {
-          left = 0;
-        }
-
-        if( top < 0 ) {
-          top = 0;
-        }
+        let {left, top, elementBorders} = this.getMovingPositions(e.clientX, e.clientY);
 
         // Update all begin and end coordinates who regard to this item
         if( this.dd.id >= 0 ) {
 
-          this.updateRegardingCoords(left, top, elementBorders);
+          // this.updateRegardingCoords(left, top, elementBorders);
 
-        }
-      }
-    }
-
-    updateRegardingCoords(left, top, elementBorders) {
-
-      // getting dragging item
-      let $draggedItem = _.find(this.$refs.items, (item: any) => {
-        if( item && item.itemData ) {
-          return item.itemData.id === this.dd.id;
-        }
-      });
-
-      if( $draggedItem ) {
-
-        if( elementBorders.left < this.area.boundaries.left ) {
-          // touch left of visible area
-          if( left > 0 ) {
-            this.$refs.frame.scrollLeft -= 10;
-          }
-        }
-
-        if( elementBorders.top < this.area.boundaries.top ) {
-          // touch top of visible area
-          if( top > 0 ) {
-            this.$refs.frame.scrollTop -= 10;
-          }
-        }
-
-        let bounding = $draggedItem.$el.getBoundingClientRect(),
-          rightPosition = left + bounding.width + 10,
-          bottomPosition = top + bounding.height + 10 + 10;
-
-        if( elementBorders.right > this.area.boundaries.right ) {
-
-          // touch right of visible area
-          if( left > 0 ) { // todo: if left less than area height
-
-            // check for increase width
-            if( rightPosition >= this.areaSize.width ) {
-              // width need to increase
-              this.areaSize.width += 200;
-            } else {
-              this.$refs.frame.scrollLeft += 10;
+          // getting dragging item
+          let $draggedItem = _.find(this.$refs.items, (item: any) => {
+            if( item && item.itemData ) {
+              return item.itemData.id === this.dd.id;
             }
-          }
+          });
 
-        }
+          if( $draggedItem ) {
 
-        if( elementBorders.bottom > this.area.boundaries.bottom ) {
-
-          // touch bottom of visible area
-          if( top > 0 ) { // todo: if top less than area width
-
-            // check for increase height
-            if( bottomPosition >= this.areaSize.height ) {
-              // height need to increase
-              this.areaSize.height += 200;
-            } else {
-              this.$refs.frame.scrollTop += 10;
+            if( elementBorders.left < this.area.boundaries.left ) {
+              // touch left of visible area
+              if( left > 0 ) {
+                this.$refs.frame.scrollLeft -= 10;
+              }
             }
-          }
-        }
 
-        this.updateCoordsForLines($draggedItem, left, top);
+            if( elementBorders.top < this.area.boundaries.top ) {
+              // touch top of visible area
+              if( top > 0 ) {
+                this.$refs.frame.scrollTop -= 10;
+              }
+            }
 
-      }
+            let bounding = $draggedItem.$el.getBoundingClientRect(),
+              rightPosition = left + bounding.width + 10,
+              bottomPosition = top + bounding.height + 10 + 10;
 
-    }
+            if( elementBorders.right > this.area.boundaries.right ) {
 
-    updateCoordsForLines($draggedItem, left, top) {
+              // touch right of visible area
+              if( left > 0 ) { // todo: if left less than area height
 
-      _.map(this.items, (item) => {
-
-        if( item.outputs ) {
-          _.map( item.outputs, (connector, cIdx) => {
-
-            // $draggedItem updates now properly
-            if (item.id === this.dd.id) {
-
-              if ( ! _.isEmpty($draggedItem.$refs) ) {
-
-                let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
-                let coords = $beginConnector.getLineBeginCoords();
-
-                if ($beginConnector) {
-                  connector.coords = coords;
+                // check for increase width
+                if( rightPosition >= this.areaSize.width ) {
+                  // width need to increase
+                  this.areaSize.width += 200;
+                } else {
+                  this.$refs.frame.scrollLeft += 10;
                 }
               }
 
             }
 
-            if (connector.target_block_id === this.dd.id) {
-              connector.targetCoords = $draggedItem.getLineEndCoords();
-            }
-            // check if target item not itself
-            else {
+            if( elementBorders.bottom > this.area.boundaries.bottom ) {
 
-              // TODO: 70 is bad, but it fast...
-              const isActive = (
-                _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone' &&
-                item.component === 'BlockBase' &&
-                item.x + 70 < left + this.closest &&
-                item.x + 70 > left - this.closest &&
-                item.y < top + this.closest &&
-                item.y > top - this.closest
-              );
+              // touch bottom of visible area
+              if( top > 0 ) { // todo: if top less than area width
 
-              item.active = isActive;
-              if (isActive) {
-                // TODO: if active, set target id to dd
-                this.setActiveTargetId(item.id);
-
-                left = item.x - this.connectorWidth / 2 + 70;
-                top = item.y - this.connectorWidth / 2 + 1;
+                // check for increase height
+                if( bottomPosition >= this.areaSize.height ) {
+                  // height need to increase
+                  this.areaSize.height += 200;
+                } else {
+                  this.$refs.frame.scrollTop += 10;
+                }
               }
             }
 
-          });
+            this.updateCoordsForLines($draggedItem, left, top);
+
+            this.updateCoords([left, top]);
+
+          }
+
         }
-
-        this.updateCoords([left, top]);
-
-      });
-
+      }
     }
 
     mouseupHandler() {

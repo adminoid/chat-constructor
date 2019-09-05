@@ -18,9 +18,11 @@ export default {
                         // let block : any = _.find(store.state.Block.items, item => item.id === this.formData.id);
                         // block.name = this.formData.name;
                         var _this = this;
-                        this.formData.buttons.forEach(function (item, index) {
-                            item.sort_order_id = index;
-                        });
+                        if ('outputs' in this.formData) {
+                            this.formData.buttons.forEach(function (item, index) {
+                                item.sort_order_id = index;
+                            });
+                        }
                         // send formData to the backend
                         axios.post('/private/save-extended-block-data', this.formData).then(function () {
                             // todo: run action for update this.formData.id block

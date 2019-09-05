@@ -51,6 +51,10 @@ export default class Block extends VuexModule {
     left: 0,
   };
 
+  closest = 20;
+
+  connectorWidth = 16;
+
   @Action
   async saveBlockData(data) {
     return axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
@@ -74,9 +78,72 @@ export default class Block extends VuexModule {
     let data = blockData.data;
     delete data['bot'];
 
+    console.log(data);
+
     // data.id - stores blockId
     let index = _.findIndex(this.items, {id: data.id});
     this.items.splice(index, 1, data);
+  }
+
+  @Mutation
+  updateCoordsForLines($draggedItem, left, top) {
+
+    _.map(this.items, (item) => {
+
+      if( item.outputs ) {
+
+        _.map( item.outputs, (connector, cIdx) => {
+
+          // $draggedItem updates now properly
+          if (item.id === this.dd.id) {
+
+            console.log('1...');
+
+            if ( ! _.isEmpty($draggedItem.$refs) ) {
+
+              let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
+              let coords = $beginConnector.getLineBeginCoords();
+
+              if ($beginConnector) {
+                connector.coords = coords;
+              }
+            }
+
+          }
+          else if (connector.target_block_id === this.dd.id) {
+            console.log('2...');
+            connector.targetCoords = $draggedItem.getLineEndCoords();
+          }
+          // todo: check if target item not itself
+          else {
+
+            console.log('3...');
+
+            // todo: 70 is bad, but it fast...
+            const isActive = (
+              _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone' &&
+              item.component === 'BlockBase' &&
+              item.x + 70 < left + this.closest &&
+              item.x + 70 > left - this.closest &&
+              item.y < top + this.closest &&
+              item.y > top - this.closest
+            );
+
+            item.active = isActive;
+            if (isActive) {
+              // TODO: if active, set target id to dd
+              this.setActiveTargetId(item.id);
+
+              left = item.x - this.connectorWidth / 2 + 70;
+              top = item.y - this.connectorWidth / 2 + 1;
+            }
+          }
+
+        });
+      }
+
+    });
+
   }
 
   @Mutation
