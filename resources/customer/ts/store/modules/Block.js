@@ -70,14 +70,14 @@ var Block = /** @class */ (function (_super) {
         var index = _.findIndex(this.items, { id: data.id });
         this.items.splice(index, 1, data);
     };
-    Block.prototype.updateCoordsForLines = function ($draggedItem, left, top) {
+    Block.prototype.updateCoordsForLines = function (payload) {
         var _this = this;
+        var $draggedItem = payload.$draggedItem, left = payload.left, top = payload.top;
         _.map(this.items, function (item) {
             if (item.outputs) {
                 _.map(item.outputs, function (connector, cIdx) {
                     // $draggedItem updates now properly
                     if (item.id === _this.dd.id) {
-                        console.log('1...');
                         if (!_.isEmpty($draggedItem.$refs)) {
                             var $beginConnector = $draggedItem.$refs['outputs'][cIdx];
                             var coords = $beginConnector.getLineBeginCoords();
@@ -87,12 +87,10 @@ var Block = /** @class */ (function (_super) {
                         }
                     }
                     else if (connector.target_block_id === _this.dd.id) {
-                        console.log('2...');
                         connector.targetCoords = $draggedItem.getLineEndCoords();
                     }
                     // todo: check if target item not itself
                     else {
-                        console.log('3...');
                         // todo: 70 is bad, but it fast...
                         var isActive = (_.find(_this.items, ['id', _this.dd.id]).component === 'ConnectorClone' &&
                             item.component === 'BlockBase' &&

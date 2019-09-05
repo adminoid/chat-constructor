@@ -86,7 +86,9 @@ export default class Block extends VuexModule {
   }
 
   @Mutation
-  updateCoordsForLines($draggedItem, left, top) {
+  updateCoordsForLines(payload) {
+
+    let {$draggedItem, left, top} = payload;
 
     _.map(this.items, (item) => {
 
@@ -96,8 +98,6 @@ export default class Block extends VuexModule {
 
           // $draggedItem updates now properly
           if (item.id === this.dd.id) {
-
-            console.log('1...');
 
             if ( ! _.isEmpty($draggedItem.$refs) ) {
 
@@ -111,13 +111,10 @@ export default class Block extends VuexModule {
 
           }
           else if (connector.target_block_id === this.dd.id) {
-            console.log('2...');
             connector.targetCoords = $draggedItem.getLineEndCoords();
           }
           // todo: check if target item not itself
           else {
-
-            console.log('3...');
 
             // todo: 70 is bad, but it fast...
             const isActive = (

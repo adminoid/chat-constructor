@@ -246,7 +246,9 @@
               }
             }
 
-            this.updateCoordsForLines($draggedItem, left, top);
+            console.log(left, top);
+
+            this.updateCoordsForLines({$draggedItem, left, top});
 
             this.updateCoords([left, top]);
 
