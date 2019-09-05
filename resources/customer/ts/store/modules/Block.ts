@@ -102,18 +102,10 @@ export default class Block extends VuexModule {
 
   @Mutation
   updateEndLineCoords( payload ) {
-
-    let { itemId, x, y, coords } = payload;
-
-    if( coords ) {
-      x = coords.left;
-      y = coords.top;
-    }
-
     _.map( this.items, (item) => {
       _.map( item.outputs, connector => {
-        if ( connector.target_block_id === itemId ) {
-          connector.targetCoords = {left: x, top: y};
+        if ( connector.target_block_id === payload.itemId ) {
+          connector.targetCoords = {left: payload.x, top: payload.y};
         }
       });
     });

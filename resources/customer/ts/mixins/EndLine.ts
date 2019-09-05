@@ -35,10 +35,13 @@ export default class EndLine extends Vue {
   }
 
   mounted () {
-    let id = this.id || this.itemData.id;
+    let id = this.id || this.itemData.id,
+      coords = this.getLineEndCoords();
+
     store.commit('Block/updateEndLineCoords', {
       itemId: id,
-      coords: this.getLineEndCoords(),
+      x: coords.left,
+      y: coords.top,
     });
   }
 

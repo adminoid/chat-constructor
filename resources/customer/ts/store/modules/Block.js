@@ -82,15 +82,10 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var itemId = payload.itemId, x = payload.x, y = payload.y, coords = payload.coords;
-        if (coords) {
-            x = coords.left;
-            y = coords.top;
-        }
         _.map(this.items, function (item) {
             _.map(item.outputs, function (connector) {
-                if (connector.target_block_id === itemId) {
-                    connector.targetCoords = { left: x, top: y };
+                if (connector.target_block_id === payload.itemId) {
+                    connector.targetCoords = { left: payload.x, top: payload.y };
                 }
             });
         });
