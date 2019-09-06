@@ -21,6 +21,7 @@ var Block = /** @class */ (function (_super) {
             newIdx: -1,
             targetId: -1,
             sourcePath: [],
+            someoneActive: false,
         };
         _this.area = {
             boundaries: {
@@ -34,8 +35,6 @@ var Block = /** @class */ (function (_super) {
             top: 0,
             left: 0,
         };
-        _this.closest = 20;
-        _this.connectorWidth = 16;
         return _this;
     }
     Block.prototype.saveBlockData = function (data) {
@@ -70,51 +69,6 @@ var Block = /** @class */ (function (_super) {
         var index = _.findIndex(this.items, { id: data.id });
         this.items.splice(index, 1, data);
     };
-    Block.prototype.updateCoordsForLines = function (payload) {
-        var _this = this;
-        var $draggedItem = payload.$draggedItem, left = payload.left, top = payload.top;
-        _.map(this.items, function (item) {
-            if (item.outputs) {
-                _.map(item.outputs, function (connector, cIdx) {
-                    // $draggedItem updates now properly
-                    if (item.id === _this.dd.id) {
-                        if (!_.isEmpty($draggedItem.$refs)) {
-                            var $beginConnector = $draggedItem.$refs['outputs'][cIdx];
-                            var coords = $beginConnector.getLineBeginCoords();
-                            if ($beginConnector) {
-                                connector.coords = coords;
-                            }
-                        }
-                    }
-                    else if (connector.target_block_id === _this.dd.id) {
-                        connector.targetCoords = $draggedItem.getLineEndCoords();
-                    }
-                    // todo: check if target item not itself
-                    else {
-                        // todo: 70 is bad, but it fast...
-                        var isActive = (_.find(_this.items, ['id', _this.dd.id]).component === 'ConnectorClone' &&
-                            item.component === 'BlockBase' &&
-                            item.x + 70 < left + _this.closest &&
-                            item.x + 70 > left - _this.closest &&
-                            item.y < top + _this.closest &&
-                            item.y > top - _this.closest);
-                        item.active = isActive;
-                        if (isActive) {
-                            // TODO: if active, set target id to dd
-                            _this.setActiveTargetId(item.id);
-                            left = item.x - _this.connectorWidth / 2 + 70;
-                            top = item.y - _this.connectorWidth / 2 + 1;
-                        }
-                    }
-                });
-            }
-        });
-    };
-    Block.prototype.setActiveTargetId = function (id) {
-        if (id > 0) {
-            this.dd.targetId = id;
-        }
-    };
     Block.prototype.setBeginLineCoords = function (payload) {
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
         _.map(this.items, function (item) {
@@ -123,6 +77,10 @@ var Block = /** @class */ (function (_super) {
                 output.coords = coords;
             }
         });
+    };
+    Block.prototype.setActiveTargetId = function (id) {
+        console.log('setActiveTargetId ' + id);
+        this.dd.targetId = id;
     };
     Block.prototype.updateEndLineCoords = function (payload) {
         _.map(this.items, function (item) {
@@ -264,13 +222,10 @@ var Block = /** @class */ (function (_super) {
     ], Block.prototype, "updateBlock", null);
     tslib_1.__decorate([
         Mutation
-    ], Block.prototype, "updateCoordsForLines", null);
+    ], Block.prototype, "setBeginLineCoords", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setActiveTargetId", null);
-    tslib_1.__decorate([
-        Mutation
-    ], Block.prototype, "setBeginLineCoords", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateEndLineCoords", null);

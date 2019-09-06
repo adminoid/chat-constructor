@@ -60,7 +60,6 @@
     @BlockModule.Mutation updateEndLineCoords;
     @BlockModule.Mutation setActiveTargetId;
     @BlockModule.Mutation setScrollOffset;
-    @BlockModule.Mutation updateCoordsForLines;
 
     lines = [];
 
@@ -73,7 +72,9 @@
       height: 0,
     };
 
-    isItemsChanged = false;
+    closest = 20;
+
+    connectorWidth = 16;
 
     created () {
       this.botId = +this.$route.params.botId;
@@ -94,7 +95,6 @@
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
       this.lines = this.makeLinesFromItems();
-      this.isItemsChanged = true;
     }
 
     setAreaBorders() {
@@ -119,7 +119,7 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
-      if (this.isItemsChanged) this.lines = this.makeLinesFromItems();
+      this.lines = this.makeLinesFromItems();
     }
 
     handleScroll () {
@@ -183,10 +183,7 @@
 
         let {left, top, elementBorders} = this.getMovingPositions(e.clientX, e.clientY);
 
-        // Update all begin and end coordinates who regard to this item
         if( this.dd.id >= 0 ) {
-
-          // this.updateRegardingCoords(left, top, elementBorders);
 
           // getting dragging item
           let $draggedItem = _.find(this.$refs.items, (item: any) => {
@@ -218,8 +215,7 @@
             if( elementBorders.right > this.area.boundaries.right ) {
 
               // touch right of visible area
-              if( left > 0 ) { // todo: if left less than area height
-
+              if( left > 0 ) { // if left less than area height
                 // check for increase width
                 if( rightPosition >= this.areaSize.width ) {
                   // width need to increase
@@ -246,17 +242,78 @@
               }
             }
 
-            console.log(left, top);
-
-            this.updateCoordsForLines({$draggedItem, left, top});
-
-            this.updateCoords([left, top]);
+            this.updateCoordsForLines($draggedItem, left, top);
 
           }
 
         }
       }
     }
+
+    updateCoordsForLines($draggedItem, left, top) {
+
+      this.setActiveTargetId(-1);
+
+      _.map(this.items, (item) => {
+
+        // if dragged item is ConnectorClone
+        if ( _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone' ) {
+
+          // todo: 70 is bad, but it fast...
+          const isActive = (
+            item.component === 'BlockBase' &&
+            item.id !== this.dd.id &&
+            item.x + 70 < left + this.closest &&
+            item.x + 70 > left - this.closest &&
+            item.y < top + this.closest &&
+            item.y > top - this.closest
+          );
+
+          if (isActive) {
+
+            console.info('input connector must be activated', item.id);
+            // todo: if active, set target id to dd
+            // todo: fix sticky distance
+
+            this.setActiveTargetId(item.id);
+
+            left = item.x - this.connectorWidth / 2 + 70;
+            top = item.y - this.connectorWidth / 2 + 1;
+          }
+
+        }
+
+        if( item.outputs ) {
+
+          _.map( item.outputs, (connector, cIdx) => {
+
+            // $draggedItem updates now properly
+            if (item.id === this.dd.id) {
+
+              if ( ! _.isEmpty($draggedItem.$refs) ) {
+
+                let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
+                let coords = $beginConnector.getLineBeginCoords();
+
+                if ($beginConnector) {
+                  connector.coords = coords;
+                }
+              }
+
+            }
+            else if (connector.target_block_id === this.dd.id) {
+              connector.targetCoords = $draggedItem.getLineEndCoords();
+            }
+
+          });
+        }
+
+      });
+
+      this.updateCoords([left, top]);
+
+    }
+
 
     mouseupHandler() {
 

@@ -33,6 +33,7 @@ export default class Block extends VuexModule {
     newIdx: -1,
     targetId: -1,
     sourcePath: [],
+    someoneActive: false,
   };
 
   area = {
@@ -50,10 +51,6 @@ export default class Block extends VuexModule {
     top: 0,
     left: 0,
   };
-
-  closest = 20;
-
-  connectorWidth = 16;
 
   @Action
   async saveBlockData(data) {
@@ -86,71 +83,6 @@ export default class Block extends VuexModule {
   }
 
   @Mutation
-  updateCoordsForLines(payload) {
-
-    let {$draggedItem, left, top} = payload;
-
-    _.map(this.items, (item) => {
-
-      if( item.outputs ) {
-
-        _.map( item.outputs, (connector, cIdx) => {
-
-          // $draggedItem updates now properly
-          if (item.id === this.dd.id) {
-
-            if ( ! _.isEmpty($draggedItem.$refs) ) {
-
-              let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
-              let coords = $beginConnector.getLineBeginCoords();
-
-              if ($beginConnector) {
-                connector.coords = coords;
-              }
-            }
-
-          }
-          else if (connector.target_block_id === this.dd.id) {
-            connector.targetCoords = $draggedItem.getLineEndCoords();
-          }
-          // todo: check if target item not itself
-          else {
-
-            // todo: 70 is bad, but it fast...
-            const isActive = (
-              _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone' &&
-              item.component === 'BlockBase' &&
-              item.x + 70 < left + this.closest &&
-              item.x + 70 > left - this.closest &&
-              item.y < top + this.closest &&
-              item.y > top - this.closest
-            );
-
-            item.active = isActive;
-            if (isActive) {
-              // TODO: if active, set target id to dd
-              this.setActiveTargetId(item.id);
-
-              left = item.x - this.connectorWidth / 2 + 70;
-              top = item.y - this.connectorWidth / 2 + 1;
-            }
-          }
-
-        });
-      }
-
-    });
-
-  }
-
-  @Mutation
-  setActiveTargetId( id: number ) {
-    if( id > 0 ) {
-      this.dd.targetId = id;
-    }
-  }
-
-  @Mutation
   setBeginLineCoords( payload ) {
 
     let { itemId, connectorId, coords } = payload;
@@ -162,6 +94,12 @@ export default class Block extends VuexModule {
       }
     });
 
+  }
+
+  @Mutation
+  setActiveTargetId( id: number ) {
+    console.log('setActiveTargetId ' + id);
+    this.dd.targetId = id;
   }
 
   @Mutation
