@@ -261,8 +261,8 @@
 
           // todo: 70 is bad, but it fast...
           const isActive = (
+            this.dd.sourcePath[0] !== item.id &&
             item.component === 'BlockBase' &&
-            item.id !== this.dd.id &&
             item.x + 70 < left + this.closest &&
             item.x + 70 > left - this.closest &&
             item.y < top + this.closest &&
@@ -278,6 +278,11 @@
 
             left = item.x - this.connectorWidth / 2 + 70;
             top = item.y - this.connectorWidth / 2 + 1;
+
+            this.$nextTick(() => {
+              this.lines = this.makeLinesFromItems();
+            });
+
           }
 
         }
@@ -307,10 +312,6 @@
           });
         }
 
-      });
-
-      this.$nextTick(() => {
-        this.lines = this.makeLinesFromItems();
       });
 
       this.updateCoords([left, top]);
@@ -377,6 +378,10 @@
         }
 
         _.remove( this.items, (item: any) => item.id === this.dd.id );
+
+        this.$nextTick(() => {
+          this.lines = this.makeLinesFromItems();
+        });
 
       }
 
