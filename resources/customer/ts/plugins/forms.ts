@@ -35,12 +35,10 @@ export default {
 
           sendForm () {
 
-            // let block : any = _.find(store.state.Block.items, item => item.id === this.formData.id);
-            // block.name = this.formData.name;
+            if( 'buttons' in this.formData ) {
 
-            if( 'outputs' in this.formData ) {
-              this.formData.buttons.forEach(function (item, index) {
-                item.sort_order_id = index;
+              this.formData.buttons.forEach(function (button, index) {
+                button.sort_order_id = index;
               });
             }
 

@@ -21,7 +21,6 @@ var Block = /** @class */ (function (_super) {
             newIdx: -1,
             targetId: -1,
             sourcePath: [],
-            someoneActive: false,
         };
         _this.area = {
             boundaries: {
@@ -64,7 +63,7 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.updateBlock = function (blockData) {
         var data = blockData.data;
         delete data['bot'];
-        console.log(data);
+        // console.log(data);
         // data.id - stores blockId
         var index = _.findIndex(this.items, { id: data.id });
         this.items.splice(index, 1, data);

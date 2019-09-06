@@ -33,7 +33,6 @@ export default class Block extends VuexModule {
     newIdx: -1,
     targetId: -1,
     sourcePath: [],
-    someoneActive: false,
   };
 
   area = {
@@ -75,7 +74,7 @@ export default class Block extends VuexModule {
     let data = blockData.data;
     delete data['bot'];
 
-    console.log(data);
+    // console.log(data);
 
     // data.id - stores blockId
     let index = _.findIndex(this.items, {id: data.id});

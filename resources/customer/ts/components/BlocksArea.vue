@@ -271,7 +271,6 @@
 
           if (isActive) {
 
-            console.info('input connector must be activated', item.id);
             // todo: if active, set target id to dd
             // todo: fix sticky distance
 
