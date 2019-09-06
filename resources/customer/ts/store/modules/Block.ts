@@ -97,7 +97,6 @@ export default class Block extends VuexModule {
 
   @Mutation
   setActiveTargetId( id: number ) {
-    console.log('setActiveTargetId ' + id);
     this.dd.targetId = id;
   }
 

@@ -292,9 +292,9 @@
               if ( ! _.isEmpty($draggedItem.$refs) ) {
 
                 let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
-                let coords = $beginConnector.getLineBeginCoords();
 
                 if ($beginConnector) {
+                  let coords = $beginConnector.getLineBeginCoords();
                   connector.coords = coords;
                 }
               }
@@ -307,6 +307,10 @@
           });
         }
 
+      });
+
+      this.$nextTick(() => {
+        this.lines = this.makeLinesFromItems();
       });
 
       this.updateCoords([left, top]);
@@ -373,10 +377,6 @@
         }
 
         _.remove( this.items, (item: any) => item.id === this.dd.id );
-
-        this.$nextTick(() => {
-          this.lines = this.makeLinesFromItems();
-        });
 
       }
 

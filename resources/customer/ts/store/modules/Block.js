@@ -78,7 +78,6 @@ var Block = /** @class */ (function (_super) {
         });
     };
     Block.prototype.setActiveTargetId = function (id) {
-        console.log('setActiveTargetId ' + id);
         this.dd.targetId = id;
     };
     Block.prototype.updateEndLineCoords = function (payload) {
