@@ -53,6 +53,7 @@
     @BlockModule.State dd;
     @BlockModule.State area;
     @BlockModule.State scrollPosition;
+    @BlockModule.State toUpdateCoordsBlockId;
 
     @BlockModule.Mutation setAreaBoundaries;
     @BlockModule.Mutation dragDropDataReset;
@@ -60,6 +61,7 @@
     @BlockModule.Mutation updateEndLineCoords;
     @BlockModule.Mutation setActiveTargetId;
     @BlockModule.Mutation setScrollOffset;
+    @BlockModule.Mutation resetToUpdateCoordsBlockId;
 
     lines = [];
 
@@ -122,6 +124,60 @@
       this.lines = this.makeLinesFromItems();
     }
 
+    @Watch('toUpdateCoordsBlockId')
+    updateCoordsForBlock(blockId, oldId) {
+
+      console.info(oldId, blockId);
+
+      if (blockId > 0) {
+        // todo: get block, foreach his output connectors and update begin line coordinates
+
+        let block = _.find(this.items, ['id', blockId]);
+
+        // getting dragging item
+        let $sourceItem = _.find(this.$refs.items, (item: any) => {
+          if( item && item.itemData ) {
+            return item.itemData.id === blockId;
+          }
+        });
+
+        if( block.outputs ) {
+
+          block.outputs = _.sortBy( block.outputs, 'sort_order_id');
+
+          console.log(block.outputs);
+
+          _.map( block.outputs, (connector, cIdx) => {
+
+            if ( ! _.isEmpty($sourceItem.$refs) ) {
+              let $beginConnector = $sourceItem.$refs['outputs'][cIdx];
+
+              if ($beginConnector) {
+                let coords = $beginConnector.getLineBeginCoords();
+                connector.coords = coords;
+                console.log(coords);
+                if (connector.target_block_id > 0) {
+                  let $targetItem = _.find(this.$refs.items, (item: any) => {
+                    if( item && item.itemData ) {
+                      return item.itemData.id === connector.target_block_id;
+                    }
+                  });
+                  connector.targetCoords = $targetItem.getLineEndCoords();
+
+                  this.lines = this.makeLinesFromItems();
+
+                  this.resetToUpdateCoordsBlockId();
+
+                }
+              }
+            }
+
+          });
+        }
+      }
+
+    }
+
     handleScroll () {
 
       // calculate scroll position
@@ -134,18 +190,22 @@
 
     makeLinesFromItems() {
       let lines = [];
-
       _.map( this.items, item => {
         _.map( item.outputs, connector => {
-          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
+          if( connector.target_block_id &&
+            connector.coords &&
+            connector.coords.left &&
+            connector.coords.top &&
+            connector.targetCoords ) {
+
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,
             });
+
           }
         });
       });
-
       return lines;
     }
 
@@ -289,13 +349,14 @@
 
         if( item.outputs ) {
 
+          item.outputs = _.sortBy(item.outputs, 'sort_order_id');
+
           _.map( item.outputs, (connector, cIdx) => {
 
             // $draggedItem updates now properly
             if (item.id === this.dd.id) {
 
               if ( ! _.isEmpty($draggedItem.$refs) ) {
-
                 let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
 
                 if ($beginConnector) {

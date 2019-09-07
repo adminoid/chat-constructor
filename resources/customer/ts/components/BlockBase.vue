@@ -66,8 +66,7 @@
         type: 'editBlock', // need to pass through components, for fill form sub-component
       }, {
         blockId: this.itemData.id,
-      })
-        .catch( e => { console.error(e.message) } );
+      }).catch( e => console.error(e.message) );
     }
 
     removeBlock () {

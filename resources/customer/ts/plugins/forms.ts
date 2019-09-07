@@ -1,7 +1,6 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
 import store from '../store'
-import _ from 'lodash'
 
 export default {
 

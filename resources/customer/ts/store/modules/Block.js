@@ -34,6 +34,7 @@ var Block = /** @class */ (function (_super) {
             top: 0,
             left: 0,
         };
+        _this.toUpdateCoordsBlockId = -1;
         return _this;
     }
     Block.prototype.saveBlockData = function (data) {
@@ -67,6 +68,10 @@ var Block = /** @class */ (function (_super) {
         // data.id - stores blockId
         var index = _.findIndex(this.items, { id: data.id });
         this.items.splice(index, 1, data);
+        this.toUpdateCoordsBlockId = data.id;
+    };
+    Block.prototype.resetToUpdateCoordsBlockId = function () {
+        this.toUpdateCoordsBlockId = -1;
     };
     Block.prototype.setBeginLineCoords = function (payload) {
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
@@ -218,6 +223,9 @@ var Block = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateBlock", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "resetToUpdateCoordsBlockId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setBeginLineCoords", null);

@@ -51,6 +51,8 @@ export default class Block extends VuexModule {
     left: 0,
   };
 
+  toUpdateCoordsBlockId = -1;
+
   @Action
   async saveBlockData(data) {
     return axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
@@ -79,6 +81,13 @@ export default class Block extends VuexModule {
     // data.id - stores blockId
     let index = _.findIndex(this.items, {id: data.id});
     this.items.splice(index, 1, data);
+
+    this.toUpdateCoordsBlockId = data.id;
+  }
+
+  @Mutation
+  resetToUpdateCoordsBlockId() {
+    this.toUpdateCoordsBlockId = -1;
   }
 
   @Mutation
