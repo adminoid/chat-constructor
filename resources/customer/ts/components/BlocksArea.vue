@@ -1,6 +1,8 @@
 <template lang="pug">
   #frame-drop-area(@scroll="handleScroll" ref="frame")
-    pre#debugger {{ dd }}
+    #debugger
+      pre {{ dd }}
+      pre {{ toUpdateCoordsBlockId }}
     #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler" ref="area" :style="areaSizePx")
       drag-item-wrapper(
         v-for="(item, index) in items"
@@ -127,12 +129,12 @@
     @Watch('toUpdateCoordsBlockId')
     updateCoordsForBlock(blockId, oldId) {
 
-      console.info(oldId, blockId);
-
       if (blockId > 0) {
         // todo: get block, foreach his output connectors and update begin line coordinates
 
         let block = _.find(this.items, ['id', blockId]);
+
+        console.info(oldId, blockId);
 
         // getting dragging item
         let $sourceItem = _.find(this.$refs.items, (item: any) => {
@@ -155,7 +157,6 @@
               if ($beginConnector) {
                 let coords = $beginConnector.getLineBeginCoords();
                 connector.coords = coords;
-                console.log(coords);
                 if (connector.target_block_id > 0) {
                   let $targetItem = _.find(this.$refs.items, (item: any) => {
                     if( item && item.itemData ) {
@@ -166,9 +167,13 @@
 
                   this.lines = this.makeLinesFromItems();
 
-                  this.resetToUpdateCoordsBlockId();
-
                 }
+
+
+                console.info('reset toUpdateCoordsBlockId here');
+
+                this.resetToUpdateCoordsBlockId();
+
               }
             }
 
@@ -464,7 +469,7 @@
   #drop-area
     position: relative
     z-index: 0
-  pre#debugger
+  #debugger
     position: fixed
     top: 90px
     right: 30px
