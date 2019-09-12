@@ -74,8 +74,13 @@ class BlocksController extends Controller
         $block = new Block($blockDataFull);
         $block->save();
 
-        $output = new Output();
+        $output = Output::create(['sort_order_id' => 0]);
+        $output->outputable()->associate($outputText = OutputText::create());
         $block->outputs()->save($output);
+
+
+//        $output = new Output();
+//        $block->outputs()->save($output);
 
         $block->client_input_type()->associate(ClientInputType::find(2));
         $block->save();
