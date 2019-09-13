@@ -51,6 +51,8 @@ export default class Block extends VuexModule {
     left: 0,
   };
 
+  toUpdateCoordsBlockId = -1;
+
   @Action
   async saveBlockData(data) {
     return axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
@@ -65,11 +67,27 @@ export default class Block extends VuexModule {
     this.items = blocks.data;
   }
 
+  @Action({ commit: 'updateBlock', rawError: true })
+  async fetchBlock(blockId) {
+    return axios.get(`private/block-surface/${blockId}`);
+  }
   @Mutation
-  setActiveTargetId( id: number ) {
-    if( id > 0 ) {
-      this.dd.targetId = id;
-    }
+  updateBlock( blockData ) {
+    let data = blockData.data;
+    delete data['bot'];
+
+    // console.log(data);
+
+    // data.id - stores blockId
+    let index = _.findIndex(this.items, {id: data.id});
+    this.items.splice(index, 1, data);
+
+    this.toUpdateCoordsBlockId = data.id;
+  }
+
+  @Mutation
+  resetToUpdateCoordsBlockId() {
+    this.toUpdateCoordsBlockId = -1;
   }
 
   @Mutation
@@ -87,19 +105,16 @@ export default class Block extends VuexModule {
   }
 
   @Mutation
+  setActiveTargetId( id: number ) {
+    this.dd.targetId = id;
+  }
+
+  @Mutation
   updateEndLineCoords( payload ) {
-
-    let { itemId, x, y, coords } = payload;
-
-    if( coords ) {
-      x = coords.left;
-      y = coords.top;
-    }
-
     _.map( this.items, (item) => {
       _.map( item.outputs, connector => {
-        if ( connector.target_block_id === itemId ) {
-          connector.targetCoords = {left: x, top: y};
+        if ( connector.target_block_id === payload.itemId ) {
+          connector.targetCoords = {left: payload.x, top: payload.y};
         }
       });
     });

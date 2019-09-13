@@ -23,10 +23,11 @@ var EndLine = /** @class */ (function (_super) {
         };
     };
     EndLine.prototype.mounted = function () {
-        var id = this.id || this.itemData.id;
+        var id = this.id || this.itemData.id, coords = this.getLineEndCoords();
         store.commit('Block/updateEndLineCoords', {
             itemId: id,
-            coords: this.getLineEndCoords(),
+            x: coords.left,
+            y: coords.top,
         });
     };
     EndLine = tslib_1.__decorate([

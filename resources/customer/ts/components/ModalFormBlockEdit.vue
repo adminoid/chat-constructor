@@ -30,11 +30,11 @@
         .form-group
           label(for="select-block-type") Тип блока
           select#select-block-type.form-control(v-model="subFormData.client_input_type" @change="onChange")
-            option(v-for="subForm in subFormList" :value="{id: subForm.id, name: subForm.name, component: subForm.component}") {{ subForm.id }} - {{ subForm.name }} - {{ subForm.component }}
+            option(v-for="subForm in subFormList" :value="{id: subForm.id, name: subForm.name, component: subForm.component}") {{ subForm.name }}
 
       hr
 
-      component(v-if="subFormData.client_input_type.component" :is="subFormData.client_input_type.component")
+      component(v-if="subFormData.client_input_type.component" :is="subFormData.client_input_type.component" :state="state")
 
 </template>
 
@@ -92,10 +92,6 @@
     onChange () {
       // save block type to server
       this.subFormData.client_input_type_id = this.subFormData.client_input_type.id;
-      axios.post('private/save-client-input-types', {
-        id: this.subFormData.client_input_type_id,
-        block_id: this.state.params.blockId,
-      });
     }
 
     addMessage () {

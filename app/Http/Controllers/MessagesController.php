@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Message;
-use Illuminate\Http\Request;
-use App\Block;
 use Carbon\Carbon;
 
 class MessagesController extends Controller

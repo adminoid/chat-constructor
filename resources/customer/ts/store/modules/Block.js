@@ -34,6 +34,7 @@ var Block = /** @class */ (function (_super) {
             top: 0,
             left: 0,
         };
+        _this.toUpdateCoordsBlockId = -1;
         return _this;
     }
     Block.prototype.saveBlockData = function (data) {
@@ -53,10 +54,24 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.updateBlocks = function (blocks) {
         this.items = blocks.data;
     };
-    Block.prototype.setActiveTargetId = function (id) {
-        if (id > 0) {
-            this.dd.targetId = id;
-        }
+    Block.prototype.fetchBlock = function (blockId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                return [2 /*return*/, axios.get("private/block-surface/" + blockId)];
+            });
+        });
+    };
+    Block.prototype.updateBlock = function (blockData) {
+        var data = blockData.data;
+        delete data['bot'];
+        // console.log(data);
+        // data.id - stores blockId
+        var index = _.findIndex(this.items, { id: data.id });
+        this.items.splice(index, 1, data);
+        this.toUpdateCoordsBlockId = data.id;
+    };
+    Block.prototype.resetToUpdateCoordsBlockId = function () {
+        this.toUpdateCoordsBlockId = -1;
     };
     Block.prototype.setBeginLineCoords = function (payload) {
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
@@ -67,16 +82,14 @@ var Block = /** @class */ (function (_super) {
             }
         });
     };
+    Block.prototype.setActiveTargetId = function (id) {
+        this.dd.targetId = id;
+    };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var itemId = payload.itemId, x = payload.x, y = payload.y, coords = payload.coords;
-        if (coords) {
-            x = coords.left;
-            y = coords.top;
-        }
         _.map(this.items, function (item) {
             _.map(item.outputs, function (connector) {
-                if (connector.target_block_id === itemId) {
-                    connector.targetCoords = { left: x, top: y };
+                if (connector.target_block_id === payload.itemId) {
+                    connector.targetCoords = { left: payload.x, top: payload.y };
                 }
             });
         });
@@ -205,11 +218,20 @@ var Block = /** @class */ (function (_super) {
         Mutation
     ], Block.prototype, "updateBlocks", null);
     tslib_1.__decorate([
+        Action({ commit: 'updateBlock', rawError: true })
+    ], Block.prototype, "fetchBlock", null);
+    tslib_1.__decorate([
         Mutation
-    ], Block.prototype, "setActiveTargetId", null);
+    ], Block.prototype, "updateBlock", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "resetToUpdateCoordsBlockId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setBeginLineCoords", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "setActiveTargetId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateEndLineCoords", null);

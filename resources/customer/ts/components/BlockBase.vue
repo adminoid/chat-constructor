@@ -13,7 +13,7 @@
     .base-block__footer
       .outputs
         connector-output(
-          v-for="(connector, index) in itemData.outputs"
+          v-for="(connector, index) in sortedOutputs"
           :key="index"
           :blockId="itemData.id"
           :connectorData="connector"
@@ -35,6 +35,7 @@
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput.vue'
+  import _ from 'lodash'
 
   const BlockModule = namespace('Block');
 
@@ -65,12 +66,15 @@
         type: 'editBlock', // need to pass through components, for fill form sub-component
       }, {
         blockId: this.itemData.id,
-      })
-        .catch( e => { console.error(e.message) } );
+      }).catch( e => console.error(e.message) );
     }
 
     removeBlock () {
       console.info('removeBlock');
+    }
+
+    get sortedOutputs () {
+      return _.sortBy(this.itemData.outputs, 'sort_order_id');
     }
 
   }

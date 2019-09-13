@@ -6,7 +6,8 @@
     "strictFunctionTypes": false,
     "lib": ["es6", "dom"],
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "resources/customer/ts/@types"
     ],
     "sourceMap": true,
     "strict": true,

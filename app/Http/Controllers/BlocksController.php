@@ -6,6 +6,8 @@ use App\Bot;
 use App\ClientInputType;
 use App\Message;
 use App\Output;
+use App\OutputButton;
+use App\OutputText;
 use Illuminate\Http\Request;
 use App\Block;
 use Illuminate\Support\Facades\Validator;
@@ -72,8 +74,13 @@ class BlocksController extends Controller
         $block = new Block($blockDataFull);
         $block->save();
 
-        $output = new Output();
+        $output = Output::create(['sort_order_id' => 0]);
+        $output->outputable()->associate($outputText = OutputText::create());
         $block->outputs()->save($output);
+
+
+//        $output = new Output();
+//        $block->outputs()->save($output);
 
         $block->client_input_type()->associate(ClientInputType::find(2));
         $block->save();
@@ -158,16 +165,21 @@ class BlocksController extends Controller
 
     }
 
+    public function getBlockSurfaceData($blockId) : string
+    {
+        $block = Block::with('outputs')->findOrFail($blockId);
+        $this->authorize('view', $block);
+        return $block->toJson();
+    }
+
     public function saveExtendedBlockData(Request $request) : void
     {
 
-        $blockId = $blockData = $request->get('id');
+        $blockId = $request->get('id');
         $block = Block::findOrFail($blockId);
+        $blockData = $request->only(['name', 'client_input_type_id']);
 
         $this->authorize('update', $block);
-
-        $blockData = $request->only(['name', 'client_input_type_id']);
-        $block->update($blockData);
 
         // save related messages
         $messagesData = $request->get('messages');
@@ -175,13 +187,86 @@ class BlocksController extends Controller
         foreach ($messagesData as $value) {
             $messagesDataForUpdate[] = array_diff_key($value, array_flip(['created_at', 'updated_at']));
         }
-
-        // save messages
         foreach ($messagesDataForUpdate as $value) {
             $messageId = $value['id'];
             unset($value['id']);
 
             Message::where('id', $messageId)->update($value);
+        }
+
+        if( $block->client_input_type_id !== $blockData['client_input_type_id'] ) {
+            // remove exists outputs
+            foreach ($block->outputs()->get() as $output) {
+                $output->delete();
+            }
+        }
+
+        $block->update($blockData);
+
+        // save outputs
+        // only for buttons
+        if( $blockData['client_input_type_id'] === 1 ) {
+
+            // get the identifiers of $rawButtons, delete all identifiers in the database that are not in the identifiers of $rawButtons
+            $rawButtons = $request->get('buttons');
+            if (count($rawButtons) > 0) {
+                // stores exists ids in db
+                $rawButtonIds = array_column($rawButtons, 'id');
+                while(($key = array_search(0, $rawButtonIds)) !== false) {
+                    unset($rawButtonIds[$key]);
+                }
+
+                if( count($rawButtonIds) > 0 ) {
+                    $block->outputs()->whereNotIn('id', $rawButtonIds)->delete();
+                }
+
+            }
+
+            foreach ($rawButtons as $rawButton) {
+
+                if ($rawButton['id'] > 0) {
+                    $output = Output::findOrFail($rawButton['id']);
+                    $output->sort_order_id = $rawButton['sort_order_id'];
+                    $output->save();
+                    $outputable = $output->outputable;
+                    $outputable->text = $rawButton['text'];
+                    $outputable->save();
+                } else {
+
+                    // get maximum sort_order_id of block related outputs
+                    $maxSortOrderId = $block->outputs()->max('sort_order_id');
+
+                    // create outputs with outputButtons for current block
+                    $output = Output::create([
+                        'sort_order_id' => ($maxSortOrderId === null) ? 0 : $maxSortOrderId + 1,
+                    ]);
+
+                    // todo: Validate (custom) text of button
+                    $outputButton = OutputButton::create([
+                        'text' => $rawButton['text'],
+                    ]);
+
+                    $output->outputable()->associate($outputButton);
+                    $block->outputs()->save($output);
+                }
+
+            }
+
+        }
+        // only for texts
+        elseif( $request->get('client_input_type_id') === 2) {
+
+            // todo: check if output text exist, then update ot create
+
+            // create output with outputText for current block
+            $output = Output::create([
+                'sort_order_id' => 0,
+            ]);
+
+            // todo: Validate (custom) text of button
+            $outputText = OutputText::create();
+            $output->outputable()->associate($outputText);
+            $block->outputs()->save($output);
         }
 
     }

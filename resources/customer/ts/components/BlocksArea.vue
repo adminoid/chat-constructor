@@ -1,6 +1,8 @@
 <template lang="pug">
   #frame-drop-area(@scroll="handleScroll" ref="frame")
-    pre#debugger {{ dd }}
+    #debugger
+      pre {{ dd }}
+      pre {{ toUpdateCoordsBlockId }}
     #drop-area(@mousemove.prev="mousemoveHandler" @mouseup="mouseupHandler" ref="area" :style="areaSizePx")
       drag-item-wrapper(
         v-for="(item, index) in items"
@@ -53,6 +55,7 @@
     @BlockModule.State dd;
     @BlockModule.State area;
     @BlockModule.State scrollPosition;
+    @BlockModule.State toUpdateCoordsBlockId;
 
     @BlockModule.Mutation setAreaBoundaries;
     @BlockModule.Mutation dragDropDataReset;
@@ -60,12 +63,9 @@
     @BlockModule.Mutation updateEndLineCoords;
     @BlockModule.Mutation setActiveTargetId;
     @BlockModule.Mutation setScrollOffset;
+    @BlockModule.Mutation resetToUpdateCoordsBlockId;
 
     lines = [];
-
-    closest = 20;
-
-    connectorWidth = 16;
 
     botId;
 
@@ -76,7 +76,9 @@
       height: 0,
     };
 
-    isItemsChanged = false;
+    closest = 20;
+
+    connectorWidth = 16;
 
     created () {
       this.botId = +this.$route.params.botId;
@@ -97,7 +99,6 @@
       this.areaSize.width = maxX + 200;
       this.areaSize.height = maxY + 200;
       this.lines = this.makeLinesFromItems();
-      this.isItemsChanged = true;
     }
 
     setAreaBorders() {
@@ -122,7 +123,64 @@
 
     @Watch('items', { deep: true })
     onItemsChanged() {
-      if (this.isItemsChanged) this.lines = this.makeLinesFromItems();
+      this.lines = this.makeLinesFromItems();
+    }
+
+    @Watch('toUpdateCoordsBlockId')
+    updateCoordsForBlock(blockId, oldId) {
+
+      if (blockId > 0) {
+        // todo: get block, foreach his output connectors and update begin line coordinates
+
+        let block = _.find(this.items, ['id', blockId]);
+
+        console.info(oldId, blockId);
+
+        // getting dragging item
+        let $sourceItem = _.find(this.$refs.items, (item: any) => {
+          if( item && item.itemData ) {
+            return item.itemData.id === blockId;
+          }
+        });
+
+        if( block.outputs ) {
+
+          block.outputs = _.sortBy( block.outputs, 'sort_order_id');
+
+          console.log(block.outputs);
+
+          _.map( block.outputs, (connector, cIdx) => {
+
+            if ( ! _.isEmpty($sourceItem.$refs) ) {
+              let $beginConnector = $sourceItem.$refs['outputs'][cIdx];
+
+              if ($beginConnector) {
+                let coords = $beginConnector.getLineBeginCoords();
+                connector.coords = coords;
+                if (connector.target_block_id > 0) {
+                  let $targetItem = _.find(this.$refs.items, (item: any) => {
+                    if( item && item.itemData ) {
+                      return item.itemData.id === connector.target_block_id;
+                    }
+                  });
+                  connector.targetCoords = $targetItem.getLineEndCoords();
+
+                  this.lines = this.makeLinesFromItems();
+
+                }
+
+
+                console.info('reset toUpdateCoordsBlockId here');
+
+                this.resetToUpdateCoordsBlockId();
+
+              }
+            }
+
+          });
+        }
+      }
+
     }
 
     handleScroll () {
@@ -137,74 +195,92 @@
 
     makeLinesFromItems() {
       let lines = [];
-
       _.map( this.items, item => {
         _.map( item.outputs, connector => {
-          if( connector.target_block_id && connector.coords && connector.coords.left && connector.coords.top && connector.targetCoords) {
+          if( connector.target_block_id &&
+            connector.coords &&
+            connector.coords.left &&
+            connector.coords.top &&
+            connector.targetCoords ) {
+
             lines.push({
               begin: connector.coords,
               end: connector.targetCoords,
             });
+
           }
         });
       });
-
       return lines;
+    }
+
+    getMovingPositions(clientX, clientY) {
+
+      let elementBorders = {
+        left: clientX - this.dd.elementOffset.left,
+        top: clientY - this.dd.elementOffset.top,
+        right: clientX + this.dd.elementOffset.right,
+        bottom: clientY + this.dd.elementOffset.bottom,
+      };
+
+      let left = +Number(elementBorders.left - this.area.boundaries.left + this.scrollPosition.left),
+        top = +Number(elementBorders.top - this.area.boundaries.top + this.scrollPosition.top);
+
+      if( left < 0 ) {
+        left = 0;
+      }
+
+      if( top < 0 ) {
+        top = 0;
+      }
+
+      return {
+        left: left,
+        top: top,
+        elementBorders: elementBorders,
+      }
+
     }
 
     mousemoveHandler(e) {
 
       if (this.dd.dragging) {
 
-        let left = +Number(e.clientX - this.area.boundaries.left - this.dd.elementOffset.left + this.scrollPosition.left),
-          top = +Number(e.clientY - this.area.boundaries.top - this.dd.elementOffset.top + this.scrollPosition.top);
+        let {left, top, elementBorders} = this.getMovingPositions(e.clientX, e.clientY);
 
-        if( left < 0 ) {
-          left = 0;
-        }
-
-        if( top < 0 ) {
-          top = 0;
-        }
-
-        // Update all begin and end coordinates who concern to this item
         if( this.dd.id >= 0 ) {
 
-          let item = _.find(this.items, ['id', this.dd.id]),
-            isNewLine = item.component === 'ConnectorClone';
-
-          let $beginItem = _.find(this.$refs.items, (item: any) => {
+          // getting dragging item
+          let $draggedItem = _.find(this.$refs.items, (item: any) => {
             if( item && item.itemData ) {
               return item.itemData.id === this.dd.id;
             }
-            return false;
           });
 
-          if( $beginItem ) {
+          if( $draggedItem ) {
 
-            let bounding = $beginItem.$el.getBoundingClientRect(),
-              rightPosition = left + bounding.width + 10,
-              bottomPosition = top + bounding.height + 10 + 10;
-
-            if( e.clientX - this.dd.elementOffset.left < this.area.boundaries.left ) {
+            if( elementBorders.left < this.area.boundaries.left ) {
               // touch left of visible area
               if( left > 0 ) {
                 this.$refs.frame.scrollLeft -= 10;
               }
             }
 
-            if( e.clientY - this.dd.elementOffset.top < this.area.boundaries.top ) {
+            if( elementBorders.top < this.area.boundaries.top ) {
               // touch top of visible area
               if( top > 0 ) {
                 this.$refs.frame.scrollTop -= 10;
               }
             }
 
-            if( e.clientX + this.dd.elementOffset.right > this.area.boundaries.right ) {
-              // left = ( this.area.boundaries.right - this.area.boundaries.left ) - this.dd.elementOffset.right;
+            let bounding = $draggedItem.$el.getBoundingClientRect(),
+              rightPosition = left + bounding.width + 10,
+              bottomPosition = top + bounding.height + 10 + 10;
+
+            if( elementBorders.right > this.area.boundaries.right ) {
 
               // touch right of visible area
-              if( left > 0 ) { // todo: if left less than area height
+              if( left > 0 ) { // if left less than area height
                 // check for increase width
                 if( rightPosition >= this.areaSize.width ) {
                   // width need to increase
@@ -216,8 +292,7 @@
 
             }
 
-            if( e.clientY + this.dd.elementOffset.bottom > this.area.boundaries.bottom ) {
-              // top = ( this.area.boundaries.bottom - this.area.boundaries.top ) - this.dd.elementOffset.bottom;
+            if( elementBorders.bottom > this.area.boundaries.bottom ) {
 
               // touch bottom of visible area
               if( top > 0 ) { // todo: if top less than area width
@@ -232,69 +307,83 @@
               }
             }
 
-            // update sourceCoords (BlockModule\updateEndLineCoords)
-            let coords = $beginItem.getLineEndCoords();
+            this.updateCoordsForLines($draggedItem, left, top);
 
-            this.updateEndLineCoords({
-              itemId: this.dd.id,
-              x: coords.left,
-              y: coords.top,
-            });
-
-            _.map(this.items, (item) => {
-
-              // TODO: 76 is bad, but it fast...
-              const isActive = (
-                isNewLine && item.component === 'BlockBase' &&
-                item.x + 70 < left + this.closest &&
-                item.x + 70 > left - this.closest &&
-                item.y < top + this.closest &&
-                item.y > top - this.closest
-              );
-
-              if( item.outputs ) {
-                _.map( item.outputs, (connector, cIdx) => {
-
-                  // $beginItem updates now properly
-                  if (item.id === this.dd.id) {
-
-                    if ( ! _.isEmpty($beginItem.$refs) ) {
-
-                      let $beginConnector = $beginItem.$refs['outputs'][cIdx];
-                      let coords = $beginConnector.getLineBeginCoords();
-
-                      if ($beginConnector) {
-                        connector.coords = coords;
-                      }
-                    }
-
-                  }
-
-                  if (connector.target_block_id === this.dd.id) {
-                    connector.targetCoords = $beginItem.getLineEndCoords();
-                  }
-                  // check if target item not itself
-                  else {
-                    item.active = isActive;
-                    if (isActive) {
-                      // TODO: if active, set target id to dd
-                      this.setActiveTargetId(item.id);
-
-                      left = item.x - this.connectorWidth / 2 + 70;
-                      top = item.y - this.connectorWidth / 2 + 1;
-                    }
-                  }
-
-                });
-              }
-
-              this.updateCoords([left, top]);
-
-            });
           }
+
         }
       }
     }
+
+    updateCoordsForLines($draggedItem, left, top) {
+
+      this.setActiveTargetId(-1);
+
+      _.map(this.items, (item) => {
+
+        // if dragged item is ConnectorClone
+        if ( _.find(this.items, ['id', this.dd.id]).component === 'ConnectorClone' ) {
+
+          // todo: 70 is bad, but it fast...
+          const isActive = (
+            this.dd.sourcePath[0] !== item.id &&
+            item.component === 'BlockBase' &&
+            item.x + 70 < left + this.closest &&
+            item.x + 70 > left - this.closest &&
+            item.y < top + this.closest &&
+            item.y > top - this.closest
+          );
+
+          if (isActive) {
+
+            // todo: if active, set target id to dd
+            // todo: fix sticky distance
+
+            this.setActiveTargetId(item.id);
+
+            left = item.x - this.connectorWidth / 2 + 70;
+            top = item.y - this.connectorWidth / 2 + 1;
+
+            this.$nextTick(() => {
+              this.lines = this.makeLinesFromItems();
+            });
+
+          }
+
+        }
+
+        if( item.outputs ) {
+
+          item.outputs = _.sortBy(item.outputs, 'sort_order_id');
+
+          _.map( item.outputs, (connector, cIdx) => {
+
+            // $draggedItem updates now properly
+            if (item.id === this.dd.id) {
+
+              if ( ! _.isEmpty($draggedItem.$refs) ) {
+                let $beginConnector = $draggedItem.$refs['outputs'][cIdx];
+
+                if ($beginConnector) {
+                  let coords = $beginConnector.getLineBeginCoords();
+                  connector.coords = coords;
+                }
+              }
+
+            }
+            else if (connector.target_block_id === this.dd.id) {
+              connector.targetCoords = $draggedItem.getLineEndCoords();
+            }
+
+          });
+        }
+
+      });
+
+      this.updateCoords([left, top]);
+
+    }
+
 
     mouseupHandler() {
 
@@ -380,7 +469,7 @@
   #drop-area
     position: relative
     z-index: 0
-  pre#debugger
+  #debugger
     position: fixed
     top: 90px
     right: 30px

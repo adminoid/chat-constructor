@@ -24,7 +24,7 @@ class BlocksTableSeeder extends Seeder
         $bot->each(static function ($locBot) use ($num){
             $locBot->blocks()->saveMany(
                 factory(Block::class, $num)->create()->each( function ($block) {
-                    $block->client_input_type()->associate(ClientInputType::find(1));
+                    $block->client_input_type()->associate(ClientInputType::find(2));
                     $message = Message::create([
                         'delay' => 1.0,
                         'text' => 'Вы просто напишите слова, а я буду говорить :D',

@@ -1,7 +1,6 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
 import store from '../store'
-import _ from 'lodash'
 
 export default {
 
@@ -34,11 +33,19 @@ export default {
           }
 
           sendForm () {
-            let block : any = _.find(store.state.Block.items, item => item.id === this.formData.id);
-            block.name = this.formData.name;
+
+            if( 'buttons' in this.formData ) {
+
+              this.formData.buttons.forEach(function (button, index) {
+                button.sort_order_id = index;
+              });
+            }
 
             // send formData to the backend
-            axios.post('/private/save-extended-block-data', this.formData);
+            axios.post('/private/save-extended-block-data', this.formData).then(() => {
+              // todo: run action for update this.formData.id block
+              store.dispatch('Block/fetchBlock', this.formData.id);
+            });
           }
 
           clear() {
