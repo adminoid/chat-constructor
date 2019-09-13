@@ -87,12 +87,12 @@ class BlocksController extends Controller
 
         $message = Message::create([
             'delay' => 1.1,
-            'text' => '+1 Вы просто напишите слова, а я буду говорить :D',
+            'text' => 'Вы просто напишите слова, а я буду говорить :D',
             'sort_order_id' => 1,
         ]);
         $message2 = Message::create([
             'delay' => 1.2,
-            'text' => '+2 Вы просто напишите слова, а я буду говорить :D',
+            'text' => 'Вы просто напишите слова, а я буду говорить :D',
             'sort_order_id' => 2,
         ]);
         $block->messages()->save($message);
