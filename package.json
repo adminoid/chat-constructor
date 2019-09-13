@@ -74,12 +74,13 @@
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "axios": "^0.18.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/vue-fontawesome": "^0.1.6",
+    "axios": "^0.18.1",
+    "lodash": "^4.17.15",
     "vue": "^2.6.4",
+    "vue-i18n": "^8.14.1",
     "vue-router": "^3.0.2",
     "vuedraggable": "^2.23.0",
     "vuex": "^3.1.0"
