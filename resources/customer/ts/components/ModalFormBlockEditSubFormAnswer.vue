@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  strong Блок с ответом
+  strong {{ $t('customer.block_answer') }}
 
 </template>
 

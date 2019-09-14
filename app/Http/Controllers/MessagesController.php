@@ -16,7 +16,7 @@ class MessagesController extends Controller
             'block_id' => $blockId,
             'sort_order_id' => $nextSortOrderId,
             'delay' => 1.0,
-            'text' => 'Вы просто напишите слова, а я буду говорить :D',
+            'text' => trans('customer.message_default'),
             'created_at' =>  Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

@@ -19,9 +19,13 @@ Vue.use(WindowsPlugin);
 import FormsPlugin from './plugins/forms'
 Vue.use(FormsPlugin);
 
+import i18n from './i18n';
+
 new Vue({
 
   el: '#customer-app',
+
+  i18n,
 
   render (createElement) {
     return createElement(CustomerApp);

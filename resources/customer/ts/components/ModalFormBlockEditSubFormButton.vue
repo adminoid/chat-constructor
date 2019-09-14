@@ -1,14 +1,14 @@
 <template lang="pug">
 
   div
-    h4 Блок с кнопками
+    h4 {{ $t('customer.block_buttons') }}
     ul.buttons
       draggable.buttons__wrapper(tag='ul', v-model='buttons', v-bind='dragOptions', @start='drag = true', @end='drag = false')
         transition-group(type='transition', :name="!drag ? 'flip-list' : null")
           li.buttons__item(v-for='button in buttons', :key='button.sort_order_id')
             input.btn.btn-primary(v-model="button.text")
 
-    button.btn.btn-info(type="button" @click="addButton") Добавить кнопку
+    button.btn.btn-info(type="button" @click="addButton") {{ $t('customer.add_button') }}
 
 </template>
 
@@ -32,7 +32,7 @@
     buttons = [
       {
         id: 0,
-        text: 'Текст на кнопке',
+        text: this.$t('customer.text_on_button'),
         sort_order_id: 0,
       },
     ];
@@ -78,7 +78,7 @@
     addButton() {
       this.buttons.push({
         id: 0,
-        text: 'Текст на кнопке ' + this.buttons.length,
+        text: this.$t('customer.text_on_button') + ' ' + this.buttons.length,
         sort_order_id: this.buttons.length,
       });
     }

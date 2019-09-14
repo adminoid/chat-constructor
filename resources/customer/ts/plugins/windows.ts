@@ -1,4 +1,5 @@
-import ModalWindowConfirm from '../components/ModalWindowConfirm.vue'
+import ModalWindowConfirm from '../components/ModalWindowConfirm.vue';
+import i18n from '../i18n';
 
 export default {
 
@@ -9,7 +10,7 @@ export default {
 
         class ModalData {
 
-          private titleDefault = 'Подтвердите действие';
+          private titleDefault = Vue.$t('customer.confirm_action');
 
           title = '';
           message = '';
@@ -51,6 +52,8 @@ export default {
         Modal.open(windowData);
 
         new Vue({
+          i18n,
+
           template: '<modal-window :state="modal" @confirmed="confirmedAction" @canceled="canceledAction"></modal-window>',
           components: {
             'modal-window': ModalWindowConfirm
@@ -69,7 +72,8 @@ export default {
             canceledAction () {
               // @ts-ignore
               this.modal.close();
-              reject(new Error('Операция отменена'))
+              // @ts-ignore
+              reject(new Error(this.$t('customer.errors.cancelled_operation')))
             },
           }
         }).$mount('#modal-window');

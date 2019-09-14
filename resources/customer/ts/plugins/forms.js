@@ -1,18 +1,21 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
 import store from '../store';
+import i18n from "../i18n";
 export default {
     install: function (Vue) {
         Vue.prototype.$form = function (formData, params) {
             return new Promise(function (resolve, reject) {
                 var FormData = /** @class */ (function () {
+                    // constructor(params, $t) {
                     function FormData(params) {
-                        this.titleDefault = 'Заполните данные';
+                        this.titleDefault = ''; // this.$t('customer.fill_fields')
                         this.title = '';
                         this.active = false;
                         this.clear();
                         this.active = true;
                         this.params = params;
+                        // this.$t = $t;
                     }
                     FormData.prototype.sendForm = function () {
                         var _this = this;
@@ -37,14 +40,16 @@ export default {
                         switch (newData.type) {
                             case 'editBlock':
                                 this.componentName = 'ModalFormBlockEdit';
-                                this.title = 'Редактирование блока';
+                                this.title = 'title'; //this.$t('customer.block_edit');
+                                // console.log(this.$t('customer.block_edit'));
                                 break;
                             // this is test data for next form
                             case 'editBlock1':
                                 console.info('edit block 1');
                                 break;
                             default:
-                                console.error('Ошибка: не верный тип блока');
+                                // console.error(this.$t('customer.errors.block_type'));
+                                console.error('error');
                         }
                     };
                     FormData.prototype.close = function () {
@@ -52,9 +57,11 @@ export default {
                     };
                     return FormData;
                 }());
+                // const Modal = new FormData(params, this.$t);
                 var Modal = new FormData(params);
                 Modal.init(formData);
                 new Vue({
+                    i18n: i18n,
                     template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',
                     components: {
                         'modal-form': ModalForm
@@ -75,7 +82,9 @@ export default {
                         canceledAction: function () {
                             // @ts-ignore
                             this.modal.close();
-                            reject(new Error('Операция отменена'));
+                            // @ts-ignore
+                            reject(new Error('error1'));
+                            // reject(new Error(this.$t('customer.errors.cancelled_operation')));
                         },
                     },
                 }).$mount('#modal-form');
