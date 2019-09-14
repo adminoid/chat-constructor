@@ -134,8 +134,6 @@
 
         let block = _.find(this.items, ['id', blockId]);
 
-        console.info(oldId, blockId);
-
         // getting dragging item
         let $sourceItem = _.find(this.$refs.items, (item: any) => {
           if( item && item.itemData ) {
@@ -146,8 +144,6 @@
         if( block.outputs ) {
 
           block.outputs = _.sortBy( block.outputs, 'sort_order_id');
-
-          console.log(block.outputs);
 
           _.map( block.outputs, (connector, cIdx) => {
 
@@ -168,9 +164,6 @@
                   this.lines = this.makeLinesFromItems();
 
                 }
-
-
-                console.info('reset toUpdateCoordsBlockId here');
 
                 this.resetToUpdateCoordsBlockId();
 

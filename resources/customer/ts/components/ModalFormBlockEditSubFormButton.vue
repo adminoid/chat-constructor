@@ -32,7 +32,7 @@
     buttons = [
       {
         id: 0,
-        text: this.$t('customer.text_on_button'),
+        text: '', //this.$t('customer.text_on_button'),
         sort_order_id: 0,
       },
     ];
@@ -49,6 +49,9 @@
     };
 
     created() {
+      // @ts-ignore
+      this.buttons[0].text = this.$t('customer.text_on_button');
+      // console.log(this.$t('customer.text_on_button'));
       axios.get('/private/outputs/' + this.state.params.blockId).then(resp => {
         let buttons = resp.data;
         if( buttons.length > 0 ) {
