@@ -23,7 +23,7 @@ export default new Vuex.Store({
 
           } else {
 
-            console.error('Значение botId не передано');
+            console.error('BotId value not passed');
 
           }
 

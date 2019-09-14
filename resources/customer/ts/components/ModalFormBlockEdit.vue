@@ -5,12 +5,12 @@
     form(v-on:submit.prevent)
 
       .form-group
-        label(for="name") Имя блока
+        label(for="name") {{ $t('customer.block_name') }}
         input(type="text" class="form-control" id="name" aria-describedby="blockHelp" placeholder="Block name" v-model="subFormData.name")
-        small#blockHelp.form-text.text-muted Имя блока назначается, чтобы его запомнить.
+        small#blockHelp.form-text.text-muted {{ $t('customer.block_name_description') }}
 
       fieldset.border.p-2.messages
-        legend.w-auto Сообщения
+        legend.w-auto {{ $t('customer.messages') }}
         .messages__block(v-for="message, index in subFormData.messages" :key="message.sort_order_id")
           input.messages__delay.form-control(type="text" aria-label="delay" v-model="subFormData.messages[index].delay")
           .input-group
@@ -22,13 +22,13 @@
       fieldset.border.p-2
 
         .messages__add
-          button.btn.btn-outline-primary(@click.prev.stop="addMessage") Добавить сообщение
+          button.btn.btn-outline-primary(@click.prev.stop="addMessage") {{ $t('customer.add_message') }}
 
       hr
 
       .form-group
         .form-group
-          label(for="select-block-type") Тип блока
+          label(for="select-block-type") {{ $t('customer.block_type') }}
           select#select-block-type.form-control(v-model="subFormData.client_input_type" @change="onChange")
             option(v-for="subForm in subFormList" :value="{id: subForm.id, name: subForm.name, component: subForm.component}") {{ subForm.name }}
 

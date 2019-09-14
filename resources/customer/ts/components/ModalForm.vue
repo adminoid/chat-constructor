@@ -11,8 +11,8 @@
           .modal-body
             component(:is="formComponent" :state="state")
           .modal-footer
-            button.btn.btn-primary(type='button', @click='confirm') Подтвердить
-            button.btn.btn-secondary(type='button', @click='cancel', data-dismiss='modal') Отмена
+            button.btn.btn-primary(type='button', @click='confirm') {{ $t('customer.confirm') }}
+            button.btn.btn-secondary(type='button', @click='cancel', data-dismiss='modal') {{ $t('customer.cancel') }}
 
 </template>
 

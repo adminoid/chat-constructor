@@ -27,12 +27,12 @@ class BlocksTableSeeder extends Seeder
                     $block->client_input_type()->associate(ClientInputType::find(2));
                     $message = Message::create([
                         'delay' => 1.0,
-                        'text' => 'Вы просто напишите слова, а я буду говорить :D',
+                        'text' => trans('customer.message_default'),
                         'sort_order_id' => 1,
                     ]);
                     $message2 = Message::create([
                         'delay' => 1.0,
-                        'text' => 'Вы просто напишите слова, а я буду говорить :D',
+                        'text' => trans('customer.message_default'),
                         'sort_order_id' => 2,
                     ]);
                     $block->messages()->save($message);

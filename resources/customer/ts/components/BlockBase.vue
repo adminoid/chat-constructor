@@ -6,9 +6,9 @@
     .base-block__body
       p {{ itemData.id }}. {{ itemData.name }}
       div.base-block__panel
-        a.base-block__link.btn.btn-primary.btn-sm(title="Редактировать" @mousedown.prev.stop="editBlock")
+        a.base-block__link.btn.btn-primary.btn-sm(:title="$t('customer.edit')" @mousedown.prev.stop="editBlock")
           fa-icon(icon="edit")
-        button.base-block__link.btn.btn-outline-danger.btn-sm(title="Удалить" @mousedown.prev.stop="removeBlock")
+        button.base-block__link.btn.btn-outline-danger.btn-sm(:title="$t('customer.del')" @mousedown.prev.stop="removeBlock")
           fa-icon(icon="trash")
     .base-block__footer
       .outputs

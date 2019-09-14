@@ -1,6 +1,7 @@
 import ModalForm from "../components/ModalForm.vue";
 import axios from 'axios';
 import store from '../store'
+import i18n from "../i18n";
 
 export default {
 
@@ -12,11 +13,13 @@ export default {
 
         class FormData {
 
-          private titleDefault = 'Заполните данные';
+          private titleDefault = '';
 
           title = '';
           active = false;
           type: string;
+
+          trans: any;
 
           formData: any;
 
@@ -26,10 +29,12 @@ export default {
 
           componentName;
 
+          // constructor(params, $t) {
           constructor(params) {
             this.clear();
             this.active = true;
             this.params = params;
+            // this.$t = $t;
           }
 
           sendForm () {
@@ -53,8 +58,9 @@ export default {
             this.active = false;
           }
 
-          init(newData) {
+          init(newData, trans) {
 
+            this.trans = trans;
             this.active = true;
 
             // component name for import
@@ -63,7 +69,7 @@ export default {
               case 'editBlock':
 
                 this.componentName = 'ModalFormBlockEdit';
-                this.title = 'Редактирование блока';
+                this.title = this.trans.block_edit;
 
                 break;
 
@@ -73,7 +79,7 @@ export default {
                 break;
 
               default:
-                console.error('Ошибка: не верный тип блока');
+                console.error(this.trans.error_block_type);
 
             }
 
@@ -85,11 +91,19 @@ export default {
 
         }
 
+        // const Modal = new FormData(params, this.$t);
         const Modal = new FormData(params);
 
-        Modal.init(formData);
+        let trans = {
+          block_edit: this.$t('customer.block_edit'),
+          error_block_type: this.$t('customer.errors.block_type'),
+        };
+
+        Modal.init(formData, trans);
 
         new Vue({
+          i18n,
+
           template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',
           components: {
             'modal-form': ModalForm
@@ -110,7 +124,8 @@ export default {
             canceledAction () {
               // @ts-ignore
               this.modal.close();
-              reject(new Error('Операция отменена'))
+              // @ts-ignore
+              reject(new Error(this.$t('customer.errors.cancelled_operation')));
             },
           },
 

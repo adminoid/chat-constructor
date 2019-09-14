@@ -24,7 +24,7 @@
 
     links = [
       {
-        name: 'В начало',
+        name: this.$root.$t('customer.to_begin'),
         link: '/'
       }
     ];
