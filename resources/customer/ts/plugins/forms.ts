@@ -13,13 +13,13 @@ export default {
 
         class FormData {
 
-          private titleDefault = ''; // this.$t('customer.fill_fields')
+          private titleDefault = '';
 
           title = '';
           active = false;
           type: string;
 
-          // $t: any;
+          trans: any;
 
           formData: any;
 
@@ -58,8 +58,9 @@ export default {
             this.active = false;
           }
 
-          init(newData) {
+          init(newData, trans) {
 
+            this.trans = trans;
             this.active = true;
 
             // component name for import
@@ -68,9 +69,7 @@ export default {
               case 'editBlock':
 
                 this.componentName = 'ModalFormBlockEdit';
-                this.title = 'title'; //this.$t('customer.block_edit');
-
-                // console.log(this.$t('customer.block_edit'));
+                this.title = this.trans.block_edit;
 
                 break;
 
@@ -80,8 +79,7 @@ export default {
                 break;
 
               default:
-                // console.error(this.$t('customer.errors.block_type'));
-                console.error('error');
+                console.error(this.trans.error_block_type);
 
             }
 
@@ -96,7 +94,12 @@ export default {
         // const Modal = new FormData(params, this.$t);
         const Modal = new FormData(params);
 
-        Modal.init(formData);
+        let trans = {
+          block_edit: this.$t('customer.block_edit'),
+          error_block_type: this.$t('customer.errors.block_type'),
+        };
+
+        Modal.init(formData, trans);
 
         new Vue({
           i18n,
@@ -122,8 +125,7 @@ export default {
               // @ts-ignore
               this.modal.close();
               // @ts-ignore
-              reject(new Error('error1'));
-              // reject(new Error(this.$t('customer.errors.cancelled_operation')));
+              reject(new Error(this.$t('customer.errors.cancelled_operation')));
             },
           },
 

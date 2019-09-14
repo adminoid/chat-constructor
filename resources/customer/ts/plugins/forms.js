@@ -5,11 +5,12 @@ import i18n from "../i18n";
 export default {
     install: function (Vue) {
         Vue.prototype.$form = function (formData, params) {
+            var _this = this;
             return new Promise(function (resolve, reject) {
                 var FormData = /** @class */ (function () {
                     // constructor(params, $t) {
                     function FormData(params) {
-                        this.titleDefault = ''; // this.$t('customer.fill_fields')
+                        this.titleDefault = '';
                         this.title = '';
                         this.active = false;
                         this.clear();
@@ -34,22 +35,21 @@ export default {
                         this.title = this.titleDefault;
                         this.active = false;
                     };
-                    FormData.prototype.init = function (newData) {
+                    FormData.prototype.init = function (newData, trans) {
+                        this.trans = trans;
                         this.active = true;
                         // component name for import
                         switch (newData.type) {
                             case 'editBlock':
                                 this.componentName = 'ModalFormBlockEdit';
-                                this.title = 'title'; //this.$t('customer.block_edit');
-                                // console.log(this.$t('customer.block_edit'));
+                                this.title = this.trans.block_edit;
                                 break;
                             // this is test data for next form
                             case 'editBlock1':
                                 console.info('edit block 1');
                                 break;
                             default:
-                                // console.error(this.$t('customer.errors.block_type'));
-                                console.error('error');
+                                console.error(this.trans.error_block_type);
                         }
                     };
                     FormData.prototype.close = function () {
@@ -59,7 +59,11 @@ export default {
                 }());
                 // const Modal = new FormData(params, this.$t);
                 var Modal = new FormData(params);
-                Modal.init(formData);
+                var trans = {
+                    block_edit: _this.$t('customer.block_edit'),
+                    error_block_type: _this.$t('customer.errors.block_type'),
+                };
+                Modal.init(formData, trans);
                 new Vue({
                     i18n: i18n,
                     template: '<modal-form :state="modal" @confirmed="confirmedAction" @canceled="canceledAction" :formComponent="modal.componentName"></modal-form>',
@@ -83,8 +87,7 @@ export default {
                             // @ts-ignore
                             this.modal.close();
                             // @ts-ignore
-                            reject(new Error('error1'));
-                            // reject(new Error(this.$t('customer.errors.cancelled_operation')));
+                            reject(new Error(this.$t('customer.errors.cancelled_operation')));
                         },
                     },
                 }).$mount('#modal-form');

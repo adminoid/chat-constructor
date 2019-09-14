@@ -41,10 +41,6 @@
       this.$emit('canceled')
     }
 
-    mounted () {
-      console.log(this.$t);
-    }
-
   }
 
 </script>
