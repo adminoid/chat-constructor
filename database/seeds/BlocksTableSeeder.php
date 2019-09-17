@@ -43,14 +43,7 @@ class BlocksTableSeeder extends Seeder
                 } )
             );
 
-            $createdBlocks = $locBot->blocks()->get();
-            $hasFlagman = $createdBlocks->some('flagman');
-            if (!$hasFlagman) {
-                $firstBlock = $createdBlocks->first();
-                $firstBlock->flagman = true;
-                $firstBlock->save();
-            }
-
+            $locBot->makeFlagman();
 
         });
 
