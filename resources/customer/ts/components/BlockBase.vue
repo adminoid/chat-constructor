@@ -1,7 +1,7 @@
 <template lang="pug">
 
   .base-block
-    .base-block__flagman-toggle(@mousedown.prev.stop="toggleFlagman")
+    .base-block__flagman-toggle(@mousedown.prev.stop="toggleFlagman" :class="{'active': itemData.flagman}")
       fa-icon(icon="flag" href="#make-flagman")
     .base-block__header
       .base-block__input-connector
@@ -105,9 +105,9 @@
       position: absolute
       right: 5px
       top: 2px
-      color: rgba(50, 45, 48, 0.6) !important
+      color: #9a8391 !important
       &.active
-        color: #510028 !important
+        color: #d01c85 !important
 
     .base-block__body
       height: 100%
@@ -148,7 +148,5 @@
       background: #575dff
       border-radius: 3px
       opacity: .7
-      &.active
-        background: #f09593
 
 </style>

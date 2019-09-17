@@ -5,6 +5,7 @@ use App\ClientInputType;
 use Illuminate\Database\Seeder;
 use App\Bot;
 use App\Message;
+use function MongoDB\BSON\toJSON;
 
 class BlocksTableSeeder extends Seeder
 {
@@ -38,8 +39,19 @@ class BlocksTableSeeder extends Seeder
                     ]);
                     $block->messages()->save($message);
                     $block->messages()->save($message2);
+                    // todo: check if current bot has a flagman
                 } )
             );
+
+            $createdBlocks = $locBot->blocks()->get();
+            $hasFlagman = $createdBlocks->some('flagman');
+            if (!$hasFlagman) {
+                $firstBlock = $createdBlocks->first();
+                $firstBlock->flagman = true;
+                $firstBlock->save();
+            }
+
+
         });
 
     }
