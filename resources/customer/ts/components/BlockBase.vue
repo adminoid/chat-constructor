@@ -1,8 +1,10 @@
 <template lang="pug">
 
   .base-block
+    .base-block__flagman-toggle(@mousedown.prev.stop="toggleFlagman")
+      fa-icon(icon="flag" href="#make-flagman")
     .base-block__header
-      .input-connector
+      .base-block__input-connector
     .base-block__body
       p {{ itemData.id }}. {{ itemData.name }}
       div.base-block__panel
@@ -11,7 +13,7 @@
         button.base-block__link.btn.btn-outline-danger.btn-sm(:title="$t('customer.del')" @mousedown.prev.stop="removeBlock")
           fa-icon(icon="trash")
     .base-block__footer
-      .outputs
+      .base-block__outputs
         connector-output(
           v-for="(connector, index) in sortedOutputs"
           :key="index"
@@ -73,6 +75,10 @@
       console.info('removeBlock');
     }
 
+    toggleFlagman () {
+      console.info('toggleFlagman', this.itemData.id);
+    }
+
     get sortedOutputs () {
       return _.sortBy(this.itemData.outputs, 'sort_order_id');
     }
@@ -83,36 +89,43 @@
 
 <style lang="sass">
   .base-block
+    position: relative
     display: flex
     flex-flow: column nowrap
     justify-content: space-between
     align-items: center
-    /*height: 136px*/
     width: 140px
     background: rgba(82, 176, 93, 0.57)
     border: 1px solid rgba(14, 81, 0, 0.8)
     border-radius: 5px
     box-shadow: 4px 4px 14px 0 rgba(0,0,0,0.3)
-    .base-block__header
-      position: relative
+
+    .base-block__flagman-toggle
+      cursor: pointer
+      position: absolute
+      right: 5px
+      top: 2px
+      color: rgba(50, 45, 48, 0.6) !important
+      &.active
+        color: #510028 !important
+
     .base-block__body
       height: 100%
       > p
         margin: 5px 10px
 
-    .base-block__footer
-      position: relative
-
     .base-block__panel
       padding: 10px
       display: flex
       justify-content: space-between
+
     .base-block__link
       margin: 10px
+
     .base-block_wrap
       white-space: normal !important
 
-    .outputs
+    .base-block__outputs
       padding: 2px
       margin: 0
       list-style: none
@@ -122,7 +135,7 @@
       border: 1px dashed #7c7c7c
       border-radius: 3px
 
-    .input-connector
+    .base-block__input-connector
       padding: 2px
       margin: 0
       list-style: none

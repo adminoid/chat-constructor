@@ -20,10 +20,11 @@ class BlocksTableSeeder extends Seeder
 //        dd(ClientInputType::find(2));
 
         $bot = Bot::first();
-        $num = random_int(2, 5);
+//        $num = random_int(2, 5);
+        $num = 3;
         $bot->each(static function ($locBot) use ($num){
             $locBot->blocks()->saveMany(
-                factory(Block::class, $num)->create()->each( function ($block) {
+                factory(Block::class, $num)->create()->each( static function ($block) {
                     $block->client_input_type()->associate(ClientInputType::find(2));
                     $message = Message::create([
                         'delay' => 1.0,
