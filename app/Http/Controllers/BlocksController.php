@@ -83,6 +83,12 @@ class BlocksController extends Controller
 //        $block->outputs()->save($output);
 
         $block->client_input_type()->associate(ClientInputType::find(2));
+
+        $hasFlagship = $bot->checkFlagship();
+        if( !$hasFlagship ) {
+            $block->flagship = true;
+        }
+
         $block->save();
 
         $message = Message::create([

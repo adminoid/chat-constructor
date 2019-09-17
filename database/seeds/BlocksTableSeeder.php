@@ -39,11 +39,11 @@ class BlocksTableSeeder extends Seeder
                     ]);
                     $block->messages()->save($message);
                     $block->messages()->save($message2);
-                    // todo: check if current bot has a flagman
+                    // todo: check if current bot has a flagship
                 } )
             );
 
-            $locBot->makeFlagman();
+//            $locBot->makeFlagship();
 
         });
 

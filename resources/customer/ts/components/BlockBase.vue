@@ -1,8 +1,9 @@
 <template lang="pug">
 
   .base-block
-    .base-block__flagman-toggle(@mousedown.prev.stop="toggleFlagman" :class="{'active': itemData.flagman}")
-      fa-icon(icon="flag" href="#make-flagman")
+    <!-- todo: make title: make flagship if it possible -->
+    .base-block__flagship-toggle(@mousedown.prev.stop="toggleFlagship" :class="{'active': itemData.flagship}")
+      fa-icon(icon="flag" href="#make-flagship")
     .base-block__header
       .base-block__input-connector
     .base-block__body
@@ -75,8 +76,8 @@
       console.info('removeBlock');
     }
 
-    toggleFlagman () {
-      console.info('toggleFlagman', this.itemData.id);
+    toggleFlagship () {
+      console.info('toggleFlagship', this.itemData.id);
     }
 
     get sortedOutputs () {
@@ -100,14 +101,14 @@
     border-radius: 5px
     box-shadow: 4px 4px 14px 0 rgba(0,0,0,0.3)
 
-    .base-block__flagman-toggle
+    .base-block__flagship-toggle
       cursor: pointer
       position: absolute
       right: 5px
       top: 2px
-      color: #9a8391 !important
+      color: #788bad !important
       &.active
-        color: #d01c85 !important
+        color: #e3342f !important
 
     .base-block__body
       height: 100%
