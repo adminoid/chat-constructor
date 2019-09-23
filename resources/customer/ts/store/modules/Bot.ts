@@ -25,6 +25,8 @@ export default class Bot extends VuexModule {
 
   activeBotId = -1;
 
+  flagship = 0;
+
   @Action({ commit: 'updateBots', rawError: true })
   async fetchBots() {
     return axios.get(this.baseUrl)
@@ -32,6 +34,21 @@ export default class Bot extends VuexModule {
   @Mutation
   updateBots( bots ) {
     this.bots = bots.data;
+  }
+
+  @Action({commit: 'setFlagship'})
+  async getFlagship(botId) {
+    return axios.get(`private/get-flagship/${botId}`)
+  }
+
+  @Action({ commit: 'setFlagship', rawError: true })
+  async saveFlagship(blockId) {
+    return axios.get(`private/set-flagship/${blockId}`);
+  }
+
+  @Mutation
+  setFlagship(resp) {
+    this.flagship = resp.data;
   }
 
   @Action({ commit: 'appendBot'})

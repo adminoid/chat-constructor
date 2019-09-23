@@ -26,25 +26,25 @@ class Bot extends Model
         return $this->hasMany(Client::class);
     }
 
-    public function checkFlagship() : bool
-    {
-        $blocks = $this->blocks()->get();
-        $test = $blocks->some('flagship', 1);
-
-        return $blocks->some('flagship', 1);
-    }
+//    public function checkFlagship() : bool
+//    {
+//        $blocks = $this->blocks()->get();
+//        return $blocks->some('flagship', 1);
+//    }
 
     public function makeFlagship() : void
     {
-
-        $hasFlagship = $this->checkFlagship();
-
-        if (!$this->checkFlagship()) {
+        if (!$this->flagship) {
             $firstBlock = $this->blocks()->firstOrFail();
-            $firstBlock->flagship = true;
-            $firstBlock->save();
+            $this->flagship = $firstBlock->id;
+            $this->save();
         }
+    }
 
+    public function setFlagship(int $blockId) : void
+    {
+        $this->flagship = $blockId;
+        $this->save();
     }
 
 }

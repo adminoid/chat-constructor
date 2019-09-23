@@ -52,5 +52,9 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::get('block-surface/{blockId}', 'BlocksController@getBlockSurfaceData');
 
+    Route::get('set-flagship/{blockId}', 'BotsController@setBlockFlagship');
+
+    Route::get('get-flagship/{botId}', 'BotsController@getBlockFlagship');
+
 });
 

@@ -2,7 +2,7 @@
 
   .base-block
     <!-- todo: make title: make flagship if it possible -->
-    .base-block__flagship-toggle(@mousedown.prev.stop="toggleFlagship" :class="{'active': itemData.flagship}")
+    .base-block__flagship-toggle(@mousedown.prev.stop="toggleFlagship" :class="{'active': itemData.id == flagship}")
       fa-icon(icon="flag" href="#make-flagship")
     .base-block__header
       .base-block__input-connector
@@ -40,7 +40,8 @@
   import ConnectorOutput from './ConnectorOutput.vue'
   import _ from 'lodash'
 
-  const BlockModule = namespace('Block');
+  // const BlockModule = namespace('Block');
+  const BotModule = namespace('Bot');
 
   @Component({
     components: { ConnectorOutput },
@@ -49,15 +50,17 @@
 
     $form;
 
-    @BlockModule.State dd;
+    @BotModule.State flagship;
+
+    @BotModule.Action saveFlagship;
 
     @Prop({}) itemData!: any; // TODO: here itemData, there - just id, it is bug. Pass id to mixin
 
-    @Watch('dd', { deep: true })
-    onItemsChanged() {
+    // @Watch('dd', { deep: true })
+    // onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-      this.$forceUpdate();
-    }
+      // this.$forceUpdate();
+    // }
 
     editBlock () {
 
@@ -77,7 +80,7 @@
     }
 
     toggleFlagship () {
-      console.info('toggleFlagship', this.itemData.id);
+      this.saveFlagship(this.itemData.id);
     }
 
     get sortedOutputs () {

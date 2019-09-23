@@ -33,6 +33,7 @@
   import LineSvg from './LineSvg.vue'
 
   const BlockModule = namespace('Block');
+  const BotModule = namespace('Bot');
 
   @Component({
     //@ts-ignore
@@ -50,6 +51,7 @@
     @BlockModule.Action deleteBlock;
     @BlockModule.Action saveBlockData;
     @BlockModule.Action saveConnectorTarget;
+    @BotModule.Action getFlagship;
 
     @BlockModule.State items;
     @BlockModule.State dd;
@@ -86,6 +88,7 @@
 
     mounted () {
       this.setAreaBorders();
+      this.getFlagship(this.botId);
       this.fetchBlocks(this.botId).then(() => {
         this.setAreaSize();
       });

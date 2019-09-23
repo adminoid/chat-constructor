@@ -23,7 +23,6 @@ class CreateBlocksTable extends Migration
             $table->boolean('active')->default(true);
             $table->string('component')->default('BlockBase');
             $table->boolean('moved')->default(false);
-            $table->boolean('flagship')->default(false);
             $table->timestamps();
             $table->foreign('bot_id')
                 ->references('id')->on('bots')

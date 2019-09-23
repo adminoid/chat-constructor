@@ -7,6 +7,7 @@ use App\Bot;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Faker\Generator as Faker;
+use App\Block;
 
 class BotsController extends Controller
 {
@@ -112,6 +113,20 @@ class BotsController extends Controller
 
         return response()->json($id);
 
+    }
+
+    public function setBlockFlagship($blockId) : int
+    {
+        $block = Block::findOrFail($blockId);
+        $bot = $block->bot()->first();
+        $bot->setFlagship($blockId);
+        return $blockId;
+    }
+
+    public function getBlockFlagship($botId) : int
+    {
+        $bot = Bot::findOrFail($botId);
+        return $bot->flagship;
     }
 
 }

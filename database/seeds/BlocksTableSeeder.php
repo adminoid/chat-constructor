@@ -43,7 +43,7 @@ class BlocksTableSeeder extends Seeder
                 } )
             );
 
-//            $locBot->makeFlagship();
+            $locBot->makeFlagship();
 
         });
 
