@@ -14,3 +14,7 @@ resources/**/components/*.vue.js
 resources/**/components/*.vue.js.map
 public/js
 public/css
+laravel-echo-server.json
+laravel-echo-server.lock
+package-lock.json
+yarn.lock

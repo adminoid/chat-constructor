@@ -1,10 +1,14 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/app.js.map": "/js/app.js.map",
-    "/js/customer.js": "/js/customer.js",
+    "/js/chat.js": "/js/chat.js",
     "/css/customer.css": "/css/customer.css",
     "/css/app.css": "/css/app.css",
-    "/js/customer.js.map": "/js/customer.js.map",
+    "/css/chat.css": "/css/chat.css",
+    "/js/chat.js.map": "/js/chat.js.map",
     "/css/customer.css.map": "/css/customer.css.map",
-    "/css/app.css.map": "/css/app.css.map"
+    "/css/app.css.map": "/css/app.css.map",
+    "/css/chat.css.map": "/css/chat.css.map",
+    "/js/customer.js": "/js/customer.js",
+    "/js/customer.js.map": "/js/customer.js.map"
 }

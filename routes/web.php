@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/chat', static function () {
+    return view('chat.index');
+});
+
 Route::get('/', static function () {
 
     if(Auth::check()) {
