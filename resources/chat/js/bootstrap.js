@@ -16,13 +16,24 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo';
+import Echo from 'laravel-echo';
+import $ from 'jquery';
 
 // window.Pusher = require('pusher-js');
+window.io = require('socket.io-client');
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
+const token = $('meta[name=csrf-token]').attr('content');
+
+// Have this in case you stop running your laravel echo server
+if (typeof io !== 'undefined') {
+  window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001',
+    auth:
+      {
+        headers: {
+          'X-CSRF-TOKEN': token
+        }
+      }
+  });
+}
