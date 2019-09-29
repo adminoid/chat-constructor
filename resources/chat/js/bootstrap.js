@@ -17,23 +17,26 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 import Echo from 'laravel-echo';
-import $ from 'jquery';
 
-// window.Pusher = require('pusher-js');
 window.io = require('socket.io-client');
 
-const token = $('meta[name=csrf-token]').attr('content');
+window.Echo = new Echo({
+  broadcaster: 'socket.io',
+  host: window.location.hostname + ':6001'
+});
+
+// const token = $('meta[name=csrf-token]').attr('content');
 
 // Have this in case you stop running your laravel echo server
-if (typeof io !== 'undefined') {
-  window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001',
-    auth:
-      {
-        headers: {
-          'X-CSRF-TOKEN': token
-        }
-      }
-  });
-}
+// if (typeof io !== 'undefined') {
+//   window.Echo = new Echo({
+//     broadcaster: 'socket.io',
+//     host: window.location.hostname + ':6001',
+//     auth:
+//       {
+//         headers: {
+//           'X-CSRF-TOKEN': token
+//         }
+//       }
+//   });
+// }

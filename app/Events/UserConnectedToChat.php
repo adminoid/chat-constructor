@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MessagePushed implements ShouldBroadcast
+class UserConnectedToChat implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -31,7 +31,7 @@ class MessagePushed implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('survey.' . $this->survey->id);
+//        return new PrivateChannel('channel-name');
+        return new Channel('public-chat');
     }
-
 }
