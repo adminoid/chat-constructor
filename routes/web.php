@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/chat1', static function () {
+    event(new \App\Events\TestChatEvent('hello, dude!'));
+});
+
 Route::get('/chat', static function () {
     return view('chat.index');
 });

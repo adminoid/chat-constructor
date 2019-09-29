@@ -10,18 +10,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class UserConnectedToChat implements ShouldBroadcast
+class TestChatEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    protected $message;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($message)
     {
-        //
+        $this->message = $message;
     }
 
     /**
@@ -29,9 +31,22 @@ class UserConnectedToChat implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+    public function broadcastWith()
+    {
+        // This must always be an array. Since it will be parsed with json_encode()
+        return [
+            'message' => $this->message,
+        ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'newMessage';
+    }
+
     public function broadcastOn()
     {
-//        return new PrivateChannel('channel-name');
         return new Channel('public-chat');
     }
+
 }

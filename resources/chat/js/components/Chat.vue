@@ -16,9 +16,10 @@
 
       listenForBroadcast() {
 
-        window.Echo.channel('public-chat')
-          .listen('UserConnectedToChat', (e) => {
-            console.log(e);
+        Echo.channel('public-chat')
+          .listen('.newMessage', (message) => {
+            // this.messages.push(message);
+            console.log(message);
           });
 
       },

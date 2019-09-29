@@ -11,11 +11,12 @@
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
+//Broadcast::channel('App.User.{id}', function ($user, $id) {
+//    return (int) $user->id === (int) $id;
+//});
 
-Broadcast::channel('chat', function () {
+Broadcast::channel('public-chat', function () {
+//    return 'vbadfsdfsd';
     return request()->json([
         'msg' => 'Hi!',
     ]);
