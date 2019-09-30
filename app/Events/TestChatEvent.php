@@ -34,6 +34,9 @@ class TestChatEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         // This must always be an array. Since it will be parsed with json_encode()
+
+        usleep(500000);
+
         return [
             'message' => $this->message,
         ];

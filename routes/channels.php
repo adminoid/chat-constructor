@@ -16,8 +16,5 @@
 //});
 
 Broadcast::channel('public-chat', function () {
-//    return 'vbadfsdfsd';
-    return request()->json([
-        'msg' => 'Hi!',
-    ]);
+    return true;
 });
