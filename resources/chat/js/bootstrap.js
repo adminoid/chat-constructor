@@ -7,7 +7,6 @@ window._ = require('lodash');
  */
 
 window.axios = require('axios');
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**
@@ -17,26 +16,26 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 import Echo from 'laravel-echo';
-
 window.io = require('socket.io-client');
 
-window.Echo = new Echo({
-  broadcaster: 'socket.io',
-  host: window.location.hostname + ':6001'
-});
-
-// const token = $('meta[name=csrf-token]').attr('content');
+const metas = document.getElementsByTagName('meta');
+let token;
+for (let i = 0; i < metas.length; i++) {
+  if (metas[i].getAttribute('name') === 'csrf-token') {
+    token = metas[i].getAttribute('content');
+  }
+}
 
 // Have this in case you stop running your laravel echo server
-// if (typeof io !== 'undefined') {
-//   window.Echo = new Echo({
-//     broadcaster: 'socket.io',
-//     host: window.location.hostname + ':6001',
-//     auth:
-//       {
-//         headers: {
-//           'X-CSRF-TOKEN': token
-//         }
-//       }
-//   });
-// }
+if (typeof io !== 'undefined') {
+  window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001',
+    auth:
+      {
+        headers: {
+          'X-CSRF-TOKEN': token
+        }
+      }
+  });
+}

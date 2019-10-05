@@ -36,20 +36,22 @@ class TestChatEvent implements ShouldBroadcast
         // This must always be an array. Since it will be parsed with json_encode()
 
         usleep(500000);
+        return ['message' => 'kuuk-237'];
 
-        return [
-            'message' => $this->message,
-        ];
+//        return [
+//            'message' => $this->message,
+//        ];
+
     }
 
     public function broadcastAs()
     {
-        return 'newMessage';
+        return 'ClientChat';
     }
 
     public function broadcastOn()
     {
-        return new Channel('public-chat');
+        return new PrivateChannel('chat.client.' . 2370000);
     }
 
 }

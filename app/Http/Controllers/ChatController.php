@@ -18,7 +18,10 @@ class ChatController extends Controller
             'flagship' => $flagshipBlockId,
         ];
 
-        event(new \App\Events\TestChatEvent($message));
+//        event(new \App\Events\TestChatEvent($message));
+       broadcast(new \App\Events\TestChatEvent($message));
+
+
         return view('chat.index');
     }
 

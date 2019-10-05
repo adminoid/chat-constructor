@@ -16,10 +16,13 @@
 
       listenForBroadcast() {
 
-        Echo.channel('public-chat')
-          .listen('.newMessage', (message) => {
+        Echo.private('chat.client.' + 2370000)
+          .listen('.ClientChat', (message) => {
+
+            console.info('listen...', message);
+
             // this.messages.push(message);
-            console.log(message);
+            // console.log(e);
           });
 
       },
