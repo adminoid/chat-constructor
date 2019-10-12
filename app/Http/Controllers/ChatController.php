@@ -20,7 +20,7 @@ class ChatController extends Controller
         ];
 
 //        event(new \App\Events\TestChatEvent($message));
-        broadcast(new \App\Events\TestChatEvent($message));
+        broadcast(new \App\Events\TestChatEvent($message, auth()->user()));
 
         return view('chat.index');
     }

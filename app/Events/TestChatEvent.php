@@ -18,16 +18,21 @@ class TestChatEvent implements ShouldBroadcast
     protected $message;
 
 //    public $user;
+    /**
+     * @var User
+     */
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @param $message
+     * @param User $user
      */
-    public function __construct($message)
+    public function __construct($message, User $user)
     {
         $this->message = $message;
-//        $this->user = $user;
+        $this->user = $user;
     }
 
     /**
@@ -55,7 +60,10 @@ class TestChatEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.' . $this->message->user_id);
+//        return new PrivateChannel('chat.' . $this->message->user_id);
+
+        return new PrivateChannel('chat.' . $this->user->id);
+
     }
 
 }
