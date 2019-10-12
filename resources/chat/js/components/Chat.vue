@@ -6,6 +6,12 @@
   export default {
     name: "Chat",
 
+    data () {
+      return {
+        user_id: null,
+      }
+    },
+
     created() {
 
       this.listenForBroadcast();
@@ -16,7 +22,10 @@
 
       listenForBroadcast() {
 
-        Echo.private('chat.client.' + 2370000)
+        this.user_id = window.Laravel.user_id;
+
+        // + user_id
+        Echo.private('chat.' + this.user_id)
           .listen('.ClientChat', (message) => {
 
             console.info('listen...', message);

@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/chat-{id}', 'ChatController@initChat');
+Route::get('/chat-{id}', 'ChatController@initChat')->middleware('register.client');
 
 Route::get('/', static function () {
 

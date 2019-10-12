@@ -16,11 +16,11 @@ class ChatController extends Controller
         $message = [
             'bot_id' => $botId,
             'flagship' => $flagshipBlockId,
+            'user_id' => auth()->user()->id,
         ];
 
 //        event(new \App\Events\TestChatEvent($message));
-       broadcast(new \App\Events\TestChatEvent($message));
-
+        broadcast(new \App\Events\TestChatEvent($message));
 
         return view('chat.index');
     }

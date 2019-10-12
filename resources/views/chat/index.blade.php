@@ -15,11 +15,19 @@
         <div class="flex-center position-ref full-height">
 
             <div class="content">
+
+                <h1>{{ Auth::user()->id }}</h1>
+
                 <div id="chat"></div>
             </div>
 
         </div>
 
+        <script>
+          window.Laravel = {!! json_encode([
+              'user_id' => auth()->check() ? auth()->user()->id : null,
+          ]) !!};
+        </script>
         <script src="{{ asset('/js/chat.js') }}"></script>
 
     </body>
