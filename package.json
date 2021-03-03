@@ -50,7 +50,7 @@
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.15",
     "popper.js": "^1.12",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-plain-loader": "^1.0.0",
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.15.2",
