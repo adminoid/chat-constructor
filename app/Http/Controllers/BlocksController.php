@@ -86,7 +86,7 @@ class BlocksController extends Controller
 
         $hasFlagship = $bot->checkFlagship();
         if( !$hasFlagship ) {
-            $block->flagship = true;
+            $bot->flagship = $block->id;
         }
 
         $block->save();

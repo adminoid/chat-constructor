@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Block;
 use App\Bot;
 use Illuminate\Http\Request;
 
@@ -13,16 +14,24 @@ class ChatController extends Controller
 
         $flagshipBlockId = Bot::findOrFail($botId)->flagship;
 
-        $message = [
+//        $flagshipMessages = Block::findOrFail($flagshipBlockId)->messages()->get()->toJson();
+        $flagshipMessages = Block::find($flagshipBlockId)->messages()->get()->toJson();
+
+//        dd($flagshipMessages);
+
+        $initChatData = [
             'bot_id' => $botId,
-            'flagship' => $flagshipBlockId,
-            'user_id' => auth()->user()->id,
+            'messages' => $flagshipMessages,
         ];
 
-//        event(new \App\Events\TestChatEvent($message));
-        broadcast(new \App\Events\TestChatEvent($message, auth()->user()));
+//        broadcast(new \App\Events\InitChatEvent($initChatData, auth()->user()));
+
+//        $when = now()->addSecond(1);
+
+        broadcast(new \App\Events\InitChatEvent($initChatData, auth()->user())->delay($now));
 
         return view('chat.index');
+
     }
 
 }

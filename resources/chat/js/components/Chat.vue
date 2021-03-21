@@ -26,7 +26,7 @@
 
         // + user_id
         Echo.private('chat.' + this.user_id)
-          .listen('.ClientChat', (message) => {
+          .listen('.InitChat', (message) => {
 
             console.info('listen...', message);
 

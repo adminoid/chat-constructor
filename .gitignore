@@ -18,3 +18,5 @@ laravel-echo-server.json
 laravel-echo-server.lock
 package-lock.json
 yarn.lock
+.idea
+.DS_Store

@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Block;
 use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -11,13 +12,12 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class TestChatEvent implements ShouldBroadcast
+class InitChatEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $message;
+    protected $initChatData;
 
-//    public $user;
     /**
      * @var User
      */
@@ -26,13 +26,26 @@ class TestChatEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @param $message
+     * @param $initChatData
      * @param User $user
      */
-    public function __construct($message, User $user)
+    public function __construct($initChatData, User $user)
     {
-        $this->message = $message;
+        $this->initChatData = $initChatData;
         $this->user = $user;
+    }
+
+    protected function prepareData()
+    {
+
+        // get flagship
+//        $flagshipBlock = Block::findOrFail($this->initChatData->flagship);
+//        $messages = $this->initChatData->messages;
+//        $messages = $this->initChatData;
+
+        return [
+            'init' => 'dufos',
+        ];
     }
 
     /**
@@ -42,28 +55,27 @@ class TestChatEvent implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        // This must always be an array. Since it will be parsed with json_encode()
-
-        usleep(500000);
-//        return ['message' => 'kuuk-237'];
 
         return [
-            'message' => $this->message,
+            'data' => $this->prepareData(),
         ];
+
+//        usleep(500000);
+
+//        return [
+//            'messages' => $messages,
+//        ];
 
     }
 
     public function broadcastAs()
     {
-        return 'ClientChat';
+        return 'InitChat';
     }
 
     public function broadcastOn()
     {
-//        return new PrivateChannel('chat.' . $this->message->user_id);
-
         return new PrivateChannel('chat.' . $this->user->id);
-
     }
 
 }
