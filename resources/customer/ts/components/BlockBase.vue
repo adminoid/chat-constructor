@@ -1,19 +1,22 @@
 <template lang="pug">
 
   .base-block
+    <!-- todo: make title: make flagship if it possible -->
+    .base-block__flagship-toggle(@mousedown.prev.stop="toggleFlagship" :class="{'active': itemData.id == flagship}")
+      fa-icon(icon="flag" href="#make-flagship")
     .base-block__header
-      .input-connector
+      .base-block__input-connector
     .base-block__body
       p {{ itemData.id }}. {{ itemData.name }}
       div.base-block__panel
-        a.base-block__link.btn.btn-primary.btn-sm(title="Редактировать" @mousedown.prev.stop="editBlock")
+        a.base-block__link.btn.btn-primary.btn-sm(:title="$t('customer.edit')" @mousedown.prev.stop="editBlock")
           fa-icon(icon="edit")
-        button.base-block__link.btn.btn-outline-danger.btn-sm(title="Удалить" @mousedown.prev.stop="removeBlock")
+        button.base-block__link.btn.btn-outline-danger.btn-sm(:title="$t('customer.del')" @mousedown.prev.stop="removeBlock")
           fa-icon(icon="trash")
     .base-block__footer
-      .outputs
+      .base-block__outputs
         connector-output(
-          v-for="(connector, index) in itemData.outputs"
+          v-for="(connector, index) in sortedOutputs"
           :key="index"
           :blockId="itemData.id"
           :connectorData="connector"
@@ -35,8 +38,10 @@
   import EndLineMixin from '../mixins/EndLine'
   import { namespace } from 'vuex-class'
   import ConnectorOutput from './ConnectorOutput.vue'
+  import _ from 'lodash'
 
-  const BlockModule = namespace('Block');
+  // const BlockModule = namespace('Block');
+  const BotModule = namespace('Bot');
 
   @Component({
     components: { ConnectorOutput },
@@ -45,15 +50,17 @@
 
     $form;
 
-    @BlockModule.State dd;
+    @BotModule.State flagship;
+
+    @BotModule.Action saveFlagship;
 
     @Prop({}) itemData!: any; // TODO: here itemData, there - just id, it is bug. Pass id to mixin
 
-    @Watch('dd', { deep: true })
-    onItemsChanged() {
+    // @Watch('dd', { deep: true })
+    // onItemsChanged() {
       // TODO: in the future make observing by bubbling custom events on watch local props: coords, targetCoords
-      this.$forceUpdate();
-    }
+      // this.$forceUpdate();
+    // }
 
     editBlock () {
 
@@ -64,16 +71,20 @@
       this.$form({
         type: 'editBlock', // need to pass through components, for fill form sub-component
       }, {
-        blockId: this.itemData.id
-      })
-        .then(() => {
-          console.log('then');
-        })
-        .catch( e => { console.error(e.message) } );
+        blockId: this.itemData.id,
+      }).catch( e => console.error(e.message) );
     }
 
     removeBlock () {
       console.info('removeBlock');
+    }
+
+    toggleFlagship () {
+      this.saveFlagship(this.itemData.id);
+    }
+
+    get sortedOutputs () {
+      return _.sortBy(this.itemData.outputs, 'sort_order_id');
     }
 
   }
@@ -82,36 +93,43 @@
 
 <style lang="sass">
   .base-block
+    position: relative
     display: flex
     flex-flow: column nowrap
     justify-content: space-between
     align-items: center
-    /*height: 136px*/
     width: 140px
     background: rgba(82, 176, 93, 0.57)
     border: 1px solid rgba(14, 81, 0, 0.8)
     border-radius: 5px
     box-shadow: 4px 4px 14px 0 rgba(0,0,0,0.3)
-    .base-block__header
-      position: relative
+
+    .base-block__flagship-toggle
+      cursor: pointer
+      position: absolute
+      right: 5px
+      top: 2px
+      color: #788bad !important
+      &.active
+        color: #e3342f !important
+
     .base-block__body
       height: 100%
       > p
-        margin-bottom: 5px
-
-    .base-block__footer
-      position: relative
+        margin: 5px 10px
 
     .base-block__panel
       padding: 10px
       display: flex
       justify-content: space-between
+
     .base-block__link
       margin: 10px
+
     .base-block_wrap
       white-space: normal !important
 
-    .outputs
+    .base-block__outputs
       padding: 2px
       margin: 0
       list-style: none
@@ -121,7 +139,7 @@
       border: 1px dashed #7c7c7c
       border-radius: 3px
 
-    .input-connector
+    .base-block__input-connector
       padding: 2px
       margin: 0
       list-style: none
@@ -134,7 +152,5 @@
       background: #575dff
       border-radius: 3px
       opacity: .7
-      &.active
-        background: #f09593
 
 </style>

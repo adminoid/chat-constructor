@@ -9,9 +9,7 @@ export default new Vuex.Store({
     async createEntity(context, payload) {
 
       if (payload.type === 'bot') {
-
         await context.dispatch('Bot/createBot');
-
       }
 
       else if (payload.type === 'block') {
@@ -25,7 +23,7 @@ export default new Vuex.Store({
 
           } else {
 
-            console.error('Значение botId не передано');
+            console.error('BotId value not passed');
 
           }
 
@@ -46,4 +44,3 @@ export default new Vuex.Store({
 });
 
 // TODO: delete connection if drag to area from input connector
-// TODO: redraw lines if route change

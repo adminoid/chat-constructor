@@ -6,9 +6,9 @@
       div
         span.bots-area_wrap {{ bot.name }} / {{ bot.id }}
       div.bots-area__panel
-        router-link.bots-area__link.btn.btn-primary(title="Редактировать" :to="'/bot/' + bot.id")
+        router-link.bots-area__link.btn.btn-primary(:title="$t('customer.edit')" :to="'/bot/' + bot.id")
           fa-icon(icon="edit")
-        button.bots-area__link.btn.btn-outline-danger(title="Удалить" @click="removeBot(bot.id)")
+        button.bots-area__link.btn.btn-outline-danger(:title="$t('customer.del')" @click="removeBot(bot.id)")
           fa-icon(icon="trash")
 
 </template>
@@ -40,7 +40,7 @@
     removeBot (id) {
 
       this.$confirm({
-        message: 'Вы действительно хотите удалить бота?',
+        message: this.$t('customer.confirm_delete'),
       })
         .then(() => {
           this.deleteBot(id);

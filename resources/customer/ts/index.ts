@@ -1,15 +1,15 @@
 import "./bootstrap"
 import Vue from "vue"
 import CustomerApp from "./components/CustomerApp.vue"
-import store from './store'
+import store from "./store"
 import router from "./router"
 
 // font awesome
 import { library as FontAwesomeLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faRobot, faTrash, faEdit, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'
+import { faRobot, faTrash, faEdit, faPuzzlePiece, faFlag } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-FontAwesomeLibrary.add({faRobot, faTrash, faEdit, faPuzzlePiece});
+FontAwesomeLibrary.add({faRobot, faTrash, faEdit, faPuzzlePiece, faFlag});
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
@@ -19,9 +19,13 @@ Vue.use(WindowsPlugin);
 import FormsPlugin from './plugins/forms'
 Vue.use(FormsPlugin);
 
+import i18n from './i18n';
+
 new Vue({
 
   el: '#customer-app',
+
+  i18n,
 
   render (createElement) {
     return createElement(CustomerApp);

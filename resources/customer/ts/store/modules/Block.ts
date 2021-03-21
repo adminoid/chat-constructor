@@ -51,25 +51,43 @@ export default class Block extends VuexModule {
     left: 0,
   };
 
+  toUpdateCoordsBlockId = -1;
+
   @Action
   async saveBlockData(data) {
-    return await axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
+    return axios.patch(`private/bots/${data.botId}/blocks/${data.blockId}`, data.sendData )
   }
 
   @Action({ commit: 'updateBlocks', rawError: true })
   async fetchBlocks(id) {
-    return await axios.get(`private/bots/${id}/blocks`);
+    return axios.get(`private/bots/${id}/blocks`);
   }
   @Mutation
   updateBlocks( blocks ) {
     this.items = blocks.data;
   }
 
+  @Action({ commit: 'updateBlock', rawError: true })
+  async fetchBlock(blockId) {
+    return axios.get(`private/block-surface/${blockId}`);
+  }
   @Mutation
-  setActiveTargetId( id: number ) {
-    if( id > 0 ) {
-      this.dd.targetId = id;
-    }
+  updateBlock( blockData ) {
+    let data = blockData.data;
+    delete data['bot'];
+
+    // console.log(data);
+
+    // data.id - stores blockId
+    let index = _.findIndex(this.items, {id: data.id});
+    this.items.splice(index, 1, data);
+
+    this.toUpdateCoordsBlockId = data.id;
+  }
+
+  @Mutation
+  resetToUpdateCoordsBlockId() {
+    this.toUpdateCoordsBlockId = -1;
   }
 
   @Mutation
@@ -87,23 +105,16 @@ export default class Block extends VuexModule {
   }
 
   @Mutation
+  setActiveTargetId( id: number ) {
+    this.dd.targetId = id;
+  }
+
+  @Mutation
   updateEndLineCoords( payload ) {
-
-    let itemId = payload.itemId;
-
-    let x = payload.x,
-      y = payload.y;
-
-    if( payload.coords ) {
-      x = payload.coords.left;
-      y = payload.coords.top;
-    }
-
-
     _.map( this.items, (item) => {
       _.map( item.outputs, connector => {
-        if ( connector.target_block_id === itemId ) {
-          connector.targetCoords = {left: x, top: y};
+        if ( connector.target_block_id === payload.itemId ) {
+          connector.targetCoords = {left: payload.x, top: payload.y};
         }
       });
     });
@@ -221,7 +232,7 @@ export default class Block extends VuexModule {
     let connectorId = connector.id,
       targetBlockId = connector.target_block_id;
 
-    return await axios.post(`private/connector/save-target`, {
+    return axios.post(`private/connector/save-target`, {
       'connector-id': connectorId,
       'target-id': targetBlockId,
     });
@@ -235,20 +246,18 @@ export default class Block extends VuexModule {
 
     let steps = (this.context.state as any).blockPositionSteps;
 
-    let filtered = _.filter( this.items, (item) => {
-      return !item.moved;
-    });
+    let filtered = _.filter( this.items, item => !item.moved );
 
     let total = filtered.length;
 
     // TODO: get all items who not moved
     let actualSteps : any = {};
-    Object.keys(steps).map((key) => {
+    Object.keys(steps).map(key => {
       actualSteps[key] = steps[key] * ( total + 1 );
     });
 
-    return await axios.post(baseUrl, {
-      'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+    return axios.post(baseUrl, {
+      // 'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
       'bot_id': botId,
       x: actualSteps.x,
       y: actualSteps.y,

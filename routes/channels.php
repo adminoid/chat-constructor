@@ -11,6 +11,17 @@
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
+//Broadcast::channel('App.User.{id}', function ($user, $id) {
+//    return (int) $user->id === (int) $id;
+//});
+
+//Broadcast::channel('chat.client.*', function () {
+//    return true;
+//});
+
+//use App\Broadcasting\ChatChannel;
+//Broadcast::channel('chat.{user_id}', ChatChannel::class);
+
+Broadcast::channel('chat.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });

@@ -34,35 +34,44 @@ var Block = /** @class */ (function (_super) {
             top: 0,
             left: 0,
         };
+        _this.toUpdateCoordsBlockId = -1;
         return _this;
     }
     Block.prototype.saveBlockData = function (data) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.patch("private/bots/" + data.botId + "/blocks/" + data.blockId, data.sendData)];
             });
         });
     };
     Block.prototype.fetchBlocks = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get("private/bots/" + id + "/blocks")];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.get("private/bots/" + id + "/blocks")];
             });
         });
     };
     Block.prototype.updateBlocks = function (blocks) {
         this.items = blocks.data;
     };
-    Block.prototype.setActiveTargetId = function (id) {
-        if (id > 0) {
-            this.dd.targetId = id;
-        }
+    Block.prototype.fetchBlock = function (blockId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                return [2 /*return*/, axios.get("private/block-surface/" + blockId)];
+            });
+        });
+    };
+    Block.prototype.updateBlock = function (blockData) {
+        var data = blockData.data;
+        delete data['bot'];
+        // console.log(data);
+        // data.id - stores blockId
+        var index = _.findIndex(this.items, { id: data.id });
+        this.items.splice(index, 1, data);
+        this.toUpdateCoordsBlockId = data.id;
+    };
+    Block.prototype.resetToUpdateCoordsBlockId = function () {
+        this.toUpdateCoordsBlockId = -1;
     };
     Block.prototype.setBeginLineCoords = function (payload) {
         var itemId = payload.itemId, connectorId = payload.connectorId, coords = payload.coords;
@@ -73,17 +82,14 @@ var Block = /** @class */ (function (_super) {
             }
         });
     };
+    Block.prototype.setActiveTargetId = function (id) {
+        this.dd.targetId = id;
+    };
     Block.prototype.updateEndLineCoords = function (payload) {
-        var itemId = payload.itemId;
-        var x = payload.x, y = payload.y;
-        if (payload.coords) {
-            x = payload.coords.left;
-            y = payload.coords.top;
-        }
         _.map(this.items, function (item) {
             _.map(item.outputs, function (connector) {
-                if (connector.target_block_id === itemId) {
-                    connector.targetCoords = { left: x, top: y };
+                if (connector.target_block_id === payload.itemId) {
+                    connector.targetCoords = { left: payload.x, top: payload.y };
                 }
             });
         });
@@ -163,15 +169,11 @@ var Block = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var connectorId, targetBlockId;
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        connectorId = connector.id, targetBlockId = connector.target_block_id;
-                        return [4 /*yield*/, axios.post("private/connector/save-target", {
-                                'connector-id': connectorId,
-                                'target-id': targetBlockId,
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                connectorId = connector.id, targetBlockId = connector.target_block_id;
+                return [2 /*return*/, axios.post("private/connector/save-target", {
+                        'connector-id': connectorId,
+                        'target-id': targetBlockId,
+                    })];
             });
         });
     };
@@ -179,26 +181,20 @@ var Block = /** @class */ (function (_super) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var baseUrl, steps, filtered, total, actualSteps;
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        baseUrl = "private/bots/" + botId + "/blocks";
-                        steps = this.context.state.blockPositionSteps;
-                        filtered = _.filter(this.items, function (item) {
-                            return !item.moved;
-                        });
-                        total = filtered.length;
-                        actualSteps = {};
-                        Object.keys(steps).map(function (key) {
-                            actualSteps[key] = steps[key] * (total + 1);
-                        });
-                        return [4 /*yield*/, axios.post(baseUrl, {
-                                'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
-                                'bot_id': botId,
-                                x: actualSteps.x,
-                                y: actualSteps.y,
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                baseUrl = "private/bots/" + botId + "/blocks";
+                steps = this.context.state.blockPositionSteps;
+                filtered = _.filter(this.items, function (item) { return !item.moved; });
+                total = filtered.length;
+                actualSteps = {};
+                Object.keys(steps).map(function (key) {
+                    actualSteps[key] = steps[key] * (total + 1);
+                });
+                return [2 /*return*/, axios.post(baseUrl, {
+                        // 'name': 'Block ' + Math.floor(Math.random() * 6) + 1,
+                        'bot_id': botId,
+                        x: actualSteps.x,
+                        y: actualSteps.y,
+                    })];
             });
         });
     };
@@ -222,11 +218,20 @@ var Block = /** @class */ (function (_super) {
         Mutation
     ], Block.prototype, "updateBlocks", null);
     tslib_1.__decorate([
+        Action({ commit: 'updateBlock', rawError: true })
+    ], Block.prototype, "fetchBlock", null);
+    tslib_1.__decorate([
         Mutation
-    ], Block.prototype, "setActiveTargetId", null);
+    ], Block.prototype, "updateBlock", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "resetToUpdateCoordsBlockId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "setBeginLineCoords", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Block.prototype, "setActiveTargetId", null);
     tslib_1.__decorate([
         Mutation
     ], Block.prototype, "updateEndLineCoords", null);

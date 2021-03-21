@@ -11,8 +11,16 @@
 |
 */
 
+Route::get('/chat-{id}', 'ChatController@initChat')->middleware('register.client');
+
 Route::get('/', static function () {
-    return view('home');
+
+    if(Auth::check()) {
+        return redirect('/cabinet');
+    } else {
+        return view('auth.login');
+    }
+
 });
 
 Auth::routes(['verify' => true]);
@@ -38,9 +46,17 @@ Route::group(['prefix' => 'private', 'middleware' => 'auth'], static function()
 
     Route::get('messages/create-new/{blockId}', 'MessagesController@createMessage');
 
-    Route::post('save-client-input-types', 'ClientInputTypesController@saveClientInputType');
+    Route::get('messages/delete/{messageId}', 'MessagesController@deleteMessage');
 
     Route::post('save-extended-block-data', 'BlocksController@saveExtendedBlockData');
+
+    Route::get('outputs/{blockId}', 'OutputsController@getOutputs');
+
+    Route::get('block-surface/{blockId}', 'BlocksController@getBlockSurfaceData');
+
+    Route::get('set-flagship/{blockId}', 'BotsController@setBlockFlagship');
+
+    Route::get('get-flagship/{botId}', 'BotsController@getBlockFlagship');
 
 });
 

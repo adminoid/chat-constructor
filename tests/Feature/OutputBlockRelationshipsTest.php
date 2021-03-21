@@ -29,7 +29,7 @@ class OutputBlockRelationshipsTest extends TestCase
         $block = factory(Block::class)->create();
         $outputs = factory(Output::class, 7)->create();
 
-        $block->messages()->saveMany($outputs);
+        $block->outputs()->saveMany($outputs);
 
         $this->assertEquals($block->outputs()->count(), 7);
 

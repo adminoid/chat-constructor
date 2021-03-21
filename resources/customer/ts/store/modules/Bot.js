@@ -12,35 +12,48 @@ var Bot = /** @class */ (function (_super) {
         _this.baseUrl = 'private/bots';
         _this.bots = [];
         _this.activeBotId = -1;
+        _this.flagship = 0;
         return _this;
     }
     Bot.prototype.fetchBots = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.get(this.baseUrl)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.get(this.baseUrl)];
             });
         });
     };
     Bot.prototype.updateBots = function (bots) {
         this.bots = bots.data;
     };
-    Bot.prototype.createBot = function () {
+    Bot.prototype.getFlagship = function (botId) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, axios.post(this.baseUrl, {
-                            'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
-                        })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
+                return [2 /*return*/, axios.get("private/get-flagship/" + botId)];
             });
         });
     };
-    Bot.prototype.appendBot = function (block) {
-        this.bots.push(block.data);
+    Bot.prototype.saveFlagship = function (blockId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                return [2 /*return*/, axios.get("private/set-flagship/" + blockId)];
+            });
+        });
+    };
+    Bot.prototype.setFlagship = function (resp) {
+        this.flagship = resp.data;
+    };
+    Bot.prototype.createBot = function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
+                return [2 /*return*/, axios.post(this.baseUrl, {
+                        'name': 'Billy ' + Math.floor(Math.random() * 6) + 1
+                    }).then(function (resp) { return resp; }).catch(function (e) { return e.message; })];
+            });
+        });
+    };
+    Bot.prototype.appendBot = function (response) {
+        if (typeof response !== 'string')
+            this.bots.push(response.data);
     };
     Bot.prototype.deleteBot = function (id) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -64,6 +77,15 @@ var Bot = /** @class */ (function (_super) {
     tslib_1.__decorate([
         Mutation
     ], Bot.prototype, "updateBots", null);
+    tslib_1.__decorate([
+        Action({ commit: 'setFlagship' })
+    ], Bot.prototype, "getFlagship", null);
+    tslib_1.__decorate([
+        Action({ commit: 'setFlagship', rawError: true })
+    ], Bot.prototype, "saveFlagship", null);
+    tslib_1.__decorate([
+        Mutation
+    ], Bot.prototype, "setFlagship", null);
     tslib_1.__decorate([
         Action({ commit: 'appendBot' })
     ], Bot.prototype, "createBot", null);

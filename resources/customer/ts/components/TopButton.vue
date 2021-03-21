@@ -9,7 +9,7 @@
   @Component
   export default class TopButton extends Vue {
 
-    text = 'Добавить бота';
+    text = this.$root.$t('customer.add_bot');
     type = 'bot';
     botId = '';
 
@@ -18,18 +18,25 @@
     @Watch('$route', { immediate: true, deep: true })
     onUrlChange(newRoute) {
       if (newRoute.name == 'blocks') {
-        this.text = 'Добавить блок';
+        this.text = this.$t('customer.add_block');
         this.type = 'block';
       } else {
-        this.text = 'Добавить бота';
+        this.text = this.$t('customer.add_bot');
         this.type = 'bot';
       }
     }
 
+    @Watch('$route.params.botId')
+    onBotIdChange(newBotId) {
+      this.botId = newBotId;
+    }
+
     mounted () {
-
       this.botId = this.$route.params.botId;
+    }
 
+    changed () {
+      console.log(this.$route.params.botId);
     }
 
   }

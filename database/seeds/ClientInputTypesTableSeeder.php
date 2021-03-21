@@ -13,11 +13,12 @@ class ClientInputTypesTableSeeder extends Seeder
     public function run()
     {
 
-//        factory(App\ClientInputType::class)->create();
+        $locale = 'en';
+        App::setLocale($locale);
 
         $data = [
-            ['name'=>'Блок с кнопками', 'component' => 'ModalFormBlockEditSubFormButton'],
-            ['name'=>'Блок с ответом', 'component' => 'ModalFormBlockEditSubFormAnswer'],
+            ['name' => trans('customer.block_buttons'), 'component' => 'ModalFormBlockEditSubFormButton'],
+            ['name' => trans('customer.block_answer'), 'component' => 'ModalFormBlockEditSubFormAnswer'],
         ];
 
         ClientInputType::insert($data);

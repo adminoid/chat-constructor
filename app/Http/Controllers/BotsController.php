@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Bot;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Faker\Generator as Faker;
+use App\Block;
 
 class BotsController extends Controller
 {
@@ -32,22 +35,31 @@ class BotsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
+     * @param Faker $faker
      * @return bool|\Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, Faker $faker)
     {
 
-        $validator = Validator::make(request()->all(), $this->rules);
-        if ($validator->fails()) {
-            return response()->json(array('errors' => $validator->getMessageBag()->toArray()));
+        try {
+            $this->validate($request, $this->rules);
+
+            if( $user = auth()->user() ) {
+
+                $botData = $request->all();
+                $botData['name'] = $faker->name;
+                $bot = new Bot($botData);
+                $user->bots()->save($bot);
+
+                return response()->json($bot);
+            }
         }
-
-        $botData = $request->all();
-        if( $user = auth()->user() ) {
-            $bot = new Bot($botData);
-            $user->bots()->save($bot);
-
-            return response()->json($bot);
+        catch (ValidationException $exception) {
+            return response()->json([
+                'status' => 'error',
+                'msg'    => 'Error',
+                'errors' => $exception->errors(),
+            ], 422);
         }
 
         return false;
@@ -101,6 +113,20 @@ class BotsController extends Controller
 
         return response()->json($id);
 
+    }
+
+    public function setBlockFlagship($blockId) : int
+    {
+        $block = Block::findOrFail($blockId);
+        $bot = $block->bot()->first();
+        $bot->setFlagship($blockId);
+        return $blockId;
+    }
+
+    public function getBlockFlagship($botId) : int
+    {
+        $bot = Bot::findOrFail($botId);
+        return $bot->flagship;
     }
 
 }

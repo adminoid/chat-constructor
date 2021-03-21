@@ -26,7 +26,7 @@ export default new Vuex.Store({
                             _a.sent();
                             return [3 /*break*/, 6];
                         case 5:
-                            console.error('Значение botId не передано');
+                            console.error('BotId value not passed');
                             _a.label = 6;
                         case 6: return [3 /*break*/, 8];
                         case 7:
@@ -44,5 +44,4 @@ export default new Vuex.Store({
     }
 });
 // TODO: delete connection if drag to area from input connector
-// TODO: redraw lines if route change
 //# sourceMappingURL=index.js.map

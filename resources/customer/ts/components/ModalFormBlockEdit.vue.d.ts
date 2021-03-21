@@ -21,5 +21,6 @@ export default class ModalFormBlockEdit extends Vue {
     beforeCreate(): void;
     onChange(): void;
     addMessage(): void;
+    deleteMessage(message: any): void;
     onSubFormDataChanged(val: any): void;
 }

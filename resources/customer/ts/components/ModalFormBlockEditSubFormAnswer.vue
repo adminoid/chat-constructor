@@ -1,19 +1,17 @@
 <template lang="pug">
 
-  strong Блок с ответом
+  strong {{ $t('customer.block_answer') }}
 
 </template>
 
 <script lang="ts">
 
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Vue, Component } from 'vue-property-decorator'
 
   @Component
   export default class ModalFormBlockEditSubFormAnswer extends Vue {
 
     name: 'ModalFormBlockEditSubFormAnswer';
-
-
 
   }
 

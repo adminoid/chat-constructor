@@ -81,12 +81,5 @@
 
 </div>
 
-
-<footer>
-    <div class="copy">
-        &copy; 2019
-    </div>
-</footer>
-
 </body>
 </html>

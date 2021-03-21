@@ -12,17 +12,22 @@ var EndLine = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EndLine.prototype.getLineEndCoords = function () {
-        var areaBoundaries = store.state.Block.area.boundaries, clientRect = this.$el.getBoundingClientRect(), paddingLeft = clientRect.width / 2, x = clientRect.left - areaBoundaries.left + +store.state.Block.scrollPosition.left, y = clientRect.top - areaBoundaries.top + +store.state.Block.scrollPosition.top;
+        var addTop = 0;
+        if (this.$options.name == 'ConnectorClone') {
+            addTop = 8;
+        }
+        var areaBoundaries = store.state.Block.area.boundaries, clientRect = this.$el.getBoundingClientRect(), paddingLeft = clientRect.width / 2, x = clientRect.left - areaBoundaries.left + store.state.Block.scrollPosition.left, y = clientRect.top - areaBoundaries.top + store.state.Block.scrollPosition.top + addTop;
         return {
             left: x + paddingLeft,
             top: y,
         };
     };
     EndLine.prototype.mounted = function () {
-        var id = this.id || this.itemData.id;
+        var id = this.id || this.itemData.id, coords = this.getLineEndCoords();
         store.commit('Block/updateEndLineCoords', {
             itemId: id,
-            coords: this.getLineEndCoords(),
+            x: coords.left,
+            y: coords.top,
         });
     };
     EndLine = tslib_1.__decorate([

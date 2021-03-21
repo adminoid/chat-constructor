@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Message;
-use Illuminate\Http\Request;
-use App\Block;
 use Carbon\Carbon;
 
 class MessagesController extends Controller
@@ -18,12 +16,25 @@ class MessagesController extends Controller
             'block_id' => $blockId,
             'sort_order_id' => $nextSortOrderId,
             'delay' => 1.0,
-            'text' => 'Вы просто напишите слова, а я буду говорить :D',
+            'text' => trans('customer.message_default'),
             'created_at' =>  Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
         return Message::where('block_id', $blockId)->get()->toJson();
+
+    }
+
+    public function deleteMessage($messageId) : string
+    {
+        $message = Message::findOrFail($messageId);
+
+        // get the block (owner of the message with the received id)
+        $block = $message->block()->first();
+
+        $message->delete();
+
+        return $block->messages()->get()->toJson();
 
     }
 }

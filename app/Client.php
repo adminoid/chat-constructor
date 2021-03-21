@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Client extends Model
 {
 
+    protected $fillable = ['ip'];
+
     public function bot() : BelongsTo
     {
         return $this->belongsTo(Bot::class);
@@ -17,6 +19,11 @@ class Client extends Model
     public function conversations() : HasMany
     {
         return $this->hasMany(Conversation::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 
 }

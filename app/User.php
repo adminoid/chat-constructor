@@ -33,4 +33,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Bot');
     }
 
+    public function client()
+    {
+        return $this->hasOne('App\Client');
+    }
+
 }

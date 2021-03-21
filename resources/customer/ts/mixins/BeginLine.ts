@@ -30,16 +30,13 @@ export default class BeginLine extends Vue {
   }
 
   mounted () {
-
     // push begin coordinates to out connector
     let payload = {
       itemId: this.blockId,
       connectorId: this.connectorData.id,
       coords: this.getLineBeginCoords(),
     };
-
     store.commit('Block/setBeginLineCoords', payload);
-
   }
 
 }
